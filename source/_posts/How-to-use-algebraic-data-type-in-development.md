@@ -1,5 +1,11 @@
 ---
 title: 如何利用 ADT 良好地组织业务
+author: Shaw
+tags: 
+- 类型系统
+- 集合
+description: 在用 Scala 做业务开发的时候，我们大都会用到 case class 以及模式匹配，本文将介绍如何利用 case class 模拟 ADT 并在日常开发中利用 ADT 良好地组织业务。
+date: 2017-03-21
 ---
 
 在用 `Scala` 做业务开发的时候，我们大都会用到 `case class` 以及「模式匹配」，本文将介绍如何利用 `case class` 模拟 `ADT` 并在日常开发中利用 `ADT` 良好地组织业务。

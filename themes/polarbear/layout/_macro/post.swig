@@ -10,8 +10,17 @@
       </h1>
 
       <time class="post-time">
-          {{ full_date(post.date, 'MMM D YYYY') }}
+          {{ full_date(post.date, 'MMMD日') }}
       </time>
+      {% if is_post() && post.author %}
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="{{ post.author }}"></span>
+        </span>
+      {% endif %}
+      {% if post.author %}
+        <span class="_author-avatar-holder" data-author="{{ post.author }}"></span>
+      {% endif %}
     </header>
 
 

@@ -456,6 +456,35 @@ h6 {
   max-width: 850px;
   margin: 0 auto; }
 
+#primary.home .js-author {
+  position: absolute;
+  right: 10px;
+  top: 0; }
+#primary.home .js-author img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #eee; }
+
+article.post .post-time {
+  display: inline-block; }
+
+article.post .author-split {
+  margin: 0 10px;
+}
+
+article.post .author-info a {
+  color: #0078b6;
+}
+
+#primary:not(.home) article.post .post-header {
+  margin-bottom: 30px;
+}
+
+#primary:not(.home) article.post .post-header .post-title {
+  font-size: 2em;
+}
+
 @media only screen and (max-width: 750px) {
   .site-header-inner, .content {
     width: 90%; }
@@ -495,9 +524,12 @@ h6 {
   text-align: left;
   display: inline-block;
   margin: 0 auto;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 24px;
   color: rgba(0, 0, 0, 0.7); }
+
+.post-excerpt {
+  color: #999; }
 
 #nav-top {
   float: right; }
@@ -522,6 +554,8 @@ h6 {
     border-top: 1px solid #eee; }
   .post .post-excerpt img {
     padding-top: .5em; }
+  .post .post-header {
+    position: relative; }
   .post .post-header .post-title {
     margin: 0 0 10px;
     line-height: 1.4;
@@ -540,7 +574,7 @@ h6 {
       right: 0;
       left: 0; }
   .post .post-time {
-    color: #aaa;
+    color: #666;
     display: block;
     font-size: 14px;
     margin-bottom: 10px; }
@@ -841,7 +875,7 @@ h6 {
   font-size: 14px;
   text-transform: uppercase;
   border: 1px solid #ff;
-  display: inline-block;
+  display: block;
   background: #fff; }
   .widget_tags .tag-list-item .tag-list-link {
     color: rgba(0, 0, 0, 0.6); }
