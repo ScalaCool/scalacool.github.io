@@ -2,3 +2,4 @@
 db.json
 node_modules
 npm-debug.log
+.deploy_git/

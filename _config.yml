@@ -5,7 +5,7 @@
 # Site
 title: Scala Cool
 subtitle: When Object-Oriented meets Functional that is cool.
-description: When Object-Oriented meets Functional that is cool.
+description: 学习 Scala 相关
 author: ScalaCool
 language: zh-CN
 timezone: Asia/Shanghai
@@ -89,4 +89,6 @@ widget_custom:
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git
+  repo: https://github.com/ScalaCool/scalacool.github.io
+  branch: master
