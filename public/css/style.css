@@ -460,6 +460,7 @@ h6 {
   position: absolute;
   right: 10px;
   top: 0; }
+
 #primary.home .js-author img {
   width: 30px;
   height: 30px;
@@ -470,20 +471,16 @@ article.post .post-time {
   display: inline-block; }
 
 article.post .author-split {
-  margin: 0 10px;
-}
+  margin: 0 10px; }
 
 article.post .author-info a {
-  color: #0078b6;
-}
+  color: #0078b6; }
 
 #primary:not(.home) article.post .post-header {
-  margin-bottom: 30px;
-}
+  margin-bottom: 30px; }
 
 #primary:not(.home) article.post .post-header .post-title {
-  font-size: 2em;
-}
+  font-size: 2em; }
 
 @media only screen and (max-width: 750px) {
   .site-header-inner, .content {
@@ -491,7 +488,9 @@ article.post .author-info a {
   #secondary {
     display: none; }
   #primary.home {
-    width: 100%; } }
+    width: 100%; }
+  #primary.home .js-author img {
+    display: none; } }
 
 .header {
   padding: 20px 20px; }
@@ -524,12 +523,9 @@ article.post .author-info a {
   text-align: left;
   display: inline-block;
   margin: 0 auto;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 24px;
   color: rgba(0, 0, 0, 0.7); }
-
-.post-excerpt {
-  color: #999; }
 
 #nav-top {
   float: right; }
@@ -552,32 +548,35 @@ article.post .author-info a {
   padding: 40px 0; }
   .post + .post {
     border-top: 1px solid #eee; }
-  .post .post-excerpt img {
-    padding-top: .5em; }
+  .post .post-excerpt {
+    color: #999; }
+    .post .post-excerpt img {
+      padding-top: .5em; }
   .post .post-header {
     position: relative; }
-  .post .post-header .post-title {
-    margin: 0 0 10px;
-    line-height: 1.4;
-    font-size: 1.3em;
-    font-weight: 400;
-    font-family: "Open Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", "Microsoft Jhenghei", sans-serif; }
-  .post .post-header .post-link {
-    display: inline-block;
-    vertical-align: middle;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    box-shadow: 0 0 1px transparent;
-    position: relative;
-    overflow: hidden; }
-    .post .post-header .post-link.active:before, .post .post-header .post-link:active:before, .post .post-header .post-link:focus:before, .post .post-header .post-link:hover:before {
-      right: 0;
-      left: 0; }
+    .post .post-header .post-title {
+      margin: 0 0 10px;
+      line-height: 1.4;
+      font-size: 1.3em;
+      font-weight: 400;
+      font-family: "Open Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", "Microsoft Jhenghei", sans-serif; }
+    .post .post-header .post-link {
+      display: inline-block;
+      vertical-align: middle;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      box-shadow: 0 0 1px transparent;
+      position: relative;
+      overflow: hidden; }
+      .post .post-header .post-link.active:before, .post .post-header .post-link:active:before, .post .post-header .post-link:focus:before, .post .post-header .post-link:hover:before {
+        right: 0;
+        left: 0; }
   .post .post-time {
-    color: #666;
+    color: #aaa;
     display: block;
     font-size: 14px;
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+    color: #666; }
   .post .post-excerpt p {
     margin: 0 0 16px; }
   .post .post-content {

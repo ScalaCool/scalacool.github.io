@@ -1,21 +1,23 @@
 var authors = {
   yison: {
-    avatar: 'https://avatars2.githubusercontent.com/u/12131115?v=3&s=460'
+    avatar: '/avatar/yison.jpg'
   },
   jilen: {
     blog: 'http://jilen.moe',
-    avatar: 'https://avatars3.githubusercontent.com/u/546573?v=3&s=100'
+    avatar: '/avatar/jilen.png'
   },
   shaw: {
     blog: 'http://shawdubie.com',
-    avatar: 'http://shawdubie.com/assets/img/shaw.jpeg'
+    avatar: '/avatar/shaw.jpg'
   },
   godpan: {
     blog: 'http://www.godpan.me',
-    avatar: 'http://www.godpan.me/images/site-logo.png'
+    avatar: '/avatar/yison.png'
+  },
+  scalacool: {
+    avatar: '/avatar/scalacool.png'
   }
 }
-
 function generateAvatarAuthorHtml (nick) {
   var author = authors[nick.toLowerCase()]
   return [
@@ -25,7 +27,6 @@ function generateAvatarAuthorHtml (nick) {
     '</a>'
   ].join('')
 }
-
 function generateTextAuthorHtml (nick) {
   var author = authors[nick.toLowerCase()]
   return [
@@ -34,7 +35,6 @@ function generateTextAuthorHtml (nick) {
     author.blog ? '</a>' : ''
   ].join('')
 }
-
 $(document).ready(function () {
   var isHome = $('#primary').hasClass('home')
   var isPost = $('article').hasClass('post')
