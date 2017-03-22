@@ -14,6 +14,36 @@
     margin: $global-content-margin;
 }
 
+#primary.home .js-author {
+  position: absolute;
+  right: 10px;
+  top: 0; }
+#primary.home .js-author img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #eee; }
+
+article.post .post-time {
+  display: inline-block; }
+
+article.post .author-split {
+  margin: 0 10px;
+}
+
+article.post .author-info a {
+  color: #0078b6;
+}
+
+#primary:not(.home) article.post .post-header {
+  margin-bottom: 30px;
+}
+
+#primary:not(.home) article.post .post-header .post-title {
+  font-size: 2em;
+}
+
+
 @include max-screen() {
   .site-header-inner, .content {
     width: 90%;
@@ -23,5 +53,8 @@
   }
   #primary.home {
       width: 100%;
+  }
+  #primary.home .js-author img {
+    display: none;
   }
 }

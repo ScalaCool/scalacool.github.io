@@ -29,7 +29,7 @@
       <div class="archive-post">
         <span class="archive-post-time">
           {% if page.archive %}
-            {{ date(post.date, 'MMM D') }}
+            {{ date(post.date, 'MMM D日') }}
           {% else %}
             {{ date(post.date, 'YYYY-M-D') }}
           {% endif %}
