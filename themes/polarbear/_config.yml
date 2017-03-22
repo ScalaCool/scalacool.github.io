@@ -49,14 +49,14 @@ theme:
 # ===========================================
 
 # Baidu Analytics
-baidu_analytics:
+baidu_analytics: dfcb338d3c2ed49b6a5e26760868e19f
 # Google Analytics
 google_analytics:
 
 # Duoshuo
 duoshuo_shortname:
 # Disqus
-disqus_shortname:
+disqus_shortname: scalacool
 
 
 # ===========================================

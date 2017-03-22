@@ -92,3 +92,4 @@ deploy:
   type: git
   repo: https://github.com/ScalaCool/scalacool.github.io
   branch: master
+
