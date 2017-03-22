@@ -15,5 +15,8 @@
            data-title="{{ page.title }}" data-url="{{ page.permalink }}">
       </div>
     {% endif %}
+    <div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage">评论这篇文章</a>
+    </div>
   </div>
 {% endif %}
