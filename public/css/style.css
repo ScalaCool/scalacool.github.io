@@ -872,7 +872,6 @@ article.post .author-info a {
 .widget_tags .tag-list-item {
   padding: 0 10px 7px 0;
   font-size: 14px;
-  text-transform: uppercase;
   border: 1px solid #ff;
   display: block;
   background: #fff; }
