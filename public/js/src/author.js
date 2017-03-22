@@ -1,21 +1,21 @@
 var authors = {
   yison: {
-    avatar: '/avatar/yison.jpg'
+    avatar: '/images/avatar/yison.jpg'
   },
   jilen: {
     blog: 'http://jilen.moe',
-    avatar: '/avatar/jilen.png'
+    avatar: '/images/avatar/jilen.png'
   },
   shaw: {
     blog: 'http://shawdubie.com',
-    avatar: '/avatar/shaw.jpg'
+    avatar: '/images/avatar/shaw.jpg'
   },
   godpan: {
     blog: 'http://www.godpan.me',
-    avatar: '/avatar/yison.png'
+    avatar: '/images/avatar/yison.png'
   },
   scalacool: {
-    avatar: '/avatar/scalacool.png'
+    avatar: '/images/avatar/scalacool.png'
   }
 }
 function generateAvatarAuthorHtml (nick) {
