@@ -41,6 +41,12 @@ touch how-to-handle-collection-in-scala.md
 
 然后就可以在新创建的 ``md`` 文件中进行创作。
 
+你可以通过以下命令预览文章效果：
+
+```
+hexo serve 或 hexo s
+```
+
 
 
 ### 文章变量
