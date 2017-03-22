@@ -12,7 +12,7 @@ var authors = {
   },
   godpan: {
     blog: 'http://www.godpan.me',
-    avatar: '/images/avatar/yison.png'
+    avatar: '/images/avatar/godpan.png'
   },
   scalacool: {
     avatar: '/images/avatar/scalacool.png'
