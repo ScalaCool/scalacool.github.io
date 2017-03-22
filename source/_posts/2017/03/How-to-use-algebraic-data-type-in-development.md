@@ -1,4 +1,12 @@
-# 如何利用 ADT 良好地组织业务
+---
+title: 如何在 Scala 中利用 ADT 良好地组织业务
+author: Shaw
+tags:
+- ADT
+- 模式匹配
+description: 在用 `Scala` 做业务开发的时候，我们大都会用到 `case class` 以及「模式匹配」，本文将介绍在日常开发中如何利用 `case class` 模拟 `ADT` 去良好地组织业务。
+date: 2017-03-22
+---
 
 在用 `Scala` 做业务开发的时候，我们大都会用到 `case class` 以及「模式匹配」，本文将介绍在日常开发中如何利用 `case class` 模拟 `ADT` 去良好地组织业务。
 
@@ -40,7 +48,7 @@ data Mul a b = Mul a b
 ```
 也就是说， `a * b ` 类型是同时持有 `a` 和 `b` 的容器。
 
-在 `Scala`中，`tuples`（元组）就是这样的，eg：
+在 `Scala`中，`tuples`（元组）就是这样的，例如：
 
 ```scala
 scala> val b = (Boolean, Boolean)
@@ -128,7 +136,7 @@ case object EmptyLeaf extends Tree
 ```
 那这段被添加的代码必须放在我们上面声明 `Tree` 的那个文件里面，否则会报错。
 
-另外，`sealed` 关键字也可以让「编译器」检查「模式」语句的完整性,eg：
+另外，`sealed` 关键字也可以让「编译器」检查「模式」语句的完整性,例如：
 
 ```scala
 sealed trait Answer
