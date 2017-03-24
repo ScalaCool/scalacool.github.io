@@ -10,9 +10,12 @@ date: 2017-03-24
 这里有最新的 Scala 社区动态，帮助 Scala 爱好者了解过去一周 Scala 发生的事情。
 
 信息可能来于：
+- [Scala News](http://news.scala.cool)
 - [This week in #Scala](http://www.cakesolutions.net/teamblogs/this-week-in-scala-20/03/2017)
 - [Scala Times Issue](http://scalatimes.com/)
 - Twitter / 知乎 / 技术博客（公开）
+
+***
 
 ## 深度阅读
 
@@ -26,6 +29,8 @@ date: 2017-03-24
 
 - [Introduction to Recursion Schemes with Matryoshka](http://akmetiuk.com/posts/2017-03-10-matryoshka-intro.html)
    学习如何基于递归构架优雅的抽象。
+
+***
 
 ## 一周速递
 
