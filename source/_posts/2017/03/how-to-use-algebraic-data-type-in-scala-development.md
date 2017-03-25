@@ -3,7 +3,7 @@ title: 如何在 Scala 中利用 ADT 良好地组织业务
 author: Shaw
 tags:
 - 模式匹配
-- 类型系统
+- 类型相关
 description: 在用 Scala 做业务开发的时候，我们大都会用到 case class 以及「模式匹配」，本文将介绍在日常开发中如何利用 case class 模拟 ADT 去良好地组织业务。
 date: 2017-03-22
 ---
