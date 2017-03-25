@@ -1,25 +1,22 @@
 ---
-title: Scala 周刊（2017/03/24）
+title: Scala 技术周刊第1期（2017/03/29）
 author: ScalaCool
 tags:
 - Scala Weekly
-description: 《Scala 周刊》跟踪每周 Scala 社区动态，帮助 Scala 爱好者了解过去一周 Scala 发生的事情。
-date: 2017-03-24
+description: 《Scala 技术周刊》跟踪每周 Scala 动态，帮助 Scala 爱好者了解过去一周 Scala 社区发生的事情。
+date: 2017-03-29
 ---
 
-这里有最新的 Scala 社区动态，帮助 Scala 爱好者了解过去一周 Scala 发生的事情。
+这里有最新的 Scala 动态，帮助 Scala 爱好者了解过去一周 Scala 社区发生的事情。
 
-信息可能来于：
-- [Scala News](http://news.scala.cool)
-- [This week in #Scala](http://www.cakesolutions.net/teamblogs/this-week-in-scala-20/03/2017)
-- [Scala Times Issue](http://scalatimes.com/)
-- Twitter / 知乎 / 技术博客（公开）
+你可以通过微信公众号「scalacool」关注我们，及时获取最新资讯。
 
 ***
 
 ## 深度阅读
 
-- [如何在 Scala 中利用 ADT 良好地组织业务](http://localhost:4000/2017/03/how-to-use-algebraic-data-type-in-scala-development/) by Shaw
+- [如何在 Scala 中利用 ADT 良好地组织业务](http://localhost:4000/2017/03/how-to-use-algebraic-data-type-in-scala-development/)
+很好的一篇文章，对于 ADT 的概念和「抽象层次」都会有更进一步的认知。
 
 - [The wrong abstraction. Recap in our reading club](https://softwaremill.com/the-wrong-abstraction-recap/)
    SoftwareMill 上对 Sandi Metz 发表的一篇文章的讨论的事后总结。
