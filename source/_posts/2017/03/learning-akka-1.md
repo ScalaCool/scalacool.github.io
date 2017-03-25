@@ -1,5 +1,5 @@
 ---
-title: Akka系列（一）：Akka简介与Actor模型
+title: Akka系列（一）：Akka 简介与 Actor 模型
 author: Godpan
 tags: 
 - Akka
