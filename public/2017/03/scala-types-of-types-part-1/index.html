@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="2013 年在几场 「JavaOne 大会」之后，掀起了一些关于 「Scala 类型」方面的热议，这篇博文也应运而生。我想我们缺少一个详尽的清单，来指明跟 Scala 类型打交道的方法，所以我决定总结下自己已有的经验，分享在 Scala 中为什么我们需要这些类型。"/>
+
+
+
+
+  <meta name="keywords" content="类型相关,翻译," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/03/scala-types-of-types-part-1/"/>
+
+
+<meta name="description" content="2013 年在几场 「JavaOne 大会」之后，掀起了一些关于 「Scala 类型」方面的热议，这篇博文也应运而生。我想我们缺少一个详尽的清单，来指明跟 Scala 类型打交道的方法，所以我决定总结下自己已有的经验，分享在 Scala 中为什么我们需要这些类型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<译> Scala 类型的类型（一）">
+<meta property="og:url" content="http://scala.cool/2017/03/scala-types-of-types-part-1/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="2013 年在几场 「JavaOne 大会」之后，掀起了一些关于 「Scala 类型」方面的热议，这篇博文也应运而生。我想我们缺少一个详尽的清单，来指明跟 Scala 类型打交道的方法，所以我决定总结下自己已有的经验，分享在 Scala 中为什么我们需要这些类型。">
+<meta property="og:image" content="http://scala.cool/images/2017/03/scala-unified-types.png">
+<meta property="og:updated_time" content="2017-03-25T07:45:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<译> Scala 类型的类型（一）">
+<meta name="twitter:description" content="2013 年在几场 「JavaOne 大会」之后，掀起了一些关于 「Scala 类型」方面的热议，这篇博文也应运而生。我想我们缺少一个详尽的清单，来指明跟 Scala 类型打交道的方法，所以我决定总结下自己已有的经验，分享在 Scala 中为什么我们需要这些类型。">
+<meta name="twitter:image" content="http://scala.cool/images/2017/03/scala-unified-types.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> <译> Scala 类型的类型（一） - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                News
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <译> Scala 类型的类型（一）
+        
+      </h1>
+
+      <time class="post-time">
+          3月25日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Yison"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="Yison"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h2 id="原文"><a href="#原文" class="headerlink" title="原文"></a>原文</h2><p><a href="http://ktoso.github.io/scala-types-of-types/" target="_blank" rel="external">http://ktoso.github.io/scala-types-of-types/</a></p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#1-Scala-类型的不同类型">1. Scala 类型的不同类型</a></li>
+<li><a href="#2-写作进度">2. 写作进度</a></li>
+<li><a href="#3-Type-Ascription">3. Type Ascription</a></li>
+<li><a href="#4-通用类型系统-—-Any-AnyRef-AnyVal">4. 通用类型系统 — Any, AnyRef, AnyVal</a></li>
+<li><a href="#5-底类型-Nothing-与-Null">5. 底类型 - Nothing 与 Null</a></li>
+</ul>
+<h2 id="1-Scala-类型的不同类型"><a href="#1-Scala-类型的不同类型" class="headerlink" title="1. Scala 类型的不同类型"></a>1. Scala 类型的不同类型</h2><p>2013 年在几场 「JavaOne 大会」之后，掀起了一些关于 「Scala 类型」方面的热议，这篇博文也应运而生。  </p>
+<p>在这些讨论声中，我发现不同的人在学习 Scala 的过程中，经常重复提出相同的问题。我想我们缺少一个详尽的清单，来指明跟 Scala 类型打交道的方法，所以我决定总结下自己已有的经验，分享在 Scala 中为什么我们需要这些类型。</p>
+<h2 id="2-写作进度"><a href="#2-写作进度" class="headerlink" title="2. 写作进度"></a>2. 写作进度</h2><p>尽管我写这篇文章已经有段时间了，但始终还有很多内容未完成。比如说「高阶类型」部分需要重新梳理，「Self Type」还得补充更多细节，等等等等。详情参见计划清单。</p>
+<p>此外，如果你看到某个部分被打上了 ❌ ，则表示该部分需要修改或者是未完成。</p>
+<h2 id="3-Type-Ascription"><a href="#3-Type-Ascription" class="headerlink" title="3. Type Ascription"></a>3. Type Ascription</h2><p>Scala 有「类型推导」，这意味着我们可以在源码中省略一些类型声明。在不显式声明类型的前提下，我们只要书写 <code>val</code> 或 <code>def</code> 就够了。</p>
+<p>这种显式指定类型的行为，被称为 Type Ascription（有时候，也有叫作 Type Annotation，但这个名字很容易造成混淆，在 Scala 文档中并不这么使用）。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Thing</span></span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">getThing</span> </span>= <span class="keyword">new</span> <span class="type">Thing</span> &#123; &#125;</div><div class="line"></div><div class="line"><span class="comment">// without Type Ascription, the type is infered to be `Thing`</span></div><div class="line"><span class="keyword">val</span> infered = getThing</div><div class="line"></div><div class="line"><span class="comment">// with Type Ascription</span></div><div class="line"><span class="keyword">val</span> thing: <span class="type">Thing</span> = getThing</div></pre></td></tr></table></figure>
+<p>在此类情况下，我们可以不使用 Type Ascription 。当然你也可以针对每个公有的方法显示声明返回类型（<strong>一个非常好的习惯</strong>），这能使让代码可读性更好。</p>
+<p>你可以根据以下的提示问题，来决定是否使用 Type Ascription ：</p>
+<p><strong>Q: 如果它是一个参数？</strong></p>
+<p>A: 必须使用。</p>
+<p><strong>Q: 如果它是一个公有方法的返回值？</strong></p>
+<p>A: 为了更好的代码可读性，及输出类型的可控性，需要使用。</p>
+<p><strong>Q: 如果它是一个递归或重载的方法？</strong></p>
+<p>A: 必须使用。</p>
+<p><strong>Q: 当你需要返回一个比隐式推导结果更通用的接口？</strong></p>
+<p>A: 除非你愿意暴露实现细节，否则必须使用。</p>
+<p><strong>除上述情况之外，则可以不必显式声明类型。</strong></p>
+<p>补充说明：</p>
+<p>使用 Type Ascription 可以加快编译的速度，通常我们也很乐意看到一个方法的返回类型。</p>
+<p>好了，我们现在明白了 Type Ascription 大概是怎么一回事。讲完这个之后，我们继续接下来的话题，类型随之也会变得越来越有趣。</p>
+<h2 id="4-通用类型系统-—-Any-AnyRef-AnyVal"><a href="#4-通用类型系统-—-Any-AnyRef-AnyVal" class="headerlink" title="4. 通用类型系统 — Any, AnyRef, AnyVal"></a>4. 通用类型系统 — Any, AnyRef, AnyVal</h2><p>我们之所以说 Scala 的类型系统是通用的，是因为有一个「顶类型」— <code>Any</code> 。这与 Java 很不一样，后者存在叫做「原始类型」 ( <code>int</code> , <code>long</code> , <code>float</code> , <code>double</code> , <code>byte</code> , <code>char</code> , <code>short</code> , <code>boolean</code> ) 的特例，它们并不继承 Java 中类似顶类型的东西 <code>java.lang.Object</code>。</p>
+<center><br>  <img src="/images/2017/03/scala-unified-types.png" alt="Scala&#39;s Unified Types"><br></center>
+
+<p>Scala 引入了 <code>Any</code> 作为所有类型共同的顶类型。<code>Any</code> 是 <code>AnyRef</code> 和 <code>AnyVal</code> 的超类。</p>
+<p><code>AnyRef</code> 面向 Java（JVM）的对象世界，它对应 <code>java.lang.Object</code> ，是所有对象的超类。</p>
+<p><code>AnyVal</code> 则代表了 Java 的值世界，例如 <code>int</code> 以及其它 JVM 原始类型。</p>
+<p>正是依赖这种继承设计，我们才能够使用 <code>Any</code> 定义方法，同时兼容 <code>scala.int</code> 以及 <code>java.lang.String</code> 的实例。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></div><div class="line"></div><div class="line"><span class="keyword">val</span> allThings = <span class="type">ArrayBuffer</span>[<span class="type">Any</span>]()</div><div class="line"></div><div class="line"><span class="keyword">val</span> myInt = <span class="number">42</span>             <span class="comment">// Int, kept as low-level `int` during runtime</span></div><div class="line"></div><div class="line">allThings += myInt         <span class="comment">// Int (extends AnyVal)</span></div><div class="line">                           <span class="comment">// has to be boxed (!) -&gt; becomes java.lang.Integer in the collection (!)</span></div><div class="line"></div><div class="line">allThings += <span class="keyword">new</span> <span class="type">Person</span>()  <span class="comment">// Person (extends AnyRef), no magic here</span></div></pre></td></tr></table></figure>
+<p>虽然在 JVM 层一旦遭遇 <code>ArrayBuffer[Any]</code> ，我们的 Int 实例就会被打包成对象。对于类型系统而言，这一切还算是透明的。我们可以通过 Scala REPL 和 <code>:javap</code> 来调查下上述的例子，这样子可以找到我们的测试类产生的代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">35: invokevirtual #47  // Method myInt:()I</div><div class="line">38: invokestatic  #53  // Method scala/runtime/BoxesRunTime.boxToInteger:(I)Ljava/lang/Integer;</div><div class="line">41: invokevirtual #57  // Method scala/collection/mutable/ArrayBuffer.$plus$eq:(Ljava/lang/Object;)Lscala/collection/mutable/ArrayBuffer;</div></pre></td></tr></table></figure>
+<p>你将注意到 <code>myInt</code> 起初还是携带一个原始 <code>int</code> 类型的值。然后，在它即将被添加到 <code>ArrayBuffer</code> 的时候，scalac 植入了一个方法 <code>BoxesRunTime.boxToInteger:(I)Ljava/lang/Integer</code> （提醒下不是经常跟「字节码」打交道的读者，这个方法就是 <code>public Integer boxToInteger(i: int)</code>）。</p>
+<p>通过这么一个智能的编译器，以及在这套公共继承体系中将所有东西都当成一个对象来处理，我们就能够摆脱「原始类型」这种边缘情况的纠缠，至少在我们的 Scala 源码中，编译器会为我们处理它。</p>
+<p>当然在 JVM 层面，这种差异依旧存在。由于「原始类型」的操作更安全，同时占用更少的内存（对象明显要占用更多），scalac 会在尽可能的情况下使用原始类型。</p>
+<p>另一方面，我们也可以限制一个方法只能采用轻量级的值类型：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span></span>(in: <span class="type">AnyVal</span>) = ()</div><div class="line"></div><div class="line">check(<span class="number">42</span>)    <span class="comment">// Int -&gt; AnyVal</span></div><div class="line">check(<span class="number">13.37</span>) <span class="comment">// Double -&gt; AnyVal</span></div><div class="line"></div><div class="line">check(<span class="keyword">new</span> <span class="type">Object</span>) <span class="comment">// -&gt; AnyRef = fails to compile</span></div></pre></td></tr></table></figure></p>
+<p>在上述例子中，我们使用了一个 TypeClass <code>Checker[T]</code> 与类型边界 (type bound)（后续会详谈）。总体思路就是这个方法只能采用 Value Classes ，如 Int 或我们自己的值类型。虽然这不是惯用的方法，但这展示了 Scala 的类型系统如何拥抱 java 的原始类型，把它们引入到 “真正的” 类型系统里面，而不是像 Java 一样，仅仅将它们作为一个分离的情况存在。</p>
+<h2 id="5-底类型-Nothing-与-Null"><a href="#5-底类型-Nothing-与-Null" class="headerlink" title="5. 底类型 - Nothing 与 Null"></a>5. 底类型 - Nothing 与 Null</h2><p>在 Scala 中，一切皆有类型…… 但你是否想过，当遇到一些非正常的情况，比如抛出异常的时候，类型推导是如何保持正常运转，推断出合理的类型。</p>
+<p>让我们通过以下的 <code>if/else throw</code> 的例子来一探究竟：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> thing: <span class="type">Int</span> =</div><div class="line">  <span class="keyword">if</span> (test)</div><div class="line">    <span class="number">42</span>                             <span class="comment">// : Int</span></div><div class="line">  <span class="keyword">else</span></div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">Exception</span>(<span class="string">"Whoops!"</span>) <span class="comment">// : Nothing</span></div></pre></td></tr></table></figure></p>
+<p>正如你在注释里所看到的，<code>if</code> 块的返回类型是 <code>Int</code>（很明显），<code>else</code> 代码块的类型是 <code>Nothing</code>（有点意思）。推导器之所以能够推断 <code>thing</code> 的类型将永远是 <code>Int</code>，主要是 <code>Nothing</code> 类型的「底类型」性质在起作用。</p>
+<blockquote>
+<p>一个关于「底类型」如何运作的准确直觉是：Nothing 继承了所有类型。</p>
+</blockquote>
+<p>类型推导总是会寻找 <code>if</code> 语句两个逻辑分支的「共同类型」。因此如果 <code>else</code> 分支这里是一个继承所有类型的子类型，那么最终推断出来的结果自然会是第一个分支的类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Types visualized:</div><div class="line"></div><div class="line">           [Int] -&gt; ... -&gt; AnyVal -&gt; Any</div><div class="line">Nothing -&gt; [Int] -&gt; ... -&gt; AnyVal -&gt; Any</div></pre></td></tr></table></figure>
+<p>同样的道理也适用于 Scala 中的第二个底类型 - <code>Null</code> 。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> thing: <span class="type">String</span> =</div><div class="line">  <span class="keyword">if</span> (test)</div><div class="line">    <span class="string">"Yay!"</span>  <span class="comment">// : String</span></div><div class="line">  <span class="keyword">else</span></div><div class="line">  	<span class="literal">null</span>    <span class="comment">// : Null</span></div></pre></td></tr></table></figure>
+<p><code>thing</code> 的类型是预期的 <code>String</code>。 <code>Null</code> 遵循着跟 <code>Nothing</code> 几乎一样的规则。我将通过这个例子先探讨下 — 类型推导中 <code>AnyVal</code> 与 <code>AnyRef</code> 之间的区别。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Types visualized:</div><div class="line"></div><div class="line">        [String] -&gt; AnyRef -&gt; Any</div><div class="line">Null -&gt; [String] -&gt; AnyRef -&gt; Any</div><div class="line"></div><div class="line">infered type: String</div></pre></td></tr></table></figure>
+<p>让我们考虑下 <code>Int</code> 及其它不能兼容 <code>Null</code> 值的原始类型。我们在 REPL 中使用 <code>:type</code> 命令来调查这个情况（这样可以返回一个表达式的类型）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scala&gt; :type if (false) 23 else null</div><div class="line">Any</div></pre></td></tr></table></figure>
+<p>这跟上面一个分支对象为 <code>String</code> 类型的例子不同。因为 <code>Null</code> 不像 <code>Nothing</code> 一样继承任何类型，我们来详细研究一下这里的类型。让我们再次使用 <code>:type</code> 命令来看看 <code>Int</code> 到底继承了什么：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">scala&gt; :type -v 12</div><div class="line">// Type signature</div><div class="line">Int</div><div class="line"></div><div class="line">// Internal Type structure</div><div class="line">TypeRef(TypeSymbol(final abstract class Int extends AnyVal))</div></pre></td></tr></table></figure>
+<p><code>verbose</code> 参数在这里新增了一些信息，现在我们知道了 <code>Int</code> 是 一个 <code>AnyVal</code>，后者是个特殊的用于表示值类型的 <code>class</code>，它不能兼容 <code>Null</code>。如果我们看 <code>AnyVal</code> 的源码，我们将发现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">abstract class AnyVal extends Any with NotNull</div></pre></td></tr></table></figure>
+<p>我之所以要讲是这里，是因为 <code>AnyVal</code> 的核心功能在这里通过类型很好地表示出来了。<strong>注意那个 <code>NotNull</code> 特质（trait）</strong>。</p>
+<p>回到主题，为什么上面 <code>if</code> 语句（两个逻辑分支的类型分别是 <code>AnyVal</code> 和 <code>null</code>）的公共类型是 <code>Any</code>，而不是其它。</p>
+<p>用一句话来总结就是：</p>
+<blockquote>
+<p>Null 继承所有的 AnyRefs，而 Nothing 继承了一切。</p>
+</blockquote>
+<p>由于 AnyVals （例如数字）跟 AnyRefs 并不在一个继承树中，一个数字与一个 <code>null</code> 值唯一的公共类型就是 <code>Any</code> ，这就解释了我们的例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Types visualized:</div><div class="line"></div><div class="line">Int  -&gt; NotNull -&gt; AnyVal -&gt; [Any]</div><div class="line">Null            -&gt; AnyRef -&gt; [Any]</div><div class="line"></div><div class="line">infered type: Any an object</div></pre></td></tr></table></figure>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/类型相关/">类型相关</a>
+          
+            <a href="/tags/翻译/">翻译</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2017/03/scala-news-beta-release/">
+        <span class="next-text nav-default">ScalaNews beta releases !</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+    2017
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+</html>
