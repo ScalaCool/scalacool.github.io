@@ -3,11 +3,11 @@ title: ScalaNews beta releases !
 author: ScalaCool
 tags:
 - ScalaCool
-description: We made a reading list helping you to be informed of the latest voice in Scala world.
+description: We made a reading timeline helping you to be informed of the latest voice in Scala world.
 date: 2017-03-25
 ---
 
-[ScalaNews](http://news.scala.cool) is a reading list helping you to be informed of the latest voice in Scala world.
+[ScalaNews](http://news.scala.cool) is a reading timeline helping you to be informed of the latest voice in Scala world.
 
 ![ScalaNews](/images/2017/03/scala-news.png)
 
