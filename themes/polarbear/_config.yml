@@ -17,6 +17,7 @@ rss: default
 # Menu Settings
 # ===========================================
 menu:
+  News: http://news.scala.cool
   Archives: /archives
 
 # ===========================================
