@@ -130,7 +130,7 @@ check(13.37) // Double -> AnyVal
 check(new Object) // -> AnyRef = fails to compile
 ```
 
-在上述例子中，我们使用了一个 TypeClass `Checker[T]` 与类型边界 (type bound)（后续会详谈）。总体思路就是这个方法只能采用 Value Classes ，如 Int 或我们自己的值类型。虽然这不是惯用的方法，但这展示了 Scala 的类型系统如何拥抱 java 的原始类型，把它们引入到 “真正的” 类型系统里面，而不是像 Java 一样，仅仅将它们作为一个分离的情况存在。
+在上述例子中，我们使用了一个 TypeClass `Checker[T]` 与类型边界 (type bound)（后续会详谈）。总体思路就是这个方法只能采用 Value Classes ，如 Int 或我们自己的值类型。虽然这不是惯用的方法，但这展示了 Scala 的类型系统如何拥抱 Java 的原始类型，把它们引入到 “真正的” 类型系统里面，而不是像 Java 一样，仅仅将它们作为一个分离的情况存在。
 
 ## 5. 底类型 - Nothing 与 Null
 
