@@ -5,7 +5,7 @@ tags:
 - 类型相关
 - 翻译
 description: Scala 的 object 是通过 class 实现的（显然后者是 JVM 的基础构件）。然而你也会发现我们并不能像一个简单的类一样，轻松地获得一个 object 的类型……
-date: 2017-04-02
+date: 2017-04-10
 ---
 
 ## 上一篇
@@ -14,17 +14,17 @@ date: 2017-04-02
 
 ## 目录
 
-- [6. 一个 ``object`` 的类型]()
+- [6. 一个单例对象的类型]()
 - [7. Scala 中的型变]()
 - [8. Refined Types (refinements)]()
-- [9. Package Object]()
-- [10. Type Alias]()
+- [9. 包对象]()
+- [10. 类型别名]()
 
-## 6. 一个 ``object`` 的类型
+## 6. 一个单例对象的类型
 
-Scala 的 ``object`` 是通过 ``class`` 实现的（显然后者是 JVM 的基础构件）。然而你也会发现我们并不能像一个简单的类一样，轻松地获得一个 ``object`` 的类型……
+Scala 的单例对象（ `object`） 是通过 `class` 实现的（显然后者是 JVM 的基础构件）。然而你也会发现我们并不能像一个简单的类一样，轻松地获得一个单例对象的类型……
 
-我常常疑惑该如何传一个 ``object`` 给一个方法，对此我自己也非常惊讶。我的意思是指 ``obj: ExampleObj`` 是无效的，因为这种情况 ``ExampleObj`` 已经指向了实例，所以它有个 ``type`` 的成员，我们可以靠它解决问题。
+我常常疑惑该如何传一个单例对象给一个方法，对此我自己也非常惊讶。我的意思是指 ``obj: ExampleObj`` 是无效的，因为这种情况 ``ExampleObj`` 已经指向了实例，所以它有个 ``type`` 的成员，我们可以靠它解决问题。
 
 下面的代码解释了大概的方法：
 ```scala
@@ -88,9 +88,9 @@ val a: Array[Any] = Array[Int](1, 2, 3)
 
 
 
-### 7.1 特质（trait） —  如同「带有实现的接口」
+### 7.1 特质（trait） — 「可以带有实现的接口」 
 
-首先，让我们看看关于「特质」最简单的一个问题：我们如何将多个特质混入到一个类型中，就像如果你来自 Java，会把这叫做实现这些「带有实现的接口」一样：
+首先，让我们看看关于「特质」最简单的一个问题：我们如何将多个特质混入到一个类型中，就像如果你来自 Java，会把这叫做「接口实现」一样：
 
 ```scala
 class Base { def b = "" }
@@ -112,9 +112,93 @@ bc.c
 b1.b
 ```
 
-截止目前的内容，你应该相对比较好理解。现在我们就要讨论「钻石问题」了，熟悉 C++ 的朋友可能一直都比较期待吧。「钻石问题」（菱形继承问题）主要描述的是在「多重继承」的时候，我们「无法明确想要继承什么」的处境。如果你认为特质类似多重继承一样，下图揭示了这个问题。
+截止目前的内容，你应该相对比较好理解。现在我们就要讨论「钻石问题」了，熟悉 C++ 的朋友可能一直都比较期待吧。钻石问题（菱形继承问题）主要描述的是在「多重继承」的时候，我们「无法明确想要继承什么」的处境。如果你认为特质类似多重继承一样，下图揭示了这个问题。
 
 
 
 ### 7.2 类型线性化 VS 钻石问题
 
+要显现「钻石问题」，只要我们有一个 B、C中的覆盖实现就行了。当我们调用 D 中的公共方法的时候，产生了歧义。我们到底是继承了 B 还是 C 的方法？在 Scala 里，如果是仅仅只有一个覆盖方法的情况下，这个问题很简单 — 覆盖方法。但假使是更复杂的情况呢？让我们来研究一下：
+
+- class `A` 定义了方法 `common` ，返回 `a`  ；
+- trait `B` 覆盖了方法 `common` ，返回 `b` ；
+- trait `C` 覆盖了方法 `common` ，返回 `c` ；
+- class `D` 同时继承了 `B` 和 `C` ;
+- 请问 `D` 继承了谁的 `common` 方法？到底是 `C` 中覆盖的实现，还是 `B` 中的？
+
+这种歧义是每个「多重继承」机制的痛点之一，Scala 通过一种称为「类型线性化」的手段来解决这个问题。
+
+
+
+## 8. Refined Types (refinements) 
+
+Refinements 可以很简单地理解为「无需命名子类的子类化」。所以在源代码中，可以是类似这个样子：
+
+```scala
+class Entity
+
+trait Persister {
+  def doPersist(e: Entity) = {
+    e.persistForReal()
+  }
+}
+
+// our refined instance (and type):
+val refinedMockPersister = new Persister {
+  override def doPersist(e: Entity) = ()
+}
+```
+
+
+
+## 9. 包对象
+
+Scala 在 2.8 版本中引入了包对象（`Package Object`），这本身并没有真的拓展了类型系统。但包对象们提供了一种相当有用的模式，可以一起引入一堆东西，此外编译器也会在它们那寻找隐式的值。
+
+声明一个包对象很简单，只要一起使用 `package` 和 `object` 关键字就行了，就像这样子：
+
+```scala
+// src/main/scala/com/garden/apples/package.scala
+
+package com.garden
+
+package object apples extends RedApples with GreenApples {
+  val redApples = List(red1, red2)
+  val greenApples = List(green1, green2)
+}
+
+trait RedApples {
+  val red1, red2 = "red"
+}
+
+trait GreenApples {
+  val green1, green2 = "green"
+}
+```
+
+约定上，我们将包对象们定义在 `package.scala` 中，然后放置到目标 package 下。你可以通过调查上述例子的文件源路径以及 package 来加深理解。
+
+从使用方面来说，这带来了真正的好处。因为当你引入包的时候，你也随之引入了在包中定义的所有状态：
+
+```scala
+import com.garden.apples._
+
+redApples foreach println
+```
+
+
+
+## 10. 类型别名
+
+类型别名（Type Alias）并不是另一种类型，而是一种我们提高代码可读性的技巧。
+
+```scala
+type User = String
+type Age = Int
+
+val data:  Map[User, Age] =  Map.empty
+```
+
+通过这样的技巧，Map 的定义一下子变得很清晰。如果我们仅仅只使用一个 `Sting => Int` 的 map，代码的可读性就不那么好了。虽然我们仍旧可以坚持使用我们的原始类型（也许是出于如性能方面的考虑），但使用别名能让这个类后续的读者更容易理解。
+
+> 注意，当你要为一个类创建别名的时候，**并不会**为它的伴生对象也建立别名。举个例子，假使你定义了 `case class Person(name: String)` 以及一个别名 `type User = Person`，调用 `User("John")` 就会出错。因为 `Person` 的伴生对象并没有别名，就不能如预期般有效调用 `Person("John")`，后者会隐式地触发伴生对象中的 `apply` 方法。
