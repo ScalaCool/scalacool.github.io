@@ -1,5 +1,6 @@
 var authors = {
   yison: {
+    blog: 'http://yison.me',
     avatar: '/images/avatar/yison.jpg'
   },
   jilen: {
@@ -15,6 +16,7 @@ var authors = {
     avatar: '/images/avatar/godpan.png'
   },
   scalacool: {
+    blog: 'http://twitter.com/scala_cool',
     avatar: '/images/avatar/scalacool.png'
   }
 }
