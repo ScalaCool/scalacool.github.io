@@ -1,19 +1,16 @@
 ---
-title: Scala 周刊（2017/03/24）
+title: Scala 技术周刊 | 第1期
 author: ScalaCool
 tags:
 - Scala Weekly
-description: 《Scala 周刊》跟踪每周 Scala 社区动态，帮助 Scala 爱好者了解过去一周 Scala 发生的事情。
-date: 2017-03-24
+description: 《Scala 周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。
+date: 2017-04-26
 ---
 
-这里有最新的 Scala 社区动态，帮助 Scala 爱好者了解过去一周 Scala 发生的事情。
+> 这里有最新的 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。
+您可以通过微信搜索 「scalacool」关注我们，及时获取最新资讯。
 
-信息可能来于：
-- [Scala News](http://news.scala.cool)
-- [This week in #Scala](http://www.cakesolutions.net/teamblogs/this-week-in-scala-20/03/2017)
-- [Scala Times Issue](http://scalatimes.com/)
-- Twitter / 知乎 / 技术博客（公开）
+以下整理自 [Scala News](http://news.scala.cool) 及其它相关途径。
 
 ***
 
