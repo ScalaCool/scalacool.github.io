@@ -4,7 +4,7 @@ author: Yison
 tags:
 - 类型相关
 - 翻译
-description: Scala 的 object 是通过 class 实现的（显然后者是 JVM 的基础构件）。然而你也会发现我们并不能像一个简单的类一样，轻松地获得一个 object 的类型……
+description: Scala 的单例对象是通过 class 实现的（显然后者是 JVM 的基础构件）。然而你也会发现我们并不能像一个简单的类一样，轻松地获得一个 object 的类型……
 date: 2017-04-10
 ---
 
@@ -147,12 +147,33 @@ class D2 extends C with B
 (new D2).common == "B"
 ```
 
-之所以会这样是由于 Scala 在这里为我们采用了类型线性化规则。算法是这样子的：
+之所以会这样，是由于 Scala 在这里为我们采用了类型线性化规则。算法如下：
 
-- 
--
--
+- 首先构建一个类型列表，第一个元素就是我们首要线性化的类型；
+- 将每个超类型递归地展开，然后把所有的类型放入到此列表中（这应该是扁平的，而不是嵌套的）；
+- 删除结果列表的重复项，从左到右对列表进行扫描，删除已经存在的类型；
+- 操作完成。
 
+让我们将这个算法人肉地应用到我们的钻石实例当中，来验证为什么 `D1 extends B with C`（以及 `D2 extends C with B`）
+会产生那样的结果：
+
+```scala
+// start with D1:
+B with C with <D1>
+
+// expand all the types until you rach Any for all of them:
+(Any with AnyRef with A with B) with (Any with AnyRef with A with C) with <D1>
+
+// remove duplicates by removing "already seen" types, when moving left-to-right:
+(Any with AnyRef with A with B) with (                            C) with <D1>
+
+// write the resulting type nicely:
+Any with AnyRef with A with B with C with <D1>
+```
+
+显然，当我们调用 `common` 方法时，可以很容易地决定我们想要调用的版本：我们只需看一下线性化的类型，并尝试从右边的线性化类型结果中解析出来。在 `D1` 的例子中，实现 `common` 的特质是 `C`，所以它覆盖了 `B` 提供的实现。在 `D1` 中调用 `common` 的结果将是 `"c"` 。
+
+你可以通过在 `D2` 类上使用这种方法来包装你的头部 — 如果你运行代码，它应该会先后对 `C` 和 `B` 进行线性化，然后产生一个为 `"b"` 的结果。
 
 ## 8. Refined Types (refinements) 
 
