@@ -127,7 +127,31 @@ b1.b
 - 请问 `D` 继承了谁的 `common` 方法？到底是 `C` 中覆盖的实现，还是 `B` 中的？
 
 这种歧义是每个「多重继承」机制的痛点之一，Scala 通过一种称为「类型线性化」的手段来解决这个问题。
+换句话说，在一个钻石类继承体系中，我们总是（并明确地）。我们先来看看下面这段代码，再来讨论线性化：
 
+```scala
+trait A { def common = "A" }
+
+trait B extends A { override def common = "B" }
+trait C extends A { override def common = "C" }
+
+class D1 extends B with C
+class D2 extends C with B
+```
+
+结果如下：
+
+```scala
+(new D1).common == "C"
+
+(new D2).common == "B"
+```
+
+之所以会这样是由于 Scala 在这里为我们采用了类型线性化规则。算法是这样子的：
+
+- 
+-
+-
 
 
 ## 8. Refined Types (refinements) 
