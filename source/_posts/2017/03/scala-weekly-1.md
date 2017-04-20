@@ -1,51 +1,44 @@
 ---
-<<<<<<< HEAD
 title: Scala 技术周刊 | 第1期
 author: ScalaCool
 tags:
-- Scala Weekly
-description: 《Scala 周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。
+- Weekly
+description: 《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。
 date: 2017-04-26
 ---
 
-> 这里有最新的 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。
-您可以通过微信搜索 「scalacool」关注我们，及时获取最新资讯。
-
-以下整理自 [Scala News](http://news.scala.cool) 及其它相关途径。
-=======
-title: Scala 技术周刊第1期（2017/03/29）
-author: ScalaCool
-tags:
-- Scala Weekly
-description: 《Scala 技术周刊》跟踪每周 Scala 动态，帮助 Scala 爱好者了解过去一周 Scala 社区发生的事情。
-date: 2017-03-29
----
-
-这里有最新的 Scala 动态，帮助 Scala 爱好者了解过去一周 Scala 社区发生的事情。
-
-你可以通过微信公众号「scalacool」关注我们，及时获取最新资讯。
->>>>>>> 8f5ec3553ece22c841ca79a9ea8985726b448f78
+> 这里有最新的 Scala 社区动态、技术博文。
+微信搜索 「scalacool」关注我们，及时获取最新资讯。
 
 ***
 
 ## 深度阅读
 
-- [如何在 Scala 中利用 ADT 良好地组织业务](http://localhost:4000/2017/03/how-to-use-algebraic-data-type-in-scala-development/)
-很好的一篇文章，对于 ADT 的概念和「抽象层次」都会有更进一步的认知。
+- [Experience reports on refactoring Scala code?  ](https://www.reddit.com/r/scala/comments/65t3ll/experience_reports_on_refactoring_scala_code/)
+  重构 Scala 工程是怎样一种体验
 
-- [The wrong abstraction. Recap in our reading club](https://softwaremill.com/the-wrong-abstraction-recap/)
-   SoftwareMill 上对 Sandi Metz 发表的一篇文章的讨论的事后总结。
+- [函数式非凡的抽象能力](https://juejin.im/post/58f4a278da2f60005d3dc95a)
+  对函数式的理解
 
-- [Spark/Scala MOOC + Capstone Project Now Live on Coursera!](http://scala-lang.org/blog/2017/03/13/spark-mooc-capstone-live-on-coursera.html)
-   优质的学习资源，推荐观看。
+- [Akka 系列（三）：监管与容错](http://scala.cool/2017/04/learning-akka-3/)
+  Akka 中文系列教程
 
-- [Introduction to Recursion Schemes with Matryoshka](http://akmetiuk.com/posts/2017-03-10-matryoshka-intro.html)
-   学习如何基于递归构架优雅的抽象。
+- [Comparing Scala relational database access libraries (Slick, Doobie, Quill, Scalikejdbc)](https://softwaremill.com/comparing-scala-relational-database-access-libraries/)
+  Scala 关系型数据库类库比较
+
+- [Pattern Matching for Java](http://cr.openjdk.java.net/~briangoetz/amber/pattern-match.html)
+  Java 中的模式匹配
 
 ***
 
 ## 一周速递
 
-- [Scala Native v0.1 is here!](https://www.scala-lang.org/blog/2017/03/14/scala-native-0.1-is-here.html)
-   Scala Native 终于发布了0.1 版本。
+- Scala [发布了](http://www.scala-lang.org/news/releases-1Q17.html) 3 个新版本：
+  - Scala 2.12.2
+  - Scala 2.12.2
+  - Scala 2.13.0-M1
+
+- @eed3si9n [发表了](http://developer.lightbend.com/blog/2017-04-18-sbt-1-0-roadmap-and-beta1/) 《sbt 1.0 roadmap and beta-1》
+
+- cats 发布了新子项目：[cats-effect](https://github.com/djspiewak/cats-effect) | 相关 [issue](https://github.com/typelevel/cats/issues/1617)
 
