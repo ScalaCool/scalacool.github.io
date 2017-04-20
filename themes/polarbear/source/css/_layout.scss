@@ -43,6 +43,10 @@ article.post .author-info a {
   font-size: 2em;
 }
 
+hr {
+  border-bottom: 1px solid #eee;
+}
+
 
 @include max-screen() {
   .site-header-inner, .content {
