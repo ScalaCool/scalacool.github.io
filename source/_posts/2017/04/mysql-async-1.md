@@ -155,4 +155,4 @@ update user set remain = remain - ? where id = ?
 
 + 更小内存占用
 + 减少不必要等待，从而减少线程上下文切换
-+ 不用纠结与
++ 不用反复调试线程数量和链接数量
