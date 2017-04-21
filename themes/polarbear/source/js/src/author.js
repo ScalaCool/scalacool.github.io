@@ -1,6 +1,5 @@
 var authors = {
   yison: {
-    blog: 'http://yison.me',
     avatar: '/images/avatar/yison.jpg'
   },
   jilen: {
