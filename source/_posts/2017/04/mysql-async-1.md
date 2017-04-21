@@ -2,9 +2,10 @@
 title: MySQL 异步驱动浅析 （一）：性能分析
 author: Jilen
 tags:
-- Network, Database
+- 网络编程
+- 数据库
 description: 异步数据库驱动与传统 JDBC 驱动对比
-date: 2017-04-06
+date: 2017-04-21
 ---
 
 [Mysql Async](https://github.com/mauricio/postgresql-async) 是一个 Scala 编写的，基于 [Netty](https://netty.io) 实现的非阻塞异步数据库驱动。在本系列文章中我们将逐步分析：
