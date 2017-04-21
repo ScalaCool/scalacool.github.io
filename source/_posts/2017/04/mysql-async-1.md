@@ -123,11 +123,11 @@ update user set remain = remain - ? where id = ?
 
 #### 事务(1000tps，针对100条 user 记录)
 
-> MysqlAsync (64链接，默认16线程)
+#### MysqlAsync (64链接，默认16线程)
 
 ![MysqlAsync-trans](/images/2017/04/mysql-async-trans.png)
 
-> JDBC (64链接，64线程)
+#### JDBC (64链接，64线程)
 
 ![MysqlAsync-trans](/images/2017/04/hikaricp-trans.png)
 
@@ -137,7 +137,7 @@ update user set remain = remain - ? where id = ?
 + 在并发竞争更新，并且存在事务情况下（数据库存在大量锁）:
  - 基于 Hikaricp 连接池的程序在一段时间后直接失去响应，大量请求超时。
  - 基于 MysqlAsync 的程序仍旧在执行，大部分失败是因为事务中存在死锁或者系统繁忙。
-+ 通过调整连接数和线程数，`hikaricp + mysql-connector/j` 方案也许可以提升性能，但这套方案的问题是你永远不知道多少线程和链接数才是足够的。
++ 通过调整连接数和线程数，`hikaricp + mysql-connector/j` 方案也许可以提升性能，但这套方案的问题是你永远不知道多少线程和链接数才是合适的。
 
 
 > 下表是结合上述测试和定性分析得出的结果
