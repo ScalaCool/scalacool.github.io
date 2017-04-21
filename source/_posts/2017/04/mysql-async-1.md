@@ -33,7 +33,7 @@ date: 2017-04-21
 ### MysqlAsync 的 IO
 
 + 项目使用 Netty 的 NIO 来实现，在网络 IO 这一点上确实是非阻塞的。
-+ 协议实现过程也没用使用 `synchronized` 和 `Lock`。
++ 协议实现过程也没用使用 `synchronized` 和 `Lock`
 + Netty 默认情况下线程数为 CPU 核数2倍
 
 ### Mysql JDBC 驱动 的 IO
@@ -81,8 +81,7 @@ date: 2017-04-21
 
 这带来了一个问题：当多个线程同时要获取链接时，只有一个线程可以获得链接，其他线程全部处于 `blocked` 状态。
 
-由于是分区设计，并且 [Play](http://www.playframework.com)
-这样的全异步框架主线程数默认非常少，所以这个问题在某些场合下并不严重。
+由于是分区设计，并且 [Play](http://www.playframework.com) 这样的全异步框架主线程数默认非常少，所以这个问题在某些场合下并不严重。
 
 ### Hikaricp
 
@@ -98,13 +97,13 @@ date: 2017-04-21
 
 为了验证上述观点，我进行了简单的性能测试，主要测试了简单查询和事务两个方面。
 
-> 简单查询
+#### 简单查询
 
 ```sql
 SELECT 1
 ```
 
-> 事务
+#### 事务
 
 ```sql
 update user set remain = remain + ? where id = ?
@@ -114,21 +113,21 @@ update user set remain = remain - ? where id = ?
 
 ### 简单查询(1000qps)
 
-> MysqlAsync (64链接，默认16线程)
+#### MysqlAsync (64链接，默认16线程)
 
 ![MysqlAsync-select](/images/2017/04/mysql-async-select.png)
 
-> JDBC  (64链接，64线程)
+#### JDBC  (64链接，64线程)
 
 ![Hikaricp-select](/images/2017/04/hikaricp-select.png)
 
-### 事务(1000tps，针对100条 user 记录)
+#### 事务(1000tps，针对100条 user 记录)
 
-> MysqlAsync (64链接，默认16线程)
+#### MysqlAsync (64链接，默认16线程)
 
 ![MysqlAsync-trans](/images/2017/04/mysql-async-trans.png)
 
-> JDBC (64链接，64线程)
+#### JDBC (64链接，64线程)
 
 ![MysqlAsync-trans](/images/2017/04/hikaricp-trans.png)
 
@@ -136,9 +135,9 @@ update user set remain = remain - ? where id = ?
 
 + 在查询非常简单，速度很快的情况下两者性能相当，`Mysql Async` 有微弱的优势。
 + 在并发竞争更新，并且存在事务情况下（数据库存在大量锁）:
- - 基于 Hikaricp 连接池的程序在一段时间后直接失去响应大量请求超时。
+ - 基于 Hikaricp 连接池的程序在一段时间后直接失去响应，大量请求超时。
  - 基于 MysqlAsync 的程序仍旧在执行，大部分失败是因为事务中存在死锁或者系统繁忙。
-+ 通过调整连接数和线程数，`hikaricp + mysql-connector/j` 方案也许可以提升性能，但这套方案的问题是你永远不知道多少线程和链接数才是足够的。
++ 通过调整连接数和线程数，`hikaricp + mysql-connector/j` 方案也许可以提升性能，但这套方案的问题是你永远不知道多少线程和链接数才是合适的。
 
 
 > 下表是结合上述测试和定性分析得出的结果
