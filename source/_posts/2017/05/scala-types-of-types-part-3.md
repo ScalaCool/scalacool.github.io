@@ -10,7 +10,7 @@ date: 2017-05-04
 
 ## 上一篇
 
-[Scala 类型的类型（二）](http://yison.me/page/scala-types-of-types/part-2)
+[Scala 类型的类型（二）](http://scala.cool/2017/04/scala-types-of-types-part-2/)
 
 ## 目录
 
