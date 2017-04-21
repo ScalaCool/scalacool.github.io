@@ -24,7 +24,7 @@ date: 2017-04-06
 + 所有功能都被测试覆盖
 + 很小的依赖
 
-可以看出作者是希望通过异步非阻塞能让驱动更快（注意此处我们不讨论是真・异步或者伪异步）。
+可以看出作者是希望通过异步非阻塞能让驱动更快（注意此处我们不讨论是真异步或者伪异步）。
 接下来本文将具体分析与传统的 `mysql-connector/j` 相比究竟是不是更快，快在哪里。
 
 ## 网络 IO
@@ -32,7 +32,7 @@ date: 2017-04-06
 ### MysqlAsync 的 IO
 
 + 项目使用 Netty 的 NIO 来实现，在网络 IO 这一点上确实是非阻塞的。
-+ 协议实现过程也没用使用 `synchronized` 和 `Lock`。
++ 协议实现过程也没用使用 `synchronized` 和 `Lock`
 + Netty 默认情况下线程数为 CPU 核数2倍
 
 ### Mysql JDBC 驱动 的 IO
@@ -50,11 +50,11 @@ date: 2017-04-06
 
 项目还提供一个连接池，采用分区设计，一个 `PartitionedAsyncObjectPool` 包含多个 `SingleThreadedAsyncObjectPool` 。
 
-> `PartitionedAsyncObjectPool`
+#### PartitionedAsyncObjectPool
 
 流程十分简单，根据线程的 id 选择 `SingleThreadedAsyncObjectPool`，然后从中获取数据库链接。不存在**阻塞**的可能
 
-> SingleThreadedAsyncObjectPool
+#### SingleThreadedAsyncObjectPool
 
 顾名思义，这是一个单线程的对象池。当请求获取链接时，如果有多余链接则直接返回，如果没有则加入队列，等待有链接通过 `giveBack` 方法释放时返回给队列里的某个请求。
 这里用了 Scala 的 `Future` 和 `Promise` 实现，也不存在阻塞的情况。
@@ -80,8 +80,7 @@ date: 2017-04-06
 
 这带来了一个问题：当多个线程同时要获取链接时，只有一个线程可以获得链接，其他线程全部处于 `blocked` 状态。
 
-由于是分区设计，并且 [Play](http://www.playframework.com)
-这样的全异步框架主线程数默认非常少，所以这个问题在某些场合下并不严重。
+由于是分区设计，并且 [Play](http://www.playframework.com) 这样的全异步框架主线程数默认非常少，所以这个问题在某些场合下并不严重。
 
 ### Hikaricp
 
@@ -97,13 +96,13 @@ date: 2017-04-06
 
 为了验证上述观点，我进行了简单的性能测试，主要测试了简单查询和事务两个方面。
 
-> 简单查询
+#### 简单查询
 
 ```sql
 SELECT 1
 ```
 
-> 事务
+#### 事务
 
 ```sql
 update user set remain = remain + ? where id = ?
@@ -113,15 +112,15 @@ update user set remain = remain - ? where id = ?
 
 ### 简单查询(1000qps)
 
-> MysqlAsync (64链接，默认16线程)
+#### MysqlAsync (64链接，默认16线程)
 
 ![MysqlAsync-select](/images/2017/04/mysql-async-select.png)
 
-> JDBC  (64链接，64线程)
+#### JDBC  (64链接，64线程)
 
 ![Hikaricp-select](/images/2017/04/hikaricp-select.png)
 
-### 事务(1000tps，针对100条 user 记录)
+#### 事务(1000tps，针对100条 user 记录)
 
 > MysqlAsync (64链接，默认16线程)
 
