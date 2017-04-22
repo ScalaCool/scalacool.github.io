@@ -29,6 +29,15 @@ date: 2017-04-26
 - [Pattern Matching for Java](http://cr.openjdk.java.net/~briangoetz/amber/pattern-match.html)
   Java 中的模式匹配
 
+- [Creating user interfaces with Scala.js and Binding.scala](https://loicdescotte.github.io/posts/binding-scalajs/)
+  Scala.js + Binding.scala 实践
+
+- [<译> Scala 类型的类型（二）](http://scala.cool/2017/04/scala-types-of-types-part-2/)
+  Scala 类型介绍
+
+- [MySQL 异步驱动浅析 （一）：性能分析](http://localhost:4000/2017/04/mysql-async-1/)
+  异步数据库驱动与传统 JDBC 驱动对比
+
 ***
 
 ## 一周速递
@@ -40,5 +49,9 @@ date: 2017-04-26
 
 - @eed3si9n [发表了](http://developer.lightbend.com/blog/2017-04-18-sbt-1-0-roadmap-and-beta1/) 《sbt 1.0 roadmap and beta-1》
 
-- cats 发布了新子项目：[cats-effect](https://github.com/djspiewak/cats-effect) | 相关 [issue](https://github.com/typelevel/cats/issues/1617)
+- cats 发布了新子项目：[cats-effect](https://github.com/djspiewak/cats-effect)
+  - [Proposal: A cats-effect project](https://github.com/typelevel/cats/issues/1617)
+  - [Why not both?](https://gist.github.com/djspiewak/a775b73804c581f4028fea2e98482b3c)
+
+- scalameta 1.7.0 [changelog](https://github.com/scalameta/scalameta/blob/master/changelog/1.7.0.md) 发布，已支持 Scala.js
 
