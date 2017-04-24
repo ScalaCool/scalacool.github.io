@@ -38,6 +38,19 @@ date: 2017-04-26
 - [MySQL 异步驱动浅析 （一）：性能分析](http://localhost:4000/2017/04/mysql-async-1/)
   异步数据库驱动与传统 JDBC 驱动对比
 
+- [Cons list in Java](https://medium.com/@sujitkamthe/cons-list-in-java-ef5053d2c85c)
+  Java 实现 Cons list
+
+- [Yoneda and Coyoneda trick](https://medium.com/@olxc/yoneda-and-coyoneda-trick-f5a0321aeba4)
+
+- [Scalar Conference 2017 summary](https://medium.com/@bocytko/scalar-conference-2017-summary-5c5a96e47274)
+  参加 Scalar Conference 2017 是怎样一种体验
+
+- [Semantic tooling at Twitter via Scalameta and Kythe](http://scalameta.org/talks/2017-04-21-SemanticToolingAtTwitter.pdf)
+  xxx
+
+- [Scala Typelevel Church Encodings](http://w.pitula.me/2017/typelevel-church-enc/)
+
 ***
 
 ## 一周速递
@@ -54,4 +67,6 @@ date: 2017-04-26
   - [Why not both?](https://gist.github.com/djspiewak/a775b73804c581f4028fea2e98482b3c)
 
 - scalameta 1.7.0 [changelog](https://github.com/scalameta/scalameta/blob/master/changelog/1.7.0.md) 发布，已支持 Scala.js
+
+- Quill 作者发布了一个新项目 [Monadless](http://monadless.io/) - Monad 组合方面的语法糖，近似 [each](https://github.com/ThoughtWorksInc/each)
 
