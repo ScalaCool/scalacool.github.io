@@ -51,7 +51,7 @@ date: 2017-04-26
   介绍了 Twitter 语义分析工具现状和展望，以及 Scalameta
 
 - [Scala Typelevel Church Encodings](http://w.pitula.me/2017/typelevel-church-enc/)
-  纯使用 lambdas 实现自然数、布尔值、条件以及简单的数据结构
+  在类型层面，纯使用 lambda 实现自然数、布尔值、条件以及简单的数据结构（邱奇编码）
 
 ***
 
