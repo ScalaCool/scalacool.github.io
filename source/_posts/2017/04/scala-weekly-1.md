@@ -42,14 +42,16 @@ date: 2017-04-26
   Java 实现 Cons list
 
 - [Yoneda and Coyoneda trick](https://medium.com/@olxc/yoneda-and-coyoneda-trick-f5a0321aeba4)
+  米田引理
 
 - [Scalar Conference 2017 summary](https://medium.com/@bocytko/scalar-conference-2017-summary-5c5a96e47274)
   参加 Scalar Conference 2017 是怎样一种体验
 
 - [Semantic tooling at Twitter via Scalameta and Kythe](http://scalameta.org/talks/2017-04-21-SemanticToolingAtTwitter.pdf)
-  xxx
+  介绍了 Twitter 语义分析工具现状和展望，以及 Scalameta
 
 - [Scala Typelevel Church Encodings](http://w.pitula.me/2017/typelevel-church-enc/)
+  纯使用 lambdas 实现自然数、布尔值、条件以及简单的数据结构
 
 ***
 
@@ -70,5 +72,5 @@ date: 2017-04-26
 
 - Quill 作者发布了一个新项目 [Monadless](http://monadless.io/) - Monad 组合方面的语法糖，近似 [each](https://github.com/ThoughtWorksInc/each)
 
-- [Effects4s](https://github.com/effects4s/effects4s)
+- 新项目 [Effects4s](https://github.com/effects4s/effects4s) - Common communication protocol for IO / Task data types.
 
