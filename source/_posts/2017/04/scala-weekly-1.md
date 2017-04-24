@@ -70,3 +70,5 @@ date: 2017-04-26
 
 - Quill 作者发布了一个新项目 [Monadless](http://monadless.io/) - Monad 组合方面的语法糖，近似 [each](https://github.com/ThoughtWorksInc/each)
 
+- [Effects4s](https://github.com/effects4s/effects4s)
+
