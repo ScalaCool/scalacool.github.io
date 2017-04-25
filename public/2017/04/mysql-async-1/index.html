@@ -46,7 +46,7 @@
 <meta property="og:image" content="http://scala.cool/images/2017/04/hikaricp-select.png">
 <meta property="og:image" content="http://scala.cool/images/2017/04/mysql-async-trans.png">
 <meta property="og:image" content="http://scala.cool/images/2017/04/hikaricp-trans.png">
-<meta property="og:updated_time" content="2017-04-24T08:52:05.000Z">
+<meta property="og:updated_time" content="2017-04-25T01:55:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL 异步驱动浅析 （一）：性能分析">
 <meta name="twitter:description" content="异步数据库驱动与传统 JDBC 驱动对比">
@@ -249,9 +249,9 @@
 </table>
 <p>总得来说 MysqlAsync 通过减少了线程数确实达到了以下效果</p>
 <ul>
-<li>更小内存占用</li>
+<li>更少内存占用</li>
 <li>减少不必要等待，从而减少线程上下文切换</li>
-<li>不用反复调试线程数量和链接数量</li>
+<li>与 Play 这样的全异步框架更契合，不用反复调试线程数量和链接数量</li>
 </ul>
 
             </div>
@@ -339,4 +339,18 @@
 <script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
 
   </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
 </html>
