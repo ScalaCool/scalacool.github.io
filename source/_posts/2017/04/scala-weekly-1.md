@@ -53,6 +53,9 @@ date: 2017-04-26
 - [Scala Typelevel Church Encodings](http://w.pitula.me/2017/typelevel-church-enc/)
   在类型层面，纯使用 lambda 实现自然数、布尔值、条件以及简单的数据结构（邱奇编码）
 
+- [Functional Programming in Scala for Mortals](https://twitter.com/fommil/status/855877100296953862)
+  @Sam Halliday 正在书写的新书
+
 ***
 
 ## 一周速递
@@ -74,3 +77,14 @@ date: 2017-04-26
 
 - 新项目 [Effects4s](https://github.com/effects4s/effects4s) - Common communication protocol for IO / Task data types.
 
+- [Scala Days Chicago 2017](http://event.scaladays.org/scaladays-chicago-2017#schedule)  成功举办
+
+- Lightbend 与 HPE 联合推出 [Scala Plugin](https://www.lightbend.com/blog/lightbend-and-hpe-announce-new-hpe-fortify-scala-plugin-for-static-application-security-testing-sast)，用于静态应用安全测试
+
+- giter8 0.8.0 [发布](https://twitter.com/eed3si9n/status/853793974951313408)
+
+- twitter4s 5.1 [发布](https://twitter.com/DanielaSfregola/status/854325488315183105)
+
+- Fetch 0.6.1 [发布](https://www.47deg.com/blog/fetch-v0-6-1-release/)
+
+- Lagom 1.3.2 [发布](https://www.lagomframework.com/blog/lagom-1-3-2.html)
