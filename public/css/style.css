@@ -482,6 +482,9 @@ article.post .author-info a {
 #primary:not(.home) article.post .post-header .post-title {
   font-size: 2em; }
 
+hr {
+  border-bottom: 1px solid #eee; }
+
 @media only screen and (max-width: 750px) {
   .site-header-inner, .content {
     width: 90%; }
@@ -611,6 +614,11 @@ article.post .author-info a {
       font-weight: 400;
       font-family: "Open Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", "Microsoft Jhenghei", sans-serif;
       margin-top: 1.2em; }
+    .post .post-content h2 {
+      font-size: 1.5em;
+      font-weight: 600; }
+    .post .post-content h4 {
+      font-size: 1.1em; }
     .post .post-content .headerlink:hover {
       border-bottom: 0; }
     .post .post-content .headerlink::before {
