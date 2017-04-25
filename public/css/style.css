@@ -482,6 +482,9 @@ article.post .author-info a {
 #primary:not(.home) article.post .post-header .post-title {
   font-size: 2em; }
 
+hr {
+  border-bottom: 1px solid #eee; }
+
 @media only screen and (max-width: 750px) {
   .site-header-inner, .content {
     width: 90%; }
