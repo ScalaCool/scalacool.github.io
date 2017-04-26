@@ -90,6 +90,6 @@ widget_custom:
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/ScalaCool/scalacool.github.io
+  repo: git@git.coding.net:ScalaCool/ScalaCool.git
   branch: master
 
