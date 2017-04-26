@@ -42,7 +42,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="2013 年在几场 「JavaOne 大会」之后，掀起了一些关于 「Scala 类型」方面的热议，这篇博文也应运而生。我想我们缺少一个详尽的清单，来指明跟 Scala 类型打交道的方法，所以我决定总结下自己已有的经验，分享在 Scala 中为什么我们需要这些类型。">
 <meta property="og:image" content="http://scala.cool/images/2017/03/scala-unified-types.png">
-<meta property="og:updated_time" content="2017-04-24T08:52:05.000Z">
+<meta property="og:updated_time" content="2017-04-25T02:05:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<译> Scala 类型的类型（一）">
 <meta name="twitter:description" content="2013 年在几场 「JavaOne 大会」之后，掀起了一些关于 「Scala 类型」方面的热议，这篇博文也应运而生。我想我们缺少一个详尽的清单，来指明跟 Scala 类型打交道的方法，所以我决定总结下自己已有的经验，分享在 Scala 中为什么我们需要这些类型。">
@@ -219,6 +219,7 @@
 </blockquote>
 <p>由于 AnyVals （例如数字）跟 AnyRefs 并不在一个继承树中，一个数字与一个 <code>null</code> 值唯一的公共类型就是 <code>Any</code> ，这就解释了我们的例子。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Types visualized:</div><div class="line"></div><div class="line">Int  -&gt; NotNull -&gt; AnyVal -&gt; [Any]</div><div class="line">Null            -&gt; AnyRef -&gt; [Any]</div><div class="line"></div><div class="line">infered type: Any an object</div></pre></td></tr></table></figure>
+<h2 id="下一篇"><a href="#下一篇" class="headerlink" title="下一篇"></a>下一篇</h2><p><a href="http://scala.cool/2017/04/scala-types-of-types-part-2/">Scala 类型的类型（二）</a></p>
 
             </div>
           
