@@ -33,7 +33,7 @@ date: 2017-05-02
   告别 Activator
 
 - [Plug and Play](https://medium.com/roposo-engineering/plug-and-play-26ca06c6bf22)
-  Roposo 在 Play 和 Spring 中选择前者的原因
+  Roposo 在 Spring 和 Play 中选择后者的原因
 
 - [Scala Days Chicago 2017: What You Need to Know](https://medium.com/tapad-engineering/scala-days-chicago-2017-what-you-need-to-know-c5fa7b5679b0)
   关于 Scala Days Chicago 2017 的一些 talk 总结
