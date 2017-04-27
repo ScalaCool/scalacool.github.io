@@ -85,11 +85,31 @@ val _ = new SimpleContainer with OnlyNumbers {
 
 ## 12. 自递归类型
 
-自递归类型（Self-recursive Types）在大多数文献中被称为 **F-Bounded Types** 。所以你可能会发现很多文章或博客引用「F-bounded」。事实上，这是「self-recursive」的另一种叫法，
+自递归类型（Self-recursive Types）在大多数文献中被称为 **F-Bounded Types** 。所以你可能会发现很多文章或博客引用「F-bounded」。事实上，这是「self-recursive」的另一种叫法，代表了「子类型约束」本身是通过参数化的情况。
+由于「自递归」的叫法更加直观，我们会在后续的文中坚持使用（尽管部分读者会在 google 中搜索「F-bounded」是什么）。
 
 ### 12.1 F-Bounded Type
 
+虽然这不是 Scala 的某种特定类型，它有时也让人感到棘手。很多人熟悉（也许是不知不觉地）的一个自递归类型的例子是 Java 中的 `Enum<E>` 。如果你比较好奇，可以参见 [Enum sources from Java](http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b14/java/lang/Enum.java) 。但现在先让我们回到 Scala，看看我们到底在讨论什么。
 
+> 在本节中，我们不会特别深入探讨这种类型。如果你想要了解在 Scala 中更多、更深入的用例，你或许可以看看 Kris Nuttycombe 的 [F-Bounded Type Polymorphism Considered Tricky](http://logji.blogspot.se/2012/11/f-bounded-type-polymorphism-give-up-now.html) 。
+
+想象你有某个 `Fruit` 特质，一个 `Apple` 和 `Orange` 继承了它。Fruit 特质同时还有一个 「compareTo」方法，这时候问题出现了：猜想你想说「我不能拿橘子和苹果进行比较啊，它们可是完全不同的东西！」。首先让我们写一段稚嫩的实现代码来：
+```scala
+// naive impl, Fruit is NOT self-recursively parameterised
+
+trait Fruit {
+  final def compareTo(other: Fruit): Boolean = true // impl doesn't matter in our example, we care about compile-time
+}
+
+class Apple  extends Fruit
+class Orange extends Fruit
+
+val apple = new Apple()
+val orange = new Orange()
+
+apple compareTo orange // compiles, but we want to make this NOT compile!
+```
 
 ## 13. 类型构造器
 
