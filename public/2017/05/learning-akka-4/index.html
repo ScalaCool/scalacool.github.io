@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="通过前几篇的学习，相信大家对Akka应该有所了解了，都说解决并发哪家强，JVM上面找Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？"/>
+
+
+
+
+  <meta name="keywords" content="Akka," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/05/learning-akka-4/"/>
+
+
+<meta name="description" content="通过前几篇的学习，相信大家对Akka应该有所了解了，都说解决并发哪家强，JVM上面找Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Akka系列（四）：Akka中的共享内存模型">
+<meta property="og:url" content="http://scala.cool/2017/05/learning-akka-4/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="通过前几篇的学习，相信大家对Akka应该有所了解了，都说解决并发哪家强，JVM上面找Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？">
+<meta property="og:image" content="http://scala.cool/images/2017/05/java-memory.png">
+<meta property="og:image" content="http://scala.cool/images/2017/05/actor-process.png">
+<meta property="og:updated_time" content="2017-05-02T05:06:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Akka系列（四）：Akka中的共享内存模型">
+<meta name="twitter:description" content="通过前几篇的学习，相信大家对Akka应该有所了解了，都说解决并发哪家强，JVM上面找Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？">
+<meta name="twitter:image" content="http://scala.cool/images/2017/05/java-memory.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Akka系列（四）：Akka中的共享内存模型 - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                News
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Akka系列（四）：Akka中的共享内存模型
+        
+      </h1>
+
+      <time class="post-time">
+          5月2日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Godpan"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="Godpan"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>通过前几篇的学习，相信大家对Akka应该有所了解了，都说解决并发哪家强，JVM上面找Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？</p>
+<h2 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h2><p>众所周知，在处理并发问题上面，最核心的一部分就是如何处理共享内存，很多时候我们都需要花费很多时间和精力在共享内存上，那么在学习Akka对共享内存是如何管理之前，我们先来看看Java中是怎么处理这个问题的。</p>
+<h3 id="Java共享内存"><a href="#Java共享内存" class="headerlink" title="Java共享内存"></a>Java共享内存</h3><p>相信对Java并发有所了解的同学都应该知道在Java5推出JSR 133后，Java对内存管理有了更高标准的规范了，这使我们开发并发程序也有更好的标准了，不会有一些模糊的定义导致的无法确定的错误。</p>
+<p>首先来看看一下Java内存模型的简单构图：</p>
+<p><img src="/images/2017/05/java-memory.png" alt="Java Memory"></p>
+<p>从图中我们可以看到我们线程都有自己的一个工作内存，这就好比高速缓存，它是对主内存部分数据的拷贝，线程对自己工作内存的操作速度远远快于对主内存的操作，但这也往往会引起共享变量不一致的问题，比如以下一个场景：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> a = <span class="number">0</span>;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setA</span><span class="params">()</span> </span>&#123;</div><div class="line">  a = a + <span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面是一个很简单的例子，a是一个全局变量，然后我们有一个方法去修改这个值，每次增加一，假如我们用100个线程去运行这段代码，那a最终的结果会是多少呢？<br>100？显然不一定，它可能是80，90，或者其他数，这就造成共享变量不一致的问题，那么为什么会导致这个问题呢，就是我们上面所说的，线程去修改a的时候可能就只是修改了自己工作内存中a的副本，但并没有将a的值及时的刷新到主内存中，这便会导致其他线程可能读到未被修改a的值，最终出现变量不一致问题。</p>
+<p>那么Java中是怎么处理这种问题，如何保证共享变量的一致性的呢？</p>
+<h4 id="同步机制"><a href="#同步机制" class="headerlink" title="同步机制"></a>同步机制</h4><p>大体上Java中有3类同步机制，但它们所解决的问题并不相同，我们先来看一看这三种机制：</p>
+<ul>
+<li>final关键词</li>
+<li>volatile关键词</li>
+<li>synchronized关键词（这里代表了所有类似监视锁的机制）</li>
+</ul>
+<h5 id="1-final关键词"><a href="#1-final关键词" class="headerlink" title="1.final关键词"></a>1.final关键词</h5><p>写过Java程序的同学对这个关键词应该再熟悉不过了，其基本含义就是<strong>不可变</strong>，不可变变量，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">final</span> <span class="keyword">int</span> a = <span class="number">10</span>;</div><div class="line"><span class="keyword">final</span> String b = <span class="string">"hello"</span>;</div></pre></td></tr></table></figure>
+<p>不可变的含义在于当你对这些变量或者对象赋初值后，不能再重新去赋值，但对于对象来说，我们不能修改的是它的引用，但是对象内的内容还是可以修改的。下面是一个简单的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">final</span> User u = <span class="keyword">new</span> User(<span class="number">1</span>,<span class="string">"a"</span>);</div><div class="line">u.id = <span class="number">2</span>; <span class="comment">//可以修改</span></div><div class="line">u = <span class="keyword">new</span> User(<span class="number">2</span>,<span class="string">"b"</span>); <span class="comment">//不可修改</span></div></pre></td></tr></table></figure>
+<p>所以在利用final关键词用来保证共享变量的一致性时一定要了解清楚自己的需求，选择合适的方法。</p>
+<h4 id="2-volatile关键词"><a href="#2-volatile关键词" class="headerlink" title="2.volatile关键词"></a>2.volatile关键词</h4><p>很多同学在遇到共享变量不一致的问题后，都会说我在声明变量前加一个volatile就好了，但事实真是这样嘛？答案显然不是。那我们来看看volatile到底为我们做了什么。</p>
+<p>前面我们说过每个线程都有自己的工作内存，很多时候线程去修改一个变量的值只是修改了自己工作内存中副本的值，这便会导致主内存的值并不是最新的，其他线程读取到的变量便会出现问题。volatile帮我们解决了这个问题，它有两个特点：</p>
+<ul>
+<li>线程每次都会去主内存中读取变量</li>
+<li>线程每次修改变量后的值都会及时更新到主内存中去</li>
+</ul>
+<p>举个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">volatile</span> <span class="keyword">int</span> a = <span class="number">0</span>;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setA</span><span class="params">()</span> </span>&#123;</div><div class="line">  a = a + <span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在线程在执行这段代码时，都会强制去主内存中读取变量的值，修改后也会马上更新到主内存中去，但是这真的能解决共享变量不一致的问题嘛，其实不然，比如我们有这么一个场景：两个线程同时读取了主内存中变量最新的值，这是我们两个线程都去执行修改操作，最后结果会是什么呢？这里就留给大家自己去思考了，其实也很简单的。</p>
+<p>那么volatile在什么场景下能保证线程安全，按照官方来说，有以下两个条件：</p>
+<ul>
+<li>对变量的写操作不依赖于当前值</li>
+<li>该变量没有包含在具有其他变量的不变式中</li>
+</ul>
+<p>多的方面这里我就不展开了，推荐两篇我觉得写的还不错的文章：<a href="http://www.cnblogs.com/paddix/p/5428507.html" target="_blank" rel="external">volatile的使用及其原理</a><a href="http://blog.csdn.net/vking_wang/article/details/9982709" target="_blank" rel="external">volatile的适用场景</a></p>
+<h4 id="3-synchronized关键词"><a href="#3-synchronized关键词" class="headerlink" title="3.synchronized关键词"></a>3.synchronized关键词</h4><p>很多同学在学习Java并发过程中最先接触的就是synchronized关键词了，它确实能解决我们上述的并发问题，那它到时如何帮我们保证共享变量的一致性的呢？</p>
+<p>简而言之的说，线程在访问请求用synchronized关键词修饰的方法，代码块都会要求获得一个监视器锁，当线程获得了监视器锁后，它才有权限去执行相应的方法或代码块，并在执行结束后释放监视器锁，这便能保证共享内存的一致性了，因为本文主要是讲Akka的共享内存，过多的篇幅就不展开了，这里推荐一篇解析synchronized原理很不错的文章，有兴趣的同学可以去看看：<a href="http://www.cnblogs.com/paddix/p/5367116.html" target="_blank" rel="external">Synchronized及其实现原理</a></p>
+<h3 id="Akka共享内存"><a href="#Akka共享内存" class="headerlink" title="Akka共享内存"></a>Akka共享内存</h3><p>Akka中的共享内存是基于Actor模型的，Actor模型提倡的是：<strong>通过通讯来实现共享内存，而不是用共享内存来实现通讯</strong>，这点是跟Java解决共享内存最大的区别，举个例子：<br>在Java中我们要去操作共享内存中数据时，每个线程都需要不断的获取共享内存的监视器锁，然后将操作后的数据暴露给其他线程访问使用，用共享内存来实现各个线程之间的通讯，而在Akka中我们可以将共享可变的变量作为一个Actor内部的状态，利用Actor模型本身串行处理消息的机制来保证变量的一致性。</p>
+<p>当然要使用Akka中的机制也必须满足一下两条原则：</p>
+<ul>
+<li>消息的发送必须先于消息的接收</li>
+<li>同一个Actor对一条消息的处理先于下一条消息处理</li>
+</ul>
+<p>第二个原则很好理解，就是上面我们说的Actor内部是串行处理消息，那我们来看看第一个原则，为什么要保证消息的发送先于消息的接收，是为了防止我们在创建消息的时候发生了不确定的错误，接收者将可能接收到不正确的消息，导致发生奇怪的异常。</p>
+<p>通过前面的学习我们知道Actor是一种比线程更轻量级，抽象程度更高的一种结构，它帮我们规避了我们自己去操作线程，那么Akka底层到底是怎么帮我们去保证共享内存的一致性的呢？</p>
+<p>一个Actor它可能会有很多线程同时向它发送消息，之前我们也说到Actor本身是串行处理的消息的，那它是如何保障这种机制的呢？</p>
+<h4 id="Mailbox"><a href="#Mailbox" class="headerlink" title="Mailbox"></a>Mailbox</h4><p>Mailbox在Actor模型是一个很重要的概念，我们都知道向一个Actor发送的消息首先都会被存储到它所对应的Mailbox中，那么我们先来看看MailBox的定义结构(本文所引用的代码都在akka.dispatch.Mailbox.scala中，有兴趣的同学也可以去研究一下）：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span>[akka] <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Mailbox</span>(<span class="params">val messageQueue: <span class="type">MessageQueue</span></span>)</span></div><div class="line">  <span class="keyword">extends</span> <span class="type">ForkJoinTask</span>[<span class="type">Unit</span>] <span class="keyword">with</span> <span class="type">SystemMessageQueue</span> <span class="keyword">with</span> <span class="type">Runnable</span> &#123;&#125;</div></pre></td></tr></table></figure>
+<p>很清晰Mailbox内部维护了一个messageQueue这样的消息队列，并继承了Scala自身定义的ForkJoinTask任务执行类和我们很熟悉的Runnable接口，由此可以看出，Mailbox底层还是利用Java中的线程进行处理的。那么我们先来看看它的run方法：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">run</span></span>(): <span class="type">Unit</span> = &#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      <span class="keyword">if</span> (!isClosed) &#123; <span class="comment">//Volatile read, needed here</span></div><div class="line">        processAllSystemMessages() <span class="comment">//First, deal with any system messages</span></div><div class="line">        processMailbox() <span class="comment">//Then deal with messages</span></div><div class="line">      &#125;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      setAsIdle() <span class="comment">//Volatile write, needed here</span></div><div class="line">      dispatcher.registerForExecution(<span class="keyword">this</span>, <span class="literal">false</span>, <span class="literal">false</span>)</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>为了配合理解，我们这里先来看一下定义：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@inline</span></div><div class="line">  <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">currentStatus</span></span>: <span class="type">Mailbox</span>.<span class="type">Status</span> = <span class="type">Unsafe</span>.instance.getIntVolatile(<span class="keyword">this</span>, <span class="type">AbstractMailbox</span>.mailboxStatusOffset)</div><div class="line"></div><div class="line"><span class="meta">@inline</span></div><div class="line">  <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">isClosed</span></span>: <span class="type">Boolean</span> = currentStatus == <span class="type">Closed</span></div></pre></td></tr></table></figure>
+<p>这里我们可以看出Mailbox本身会维护一个状态Mailbox.Status，是一个Int变量,而且是可变的，并且用到volatile来保证了它的可见性：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@volatile</span></div><div class="line">  <span class="keyword">protected</span> <span class="keyword">var</span> _statusDoNotCallMeDirectly: <span class="type">Status</span> = _ <span class="comment">//0 by default</span></div></pre></td></tr></table></figure>
+<p>现在我们在回去看上面的代码，run方法的执行过程，首先它会去读取MailBox此时的状态，因为是一个Volatile read，所以能保证读取到的是最新的值，然后它会先处理任何的系统消息，这部分不需要我们太过关心，之后便是执行我们发送的消息，这里我们需要详细看一下processMailbox()的实现：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">@tailrec</span> <span class="keyword">private</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">processMailbox</span></span>(</div><div class="line">    left:       <span class="type">Int</span>  = java.lang.<span class="type">Math</span>.max(dispatcher.throughput, <span class="number">1</span>),</div><div class="line">    deadlineNs: <span class="type">Long</span> = <span class="keyword">if</span> (dispatcher.isThroughputDeadlineTimeDefined == <span class="literal">true</span>) <span class="type">System</span>.nanoTime + dispatcher.throughputDeadlineTime.toNanos <span class="keyword">else</span> <span class="number">0</span>L): <span class="type">Unit</span> =</div><div class="line">    <span class="keyword">if</span> (shouldProcessMessage) &#123;</div><div class="line">      <span class="keyword">val</span> next = dequeue()  <span class="comment">//去出下一条消息</span></div><div class="line">      <span class="keyword">if</span> (next ne <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="type">Mailbox</span>.debug) println(actor.self + <span class="string">" processing message "</span> + next)</div><div class="line">        actor invoke next</div><div class="line">        <span class="keyword">if</span> (<span class="type">Thread</span>.interrupted())</div><div class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">InterruptedException</span>(<span class="string">"Interrupted while processing actor messages"</span>)</div><div class="line">        processAllSystemMessages()</div><div class="line">        <span class="keyword">if</span> ((left &gt; <span class="number">1</span>) &amp;&amp; ((dispatcher.isThroughputDeadlineTimeDefined == <span class="literal">false</span>) || (<span class="type">System</span>.nanoTime - deadlineNs) &lt; <span class="number">0</span>))</div><div class="line">          processMailbox(left - <span class="number">1</span>, deadlineNs) <span class="comment">//递归处理下一条消息</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>从上述代码中我们可以清晰的看到，当满足消息处理的情况下就会进行消息处理，从消息队列列取出下一条消息就是上面的<code>dequeue()</code>,然后将消息发给具体的Actor进行处理，接下去又是处理系统消息，然后判断是否还有满足情况需要下一条消息，若有则再次进行处理，可以看成一个递归操作,<code>@tailrec</code>也说明了这一点，它表示的是让编译器进行尾递归优化。</p>
+<p>现在我们来看一下一条消息从发送到最终处理在Akka中到底是怎么执行的，下面的内容是我通过阅读Akka源码加自身理解得出的，这里先画了一张流程图：</p>
+<p><img src="/images/2017/05/actor-process.png" alt="Actor process"></p>
+<p>消息的大致流程我都在图中给出，还有一些细节，必须序列化消息，获取状态等就没有具体说明了，有兴趣的同学可以自己去阅读以下Akka的源码，个人觉得Akka的源码阅读性还是很好的，比如：</p>
+<ul>
+<li>基本没有方法超过20行</li>
+<li>不会有过多的注释，但关键部分会给出，更能加深自己的理解</li>
+</ul>
+<p>当然也有一些困扰，我们在不了解各个类，接口之间的关系时，阅读体验就会变得很糟糕，当然我用IDEA很快就解决了这个问题。</p>
+<p>我们这里来看看关键的部分：<strong>Actor是如何保证串行处理消息的？</strong></p>
+<p>上图中有一根判定，是否已有线程在执行任务？我们来看看这个判定的具体逻辑：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@tailrec</span></div><div class="line">  <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">setAsScheduled</span></span>(): <span class="type">Boolean</span> = &#123;  <span class="comment">//是否有线程正在调度执行该MailBox的任务</span></div><div class="line">    <span class="keyword">val</span> s = currentStatus</div><div class="line">    <span class="comment">/*</span></div><div class="line">     * Only try to add Scheduled bit if pure Open/Suspended, not Closed or with</div><div class="line">     * Scheduled bit already set.</div><div class="line">     */</div><div class="line">    <span class="keyword">if</span> ((s &amp; shouldScheduleMask) != <span class="type">Open</span>) <span class="literal">false</span></div><div class="line">    <span class="keyword">else</span> updateStatus(s, s | <span class="type">Scheduled</span>) || setAsScheduled()</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>从注释和代码的逻辑上我们可以看出当已有线程在执行返回false，若没有则去更改状态为以调度，直到被其他线程抢占或者更改成功，其中updateStatus()是线程安全的，我们可以看一下它的实现,是一个CAS操作：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@inline</span></div><div class="line">  <span class="keyword">protected</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">updateStatus</span></span>(oldStatus: <span class="type">Status</span>, newStatus: <span class="type">Status</span>): <span class="type">Boolean</span> =</div><div class="line">    <span class="type">Unsafe</span>.instance.compareAndSwapInt(<span class="keyword">this</span>, <span class="type">AbstractMailbox</span>.mailboxStatusOffset, oldStatus, newStatus)</div></pre></td></tr></table></figure>
+<p>到这里我们应该可以大致清楚Actor内部是如何保证共享内存的一致性了，Actor接收消息是多线程的，但处理消息是单线程的，利用MailBox中的Status来保障这一机制。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过上面的内容我们可以总结出以下几点：</p>
+<ul>
+<li>Akka并不是说用了什么特殊魔法来保证并发的，底层使用的还是Java和JVM的同步机制</li>
+<li>Akka并没有使用任何的锁机制，这就避免了死锁的可能性</li>
+<li>Akka并发执行的处理并没有使用线程切换，不仅提高了线程的使用效率，也大大减少了线程切换消耗</li>
+<li>Akka为我们提供了更高层次的并发抽象模型，让我们不必关心底层的实现，只需着重实现业务逻辑就行，遵循它的规范，让框架帮我们处理一切难点吧</li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Akka/">Akka</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2017/04/scala-weekly-1/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第1期</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+    2017
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

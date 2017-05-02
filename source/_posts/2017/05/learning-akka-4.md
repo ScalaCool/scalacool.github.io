@@ -1,9 +1,9 @@
 ---
-title: Akka系列（四）：Akka中的共享内存模型
+title: Akka 系列（四）：Akka 中的共享内存模型
 author: Godpan
 tags: 
 - Akka
-description: 通过前几篇的学习，相信大家对Akka应该有所了解了，都说解决并发哪家强，JVM上面找Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？
+description: 通过前几篇的学习，相信大家对 Akka 应该有所了解了，都说解决并发哪家强，JVM上面找 Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？
 date: 2017-05-02
 ---
 
