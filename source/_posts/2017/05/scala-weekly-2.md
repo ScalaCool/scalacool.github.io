@@ -38,6 +38,13 @@ date: 2017-05-02
 - [Scala Days Chicago 2017: What You Need to Know](https://medium.com/tapad-engineering/scala-days-chicago-2017-what-you-need-to-know-c5fa7b5679b0)
   关于 Scala Days Chicago 2017 的一些 talk 总结
 
+- [基于 Scala 的产品开发实践](http://zhangyi.farbox.com/post/architecture/our-practice-based-on-scala)
+  国内团队基于 Spark + Scala 的大数据产品开发实践
+
+- [当函数成为一等公民时，设计模式的变化](https://juejin.im/post/5902981e44d904006912031d)
+  
+- [Crushing boilerplate with Scala macros](https://medium.com/iterators/crushing-boilerplate-with-scala-macros-754860551c98)
+
 ***
 
 ## 一周速递
