@@ -12,7 +12,7 @@
 
 
 
-  <meta name="description" content="通过前几篇的学习，相信大家对Akka应该有所了解了，都说解决并发哪家强，JVM上面找Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？"/>
+  <meta name="description" content="通过前几篇的学习，相信大家对 Akka 应该有所了解了，都说解决并发哪家强，JVM上面找 Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？"/>
 
 
 
@@ -35,18 +35,18 @@
 <link rel="canonical" href="http://scala.cool/2017/05/learning-akka-4/"/>
 
 
-<meta name="description" content="通过前几篇的学习，相信大家对Akka应该有所了解了，都说解决并发哪家强，JVM上面找Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？">
+<meta name="description" content="通过前几篇的学习，相信大家对 Akka 应该有所了解了，都说解决并发哪家强，JVM上面找 Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Akka系列（四）：Akka中的共享内存模型">
+<meta property="og:title" content="Akka 系列（四）：Akka 中的共享内存模型">
 <meta property="og:url" content="http://scala.cool/2017/05/learning-akka-4/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="通过前几篇的学习，相信大家对Akka应该有所了解了，都说解决并发哪家强，JVM上面找Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？">
+<meta property="og:description" content="通过前几篇的学习，相信大家对 Akka 应该有所了解了，都说解决并发哪家强，JVM上面找 Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？">
 <meta property="og:image" content="http://scala.cool/images/2017/05/java-memory.png">
 <meta property="og:image" content="http://scala.cool/images/2017/05/actor-process.png">
-<meta property="og:updated_time" content="2017-05-02T05:06:53.000Z">
+<meta property="og:updated_time" content="2017-05-03T01:09:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Akka系列（四）：Akka中的共享内存模型">
-<meta name="twitter:description" content="通过前几篇的学习，相信大家对Akka应该有所了解了，都说解决并发哪家强，JVM上面找Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？">
+<meta name="twitter:title" content="Akka 系列（四）：Akka 中的共享内存模型">
+<meta name="twitter:description" content="通过前几篇的学习，相信大家对 Akka 应该有所了解了，都说解决并发哪家强，JVM上面找 Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？">
 <meta name="twitter:image" content="http://scala.cool/images/2017/05/java-memory.png">
 
 
@@ -82,7 +82,7 @@
 
 
 
-    <title> Akka系列（四）：Akka中的共享内存模型 - Scala Cool </title>
+    <title> Akka 系列（四）：Akka 中的共享内存模型 - Scala Cool </title>
   </head>
 
   <body>
@@ -128,7 +128,7 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          Akka系列（四）：Akka中的共享内存模型
+          Akka 系列（四）：Akka 中的共享内存模型
         
       </h1>
 
@@ -169,7 +169,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">final</span> <span class="keyword">int</span> a = <span class="number">10</span>;</div><div class="line"><span class="keyword">final</span> String b = <span class="string">"hello"</span>;</div></pre></td></tr></table></figure>
 <p>不可变的含义在于当你对这些变量或者对象赋初值后，不能再重新去赋值，但对于对象来说，我们不能修改的是它的引用，但是对象内的内容还是可以修改的。下面是一个简单的例子：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">final</span> User u = <span class="keyword">new</span> User(<span class="number">1</span>,<span class="string">"a"</span>);</div><div class="line">u.id = <span class="number">2</span>; <span class="comment">//可以修改</span></div><div class="line">u = <span class="keyword">new</span> User(<span class="number">2</span>,<span class="string">"b"</span>); <span class="comment">//不可修改</span></div></pre></td></tr></table></figure>
-<p>所以在利用final关键词用来保证共享变量的一致性时一定要了解清楚自己的需求，选择合适的方法。</p>
+<p>所以在利用final关键词用来保证共享变量的一致性时一定要了解清楚自己的需求，选择合适的方法，另外final变量必须在定义或者构建对象的时候进行初始化，不然会报错。</p>
 <h4 id="2-volatile关键词"><a href="#2-volatile关键词" class="headerlink" title="2.volatile关键词"></a>2.volatile关键词</h4><p>很多同学在遇到共享变量不一致的问题后，都会说我在声明变量前加一个volatile就好了，但事实真是这样嘛？答案显然不是。那我们来看看volatile到底为我们做了什么。</p>
 <p>前面我们说过每个线程都有自己的工作内存，很多时候线程去修改一个变量的值只是修改了自己工作内存中副本的值，这便会导致主内存的值并不是最新的，其他线程读取到的变量便会出现问题。volatile帮我们解决了这个问题，它有两个特点：</p>
 <ul>
@@ -193,7 +193,7 @@
 <li>消息的发送必须先于消息的接收</li>
 <li>同一个Actor对一条消息的处理先于下一条消息处理</li>
 </ul>
-<p>第二个原则很好理解，就是上面我们说的Actor内部是串行处理消息，那我们来看看第一个原则，为什么要保证消息的发送先于消息的接收，是为了防止我们在创建消息的时候发生了不确定的错误，接收者将可能接收到不正确的消息，导致发生奇怪的异常。</p>
+<p>第二个原则很好理解，就是上面我们说的Actor内部是串行处理消息，那我们来看看第一个原则，为什么要保证消息的发送先于消息的接收，是为了防止我们在创建消息的时候发生了不确定的错误，接收者将可能接收到不正确的消息，导致发生奇怪的异常，主要表现为消息对象未初始化完整时，若没有这条规则保证，Actor收到的消息便会不完整。</p>
 <p>通过前面的学习我们知道Actor是一种比线程更轻量级，抽象程度更高的一种结构，它帮我们规避了我们自己去操作线程，那么Akka底层到底是怎么帮我们去保证共享内存的一致性的呢？</p>
 <p>一个Actor它可能会有很多线程同时向它发送消息，之前我们也说到Actor本身是串行处理的消息的，那它是如何保障这种机制的呢？</p>
 <h4 id="Mailbox"><a href="#Mailbox" class="headerlink" title="Mailbox"></a>Mailbox</h4><p>Mailbox在Actor模型是一个很重要的概念，我们都知道向一个Actor发送的消息首先都会被存储到它所对应的Mailbox中，那么我们先来看看MailBox的定义结构(本文所引用的代码都在akka.dispatch.Mailbox.scala中，有兴趣的同学也可以去研究一下）：</p>
@@ -221,7 +221,7 @@
 <p>从注释和代码的逻辑上我们可以看出当已有线程在执行返回false，若没有则去更改状态为以调度，直到被其他线程抢占或者更改成功，其中updateStatus()是线程安全的，我们可以看一下它的实现,是一个CAS操作：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@inline</span></div><div class="line">  <span class="keyword">protected</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">updateStatus</span></span>(oldStatus: <span class="type">Status</span>, newStatus: <span class="type">Status</span>): <span class="type">Boolean</span> =</div><div class="line">    <span class="type">Unsafe</span>.instance.compareAndSwapInt(<span class="keyword">this</span>, <span class="type">AbstractMailbox</span>.mailboxStatusOffset, oldStatus, newStatus)</div></pre></td></tr></table></figure>
 <p>到这里我们应该可以大致清楚Actor内部是如何保证共享内存的一致性了，Actor接收消息是多线程的，但处理消息是单线程的，利用MailBox中的Status来保障这一机制。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过上面的内容我们可以总结出以下几点：</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上面的内容我们可以总结出以下几点：</p>
 <ul>
 <li>Akka并不是说用了什么特殊魔法来保证并发的，底层使用的还是Java和JVM的同步机制</li>
 <li>Akka并没有使用任何的锁机制，这就避免了死锁的可能性</li>
