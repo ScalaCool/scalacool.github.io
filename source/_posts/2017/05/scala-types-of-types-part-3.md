@@ -14,11 +14,11 @@ date: 2017-05-04
 
 ## 目录
 
-- [11. 抽象类型成员]()
-- [12. 自递归类型]()
-- [13. 类型构造器]()
-- [14. 高阶类型]()
-- [15. 样例类]()
+- [11. 抽象类型成员](#11-抽象类型成员)
+- [12. 自递归类型](#12-自递归类型)
+- [13. 类型构造器](#13-类型构造器)
+- [14. 高阶类型](#14-高阶类型)
+- [15. 样例类](#15-样例类)
 
 ## 11. 抽象类型成员
 
@@ -152,8 +152,30 @@ object Jabłuszko extends Apple
 
 > ❌ 该章节作者尚未完成，或需要修改
 
-类型构造器跟函数几乎是类似的，但前者是在类型层面。换句话说，你在日常的编程中可以给一个函数传入一个值 `a`，然后返回一个值 `b` 。于是在类型层面编程，你可以认为一个 `List[+A]` 是一个类型构造器，
+类型构造器跟函数几乎是类似的，但前者是在类型层面。换句话说，你在日常的编程中可以给一个函数传入一个值 `a`，然后返回一个值 `b` 。于是在类型层面编程，你可以认为一个 `List[+A]` 是一个类型构造器，表现如下：
+- `List[+A]` 有一个类型参数 (`A`)；
+- 它本身并不是一个有效的类型，你需要填充 `A` 所在的地方来「构造类型」；
+- 填上 `Int` 你就得到了一个具体的类型 `List[Int]` 。
 
+通过这个例子，你会发现「类型构造器」跟「普通构造器」是如此的相似，唯一不同的地方在于前者处理的是类型，而不是对象的实例。值得注意的是，在 Scala 中我们不能说某个东西的类型是 `List` ，因为它并不像 Java 里，javac 会将 `List<Object>` 给你。 Scala 在这个地方是更严格的，它并不允许我们仅仅使用一个 `List` 来代表一个类型，因为它是一个类型构造器，而不是一个真正的具体类型。
+
+在 Scala 2.11.x 中我们将在 REPL 中拥有一个强大的命令 - `:kind` ，它支持检测一个类型是高阶。让我们通过一个简单的类型构造器来试试看，比如 `List[+A]` ：
+```scala
+// Welcome to Scala version 2.11.0-M5 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0-ea).
+// Type in expressions to have them evaluated.
+
+:kind List
+// scala.collection.immutable.List's kind is F[+A]
+
+:kind -v List
+// scala.collection.immutable.List's kind is F[+A]
+// * -(+)-> *
+// This is a type constructor: a 1st-order-kinded type.
+```
+
+这里我们看到，scalac 可以告诉我们 `List` 实际上是一个类型构造器（当与 `-verbose` 一起使用时，会更有说服力）。我们来调查下上述信息中的语法：`* -> *` 。这个语法被广泛地用于代表类型，我发现事实上这是收到了 Haskell 的启发 — Haskell 用它来打印函数的类型。
+
+综上所述，`List[A+]` （或者 `Option[+A]` ，或者 `Set[+A]` …… 或者其它有一个类型参数的东西）是最简单的类型构造器的例子 — 这些都有一个参数。我们称它们为第一阶类型 (`* -> *`)。值得一提的是，一个 `Pair[+A, +B]` （我们可以表示为 `* -> * -> *`）依旧不是一个「高阶类型」，它也是第一阶的。在下一节中，我们将仔细研究高阶类型到底给我们带来了什么，以及如何识别它。
 
 ## 14. 高阶类型
 
@@ -181,6 +203,38 @@ case class Circle(radius: Double)
 ```
 
 仅一行代码，我们就已经实现了 [Value Object](http://en.wikipedia.org/wiki/Value_object) 模式。这意味着通过定义一个样例类，我们就自动做到了以下事情：
-- 它的实例是不可变的
-- 可以使用 `equals` 来被比较，通过它的字段来判定相等（而不是类似一个普通类的对象相等）
-- 
+- 它的实例是不可变的；
+- 可以使用 `equals` 来被比较，通过它的字段来判定相等（而不是类似一个普通类的对象相等）；
+- 它的 `hashcode` 奉行 `equals` 的契约，是基于类的值；
+- 它的 `toString` 由类名和它所包含的字段的值组成的（对照上面的 Circle，可实现为 `def toString = s"Circle($radius)"`）。
+
+我们消化下目前所提到的东西，接下来将使用一个生动的例子来继续延伸。这次我们要实现一个 `Point` 类，它会拥有不止一个字段，来展现 `case class` 给我们提供的一些有趣的特性：
+```scala
+① case class Point(x: Int, y: Int)        
+② val a = Point(0, 0)                   
+③ // a.toString == "Point(0,0)"         
+
+④  val b = a.copy(y = 10)                
+  // b.toString == "Point(0,10)"
+
+⑤ a == Point(0, 0)                      
+
+```
+
+① `x` 和 `y` 自动被定义为 `val` 成员；
+② 一个 `Point` 的伴身对象会同时产生，它有一个 `apply(x: Int, y: Int)` 方法，我们可以借此创建实例；
+③ 生成的 `toString` 方法包含了类名以及 case class 的参数值；
+④ `copy(...)` 方法支持我们轻松创建拷贝的对象，改变选定的字段；
+⑤ case class 基于值来判等 ( `equals` 和 `hashCode` 被生成，它们基于 case class 的参数实现)
+
+除此之外，一个 case class 还可被用于模式匹配，使用 「usual」或「extractor」语法：
+
+```scala
+Circle(2.5) match {
+  case Circle(r) => println("Radius = " + r)
+}
+
+val Circle(r)
+val r2 = r + r
+```
+
