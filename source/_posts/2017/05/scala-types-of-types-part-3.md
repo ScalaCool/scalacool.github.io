@@ -5,7 +5,7 @@ tags:
 - 类型相关
 - 翻译
 description: 现在我们来深入了解「类型别名」的使用场景 — 抽象类型成员。有了抽象类型成员，我们就可以说「我希望有人告诉我某个类型 — 我将通过名称 MyType 来引用它」。
-date: 2017-05-04
+date: 2017-05-010
 ---
 
 ## 上一篇
@@ -60,7 +60,7 @@ trait OnlyNumbersContainer {
 }
 ```
 
-或者我们可以稍后在类的结构中添加约束，比如通过在一个特质中混入xxxx：
+或者我们可以稍后在类的继承关系中添加约束，比如继承一个声明「only Numbers」的特质：
 ```scala
 trait SimpleContainer {
   type A
@@ -85,7 +85,8 @@ val _ = new SimpleContainer with OnlyNumbers {
 
 ## 12. 自递归类型
 
-自递归类型（Self-recursive Types）在大多数文献中被称为 **F-Bounded Types** 。所以你可能会发现很多文章或博客引用 **F-bounded** 。事实上，这是 self-recursive 的另一种叫法，代表了「子类型约束」本身是通过参数化的情况。
+自递归类型（Self-recursive Types）在大多数文献中被称为 **F-Bounded Types** 。所以你可能会发现很多文章或博客引用 **F-bounded** 。事实上，这是 self-recursive 的另一种叫法，代表了「子类型约束」本身是通过参数化发生在左侧的绑定器的情况。
+
 由于「自递归」的叫法更加直观，我们会在后续的文中坚持使用（尽管还是有部分读者会在 google 中搜索「F-bounded是什么」）。
 
 ### 12.1 F-Bounded Type
