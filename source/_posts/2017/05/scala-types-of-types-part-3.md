@@ -91,7 +91,7 @@ val _ = new SimpleContainer with OnlyNumbers {
 
 ### 12.1 F-Bounded Type
 
-虽然这不是 Scala 的某种特定类型，但它有时也让人感到棘手。很多人熟悉（也许是不知不觉地）的一个自递归类型的例子是 Java 中的 `Enum<E>` 。如果你比较好奇，可以参见 [Enum sources from Java](http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b14/java/lang/Enum.java) 。但现在先让我们回到 Scala，看看我们到底在讨论什么。
+虽然这不是 Scala 的某种具体类型，但它有时也让人感到棘手。很多人熟悉（也许是不知不觉地）的一个自递归类型的例子是 Java 中的 `Enum<E>` 。如果你比较好奇，可以参见 [Enum sources from Java](http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b14/java/lang/Enum.java) 。但现在先让我们回到 Scala，看看我们到底在讨论什么。
 
 > 在本节中，我们不会特别深入探讨这种类型。如果你想要了解在 Scala 中更多、更深入的用例，或许可以看看 Kris Nuttycombe 的 [F-Bounded Type Polymorphism Considered Tricky](http://logji.blogspot.se/2012/11/f-bounded-type-polymorphism-give-up-now.html) 。
 
@@ -112,7 +112,7 @@ val orange = new Orange()
 apple compareTo orange // compiles, but we want to make this NOT compile!
 ```
 
-在这段代码中，由于 `Fruit` 特质压根不知道谁会继承它，所以不可能通过限制 compareTo 的签名来。让我们利用「自递归类型参数」来重新实现下：
+在这段代码中，由于 `Fruit` 特质不知道谁会继承它，所以不可能通过限制 compareTo 的签名来实现只允许传入跟`this` 相同的子类型参数。让我们利用「自递归类型参数」来重新实现下：
 ```scala
 trait Fruit[T <: Fruit[T]] {
   final def compareTo(other: Fruit[T]): Boolean = true // impl doesn't matter in our example
@@ -125,7 +125,7 @@ val apple = new Apple
 val orange = new Orange
 ```
 
-注意 Fruit 签名里的类型参数，你可以解读为「我传入了类型 `T` , `T` 必须是一个 `Fruit[T]`」，必须像上述 `Apple` 和 `Orange` 一样才能满足这种界限条件。现在如果我们要比较 `apple` 和 `orange` ，我们就会得到一个编译时错误：
+注意 Fruit 签名里的类型参数，你可以解读为「我传入了类型 `T` , `T` 必须是一个 `Fruit[T]`」，必须像上述 `Apple` 和 `Orange` 一样继承这个特质才能满足这种界限条件。现在如果我们要比较 `apple` 和 `orange` ，我们就会得到一个编译时错误：
 ```
 scala> orange compareTo apple
 :13: error: type mismatch;
@@ -137,7 +137,7 @@ scala> orange compareTo orange
 res1: Boolean = true
 ```
 
-因此我们确定只能在同类水果之间进行比较，比如苹果跟苹果。
+因此我们确定只能在同类水果之间进行比较，比如苹果跟苹果。假使讨论更多，要是 `Apple` 和 `Orange` 的子类呢？好，因为我们在类型继承关系中在 Apple / Orange 层填写了类型参数，根本上行我们可以说「苹果只能跟苹果进行比较」，这也意味着苹果的子类可以进行相互比较。这对 Fruit 的 `compareTo` 的签名来说依旧好办，因为我们调用的右侧部分会变成 `Fruit[Apple]` — 变得更具体一点而已。让我们用一个日本的苹果（ja. "りんご", "ringo"）和一个波兰的苹果（pl. "Jabłuszko"）举例：
 
 ```scala
 object `りんご`  extends Apple
