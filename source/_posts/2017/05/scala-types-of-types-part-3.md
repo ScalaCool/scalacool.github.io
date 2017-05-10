@@ -125,7 +125,7 @@ val apple = new Apple
 val orange = new Orange
 ```
 
-注意 Fruit 签名里的类型参数，你可以解读为「我传入了类型 `T` , `T` 必须是一个 `Fruit[T]`」，符合这种边界的唯一方式就是上述的 `Apple` 和 `Orange` 一样。现在如果我们要比较 `apple` 和 `orange` ，我们就会得到一个编译时错误：
+注意 Fruit 签名里的类型参数，你可以解读为「我传入了类型 `T` , `T` 必须是一个 `Fruit[T]`」，必须像上述 `Apple` 和 `Orange` 一样才能满足这种界限条件。现在如果我们要比较 `apple` 和 `orange` ，我们就会得到一个编译时错误：
 ```
 scala> orange compareTo apple
 :13: error: type mismatch;
@@ -174,7 +174,7 @@ object Jabłuszko extends Apple
 // This is a type constructor: a 1st-order-kinded type.
 ```
 
-这里我们看到，scalac 可以告诉我们 `List` 实际上是一个类型构造器（当与 `-verbose` 一起使用时，会更有说服力）。我们来调查下上述信息中的语法：`* -> *` 。这个语法被广泛地用于代表类型，我发现事实上这是收到了 Haskell 的启发 — Haskell 用它来打印函数的类型。
+这里我们看到，scalac 可以告诉我们 `List` 实际上是一个类型构造器（当与 `-verbose` 一起使用时，会更有说服力）。我们来调查下上述信息中的语法：`* -> *` 。这个语法被广泛地用于代表类型，我发现事实上这是收到了 Haskell 的启发 — Haskell 用它来打印函数的类型。最直观的解读是「传入一个类型，返回另一个类型」。你也许已经注意到我们从 Scala 完整的输出中省略了来自关系中的 `+` 符号（比如 `* -(+)-> *`）。这个代表型变的边界，你可以在 [Scala 中的型变](http://scala.cool/2017/04/scala-types-of-types-part-2/#7-Scala-中的型变) 一节中了解更多关于型变的内容。
 
 综上所述，`List[A+]` （或者 `Option[+A]` ，或者 `Set[+A]` …… 或者其它有一个类型参数的东西）是最简单的类型构造器的例子 — 这些都有一个参数。我们称它们为第一阶类型 (`* -> *`)。值得一提的是，一个 `Pair[+A, +B]` （我们可以表示为 `* -> * -> *`）依旧不是一个「高阶类型」，它也是第一阶的。在下一节中，我们将仔细研究高阶类型到底给我们带来了什么，以及如何识别它。
 
