@@ -73,7 +73,7 @@ class Day {
 
 好的，我们现在知道了编译器可以在不必要的时候通过奇技淫巧来避免将 `ints` 包装成 `Ints` 。因此让我们来看看 Scala 在 2.10.x 之后是如何将这个特性展示给我们的。这个特性被称为「值类」，可以相当简单地应用到你现有的类当中。使用它们就像将 `extends AnyVal` 加到你的类中一样方便，同时将遵循下面将提及的新规则。如果你不熟悉 `AnyVal` ，这可能是一个很好的学习机会 — 你可以查看 [通用类型系统 — Any, AnyRef, AnyVal](http://localhost:4000/2017/03/scala-types-of-types-part-1/#4-通用类型系统-—-Any-AnyRef-AnyVal)。
 
-让我们实现一个 `Meter` 来作为我们的例子，它将实现一个原生 `int` 的 wrapper ，并支持将以「米」为单位的数字转化为以 `Foot` 类型的数字。我们需要上一课，因为没人理解皇室的制度 ;-)  。
+让我们实现一个 `Meter` 来作为我们的例子，它将实现一个原生 `int` 的包装 ，并支持将以「meter」为单位的数字转化为以 `Foot` 类型的数字。我们需要上一课，因为没人理解皇室的制度 ;-)  。不过，如果 95% 的时候都使用原生的 meter 值，为什么我们要因为让一个对象包含一个 `int` 而支付额外的运行时开销？（每个实例都有好几个字节！）是因为这是一个面向欧洲市场的项目？我们需要「值类」的救援！
 
 ```scala
 case class Meter(value: Double) extends AnyVal {
@@ -84,6 +84,47 @@ case class Foot(value: Double) extends AnyVal {
   def toMeter: Meter = Meter(value / 0.3048)
 }
 ```
+
+我们将在所有的例子中使用样例类（值类），但它在技术上不是硬性要求的（尽管非常方便）。虽然你也可以通过在一个普通类使用 `val` 来实现一个值类，相比样例类通常会是最佳方案。你可能会问「为什么只有一个参数」，这是因为我们会尽量避免去包装值，这对于单个值是有意义的，否则我们就必须在某些地方保持一个元组，这样很快就会变得含糊，同时我们也将失去「不包装」策略下的性能。因此记住，值类仅适用于一个值，虽然没人可以说这个参数必须是一个原始类型，它也可以是一个普通类，如 `Fruit` 或 `Person` ，我们有时候依旧可以避免在值类中进行包装。
+
+> 所有你在定义一个值类时需要做的，就是拥有一个包含「继承 `AnyVal`变量」的类，同时遵循一些它的限制。这个变量不一定就是原始类型，它可以是任何东西。这些限制换句话说，就是一个更长的列表，比如一个值类型不能包含除了 `def` 成员外的其它字段，并且不能被扩展，等等。完整的限制清单以及更深入的例子，可以参加 Scala 文档 — [Value Classes - summary of limitations])(http://docs.scala-lang.org/overviews/core/value-classes.html#summary_of_limitations) 。
+
+好了，现在我们拥有了 `Meter` 和 `Foot` 值样例类，我们首先检查下当添加了 `extends AnyVal` 部分之后，生成的字节码如何使 `Meter` 从一个普通的样例类，变成一个值类：
+```scala
+// case class
+scala> :javap Meter
+
+public class Meter extends java.lang.Object implements scala.Product,scala.Serializable{
+    public double value();
+    public Foot toFeet();
+    // ...
+}
+
+scala> :javap Meter$
+public class Meter$ extends scala.runtime.AbstractFunction1 implements scala.Serializable{
+    // ... (skipping not interesting in this use-case methods)
+}
+```
+
+为值类生成的字节码如下：
+```scala
+// case value class
+
+scala> :javap Meter
+public final class Meter extends java.lang.Object implements scala.Product,scala.Serializable{
+    public double value();
+    public Foot toFeet();
+    // ...
+}
+
+scala> :javap Meter$
+public class Meter$ extends scala.runtime.AbstractFunction1 implements scala.Serializable{
+    public final Foot toFeet$extension(double);
+    // ...
+}
+```
+
+有一件事情应该引起我们的重视，就是当 `Meter` 作为一个值类被创建时，它的伴生对象获得了一个新的方法 — `toFeet$extension(double): Foot` 。
 
 ## 18. 类型类
 
