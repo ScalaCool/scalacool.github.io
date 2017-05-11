@@ -12,7 +12,7 @@
 
 
 
-  <meta name="description" content="<译> Scala 类型的类型（四）"/>
+  <meta name="description" content="Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（植入到 Enumeration）来写出类似的东西。"/>
 
 
 
@@ -35,40 +35,16 @@
 <link rel="canonical" href="http://scala.cool/2017/05/scala-types-of-types-part-4/"/>
 
 
-<meta name="description" content="上一篇Scala 类型的类型（三）
-目录
-16. 枚举
-17. 值类
-18. 类型类
-19. 自类型注释
-20. 幻象类型
-
-16. 枚举">
+<meta name="description" content="Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（植入到 Enumeration）来写出类似的东西。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="<译> Scala 类型的类型（四）">
 <meta property="og:url" content="http://scala.cool/2017/05/scala-types-of-types-part-4/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="上一篇Scala 类型的类型（三）
-目录
-16. 枚举
-17. 值类
-18. 类型类
-19. 自类型注释
-20. 幻象类型
-
-16. 枚举">
-<meta property="og:updated_time" content="2017-05-11T08:23:51.000Z">
+<meta property="og:description" content="Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（植入到 Enumeration）来写出类似的东西。">
+<meta property="og:updated_time" content="2017-05-11T09:05:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<译> Scala 类型的类型（四）">
-<meta name="twitter:description" content="上一篇Scala 类型的类型（三）
-目录
-16. 枚举
-17. 值类
-18. 类型类
-19. 自类型注释
-20. 幻象类型
-
-16. 枚举">
+<meta name="twitter:description" content="Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（植入到 Enumeration）来写出类似的东西。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -171,15 +147,18 @@
 
     
             <div class="post-content">
-            <h2 id="上一篇"><a href="#上一篇" class="headerlink" title="上一篇"></a>上一篇</h2><p><a href="http://scala.cool/2017/03/scala-types-of-types-part-3/">Scala 类型的类型（三）</a></p>
+            <h2 id="上一篇"><a href="#上一篇" class="headerlink" title="上一篇"></a>上一篇</h2><p><a href="http://scala.cool/2017/05/scala-types-of-types-part-3/">Scala 类型的类型（三）</a></p>
 <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
 <li><a href="">16. 枚举</a></li>
 <li><a href="">17. 值类</a></li>
 <li><a href="">18. 类型类</a></li>
 <li><a href="">19. 自类型注释</a></li>
-<li><a href="">20. 幻象类型</a></li>
+<li><a href="">20. 幽灵类型</a></li>
 </ul>
-<h2 id="16-枚举"><a href="#16-枚举" class="headerlink" title="16. 枚举"></a>16. 枚举</h2>
+<h2 id="16-枚举"><a href="#16-枚举" class="headerlink" title="16. 枚举"></a>16. 枚举</h2><p>Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（植入到 Enumeration）来写出类似的东西。</p>
+<h3 id="16-1-Enumeration"><a href="#16-1-Enumeration" class="headerlink" title="16.1. Enumeration"></a>16.1. Enumeration</h3><p>在 Scala 2.10.x 版本中可以通过使用 <code>Enumeration</code> 来实现「类枚举」的结构。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Main</span> <span class="keyword">extends</span> <span class="title">App</span> </span>&#123;</div><div class="line"></div><div class="line">① <span class="class"><span class="keyword">object</span> <span class="title">WeekDay</span> <span class="keyword">extends</span> <span class="title">Enumeration</span> </span>&#123;               </div><div class="line">②    <span class="class"><span class="keyword">type</span> <span class="title">WeekDay</span> </span>= <span class="type">Value</span>                             </div><div class="line">③    <span class="keyword">val</span> <span class="type">Mon</span>, <span class="type">Tue</span>, <span class="type">Wed</span>, <span class="type">Thu</span>, <span class="type">Fri</span>, <span class="type">Sat</span>, <span class="type">Sun</span> = <span class="type">Value</span>    </div><div class="line">  &#125;</div><div class="line">④  <span class="keyword">import</span> <span class="type">WeekDay</span>._                                   </div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">isWorkingDay</span></span>(d: <span class="type">WeekDay</span>) = ! (d == <span class="type">Sat</span> || d == <span class="type">Sun</span>)</div><div class="line"></div><div class="line">⑤  <span class="type">WeekDay</span>.values filter isWorkingDay foreach println </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>① 首先我们声明一个单例来包含我们的枚举值，它必须继承 <code>Enumeration</code><br>② 在这里，我们为枚举值定义一个 <a href="http://scala.cool/2017/04/scala-types-of-types-part-2/#10-类型别名">类型别名</a> ，</p>
+
             </div>
           
 
