@@ -41,7 +41,7 @@
 <meta property="og:url" content="http://scala.cool/2017/05/scala-types-of-types-part-4/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（植入到 Enumeration）来写出类似的东西。">
-<meta property="og:updated_time" content="2017-05-11T09:05:06.000Z">
+<meta property="og:updated_time" content="2017-05-11T09:39:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<译> Scala 类型的类型（四）">
 <meta name="twitter:description" content="Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（植入到 Enumeration）来写出类似的东西。">
@@ -149,16 +149,21 @@
             <div class="post-content">
             <h2 id="上一篇"><a href="#上一篇" class="headerlink" title="上一篇"></a>上一篇</h2><p><a href="http://scala.cool/2017/05/scala-types-of-types-part-3/">Scala 类型的类型（三）</a></p>
 <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
-<li><a href="">16. 枚举</a></li>
-<li><a href="">17. 值类</a></li>
-<li><a href="">18. 类型类</a></li>
-<li><a href="">19. 自类型注释</a></li>
-<li><a href="">20. 幽灵类型</a></li>
+<li><a href="#16-枚举">16. 枚举</a></li>
+<li><a href="#17-值类">17. 值类</a></li>
+<li><a href="#18-类型类">18. 类型类</a></li>
+<li><a href="#19-自类型注解">19. 自类型注解</a></li>
+<li><a href="#20-幽灵类型">20. 幽灵类型</a></li>
 </ul>
 <h2 id="16-枚举"><a href="#16-枚举" class="headerlink" title="16. 枚举"></a>16. 枚举</h2><p>Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（植入到 Enumeration）来写出类似的东西。</p>
 <h3 id="16-1-Enumeration"><a href="#16-1-Enumeration" class="headerlink" title="16.1. Enumeration"></a>16.1. Enumeration</h3><p>在 Scala 2.10.x 版本中可以通过使用 <code>Enumeration</code> 来实现「类枚举」的结构。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Main</span> <span class="keyword">extends</span> <span class="title">App</span> </span>&#123;</div><div class="line"></div><div class="line">① <span class="class"><span class="keyword">object</span> <span class="title">WeekDay</span> <span class="keyword">extends</span> <span class="title">Enumeration</span> </span>&#123;               </div><div class="line">②    <span class="class"><span class="keyword">type</span> <span class="title">WeekDay</span> </span>= <span class="type">Value</span>                             </div><div class="line">③    <span class="keyword">val</span> <span class="type">Mon</span>, <span class="type">Tue</span>, <span class="type">Wed</span>, <span class="type">Thu</span>, <span class="type">Fri</span>, <span class="type">Sat</span>, <span class="type">Sun</span> = <span class="type">Value</span>    </div><div class="line">  &#125;</div><div class="line">④  <span class="keyword">import</span> <span class="type">WeekDay</span>._                                   </div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">isWorkingDay</span></span>(d: <span class="type">WeekDay</span>) = ! (d == <span class="type">Sat</span> || d == <span class="type">Sun</span>)</div><div class="line"></div><div class="line">⑤  <span class="type">WeekDay</span>.values filter isWorkingDay foreach println </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>① 首先我们声明一个单例来包含我们的枚举值，它必须继承 <code>Enumeration</code><br>② 在这里，我们为枚举值定义一个 <a href="http://scala.cool/2017/04/scala-types-of-types-part-2/#10-类型别名">类型别名</a> ，</p>
-
+<p>① 首先我们声明一个单例来包含我们的枚举值，它必须继承 <code>Enumeration</code><br>② 在这里，我们为 <code>Enumeration</code> 内部的 <code>Value</code> 类型定义一个 <a href="http://scala.cool/2017/04/scala-types-of-types-part-2/#10-类型别名">类型别名</a> ，因为我们需要取一个匹配单例名字的名字，后面可以始终通过「WeekDay」来引用它。（是的，这几乎是一个 hack ）<br>③ 在这里，我们采用了「多重赋值」，因此每个 <code>val</code> 左边的变量都被赋值了一个不同的 <code>Value</code> 类型的实例<br>④ 这个 <code>import</code> 带来了两点：不仅支持了在没有 <code>WeekDay</code> 前缀的情况下直接使用 <code>Mon</code> ，同时也在这个作用域中引入了 <code>type WeekDay</code> ，于是我们可以在下方的方法定义中使用它<br>⑤ 最后，我们获得了一些 <code>Enumeration</code> 的方法，这些并不是魔术，当我们创建新的 <code>Value</code> 实例时，大部分动作都会发生</p>
+<p>正如你所见，Scala 中的枚举机制并不是内置的，而是通过巧妙地借助类型系统来实现。对于一些使用场景，这也许已经足够了。但当遇到需要增加枚举值以及往每个值增加行为的时候，它就不能像 Java 那样强大了。</p>
+<h3 id="16-2-enum"><a href="#16-2-enum" class="headerlink" title="16.2. @enum"></a>16.2. @enum</h3><blockquote>
+<p><code>@enum</code> 注解现在已经不仅仅只是一个提议了， 已经处在 Scala 内部的讨论进程中了：<a href="https://groups.google.com/forum/#!topic/scala-internals/8RWkccSRBxQ%5B1-25%5D" target="_blank" rel="external">Enumeration must DIE…</a></p>
+</blockquote>
+<p><code>@enum</code> 注解可能会跟「注解宏」一起，在将来被支持。在 Scala 改进计划文档中有关于此的描述：<a href="http://ktoso.github.io/scala-types-of-types/#enumeration-2" target="_blank" rel="external">enum-sip</a> 。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@enum</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Day</span> </span>&#123;</div><div class="line">  <span class="type">Monday</span>    &#123; <span class="function"><span class="keyword">def</span> <span class="title">goodDay</span> </span>= <span class="literal">false</span> &#125;</div><div class="line">  <span class="type">Tuesday</span>   &#123; <span class="function"><span class="keyword">def</span> <span class="title">goodDay</span> </span>= <span class="literal">false</span> &#125;</div><div class="line">  <span class="type">Wednesday</span> &#123; <span class="function"><span class="keyword">def</span> <span class="title">goodDay</span> </span>= <span class="literal">false</span> &#125;</div><div class="line">  <span class="type">Thursday</span>  &#123; <span class="function"><span class="keyword">def</span> <span class="title">goodDay</span> </span>= <span class="literal">false</span> &#125;</div><div class="line">  <span class="type">Friday</span>    &#123; <span class="function"><span class="keyword">def</span> <span class="title">goodDay</span> </span>= <span class="literal">true</span>  &#125;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">goodDay</span></span>: <span class="type">Boolean</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="17-值类"><a href="#17-值类" class="headerlink" title="17. 值类"></a>17. 值类</h2><h2 id="18-类型类"><a href="#18-类型类" class="headerlink" title="18. 类型类"></a>18. 类型类</h2><h2 id="19-自类型注解"><a href="#19-自类型注解" class="headerlink" title="19. 自类型注解"></a>19. 自类型注解</h2><h2 id="20-幽灵类型"><a href="#20-幽灵类型" class="headerlink" title="20. 幽灵类型"></a>20. 幽灵类型</h2>
             </div>
           
 
