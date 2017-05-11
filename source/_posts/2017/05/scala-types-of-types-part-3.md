@@ -174,7 +174,7 @@ object Jabłuszko extends Apple
 // This is a type constructor: a 1st-order-kinded type.
 ```
 
-这里我们看到，scalac 可以告诉我们 `List` 实际上是一个类型构造器（当与 `-verbose` 一起使用时，会更有说服力）。我们来调查下上述信息中的语法：`* -> *` 。这个语法被广泛地用于代表类型，我发现事实上这是收到了 Haskell 的启发 — Haskell 用它来打印函数的类型。最直观的解读是「传入一个类型，返回另一个类型」。你也许已经注意到我们从 Scala 完整的输出中省略了来自关系中的 `+` 符号（比如 `* -(+)-> *`）。这个代表型变的边界，你可以在 [Scala 中的型变](http://scala.cool/2017/04/scala-types-of-types-part-2/#7-Scala-中的型变) 一节中了解更多关于型变的内容。
+这里我们看到，scalac 可以告诉我们 `List` 实际上是一个类型构造器（当与 `-verbose` 一起使用时，会更有说服力）。我们来调查下上述信息中的语法：`* -> *` 。这个语法被广泛地用于代表类型（ kind ，而不是 type ），我发现事实上这是受到了 Haskell 的启发 — Haskell 用它来打印函数的类型。最直观的解读是「传入一个类型，返回另一个类型」。你也许已经注意到我们从 Scala 完整的输出中省略了来自关系中的 `+` 符号（`* -(+)-> *`）。这个代表型变的边界，你可以在 [Scala 中的型变](http://scala.cool/2017/04/scala-types-of-types-part-2/#7-Scala-中的型变) 一节中了解更多关于型变的内容。
 
 综上所述，`List[A+]` （或者 `Option[+A]` ，或者 `Set[+A]` …… 或者其它有一个类型参数的东西）是最简单的类型构造器的例子 — 这些都有一个参数。我们称它们为第一阶类型 (`* -> *`)。值得一提的是，一个 `Pair[+A, +B]` （我们可以表示为 `* -> * -> *`）依旧不是一个「高阶类型」，它也是第一阶的。在下一节中，我们将仔细研究高阶类型到底给我们带来了什么，以及如何识别它。
 
@@ -198,7 +198,7 @@ TODO：[http://blogs.atlassian.com/2013/09/scala-types-of-a-higher-kind/](http:/
 
 样例类（Case Class）是 Scala 编译器中最有用的小技巧之一。它使用起来简单，然而又帮了大忙。它为我们避免了一些非常重复无聊的工作，如 `equals`、`hashCode` 和 `toString` 的实现，内置了 `apply` / `unapply` 方法来支持模式匹配，等等。
 
-在 Scala 中一个样例类的声明就像一个普通的类一样，但是需要前置一个 `case` 关键字：
+在 Scala 中一个样例类的声明就像一个普通的类一样，只是需要前置一个 `case` 关键字：
 ```scala
 case class Circle(radius: Double)
 ```
@@ -206,7 +206,7 @@ case class Circle(radius: Double)
 仅一行代码，我们就已经实现了 [Value Object](http://en.wikipedia.org/wiki/Value_object) 模式。这意味着通过定义一个样例类，我们就自动做到了以下事情：
 - 它的实例是不可变的；
 - 可以使用 `equals` 来被比较，通过它的字段来判定相等（而不是类似一个普通类的对象相等）；
-- 它的 `hashcode` 奉行 `equals` 的契约，是基于类的值；
+- 它的 `hashCode` 奉行 `equals` 的契约，是基于类的值；
 - 它的 `toString` 由类名和它所包含的字段的值组成的（对照上面的 Circle，可实现为 `def toString = s"Circle($radius)"`）。
 
 我们消化下目前所提到的东西，接下来将使用一个生动的例子来继续延伸。这次我们要实现一个 `Point` 类，它会拥有不止一个字段，来展现 `case class` 给我们提供的一些有趣的特性：
@@ -228,7 +228,7 @@ case class Circle(radius: Double)
 ④ `copy(...)` 方法支持我们轻松创建拷贝的对象，改变选定的字段；
 ⑤ case class 基于值来判等 ( `equals` 和 `hashCode` 被生成，它们基于 case class 的参数实现)
 
-除此之外，一个 case class 还可被用于模式匹配，使用 「usual」或「extractor」语法：
+除此之外，一个 case class 还可被用于模式匹配，使用惯常的或者「抽取器模式」语法：
 
 ```scala
 Circle(2.5) match {
