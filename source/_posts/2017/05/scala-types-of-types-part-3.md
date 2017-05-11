@@ -5,7 +5,7 @@ tags:
 - 类型相关
 - 翻译
 description: 现在我们来深入了解「类型别名」的使用场景 — 抽象类型成员。有了抽象类型成员，我们就可以说「我希望有人告诉我某个类型 — 我将通过名称 MyType 来引用它」。
-date: 2017-05-010
+date: 2017-05-10
 ---
 
 ## 上一篇
@@ -36,7 +36,7 @@ trait SimplestContainer {
 
 学过 Java 的朋友会觉得这在语法上有点类似 `Container<A>` ，但在 「路径依赖类型」 的章节中我们会发现它其实是更强大的，以下的例子也可以说明这一点。
 
-需要注意到的关键点是，当命名中包含了关键字 `abstract` （译者注：即 `trait abstract SimplestContainer`），它并不会表现得跟一个「抽象字段」一样 — 所以你仍然可以在不「实现」类型成员 `A` 的前提下创建一个 `SimplestContainer` 的新实例：
+需要注意到的关键点是，虽然 Abstract Member Type 命名中包含了关键字 `abstract`，它并不会表现得跟一个「抽象字段」一样 — 所以你仍然可以在不「实现」类型成员 `A` 的前提下创建一个 `SimplestContainer` 的新实例：
 ```scala
 new SimplestContainer // valid, but A is "anything"
 ```
@@ -222,11 +222,11 @@ case class Circle(radius: Double)
 
 ```
 
-① `x` 和 `y` 自动被定义为 `val` 成员；
-② 一个 `Point` 的伴身对象会同时产生，它有一个 `apply(x: Int, y: Int)` 方法，我们可以借此创建实例；
-③ 生成的 `toString` 方法包含了类名以及 case class 的参数值；
-④ `copy(...)` 方法支持我们轻松创建拷贝的对象，改变选定的字段；
-⑤ case class 基于值来判等 ( `equals` 和 `hashCode` 被生成，它们基于 case class 的参数实现)
+① `x` 和 `y` 自动被定义为 `val` 成员；  
+② 一个 `Point` 的伴身对象会同时产生，它有一个 `apply(x: Int, y: Int)` 方法，我们可以借此创建实例；  
+③ 生成的 `toString` 方法包含了类名以及 case class 的参数值；  
+④ `copy(...)` 方法支持我们轻松创建拷贝的对象，改变选定的字段；  
+⑤ case class 基于值来判等 ( `equals` 和 `hashCode` 被生成，它们基于 case class 的参数实现)  
 
 除此之外，一个 case class 还可被用于模式匹配，使用惯常的或者「抽取器模式」语法：
 
