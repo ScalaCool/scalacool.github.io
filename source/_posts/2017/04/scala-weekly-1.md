@@ -21,7 +21,7 @@ date: 2017-04-26
   对函数式的理解
 
 - [Akka 系列（三）：监管与容错](http://scala.cool/2017/04/learning-akka-3/)
-  Akka 中文系列教程
+  Akka 中文系列文章
 
 - [Comparing Scala relational database access libraries (Slick, Doobie, Quill, Scalikejdbc)](https://softwaremill.com/comparing-scala-relational-database-access-libraries/)
   Scala 关系型数据库类库比较
