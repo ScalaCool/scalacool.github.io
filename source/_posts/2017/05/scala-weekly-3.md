@@ -38,6 +38,7 @@ date: 2017-05-11
   Akka Typed 系列新 API 示例
 
 - [Akka Typed: Coexistence](http://blog.akka.io/typed/2017/05/06/typed-coexistence)
+  两种 ActorSystem 如何共存
 
 - [Why Scala is always better than Node.js](https://vimeo.com/216330850)
   作者个人对 Scala 和 Node.js 的比较
