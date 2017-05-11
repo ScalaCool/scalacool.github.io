@@ -263,3 +263,7 @@ val data:  Map[User, Age] =  Map.empty
 通过这样的技巧，Map 的定义一下子变得很清晰。如果我们仅仅只使用一个 `Sting => Int` 的 map，代码的可读性就不那么好了。虽然我们仍旧可以坚持使用我们的原始类型（也许是出于如性能方面的考虑），但使用别名能让这个类后续的读者更容易理解。
 
 > 注意，当你要为一个类创建别名的时候，**并不会**为它的伴生对象也建立别名。举个例子，假使你定义了 `case class Person(name: String)` 以及一个别名 `type User = Person`，调用 `User("John")` 就会出错。因为 `Person` 的伴生对象并没有别名，就不能如预期般有效调用 `Person("John")`，后者会隐式地触发伴生对象中的 `apply` 方法。
+
+## 下一篇
+
+[Scala 类型的类型（三）](http://scala.cool/2017/05/scala-types-of-types-part-3/)

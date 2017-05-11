@@ -221,3 +221,7 @@ Null            -> AnyRef -> [Any]
 
 infered type: Any an object
 ```
+
+## 下一篇
+
+[Scala 类型的类型（二）](http://scala.cool/2017/04/scala-types-of-types-part-2/)
