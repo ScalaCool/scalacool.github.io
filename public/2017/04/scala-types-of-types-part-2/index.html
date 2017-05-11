@@ -42,7 +42,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="Scala 的单例对象是通过 class 实现的（显然后者是 JVM 的基础构件）。然而你也会发现我们并不能像一个简单的类一样，轻松地获得一个 object 的类型……">
 <meta property="og:image" content="http://scala.cool/images/2017/04/diamond-inheritance.png">
-<meta property="og:updated_time" content="2017-05-02T05:06:40.000Z">
+<meta property="og:updated_time" content="2017-05-09T05:59:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<译> Scala 类型的类型（二）">
 <meta name="twitter:description" content="Scala 的单例对象是通过 class 实现的（显然后者是 JVM 的基础构件）。然而你也会发现我们并不能像一个简单的类一样，轻松地获得一个 object 的类型……">
@@ -283,6 +283,7 @@
 <blockquote>
 <p>注意，当你要为一个类创建别名的时候，<strong>并不会</strong>为它的伴生对象也建立别名。举个例子，假使你定义了 <code>case class Person(name: String)</code> 以及一个别名 <code>type User = Person</code>，调用 <code>User(&quot;John&quot;)</code> 就会出错。因为 <code>Person</code> 的伴生对象并没有别名，就不能如预期般有效调用 <code>Person(&quot;John&quot;)</code>，后者会隐式地触发伴生对象中的 <code>apply</code> 方法。</p>
 </blockquote>
+<h2 id="下一篇"><a href="#下一篇" class="headerlink" title="下一篇"></a>下一篇</h2><p><a href="http://scala.cool/2017/05/scala-types-of-types-part-3/">Scala 类型的类型（三）</a></p>
 
             </div>
           
