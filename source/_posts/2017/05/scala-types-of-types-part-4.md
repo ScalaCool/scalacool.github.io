@@ -128,7 +128,9 @@ public class Meter$ extends scala.runtime.AbstractFunction1 implements scala.Ser
 }
 ```
 
-有一件事情应该引起我们的重视，就是当 `Meter` 作为一个值类被创建时，它的伴生对象获得了一个新的方法 — `toFeet$extension(double): Foot` 。
+有一件事情应该引起我们的重视，就是当 `Meter` 作为一个值类被创建时，它的伴生对象获得了一个新的方法 — `toFeet$extension(double): Foot` 。在这个方法成为 `Meter` 类的实例方法之前，它没有任何参数（所以它是：`toFeet(): Foot`）。生成的方法被标记为「扩展」，实际上这也是我们给这些方法所取得名字。（ .NET 开发者已经看到这种趋势了）
+
+由于我们的值类的目标是避免必须分配整个值类对象，从而直接跟包装后的值打交道，所以我们必须停止使用实例方法，因为它们将迫使我们产生一个包装（ `Meter` ）类的实例。
 
 ```scala
 // source code                 // what the emited bytecode actualy does
