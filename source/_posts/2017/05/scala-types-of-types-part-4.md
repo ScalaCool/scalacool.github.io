@@ -43,9 +43,13 @@ object Main extends App {
 ```
 
 ① 首先我们声明一个单例来包含我们的枚举值，它必须继承 `Enumeration`
+
 ② 在这里，我们为 `Enumeration` 内部的 `Value` 类型定义一个 [类型别名](http://scala.cool/2017/04/scala-types-of-types-part-2/#10-类型别名) ，因为我们需要取一个匹配单例名字的名字，后面可以始终通过「WeekDay」来引用它。（是的，这几乎是一个 hack ）
+
 ③ 在这里，我们采用了「多重赋值」，因此每个 `val` 左边的变量都被赋值了一个不同的 `Value` 类型的实例
+
 ④ 这个 `import` 带来了两点：不仅支持了在没有 `WeekDay` 前缀的情况下直接使用 `Mon` ，同时也在这个作用域中引入了 `type WeekDay` ，于是我们可以在下方的方法定义中使用它
+
 ⑤ 最后，我们获得了一些 `Enumeration` 的方法，这些并不是魔术，当我们创建新的 `Value` 实例时，大部分动作都会发生
 
 正如你所见，Scala 中的枚举机制并不是内置的，而是通过巧妙地借助类型系统来实现。对于一些使用场景，这也许已经足够了。但当遇到需要增加枚举值以及往每个值增加行为的时候，它就不能像 Java 那样强大了。
@@ -125,6 +129,20 @@ public class Meter$ extends scala.runtime.AbstractFunction1 implements scala.Ser
 ```
 
 有一件事情应该引起我们的重视，就是当 `Meter` 作为一个值类被创建时，它的伴生对象获得了一个新的方法 — `toFeet$extension(double): Foot` 。
+
+```scala
+// source code                 // what the emited bytecode actualy does
+
+① val m: Meter  = Meter(12.0)    // store 12.0                                      
+② val d: Double = m.value * 2    // double multiply (12.0 * 2.0), store             
+③ val f: Foot   = m.toFeet       // call Meter$.$MODULE$.toFeet$extension(12.0)     
+```
+
+①
+
+②
+
+③
 
 ## 18. 类型类
 
