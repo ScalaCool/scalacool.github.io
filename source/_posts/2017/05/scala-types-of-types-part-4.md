@@ -69,7 +69,25 @@ class Day {
 
 ## 17. 值类
 
+值类型（Value Class）在 Scala 内部存在了很长时间，并且你也已经使用过它们很多次了。因为 Scala 中所有的 Number 都使用这个编译器技巧来避免数字值的包装和拆装的过程，比如从 `int` 到 `scala.Int` 等。提醒下你回想一下 `Array[Int]` ，它其实在 JVM 中是 `int[]` ，（如果你对 bytecode 熟悉，会知道它是 JVM 的一种运行时类型：`[I]`）它 会有蛮多性能方面的影响。总的来说，数字的数组性能很好，但引用的数组就没那么快了。
+
+好的，我们现在知道了编译器可以在不必要的时候通过奇技淫巧来避免将 `ints` 包装成 `Ints` 。因此让我们来看看 Scala 在 2.10.x 之后是如何将这个特性展示给我们的。这个特性被称为「值类」，可以相当简单地应用到你现有的类当中。使用它们就像将 `extends AnyVal` 加到你的类中一样方便，同时将遵循下面将提及的新规则。如果你不熟悉 `AnyVal` ，这可能是一个很好的学习机会 — 你可以查看 [通用类型系统 — Any, AnyRef, AnyVal](http://localhost:4000/2017/03/scala-types-of-types-part-1/#4-通用类型系统-—-Any-AnyRef-AnyVal)。
+
+让我们实现一个 `Meter` 来作为我们的例子，它将实现一个原生 `int` 的 wrapper ，并支持将以「米」为单位的数字转化为以 `Foot` 类型的数字。我们需要上一课，因为没人理解皇室的制度 ;-)  。
+
+```scala
+case class Meter(value: Double) extends AnyVal {
+  def toFeet: Foot = Foot(value * 0.3048)
+}
+
+case class Foot(value: Double) extends AnyVal {
+  def toMeter: Meter = Meter(value / 0.3048)
+}
+```
+
 ## 18. 类型类
+
+> ❌ 该章节作者尚未完成，或需要修改
 
 ## 19. 自类型注解
 
