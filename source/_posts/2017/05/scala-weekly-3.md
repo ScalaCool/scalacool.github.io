@@ -29,8 +29,6 @@ date: 2017-05-11
 - [When the Scala compiler doesn't help](http://latkin.org/blog/2017/05/02/when-the-scala-compiler-doesnt-help/)
   吐槽 Scala 编译器某些不合理的场景
 
-- [Always stop unused Akka actors](https://mikulskibartosz.name/always-stop-unused-akka-actors-a2ceeb1ed41)
-
 - [Intro to typelevel programming: Part 1 (Typeclasses)](http://www.cakesolutions.net/teamblogs/typelevel-1-typeclasses)
   Cake Solutions 类型编程系列第一篇
 
