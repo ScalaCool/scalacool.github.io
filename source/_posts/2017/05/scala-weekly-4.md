@@ -14,7 +14,8 @@ date: 2017-05-17
 
 ## 深度阅读
 
-- [Free and tagless compared - how not to commit to a monad too early](https://softwaremill.com/free-tagless-compared-how-not-to-commit-to-monad-too-early/)
+- [Adventures in Scala-land — Worth the Investment](https://medium.com/build-acl/adventures-in-scala-land-worth-the-investment-c01dd5da5c1c)
+  Scala 新人学习感悟
 
 - [Cats vs Scalaz for functional programming in Scala](https://www.reddit.com/r/scala/comments/6ar53p/cats_vs_scalaz_for_functional_programming_in_scala/)
   Cats 和 Scalaz （前）维护者之一总结两者之间的差异
@@ -26,6 +27,7 @@ date: 2017-05-17
   阐述 Mutable 和 Immutable 各自的使用场景
 
 - [Building a CQRS / ES Framework (part 1)](http://www.strongtyped.io/blog/2017/05/07/building-cqrs-es-framework-part1/)
+  CQRS / ES 架构系列
 
 - [Automatic Race Condition Detector](https://improbable.io/2016/03/04/automatic-race-condition-detector)
 
@@ -38,8 +40,7 @@ date: 2017-05-17
 - [Metarpheus: a custom approach to API contracts](https://blog.buildo.io/metarpheus-a-custom-approach-to-api-contracts-f340a6792d43)
   利用 scala.meta 实现自动的前后端接口约定
 
-- [Adventures in Scala-land — Worth the Investment](https://medium.com/build-acl/adventures-in-scala-land-worth-the-investment-c01dd5da5c1c)
-  Scala 新人学习感悟
+- [Free and tagless compared - how not to commit to a monad too early](https://softwaremill.com/free-tagless-compared-how-not-to-commit-to-monad-too-early/)
 
 ***
 
