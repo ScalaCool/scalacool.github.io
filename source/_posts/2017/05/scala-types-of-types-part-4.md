@@ -156,6 +156,52 @@ public class Meter$ extends scala.runtime.AbstractFunction1 implements scala.Ser
 
 > ❌ 该章节作者尚未完成，或需要修改
 
+类型类（Type Class）属于 Scala 中可利用的最强大的模式，可以总结为（如果你比较喜欢华丽的措施）「临时多态」。等到本章结束之后，你就可以理解它了。
+
+Scala 为我们解决的典型的问题就是，在无需显式绑定两个类的前提下，提供可拓展的 API 。举一个严格绑定的例子，我们不使用类型类，如扩展一个 `Writable` 接口，为了让我们自定义的数据类型可写：
+
+```scala
+// no type classes yet
+trait Writable[Out] {
+  def write: Out
+}
+
+case class Num(a: Int, b: Int) extends Writable[Json] {
+  def write = Json.toJson(this)
+}
+```
+
+使用这种风格，只是扩展和实现了一个接口，我们将 `Num` 转化为 `Writable` ，同时我们也必须提供 `write` 的实现，「必须在这里马上实现」，这使得其他人难以提供不同的实现 — 它们必须继承实现一个 `Num` 子类。这里的另一个痛点是，我们不能从一个相同的特质继承两次，提供不同的序列化目标（你不能同时继承 `Writable[Json]` 和 `Writable[Protobuf]`）。
+
+所有这些问题都可以通过基于类型类的方法解决，而不是直接继承 `Writable[Out]` 。让我们试一试，并详细解释下这到底是如何做的：
+
+```scala
+① trait Writes[In, Out] {                                               
+    def write(in: In): Out
+  }
+
+② trait Writable[Self] {                                               
+    def write[Out]()(implicit writes: Writes[Self, Out]): Out =
+      writes write this
+  }
+
+③ implicit val jsonNum = Writes[Num, Json] {                            
+    def (n1: Num, n2: Num) = n1.a < n1.
+  }
+
+case class Num(a: Int) extends Writable[Num]
+```
+
+① 首先我们定义下类型类，它的 API 跟之前的 `Writable` 特质类似，但我们保持分离，而不是将它们混合到一个写入的类中。这是为了知道我们用「自类型注解」定义了什么
+
+② 接下来我们将我们的 `Writable` 特质改为使用 `Self` 进行参数化，并将「目标序列化类型」移动到 `write` 的签名中。它现在还需要一个隐式的 `Writes[Self, Out]` 实现，它将处理序列化 — 这就是我们的类型类
+
+③ 这是类型类的实现。请注意，我们将实例标记为 `implicit` ，所以
+
+Universal traits 是 `extend Any` 的特质，它们应该只有 `def` ，并且没有初始化代码。
+
+> 这里作者还需要有很多补充
+
 ## 19. 自类型注解
 
 ## 20. 幽灵类型
