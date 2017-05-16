@@ -30,6 +30,7 @@ date: 2017-05-17
   CQRS / ES 架构系列
 
 - [Automatic Race Condition Detector](https://improbable.io/2016/03/04/automatic-race-condition-detector)
+  验证驱动开发
 
 - [<译> Scala 类型的类型（三）](http://scala.cool/2017/05/scala-types-of-types-part-3/)
   Scala 类型系列翻译
@@ -41,6 +42,7 @@ date: 2017-05-17
   利用 scala.meta 实现自动的前后端接口约定
 
 - [Free and tagless compared - how not to commit to a monad too early](https://softwaremill.com/free-tagless-compared-how-not-to-commit-to-monad-too-early/)
+  详细分解 Free monads 和 final tagless 两种解决方案之间的差异
 
 ***
 
