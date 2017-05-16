@@ -15,7 +15,7 @@ date: 2017-05-23
 ## 目录
 
 - [16. 枚举](#16-枚举)
-- [17. 值类](#17-值类)
+- [17. value 类](#17-value-类)
 - [18. 类型类](#18-类型类)
 - [19. 自类型注解](#19-自类型注解)
 - [20. 幽灵类型](#20-幽灵类型)
@@ -71,13 +71,13 @@ class Day {
 }
 ```
 
-## 17. 值类
+## 17. value 类
 
-值类型（Value Class）在 Scala 内部存在了很长时间，并且你也已经使用过它们很多次了。因为 Scala 中所有的 Number 都使用这个编译器技巧来避免数字值的装箱和拆箱的过程，比如从 `int` 到 `scala.Int` 等。提醒下你回想一下 `Array[Int]` ，它其实在 JVM 中是 `int[]` ，（如果你对 bytecode 熟悉，会知道它是 JVM 的一种运行时类型：`[I]`）它 会有蛮多性能方面的影响。总的来说，数字的数组性能很好，但引用的数组就没那么快了。
+value 类型（Value Class）在 Scala 内部存在了很长时间，并且你也已经使用过它们很多次了。因为 Scala 中所有的 Number 都使用这个编译器技巧来避免数字值的装箱和拆箱的过程，比如从 `int` 到 `scala.Int` 等。提醒下你回想一下 `Array[Int]` ，它其实在 JVM 中是 `int[]` ，（如果你对 bytecode 熟悉，会知道它是 JVM 的一种运行时类型：`[I]`）它 会有蛮多性能方面的影响。总的来说，数字的数组性能很好，但引用的数组就没那么快了。
 
-好的，我们现在知道了编译器可以在不必要的时候通过奇技淫巧来避免将 `ints` 装箱成 `Ints` 。因此让我们来看看 Scala 在 2.10.x 之后是如何将这个特性展示给我们的。这个特性被称为「值类」，可以相当简单地应用到你现有的类当中。使用它们简单到只要把 `extends AnyVal` 加到你的类中，同时遵循以下将提及的新规则。如果你不熟悉 `AnyVal` ，这可能是一个很好的学习机会 — 你可以查看 [通用类型系统 — Any, AnyRef, AnyVal](http://localhost:4000/2017/03/scala-types-of-types-part-1/#4-通用类型系统-—-Any-AnyRef-AnyVal)。
+好的，我们现在知道了编译器可以在不必要的时候通过奇技淫巧来避免将 `ints` 装箱成 `Ints` 。因此让我们来看看 Scala 在 2.10.x 之后是如何将这个特性展示给我们的。这个特性被称为「value 类」，可以相当简单地应用到你现有的类当中。使用它们简单到只要把 `extends AnyVal` 加到你的类中，同时遵循以下将提及的新规则。如果你不熟悉 `AnyVal` ，这可能是一个很好的学习机会 — 你可以查看 [通用类型系统 — Any, AnyRef, AnyVal](http://localhost:4000/2017/03/scala-types-of-types-part-1/#4-通用类型系统-—-Any-AnyRef-AnyVal)。
 
-让我们实现一个 `Meter` 来作为我们的例子，它将实现一个原生 `int` 的包装 ，并支持将以「meter」为单位的数字转化为以 `Foot` 类型的数字。我们需要上一课，因为没人理解皇室的制度 ;-)  。不过，如果 95% 的时候都使用原生的 meter 值，为什么我们要因为让一个对象包含一个 `int` 而支付额外的运行时开销？（每个实例都有好几个字节！）是因为这是一个面向欧洲市场的项目？我们需要「值类」的救援！
+让我们实现一个 `Meter` 来作为我们的例子，它将实现一个原生 `int` 的包装 ，并支持将以「meter」为单位的数字转化为以 `Foot` 类型的数字。我们需要上一课，因为没人理解皇室的制度 ;-)  。不过，如果 95% 的时候都使用原生的 meter 值，为什么我们要因为让一个对象包含一个 `int` 而支付额外的运行时开销？（每个实例都有好几个字节！）是因为这是一个面向欧洲市场的项目？我们需要「value 类」的救援！
 
 ```scala
 case class Meter(value: Double) extends AnyVal {
@@ -89,11 +89,11 @@ case class Foot(value: Double) extends AnyVal {
 }
 ```
 
-我们将在所有的例子中使用样例类（值类），但它在技术上不是硬性要求的（尽管非常方便）。虽然你也可以通过在一个普通类使用 `val` 来实现一个值类，相比样例类通常会是最佳方案。你可能会问「为什么只有一个参数」，这是因为我们会尽量避免去包装值，这对于单个值是有意义的，否则我们就必须在某些地方保持一个元组，这样很快就会变得含糊，同时我们也将失去「不包装」策略下的性能。因此记住，值类仅适用于一个值，虽然没人可以说这个参数必须是一个原始类型，它也可以是一个普通类，如 `Fruit` 或 `Person` ，我们有时候依旧可以避免在值类中进行包装。
+我们将在所有的例子中使用样例类（value 类），但它在技术上不是硬性要求的（尽管非常方便）。虽然你也可以通过在一个普通类使用 `val` 来实现一个 value 类，相比样例类通常会是最佳方案。你可能会问「为什么只有一个参数」，这是因为我们会尽量避免去包装值，这对于单个值是有意义的，否则我们就必须在某些地方保持一个元组，这样很快就会变得含糊，同时我们也将失去「不包装」策略下的性能。因此记住，value 类仅适用于一个值，虽然没人可以说这个参数必须是一个原始类型，它也可以是一个普通类，如 `Fruit` 或 `Person` ，我们有时候依旧可以避免在 value 类中进行包装。
 
-> 所有你在定义一个值类时需要做的，就是拥有一个包含「继承 `AnyVal`变量」的类，同时遵循一些它的限制。这个变量不一定就是原始类型，它可以是任何东西。这些限制换句话说，就是一个更长的列表，比如一个值类型不能包含除了 `def` 成员外的其它字段，并且不能被扩展，等等。完整的限制清单以及更深入的例子，可以参加 Scala 文档 — [Value Classes - summary of limitations])(http://docs.scala-lang.org/overviews/core/value-classes.html#summary_of_limitations) 。
+> 所有你在定义一个 value 类时需要做的，就是拥有一个包含「继承 `AnyVal`变量」的类，同时遵循一些它的限制。这个变量不一定就是原始类型，它可以是任何东西。这些限制换句话说，就是一个更长的列表，比如一个 value 类型不能包含除了 `def` 成员外的其它字段，并且不能被扩展，等等。完整的限制清单以及更深入的例子，可以参加 Scala 文档 — [Value Classes - summary of limitations])(http://docs.scala-lang.org/overviews/core/value-classes.html#summary_of_limitations) 。
 
-好了，现在我们拥有了 `Meter` 和 `Foot` 值样例类，我们首先检查下当添加了 `extends AnyVal` 部分之后，生成的字节码如何使 `Meter` 从一个普通的样例类，变成一个值类：
+好了，现在我们拥有了 `Meter` 和 `Foot` 值样例类，我们首先检查下当添加了 `extends AnyVal` 部分之后，生成的字节码如何使 `Meter` 从一个普通的样例类，变成一个 value 类：
 ```scala
 // case class
 scala> :javap Meter
@@ -110,7 +110,7 @@ public class Meter$ extends scala.runtime.AbstractFunction1 implements scala.Ser
 }
 ```
 
-为值类生成的字节码如下：
+为 value 类生成的字节码如下：
 ```scala
 // case value class
 
@@ -128,9 +128,13 @@ public class Meter$ extends scala.runtime.AbstractFunction1 implements scala.Ser
 }
 ```
 
-有一件事情应该引起我们的重视，就是当 `Meter` 作为一个值类被创建时，它的伴生对象获得了一个新的方法 — `toFeet$extension(double): Foot` 。在这个方法成为 `Meter` 类的实例方法之前，它没有任何参数（所以它是：`toFeet(): Foot`）。生成的方法被标记为「extension」（`toFeet$extension`），实际上这也是我们给这些方法所取得名字。（ .NET 开发者已经看到这种趋势了）
+有一件事情应该引起我们的重视，就是当 `Meter` 作为一个 value 类被创建时，它的伴生对象获得了一个新的方法 — `toFeet$extension(double): Foot` 。在这个方法成为 `Meter` 类的实例方法之前，它没有任何参数（所以它是：`toFeet(): Foot`）。生成的方法被标记为「extension」（`toFeet$extension`），实际上这也是我们给这些方法所取得名字。（ .NET 开发者已经看到这种趋势了）
 
-由于我们的值类的目标是避免必须分配整个值类对象，从而直接跟包装后的值打交道，所以我们必须停止使用实例方法，因为它们将迫使我们产生一个包装（ `Meter` ）类的实例。
+由于我们的 value 类的目标是避免必须分配整个 value 类对象，从而直接跟包装后的值打交道，所以我们必须停止使用实例方法，因为它们将迫使我们产生一个包装（ `Meter` ）类的实例。我们能做的事情是，将这个实例方法变成一个「扩展方法」，它将存储在 `Meter` 的伴生对象中。我们通过传入 `Double` 类型值，而不是使用实例的 `value: Double` 来调用这个扩展方法。
+
+> **扩展方法**的作用跟**隐式转换**类似（后者是一个更通用，以及更强大的武器），但它是更加简单的一种方式 — 避免了必须分配整个包装后的对象。相对的，隐式转换会需要它来提供「额外的方法」。扩展方法有点采用「重写生成的方法」的路线，以便它们将「要扩展的类型」作为它们第一个参数。举个例子，假如你写了 `3.toHexString` ，这个方法会通过一个隐式转换被添加到 `Int` ，然而由于目标是 `class RichInt extends AnyVal` ，所以一个 value 类的调用并不会导致 `RichInt` 的分配，而是会被重写成 `RichInt$.$MODULE$.toHexString$extension(3)`，这样子就避免了 `RichInt` 的分配。
+
+让我们用新学习到的知识来调查下在 `Meter` 的例子中，编译器到底为我们做了什么。源码旁边注释的部分解释了编译器实际上生成的东西。（如此来发现代码运行时发生了什么）：
 
 ```scala
 // source code                 // what the emited bytecode actualy does
@@ -140,11 +144,13 @@ public class Meter$ extends scala.runtime.AbstractFunction1 implements scala.Ser
 ③ val f: Foot   = m.toFeet       // call Meter$.$MODULE$.toFeet$extension(12.0)     
 ```
 
-①
+① 有人可能会期待在这里分配一个 `Meter` 对象，然而由于我们正在使用一个 value 类，只有被包装的值被存储 — 即我们在运行时一直在处理的一个原生 `double` 值。（赋值和类型检查依旧会验证这是否个 `Meter` 实例）
 
-②
+② 在这里，我们访问了 value 类的 `value`（这个字段名的名字没有关系）。请注意，运行时这里操作的是原生的 `doubles` ，因此不必像往常一个普通的样例类一样，调用一个 `value` 的方法。
 
-③
+③ 这里，我们似乎在调用一个定义在 `Meter` 里的实例方法，然而事实上，编译器已经用一个扩展方法调用代替了这个调用，它在 12.0 这个值中传递。我们获得了一个 `Foot` 实例… 等一下！但是 `Foot` 这里也被定义成了一个 value 类，所以在运行时我们再次得到了一个原生 `double` ！
+
+这些都是「扩展方法」和 「value 类」的基础知识。如果你想阅读更多，了解不同的边界情况，请参考[官方关于 value 类的章节](http://docs.scala-lang.org/overviews/core/value-classes.html)，Mark Harrah 在这里用了很多例子，解释得很好。所以除了基本介绍外，我就不再重复劳动了。
 
 ## 18. 类型类
 
