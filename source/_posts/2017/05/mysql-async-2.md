@@ -44,12 +44,14 @@ conn.inTransaction { c =>
 
 ## 三、不支持客户端 PreparedStatement
 
-'Mysql-connector-java' 支持客户端 PreparedStatement，从而可以开启将多个插入重写为一个批量插入的功能（rewriteBatchedStatements）。
+`Mysql-connector-java` 支持客户端 PreparedStatement，从而可以开启将多个插入重写为一个批量插入的功能（rewriteBatchedStatements）。
 批量插入语句可以减少锁的次数，从而大幅大幅提升性能的，这在一些插入频繁场景（如 akka-persistence）非常有用。
+
 要解决这个问题，只能手工生成 `批量插入语句`。
 
 
 ## 四、Netty 是不可配置的
 
 Netty 相关的设置硬编码在实现里，无法自定义 `EventLoop` 也无法开启 Linux 平台 `native epoll` 支持（该选项可以进一步提升性能，减少 GC 压力）。
+
 使用前文提到的版本里已经默认开启了 `native epoll` 支持。
