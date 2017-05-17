@@ -26,6 +26,10 @@ date: 2017-05-23
 - [Caller: an implicit value that points to the function caller](https://static.javadoc.io/com.thoughtworks.feature/unidoc_2.12/1.0.0/com/thoughtworks/feature/Caller.html)
   com.thoughtworks.feature
 
+- Six Years of Scala Development
+  - [Part I: Departure](https://soc.github.io/six-years-of-scala-development/departure.html)
+  - [Part II: Retrospective](https://soc.github.io/six-years-of-scala-development/retrospective.html)
+
 ## 一周速递
 
 - Scala hamsters 1.3.1 [发布](https://twitter.com/loic_d/status/864040349588758529)
