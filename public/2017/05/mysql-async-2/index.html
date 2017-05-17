@@ -41,7 +41,7 @@
 <meta property="og:url" content="http://scala.cool/2017/05/mysql-async-2/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="Mysql Async 异步驱动存在的缺点分析">
-<meta property="og:updated_time" content="2017-05-17T01:47:16.000Z">
+<meta property="og:updated_time" content="2017-05-17T01:51:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL 异步驱动浅析 （二）：缺点分析">
 <meta name="twitter:description" content="Mysql Async 异步驱动存在的缺点分析">
@@ -130,7 +130,7 @@
       </h1>
 
       <time class="post-time">
-          5月14日
+          5月17日
       </time>
       
         <span class="author-split">|</span>
@@ -158,8 +158,10 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">conn.inTransaction &#123; c =&gt;</div><div class="line">  <span class="keyword">val</span> fa = c.sendQuery(<span class="string">"xxx"</span>)</div><div class="line">  <span class="keyword">val</span> fb = c.sendQuery(<span class="string">"yyy"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这样的代码就不能正确运行，必须改成如下串行或等价的形式</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">conn.inTransaction &#123; c =&gt;</div><div class="line">  <span class="keyword">for</span> &#123;</div><div class="line">   a &lt;- c.sendQuery(<span class="string">"xxx"</span>)</div><div class="line">   b &lt;- c.sendQuery(<span class="string">"yyy"</span>)</div><div class="line">  &#125; <span class="keyword">yield</span> (a, b)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="三、不支持客户端-PreparedStatement"><a href="#三、不支持客户端-PreparedStatement" class="headerlink" title="三、不支持客户端 PreparedStatement"></a>三、不支持客户端 PreparedStatement</h2><p>‘Mysql-connector-java’ 支持客户端 PreparedStatement，从而可以开启将多个插入重写为一个批量插入的功能（rewriteBatchedStatements）。<br>批量插入语句可以减少锁的次数，从而大幅大幅提升性能的，这在一些插入频繁场景（如 akka-persistence）非常有用。<br>要解决这个问题，只能手工生成 <code>批量插入语句</code>。</p>
-<h2 id="四、Netty-是不可配置的"><a href="#四、Netty-是不可配置的" class="headerlink" title="四、Netty 是不可配置的"></a>四、Netty 是不可配置的</h2><p>Netty 相关的设置硬编码在实现里，无法自定义 <code>EventLoop</code> 也无法开启 Linux 平台 <code>native epoll</code> 支持（该选项可以进一步提升性能，减少 GC 压力）。<br>使用前文提到的版本里已经默认开启了 <code>native epoll</code> 支持。</p>
+<h2 id="三、不支持客户端-PreparedStatement"><a href="#三、不支持客户端-PreparedStatement" class="headerlink" title="三、不支持客户端 PreparedStatement"></a>三、不支持客户端 PreparedStatement</h2><p><code>Mysql-connector-java</code> 支持客户端 PreparedStatement，从而可以开启将多个插入重写为一个批量插入的功能（rewriteBatchedStatements）。<br>批量插入语句可以减少锁的次数，从而大幅大幅提升性能的，这在一些插入频繁场景（如 akka-persistence）非常有用。</p>
+<p>要解决这个问题，只能手工生成 <code>批量插入语句</code>。</p>
+<h2 id="四、Netty-是不可配置的"><a href="#四、Netty-是不可配置的" class="headerlink" title="四、Netty 是不可配置的"></a>四、Netty 是不可配置的</h2><p>Netty 相关的设置硬编码在实现里，无法自定义 <code>EventLoop</code> 也无法开启 Linux 平台 <code>native epoll</code> 支持（该选项可以进一步提升性能，减少 GC 压力）。</p>
+<p>使用前文提到的版本里已经默认开启了 <code>native epoll</code> 支持。</p>
 
             </div>
           
@@ -178,15 +180,9 @@
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2017/05/scala-weekly-4/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">Scala 技术周刊 | 第4期</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
     
-    
-      <a class="next" href="/2017/05/scala-weekly-3/">
-        <span class="next-text nav-default">Scala 技术周刊 | 第3期</span>
+      <a class="next" href="/2017/05/scala-weekly-4/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第4期</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
