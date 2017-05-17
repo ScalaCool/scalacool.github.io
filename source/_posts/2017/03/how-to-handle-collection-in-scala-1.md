@@ -1,5 +1,5 @@
 ---
-title: 如何在 Scala 中科学地操作 collection
+title: 如何在 Scala 中科学地操作 collection（一）：集合类型与操作
 author: Shaw
 tags:
 - 集合
