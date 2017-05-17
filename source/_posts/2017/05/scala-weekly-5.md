@@ -14,4 +14,18 @@ date: 2017-05-23
 
 ## 深度阅读
 
+- [如何解决如下关于 Scala 中自引用的问题？](https://www.zhihu.com/question/59862752)
+  知乎问答
+
+- [Scala学习笔记(八) 模式匹配](http://www.jianshu.com/p/1456f065a4bb)
+  Scala 模式匹配入门介绍
+
+- [Java vs. Scala : Why Scala?](https://medium.com/@leila.A/java-vs-scala-why-scala-63f4d9772e88)
+  作者对 Java 和 Scala 的比较
+
+- [Caller: an implicit value that points to the function caller](https://static.javadoc.io/com.thoughtworks.feature/unidoc_2.12/1.0.0/com/thoughtworks/feature/Caller.html)
+  com.thoughtworks.feature
+
 ## 一周速递
+
+- Scala hamsters 1.3.1 [发布](https://twitter.com/loic_d/status/864040349588758529)
