@@ -30,6 +30,9 @@ date: 2017-05-23
   - [Part I: Departure](https://soc.github.io/six-years-of-scala-development/departure.html)
   - [Part II: Retrospective](https://soc.github.io/six-years-of-scala-development/retrospective.html)
 
+- [MySQL 异步驱动浅析 （二）：缺点分析](http://scala.cool/2017/05/mysql-async-2/)
+  Mysql Async 异步驱动存在的缺点分析
+
 ## 一周速递
 
 - Scala hamsters 1.3.1 [发布](https://twitter.com/loic_d/status/864040349588758529)
