@@ -5,7 +5,7 @@ tags:
 - 网络编程
 - 数据库
 description: Mysql Async 异步驱动存在的缺点分析
-date: 2017-05-14
+date: 2017-05-17
 ---
 
 [上一篇文章](/2017/04/mysql-async-1/)分析 Mysql 异步驱动的性能。本文阐述 Mysql Async 使用时需要注意的问题
