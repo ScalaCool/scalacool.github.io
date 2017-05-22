@@ -45,6 +45,43 @@ date: 2017-05-23
 - [Why Scala didn’t miss the Android opportunity](https://medium.com/@ScalaWilliam/why-scala-didnt-miss-the-android-opportunity-92eaaf63c339)
   作者谈 Android 支持 Kotlin 后对 Scala 的正面影响
 
+- Akka Typed:
+  - [Supervision](http://blog.akka.io/typed/2017/05/16/supervision)
+  - [Lifecycle and Watch](http://blog.akka.io/typed/2017/05/19/signals)
+
+- [Lightbend's annual charity survey](https://lightbend.qualtrics.com/jfe6/form/SV_1TVpitlCAaBmsvP)
+  Lightbend 年度调查
+
+- [Akka anti-patterns: blocking](https://manuel.bernhardt.io/2017/05/15/akka-anti-patterns-blocking/)
+  为什么阻塞在 Akka 中不好
+
+- [All Scala Italy 2017 videos!](https://vimeo.com/search?q=scalaitaly)
+  Scala Italy 2017 talk 汇总
+
+- [Functional vs Object Oriented Programming](https://medium.com/@kasa288/functional-vs-object-oriented-programming-10872e5ef439)
+  作者分享对「函数式」VS「面向对象」编程的看法
+
+- [Consider syntax with significant indentation](https://github.com/lampepfl/dotty/issues/2491)
+  Martin: 关于 Scala 缩进语法的提案
+
+- [Java, Scala, Kotlin and .. Skiing](https://www.reactivesystems.eu/2017/05/21/java-scala-kotlin-skiing.html)
+  Java is skiing. Scala is snowboardig. Kotlin is carving skis. 
+
+- [Your first microservices using Scala and Lagom](http://blog.scalac.io/2016/07/14/lagom-scala.html)
+  Scala + Lagom 构建微服务
+
+
+
 ## 一周速递
 
 - Scala hamsters 1.3.1 [发布](https://twitter.com/loic_d/status/864040349588758529)
+
+- Scastie 正式版[发布](http://www.scala-lang.org/blog/2017/05/19/scastie.html)，体验更加友好，所有人都可以使用
+
+- akka-persistence-cassandra 0.28 and 0.53 [发布](https://github.com/akka/akka-persistence-cassandra/milestone/28?closed=1)
+
+- Lagom 1.3.4 [发布](https://www.lagomframework.com/blog/lagom-1-3-4.html)
+
+- Scala Ammonite 0.9.0 [发布](http://www.lihaoyi.com/Ammonite/#0.9.0)
+
+- sangria v1.2.1 [发布](https://github.com/sangria-graphql/sangria/releases/tag/v1.2.1)
