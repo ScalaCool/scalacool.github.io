@@ -14,4 +14,18 @@ date: 2017-05-30
 
 ## 深度阅读
 
+- [Akka Streams – What is NotUsed all about](https://manuel.bernhardt.io/2017/05/22/akka-streams-notused/)
+  介绍 Akka Streams 中的 `NotUsed` type
+
+- [A Pitfall in Scala Implicits](https://ian.pw/posts/2017-05-21-a-pitfall-in-scala-implicits.html)
+
+- [Is Scala a good choice to learn in 2017?](https://www.quora.com/Is-Scala-a-good-choice-to-learn-in-2017)
+  Quora 问答
+
+- [Handling exceptions in scala](https://medium.com/@tilakpatidar/handling-exceptions-in-scala-dc8a8160eb64)
+  Scala 中的异常处理
+
+
+  
+
 ## 一周速递
