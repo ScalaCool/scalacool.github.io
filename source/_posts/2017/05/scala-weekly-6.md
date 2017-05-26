@@ -25,7 +25,11 @@ date: 2017-05-30
 - [Handling exceptions in scala](https://medium.com/@tilakpatidar/handling-exceptions-in-scala-dc8a8160eb64)
   Scala 中的异常处理
 
+- [My Experience at Scala Italy 2017](https://blog.buildo.io/my-experience-at-scala-italy-2017-c22377c6e488)
+  参加 Scala Italy 2017 是一种怎样的体验
 
+- [Futures in Scala 2.12](http://viktorklang.com/blog/)
+  Scala 2.12.x 版本中 Future 的演变
   
 
 ## 一周速递
