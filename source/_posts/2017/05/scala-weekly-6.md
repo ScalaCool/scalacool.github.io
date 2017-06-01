@@ -30,6 +30,32 @@ date: 2017-05-30
 
 - [Futures in Scala 2.12](http://viktorklang.com/blog/)
   Scala 2.12.x 版本中 Future 的演变
+
+- [Metaprogramming magic with Scalameta](https://medium.com/@Arhelmus/metaprogramming-magic-with-scalameta-67e849ab490e)
+  用 Scalameta 进行元编程
+
+- [What's new with Scala Native?](http://www.scala-lang.org/blog/2017/05/26/whats-new-scala-native.html)
+  Scala 官网介绍 Scala Native 进展
+
+- [Functional Patterns Part 1](https://medium.com/@kasa288/functional-design-patterns-part-1-9be81d843900)
+  函数式编程下的设计模式
+
+- [Akka Typed: Timers](http://akka.io/blog/2017/05/26/timers)
+  Akka Typed 系列
   
 
 ## 一周速递
+
+- scalameta 1.8.0 [发布](https://github.com/scalameta/scalameta/blob/master/changelog/1.8.0.md)
+
+- Akka Alpakka 0.9 [发布](https://github.com/akka/alpakka/releases/tag/v0.9)
+
+- circe-derivation 0.8.0-M1 [发布](https://github.com/circe/circe-derivation/releases/tag/v0.8.0-M1)
+
+- GitHub4s 0.15.0 [发布](https://www.47deg.com/blog/github4s-v0-15-0-release/)
+
+- Frameless 0.3.0 [发布](https://github.com/typelevel/frameless)
+
+- Scala IDE 4.6.1-RC1 [发布](http://scala-ide.org/download/milestone.html)
+
+- Scala Effekt — Extensible algebraic effects with handlers [发布](https://github.com/b-studios/scala-effekt)
