@@ -56,7 +56,7 @@ date: 2017-06-07
   JDK 9 提议
 
 - [Warts of the Scala Programming Language](http://www.lihaoyi.com/post/WartsoftheScalaProgrammingLanguage.html)
-  李浩毅新文章：关于 Scala 这门的语言的瑕疵
+  李浩毅新文章：关于 Scala 这门语言的瑕疵
 
 - [Why you should know Monix](https://blog.scalac.io/2017/06/01/why-should-you-care-about-monix.html)
   Monix 优点介绍
