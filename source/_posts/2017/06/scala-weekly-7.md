@@ -31,18 +31,26 @@ date: 2017-06-07
   介绍了 Dotty 中的 Types
 
 - [An interval-based rate limiter for Akka Stream](https://softwaremill.com/interval-based-rate-limiter/)
+  频率限制解决方案
 
 - [Akka monitoring with Kamon part 1](https://softwaremill.com/akka-monitoring-with-kamon-part-1/)
+  用 Kamon 监控 Akka 应用
+
 
 - [Reply to your feedback on sbt](https://contributors.scala-lang.org/t/reply-to-your-feedback-on-sbt/892)
+  sbt 官方对反馈的回应总结
 
 - [Akka anti-patterns overview](https://manuel.bernhardt.io/2017/05/29/akka-anti-patterns-overview/)
+  Akka 反设计总结
 
 - [Why We Open Sourced our Books](http://underscore.io/blog/posts/2017/05/29/why-we-open-sourced-our-books.html)
+  underscore.io 开源了书籍
 
 - [Curious about your Scala "style"](https://www.reddit.com/r/scala/comments/6eknxg/curious_about_your_scala_style/)
+  Scala 使用风格和层次探讨
 
 - [Evaluation strategies in Scala](http://www.cakesolutions.net/teamblogs/evaluation-strategies-in-scala)
+  求值策略
 
 - [Proposed schedule change for JDK 9](http://mail.openjdk.java.net/pipermail/jdk9-dev/2017-May/005864.html)
   JDK 9 提议
