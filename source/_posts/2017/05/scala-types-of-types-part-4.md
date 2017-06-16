@@ -5,7 +5,7 @@ tags:
 - 类型相关
 - 翻译
 description: Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（植入到 Enumeration）来写出类似的东西。
-date: 2017-05-23
+date: 2017-06-15
 ---
 
 ## 上一篇
