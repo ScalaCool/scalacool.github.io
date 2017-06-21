@@ -39,7 +39,27 @@ date: 2017-06-21
   翻译
 
 - [What if I told you, Scala compiler can understand SQL queries?](http://www.cakesolutions.net/teamblogs/what-if-i-told-you-scala-compiler-can-understand-sql-queries)
-  
+  同时推荐下 Quill
+
+- Integrating Akka Streams and Akka Actors
+  - [Part I](http://blog.colinbreck.com/integrating-akka-streams-and-akka-actors-part-i/)
+  - [Part II](http://blog.colinbreck.com/integrating-akka-streams-and-akka-actors-part-ii/)
+
 
 ## 一周速递
 
+- Akka 2.4.19 [发布](http://akka.io/blog/news/2017/06/12/akka-2.4.19-released)
+
+- sbt-assembly 0.14.5 for to sbt 0.13 and 1.0.0-M6 [发布](https://github.com/sbt/sbt-assembly/releases/tag/v0.14.5)
+
+- ongevity 0.23 [发布](http://scabl.blogspot.com/2017/06/longevity-release-023-use-type-classes.html)
+
+- Lagom 1.3.5 [发布](http://www.rightrelevance.com/search/articles/hero?article=5fdf6b60fc25276a6d8bde4dd5c8f7142b4dba3c&query=scala&taccount=scala_rr)
+
+- Sangria v1.2.2 [发布](https://github.com/sangria-graphql/sangria/releases/tag/v1.2.2)
+
+- Scala Native 0.3.0 [发布](https://www.reddit.com/r/scala/comments/6hf66e/announcing_scala_native_030_with_brand_new/)
+
+- Scala IDE 4.6.1 [发布](http://scala-ide.org/)，支持 Play 2
+
+- Ammonite Scala 1.0.0-RC7 [发布](http://ammonite.io/#1.0.0-RC7)
