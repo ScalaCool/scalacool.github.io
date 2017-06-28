@@ -228,7 +228,7 @@ val v1 = async {
 }
 
 v1 foreach {
-  case r => println(s"the result is ${v1}")
+  case r => println(s"the result is ${r}")
 }
 ```
 这种方式与for yield表达式有啥区别呢？其实主要有两点：
