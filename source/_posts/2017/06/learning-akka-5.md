@@ -1,5 +1,5 @@
 ---
-title: Akka 系列（四）：Akka 中的共享内存模型
+title: Akka 系列（五）：Java和Scala中的Future
 author: Godpan
 tags: 
 - Akka
