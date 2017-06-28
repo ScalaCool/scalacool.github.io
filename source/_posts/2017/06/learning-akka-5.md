@@ -1,5 +1,5 @@
 ---
-title: Akka 系列（五）：Java和Scala中的Future
+title: Akka 系列（五）：Java 和 Scala 中的 Future
 author: Godpan
 tags: 
 - Akka
