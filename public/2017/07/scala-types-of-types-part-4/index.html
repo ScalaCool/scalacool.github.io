@@ -41,7 +41,7 @@
 <meta property="og:url" content="http://scala.cool/2017/07/scala-types-of-types-part-4/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（植入到 Enumeration）来写出类似的东西。">
-<meta property="og:updated_time" content="2017-07-06T07:09:43.000Z">
+<meta property="og:updated_time" content="2017-07-06T07:17:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<译> Scala 类型的类型（四）">
 <meta name="twitter:description" content="Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（植入到 Enumeration）来写出类似的东西。">
@@ -225,7 +225,7 @@
 <p>① 这里我们创建了一个初始化实例，它开始的状态是 <code>Stopped</code><br>② 成功开启一个 <code>Stopped</code> 的 service，返回的类型为 <code>Service[Started]</code><br>③ 成功结束一个 <code>Started</code> 的 service，返回的类型为 <code>Service[Stopped]</code><br>④ 然而结束一个已经停止的 service （<code>Service[Stopped]</code>）是无效的，不能通过编译，注意打印出来的类型边界<br>⑤ 类似地，结束一个已经开始的 service （<code>Service[Started]</code>）是无效的，不能通过编译，注意打印出来的类型边界  </p>
 <p>正如你所看到的，幽灵类型是另一种强大的工具，可以让我们的代码更加的类型安全（或者我应该说「状态安全」！？）。</p>
 <blockquote>
-<p>如果你好奇那些「不是过于疯狂的类库」使用了这些特性，这里一个值得推荐的例子是 <a href="https://github.com/foursquare/rogue" target="_blank" rel="external">Foursquare Rogue</a>（the MongoDB query DSL）。它利用幽灵类型来确保一个 query builder 的状态正确性，如 <code>limit(3)</code> 被正确地调用。</p>
+<p>如果你好奇哪些「不是过于疯狂的类库」使用了这些特性，这里一个值得推荐的例子是 <a href="https://github.com/foursquare/rogue" target="_blank" rel="external">Foursquare Rogue</a>（the MongoDB query DSL）。它利用幽灵类型来确保一个 query builder 的状态正确性，如 <code>limit(3)</code> 被正确地调用。</p>
 </blockquote>
 
             </div>

@@ -315,4 +315,4 @@ object Service {
 
 正如你所看到的，幽灵类型是另一种强大的工具，可以让我们的代码更加的类型安全（或者我应该说「状态安全」！？）。
 
-> 如果你好奇那些「不是过于疯狂的类库」使用了这些特性，这里一个值得推荐的例子是 [Foursquare Rogue](https://github.com/foursquare/rogue)（the MongoDB query DSL）。它利用幽灵类型来确保一个 query builder 的状态正确性，如 `limit(3)` 被正确地调用。
+> 如果你好奇哪些「不是过于疯狂的类库」使用了这些特性，这里一个值得推荐的例子是 [Foursquare Rogue](https://github.com/foursquare/rogue)（the MongoDB query DSL）。它利用幽灵类型来确保一个 query builder 的状态正确性，如 `limit(3)` 被正确地调用。
