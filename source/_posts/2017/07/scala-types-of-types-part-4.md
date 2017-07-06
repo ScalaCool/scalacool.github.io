@@ -58,7 +58,7 @@ object Main extends App {
 
 > `@enum` 注解现在已经不仅仅只是一个提议了， 已经处在 Scala 内部的讨论进程中了：[Enumeration must DIE...](https://groups.google.com/forum/#!topic/scala-internals/8RWkccSRBxQ%5B1-25%5D)
 
-`@enum` 注解可能会跟「注解宏」一起，在将来被支持。在 Scala 改进计划文档中有关于此的描述：[enum-sip](http://ktoso.github.io/scala-types-of-types/#enumeration-2) 。
+`@enum` 注解可能会跟「注解宏」一起，在将来被支持。在 Scala 改进计划文档中有关于此的描述：[enum-sip](https://docs.google.com/document/d/1mIKml4sJzezL_-iDJMmcAKmavHb9axjYJos_7UMlWJ8/edit) 。
 ```scala
 @enum
 class Day {
@@ -70,6 +70,8 @@ class Day {
   def goodDay: Boolean
 }
 ```
+
+**译者注：**作者以上提及的方案已被官方弃用，但 `enum` 关键字将在 Dotty 中被支持，参见 [http://dotty.epfl.ch/docs/reference/enums/enums.html](http://dotty.epfl.ch/docs/reference/enums/enums.html)
 
 ## 17. value 类
 
@@ -156,7 +158,7 @@ public class Meter$ extends scala.runtime.AbstractFunction1 implements scala.Ser
 
 > ❌ 该章节作者尚未完成，或需要修改
 
-类型类（Type Class）属于 Scala 中可利用的最强大的模式，可以总结为（如果你比较喜欢华丽的措施）「临时多态」。等到本章结束之后，你就可以理解它了。
+类型类（Type Class）属于 Scala 中可利用的最强大的模式，可以总结为（如果你比较喜欢华丽的措施）「特定多态」。等到本章结束之后，你就可以理解它了。
 
 Scala 为我们解决的典型的问题就是，在无需显式绑定两个类的前提下，提供可拓展的 API 。举一个严格绑定的例子，我们不使用类型类，如扩展一个 `Writable` 接口，为了让我们自定义的数据类型可写：
 
