@@ -204,8 +204,115 @@ Universal traits 是 `extend Any` 的特质，它们应该只有 `def` ，并且
 
 ## 19. 自身类型注解
 
+「自身类型」（Self Types）可被用来给一个特质混入外部类型，如果一个其他的类使用了这个特质，它也必须提供该特质混入部分的实现。
 
+来看一个例子，该例子中 `Service` 特质混入了 `Module` 特质，后者内部提供了其它的 services。我们可以通过如下的「自身类型注解」来表示：
+```scala
+trait Module {
+  lazy val serviceInModule = new ServiceInModule
+}
+
+trait Service {
+  this: Module =>
+
+  def doTheThings() = serviceInModule.doTheThings()
+}
+```
+
+`Service` 定义部分的第二行可以被阅读为「 I’m a Module 」。这看起来与继承一个 `Module` 并没什么两样，究竟哪里不同呢？
+
+前者意味着我们必须在实例化一个 `Service` 的同时也提供 `Module` ：
+```scala
+trait TestingModule extends Module { /*...*/ }
+
+new Service with TestingModule
+```
+
+如果你没有混入所需的特质，就会像如下一样失败：
+```scala
+new Service {}
+
+// class Service cannot be instantiated because it does not conform to its self-type Service with Module
+//              new Service {}
+//              ^
+```
+
+同时你也应该了解，我们可以利用「自身类型」语法混入多个特质。写到这，让我们讨论下为什么它被叫做 self-type（除了「是的，它看起来很通」的因素）。答案可能要归于这还是一种流行的使用风格，就像下面这样：
+```scala
+class Service {
+  self: MongoModule with APIModule =>
+
+  def delegated = self.doTheThings()
+}
+```
+事实上，你可以使用任何标识符（不仅仅是 `this` 或者 `self`），然后在你的类中引用它。
 
 ## 20. 幽灵类型
 
+幽灵类型（Phantom Types）尽管是个古怪的名字，但似乎非常贴切。它可以被解释为「不是实例的类型」，我们不直接使用它们，但是可以用来执行一些更严格的逻辑。
 
+我们要举的例子是一个 `Service` 类，它有 `start` 和 `stop` 方法。现在我们想要确保你不能「开始」一个已经在运行的服务（类型系统不允许这么干），反之亦然。
+
+一开始我们先来定义一些标记状态的特质，它们不包含任何逻辑，我们只会用它们来表示一个服务的状态类型：
+```scala
+sealed trait ServiceState
+final class Started extends ServiceState
+final class Stopped extends ServiceState
+```
+
+注意这里给 `ServiceState` 特质采用了 `sealed` 来确保不会有人在系统里突然增加其它状态。同时我们也把子类型定义为 `final` ，因此它们也不会被继承，系统不会被引入其它更多状态。
+
+### 关于 `sealed` 关键词  
+
+`sealed` 确保所有继承一个类或者特质的行为都必须在相同的一个编译单元。举例而言，如果你在一个 State.scala 的文件里定义了 `sealed trait State` 以及一些状态实现，这没毛病。然而，如果你不能再其它的文件来继承 `State` （如 MyStates.scala）。
+
+注意了，以上情况只针对使用了 `sealed` 关键词的类型有效，但不适用于它的子类。如果你不能在其它文件里继承 `State` ，但是如果你准备了一个类型如 `trait UserDefinedState extends State` ，我们则可以定义更多 `UserDefinedState` 的子类，即使是通过其它的文件。假如你要阻止这样的情况发生，你应该给你的子类们加上 `final`，正如我们在以上例子中所做的。
+
+了解了这些，我们终于可以来研究如何将它们作为幽灵类型来使用。首先我们先来定义一个 `Service` 类，它有一个 `State` 类型参数。这里请注意了，我们将不会在这个类中使用任何 `State` 类型的值！它只是静静地在这里，像一个幽灵 —— 这也是它名字的由来。
+
+```scala
+class Service[State <: ServiceState] private () {
+  def start[T >: State <: Stopped]() = this.asInstanceOf[Service[Started]]
+  def stop[T >: State <: Started]() = this.asInstanceOf[Service[Stopped]]
+}
+object Service {
+  def create() = new Service[Stopped]
+}
+```
+
+因此在这个伴身对象里，我们先创建了一个 `Service` 的实例，在最开始它的状态是 `Stopped` 。这个状态也符合类型参数（`<: ServiceState`）的类型边界，这很好。
+
+当我们想要开始/停止一个已经存在的 `Service` 的时候，有趣的事情来了。比如在 `start` 方法里定义的这个类型边界，只针对一个 `T` 的值有效，也就是 `Stopped` 。在我们的例子中，进行状态切换是一个空操作，它还是会返回相同的实例，同时显式地转化为所需要的状态。由于这个类型没有被任何东西调用，你也不会在这个操作中遇到类转换异常。
+
+现在我们使用 REPL 来调查下以上的代码，作为本章节一个很好的收场：
+```scala
+① scala> val initiallyStopped = Service.create() 
+  initiallyStopped: Service[Stopped] = Service@337688d3
+
+②  scala> val started = initiallyStopped.start()  
+  started: Service[Started] = Service@337688d3
+
+③  scala> val stopped = started.stop()            
+  stopped: Service[Stopped] = Service@337688d3
+
+④  scala> stopped.stop()                          
+  <console>:16: error: inferred type arguments [Stopped] do not conform to method stop's
+                     type parameter bounds [T >: Stopped <: Started]
+              stopped.stop()
+                      ^
+
+⑤  scala> started.start()                         
+  <console>:15: error: inferred type arguments [Started] do not conform to method start's
+                     type parameter bounds [T >: Started <: Stopped]
+              started.start()
+```
+
+① 这里我们创建了一个初始化实例，它开始的状态是 `Stopped`
+② 成功开启一个 `Stopped` 的 service，返回的类型为 `Service[Started]`
+③ 成功结束一个 `Started` 的 service，返回的类型为 `Service[Stopped]`
+④ 然而结束一个已经停止的 service （`Service[Stopped]`）是无效的，不能通过编译，注意打印出来的类型边界
+⑤ 类似地，结束一个已经开始的 service （`Service[Started]`）是无效的，不能通过编译，注意打印出来的类型边界
+
+正如你所看到的，幽灵类型是另一种强大的工具，可以让我们的代码更加的类型安全（或者我应该说「状态安全」！？）。
+
+> 如果你好奇那些「不是过于疯狂的类库」使用了这些特性，这里一个值得推荐的例子是 [Foursquare Rogue](https://github.com/foursquare/rogue)（the MongoDB query DSL）。它利用幽灵类型来确保一个 query builder 的状态正确性，如 `limit(3)` 被正确地调用。
