@@ -22,7 +22,7 @@ date: 2017-07-06
 
 ## 16. 枚举
 
-Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（包含在Enumeration）来写出类似的东西。
+Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（包含在 Enumeration）来写出类似的东西。
 
 ### 16.1. Enumeration
 
