@@ -307,11 +307,11 @@ object Service {
               started.start()
 ```
 
-① 这里我们创建了一个初始化实例，它开始的状态是 `Stopped`
-② 成功开启一个 `Stopped` 的 service，返回的类型为 `Service[Started]`
-③ 成功结束一个 `Started` 的 service，返回的类型为 `Service[Stopped]`
-④ 然而结束一个已经停止的 service （`Service[Stopped]`）是无效的，不能通过编译，注意打印出来的类型边界
-⑤ 类似地，结束一个已经开始的 service （`Service[Started]`）是无效的，不能通过编译，注意打印出来的类型边界
+① 这里我们创建了一个初始化实例，它开始的状态是 `Stopped`  
+② 成功开启一个 `Stopped` 的 service，返回的类型为 `Service[Started]`  
+③ 成功结束一个 `Started` 的 service，返回的类型为 `Service[Stopped]`  
+④ 然而结束一个已经停止的 service （`Service[Stopped]`）是无效的，不能通过编译，注意打印出来的类型边界  
+⑤ 类似地，结束一个已经开始的 service （`Service[Started]`）是无效的，不能通过编译，注意打印出来的类型边界  
 
 正如你所看到的，幽灵类型是另一种强大的工具，可以让我们的代码更加的类型安全（或者我应该说「状态安全」！？）。
 
