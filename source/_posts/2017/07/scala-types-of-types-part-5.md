@@ -102,3 +102,22 @@ val typeCheckFails: PathDep1 = out2in
 //    (which expands to)  out1.Inner
 //       val typeCheckFails: PathDep1 = out2in
 ```
+
+这里你可以理解为「每个 Outer class 都有各自的 Inner class」。
+
+使用这种类型很有用，我们能够强制从一个具体变量的内部去获得类型。一个具体的采用该类型的签名如下：
+```scala
+class Parent {
+  class Child
+}
+
+class ChildrenContainer(p: Parent) {
+  type ChildOfThisParent = p.Child
+
+  def add(c: ChildOfThisParent) = ???
+}
+```
+
+我们现在使用的路径依赖类型，已经被编码到了类型系统和逻辑中。这个 container 应该只包含 parent 的 children，而不是任何 parent 。
+
+我们将很快在 [类型投影]() 章节中看到如何引入任何一个 parent 的 child 类型。
