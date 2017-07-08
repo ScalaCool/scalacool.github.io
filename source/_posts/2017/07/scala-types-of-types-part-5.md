@@ -121,3 +121,22 @@ class ChildrenContainer(p: Parent) {
 我们现在使用的路径依赖类型，已经被编码到了类型系统和逻辑中。这个 container 应该只包含 parent 的 children，而不是任何 parent 。
 
 我们将很快在 [类型投影]() 章节中看到如何引入任何一个 parent 的 child 类型。
+
+## 23. 类型投影
+
+## 24. Specialized Types
+
+
+## 25. Type Lambda
+
+> ❌ 该章节作者尚未完成
+
+在 type lambda 的部分我们会使用 「路径依赖类型」及 「结构类型」，如果你忽略了这两个章节，你可以先跳回去看看。
+
+在了解 Type Lambdas 之前，让我们先回顾下关于「函数」和「柯里化」的某些细节：
+```scala
+class EitherMonad[A] extends Monad[({type λ[α] = Either[A, α]})#λ] {
+  def point[B](b: B): Either[A, B]
+  def bind[B, C](m: Either[A, B])(f: B => Either[A, C]): Either[A, C]
+}
+```
