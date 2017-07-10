@@ -3,15 +3,15 @@ title: Akka 系列（六）：Actor解决了什么问题？
 author: Godpan
 tags: 
 - Akka
-description: 这段时间由于忙毕业前前后后的事情，拖更了很久，表示非常抱歉，回归后的第一篇文章主要是看到了Akka最新文档中写的[What problems does the actor model solve?](http://doc.akka.io/docs/akka/current/scala/guide/actors-intro.html),阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。
+description: 看了 Akka 最新文档中写的 What problems does the actor model solve? ,阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。
 date: 2017-07-10
 ---
 
-这段时间由于忙毕业前前后后的事情，拖更了很久，表示非常抱歉，回归后的第一篇文章主要是看到了Akka最新文档中写的[What problems does the actor model solve?](http://doc.akka.io/docs/akka/current/scala/guide/actors-intro.html),阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。
+这段时间由于忙毕业前前后后的事情，拖更了很久，表示非常抱歉，回归后的第一篇文章主要是看到了Akka最新文档中写的 [What problems does the actor model solve?](http://doc.akka.io/docs/akka/current/scala/guide/actors-intro.html) ,阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。
 
 ## Actor解决了什么问题？
 
-Akka使用Actor模型来克服传统面向对象编程模型的局限性，并应对高并发分布式系统所带来的挑战。 充分理解Actor模型是必需的，它有助于我们认识到传统的编程方法在并发和分布式计算的领域上的不足之处。
+Akka 使用 Actor 模型来克服传统面向对象编程模型的局限性，并应对高并发分布式系统所带来的挑战。 充分理解 Actor 模型是必需的，它有助于我们认识到传统的编程方法在并发和分布式计算的领域上的不足之处。
 
 ### 封装的弊端
 
