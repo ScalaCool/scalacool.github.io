@@ -12,7 +12,7 @@
 
 
 
-  <meta name="description" content="<译> Scala 类型的类型（五）"/>
+  <meta name="description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。"/>
 
 
 
@@ -35,34 +35,16 @@
 <link rel="canonical" href="http://scala.cool/2017/07/scala-types-of-types-part-5/"/>
 
 
-<meta name="description" content="上一篇Scala 类型的类型（四）
-目录
-21. 结构类型
-22. 路径依赖类型
-23. 类型投影
-24. Specialized Types
-25. Type Lambda">
+<meta name="description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="<译> Scala 类型的类型（五）">
 <meta property="og:url" content="http://scala.cool/2017/07/scala-types-of-types-part-5/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="上一篇Scala 类型的类型（四）
-目录
-21. 结构类型
-22. 路径依赖类型
-23. 类型投影
-24. Specialized Types
-25. Type Lambda">
-<meta property="og:updated_time" content="2017-07-06T09:35:06.000Z">
+<meta property="og:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。">
+<meta property="og:updated_time" content="2017-07-08T13:47:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<译> Scala 类型的类型（五）">
-<meta name="twitter:description" content="上一篇Scala 类型的类型（四）
-目录
-21. 结构类型
-22. 路径依赖类型
-23. 类型投影
-24. Specialized Types
-25. Type Lambda">
+<meta name="twitter:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -173,6 +155,23 @@
 <li><a href="#19-自身类型注解">24. Specialized Types</a></li>
 <li><a href="#20-幽灵类型">25. Type Lambda</a></li>
 </ul>
+<h2 id="21-结构类型"><a href="#21-结构类型" class="headerlink" title="21. 结构类型"></a>21. 结构类型</h2><p>结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。</p>
+<p>迄今为止，我们在类型方面考虑的都是这样的问题：「x 继承接口 y 吗？」，有了「结构类型」，我们就可以深入一步，开始推理一个指定对象的结构（名字的由来）。当使用了结构类型，我们在检查一个类型是否匹配的时候，我们需要转变问题为：「这里存在带有这种签名的方法吗？」。</p>
+<p>让我们举一个很常见的例子，来看看它为什么如此强大。想象你有多种事物可以被 <strong>closed</strong> 掉，在 Java 里，一个人通常会继承 <code>java.io.Closeable</code> 接口，以此来支持写出一些通用的 <code>Closeable</code> 工具类（事实上，<strong>Google Guava</strong> 就有这样的一个类）。现在再想象另外有个人也继承了一个 <code>MyOwnCloseable</code> 类，但是并没有继承 <code>java.io.Closeable</code> 。由于静态类型的缘故，你的 <code>Closeables</code> 类库就会出问题，你就不能传 <code>MyOwnCloseable</code> 的实例给它。让我们使用结构类型来解决这个问题：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">type</span> <span class="title">JavaCloseable</span> </span>= java.io.<span class="type">Closeable</span></div><div class="line"><span class="comment">// reminder, it's body is: &#123; def close(): Unit &#125;</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyOwnCloseable</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">close</span></span>(): <span class="type">Unit</span> = ()</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// method taking a Structural Type</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">closeQuietly</span></span>(closeable: &#123; <span class="function"><span class="keyword">def</span> <span class="title">close</span></span>(): <span class="type">Unit</span> &#125;) =</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    closeable.close()</div><div class="line">  &#125; <span class="keyword">catch</span> &#123;</div><div class="line">    <span class="keyword">case</span> ex: <span class="type">Exception</span> =&gt; <span class="comment">// ignore...</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// accepts a java.io.File (implements Closeable):</span></div><div class="line">closeQuietly(<span class="keyword">new</span> <span class="type">StringReader</span>(<span class="string">"example"</span>))</div><div class="line"></div><div class="line"><span class="comment">// accepts a MyOwnCloseable</span></div><div class="line">closeQuietly(<span class="keyword">new</span> <span class="type">MyOwnCloseable</span>)</div></pre></td></tr></table></figure></p>
+<p>这个结构类型被作为某个方法的一个参数。基本上可以说，我们对这个类型唯一的期望就是它应该存在内部这样一个方法 — 因此这个类型的定义并不是一个精确的匹配，而是关于一些方法的最小集合，只有这样做才能够合法。</p>
+<p>另外需要注意的是，<strong>使用结构类型对运行时性能存在很大的负面影响，因为实际上它是通过反射实现的</strong>。我们这里不再通过字节码来调查了，记住调查 scala （或 java）类生成的字节码是一件很容易的事情，只需使用 :javap in the Scala REPL ，所以你应该自己试一试。</p>
+<p>在我们进入下一个话题之前，再来一个短小精炼的总结提示。想象你的结构类型相当的大，比如是一个类型代表某种事物，你可以打开它，使用它，然后必须关闭。通过使用一个带有结构类型的类型别名，我们就可以从这个方法中分离类型定义，如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">type</span> <span class="title">OpenerCloser</span> </span>= &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">open</span></span>(): <span class="type">Unit</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">close</span></span>(): <span class="type">Unit</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">on</span></span>(it: <span class="type">OpenerCloser</span>)(fun: <span class="type">OpenerCloser</span> =&gt; <span class="type">Unit</span>) = &#123;</div><div class="line">  it.open()</div><div class="line">  fun(it)</div><div class="line">  it.close()</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通过使用这样一个类型别名，<code>def</code> 的部分变得更加清晰了。我极力推荐这种「对更大结构类型进行类型别名」的做法，同时也最后提醒大家，确认自己是否真的需要采用结构类型，而没有其它办法了，多考虑负面的性能影响。</p>
+<h2 id="22-路径依赖类型"><a href="#22-路径依赖类型" class="headerlink" title="22. 路径依赖类型"></a>22. 路径依赖类型</h2><p>这个类型（Path Dependent Type）允许我们在另外的一个类中对某个类型进行「类型检查」，这看起来似乎比较奇怪，但以下的代码会让它变得直观：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Outer</span> </span>&#123;</div><div class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Inner</span></span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">val</span> out1 = <span class="keyword">new</span> <span class="type">Outer</span></div><div class="line"><span class="keyword">val</span> out1in = <span class="keyword">new</span> out1.<span class="type">Inner</span> <span class="comment">// concrete instance, created from inside of Outer</span></div><div class="line"></div><div class="line"><span class="keyword">val</span> out2 = <span class="keyword">new</span> <span class="type">Outer</span></div><div class="line"><span class="keyword">val</span> out2in = <span class="keyword">new</span> out2.<span class="type">Inner</span> <span class="comment">// another instance of Inner, with the enclosing instance out2</span></div><div class="line"></div><div class="line"><span class="comment">// the path dependent type. The "path" is "inside out1".</span></div><div class="line"><span class="class"><span class="keyword">type</span> <span class="title">PathDep1</span> </span>= out1.<span class="type">Inner</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// type checks</span></div><div class="line"></div><div class="line"><span class="keyword">val</span> typeChecksOk: <span class="type">PathDep1</span> = out1in</div><div class="line"><span class="comment">// OK</span></div><div class="line"></div><div class="line"><span class="keyword">val</span> typeCheckFails: <span class="type">PathDep1</span> = out2in</div><div class="line"><span class="comment">// &lt;console&gt;:27: error: type mismatch;</span></div><div class="line"><span class="comment">// found   : out2.Inner</span></div><div class="line"><span class="comment">// required: PathDep1</span></div><div class="line"><span class="comment">//    (which expands to)  out1.Inner</span></div><div class="line"><span class="comment">//       val typeCheckFails: PathDep1 = out2in</span></div></pre></td></tr></table></figure></p>
+<p>这里你可以理解为「每个 Outer class 都有各自的 Inner class」。</p>
+<p>使用这种类型很有用，我们能够强制从一个具体变量的内部去获得类型。一个具体的采用该类型的签名如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parent</span> </span>&#123;</div><div class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Child</span></span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChildrenContainer</span>(<span class="params">p: <span class="type">Parent</span></span>) </span>&#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">ChildOfThisParent</span> </span>= p.<span class="type">Child</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">add</span></span>(c: <span class="type">ChildOfThisParent</span>) = ???</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我们现在使用的路径依赖类型，已经被编码到了类型系统和逻辑中。这个 container 应该只包含 parent 的 children，而不是任何 parent 。</p>
+<p>我们将很快在 <a href="">类型投影</a> 章节中看到如何引入任何一个 parent 的 child 类型。</p>
+<h2 id="23-类型投影"><a href="#23-类型投影" class="headerlink" title="23. 类型投影"></a>23. 类型投影</h2><h2 id="24-Specialized-Types"><a href="#24-Specialized-Types" class="headerlink" title="24. Specialized Types"></a>24. Specialized Types</h2><h2 id="25-Type-Lambda"><a href="#25-Type-Lambda" class="headerlink" title="25. Type Lambda"></a>25. Type Lambda</h2><blockquote>
+<p>❌ 该章节作者尚未完成</p>
+</blockquote>
+<p>在 type lambda 的部分我们会使用 「路径依赖类型」及 「结构类型」，如果你忽略了这两个章节，你可以先跳回去看看。</p>
+<p>在了解 Type Lambdas 之前，让我们先回顾下关于「函数」和「柯里化」的某些细节：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">EitherMonad</span>[<span class="type">A</span>] <span class="keyword">extends</span> <span class="title">Monad</span>[(&#123;type λ[α] </span>= <span class="type">Either</span>[<span class="type">A</span>, α]&#125;)#λ] &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">point</span></span>[<span class="type">B</span>](b: <span class="type">B</span>): <span class="type">Either</span>[<span class="type">A</span>, <span class="type">B</span>]</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">bind</span></span>[<span class="type">B</span>, <span class="type">C</span>](m: <span class="type">Either</span>[<span class="type">A</span>, <span class="type">B</span>])(f: <span class="type">B</span> =&gt; <span class="type">Either</span>[<span class="type">A</span>, <span class="type">C</span>]): <span class="type">Either</span>[<span class="type">A</span>, <span class="type">C</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
             </div>
           
@@ -192,8 +191,8 @@
   <nav class="post-nav">
     
     
-      <a class="next" href="/2017/07/scala-types-of-types-part-4/">
-        <span class="next-text nav-default"><译> Scala 类型的类型（四）</span>
+      <a class="next" href="/2017/07/learning-akka-6/">
+        <span class="next-text nav-default">Akka 系列（六）：Actor 解决了什么问题？</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
