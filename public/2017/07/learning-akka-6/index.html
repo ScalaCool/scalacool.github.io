@@ -50,7 +50,7 @@
 <meta property="og:image" content="http://scala.cool/images/2017/07/actor-graph.png">
 <meta property="og:image" content="http://scala.cool/images/2017/07/serialized-timeline-invariants.png">
 <meta property="og:image" content="http://scala.cool/images/2017/07/actor-tree-supervision.png">
-<meta property="og:updated_time" content="2017-07-10T02:18:41.000Z">
+<meta property="og:updated_time" content="2017-07-10T02:35:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Akka 系列（六）：Actor 解决了什么问题？">
 <meta name="twitter:description" content="看了 Akka 最新文档中写的 What problems does the actor model solve? ,阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。">
@@ -162,11 +162,14 @@
 <h3 id="封装的弊端"><a href="#封装的弊端" class="headerlink" title="封装的弊端"></a>封装的弊端</h3><p>面向对象编程（OOP）是一种广泛采用的，熟悉的编程模型，它的一个核心理念就是封装，并规定对象封装的内部数据不能从外部直接访问，只允许相关的属性方法进行数据操作，比如我们熟悉的Javabean中的getX，setX等方法，对象为封装的内部数据提供安全的数据操作。</p>
 <p>举个例子，有序二叉树必须保证树节点数据的分布规则，若你想利用有序二叉树进行查询相关数据，就必须要依赖这个约束。</p>
 <p>当我们在分析面向对象编程在运行时的行为时，我们可能会绘制一个消息序列图，用来显示方法调用时的交互，如下图所示:</p>
-<p><img src="/images/2017/07/seq-chart.png" alt="seq chart"></p>
+<center><br><img src="/images/2017/07/seq-chart.png" alt="seq chart"><br></center>
+
 <p>但上述图表并不能准确地表示实例在执行过程中的生命线。实际上，一个线程执行所有这些调用，并且变量的操作也在调用该方法的同一线程上。为刚才的序列图加上执行线程，看起来像这样：</p>
-<p><img src="/images/2017/07/seq-chart-thread.png" alt="seq chart thread"></p>
+<center><br><img src="/images/2017/07/seq-chart-thread.png" alt="seq chart thread"><br></center>
+
 <p>但当在面对多线程的情况下，会发现此前的图越来越混乱和变得不清晰，现在我们模拟多个线程访问同一个示例：</p>
-<p><img src="/images/2017/07/seq-chart-multi-thread.png" alt="seq chart multi thread"></p>
+<center><br><img src="/images/2017/07/seq-chart-multi-thread.png" alt="seq chart multi thread"><br></center>
+
 <p>在上面的这种情况中，两个线程调用同一个方法，但别调用的对象并不能保证其封装的数据发生了什么，两个调用的方法指令可以任意方式的交织，无法保证共享变量的一致性，现在，想象一下在更多线程下这个问题会更加严重。</p>
 <p>解决这个问题最通常的方法就是在该方法上加锁。通过加锁可以保证同一时刻只有一个线程能进入该方法，但这是一个代价非常昂贵的方法：</p>
 <ul>
