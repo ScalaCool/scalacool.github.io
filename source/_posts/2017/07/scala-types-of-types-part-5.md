@@ -126,6 +126,62 @@ class ChildrenContainer(p: Parent) {
 
 ## 24. Specialized Types
 
+### 24.1. @specialized
+
+类型专业化（Type specialization）与其说是「类型系统」范畴的普通东西，还不如说这只是一种性能方面的技巧。但尽管如此，如果你想编写出拥有良好性能的集合，它是非常重要的，我们需要掌握它。举个例子，让我们来实现一个非常有用的集合，叫做 `Parcel[A]`，它持有一个指定类型的 value — 确实非常有用！
+```scala
+case class Parcel[A](value: A)
+```
+
+以上是我们最基本的实现。有什么问题吗？没错，`A` 可以是任何东西。甚至假使我们只对 `Int` 值进行装箱，它就会被表示为一个 Java 对象。所以上面的 class 会导致对原始值进行装箱和拆箱，因为 container 在处理对象：
+```scala
+val i: Int = Int.unbox(Parcel.apply(Int.box(1)))
+```
+
+众所周知，除非真的需要，我们都应避免进行「装箱」操作，因为它通过在 `int` 和 `object Int` 之间进行来回转换，产生了更多运行时的工作。怎样才能消除这个问题呢？一种技巧就是将我们的 `Parcel` 对所有的原始类型进行「专业化」（这里拿 `Long` 和 `Int` 做例子就够了），如下：
+
+> 如果你已经阅读过 [value 类]()，那么也许已经注意到 `Parcel` 可以用它很好地代替实现！确实如此。然而，`specialized` 在 Scala `2.8.1` 中就有了，相对地 value 类是在 `2.10.x` 才被引进。并且，前者能够专业化一种以上的 value（虽然它以指数级增长生成代码），value 类却只能限制为一种。
+
+```scala
+case class Parcel[A](value: A) {
+  def something: A = ???
+}
+
+// specialzation "by hand"
+case class IntParcel(intValue: Int) {
+  override def something: Int = /* works on low-level Int, no wrapping! */ ???
+}
+
+case class LongParcel(intValue: Long) {
+  override def something: Long = /* works on low-level Long, no wrapping! */ ???
+}
+
+```
+
+`IntParcel` 和 `LongParcel` 的实现将有效地避开装箱，因为它们直接在原始值上进行处理，并且无需进入对象领域。现在我们只需根据我们的实例，选择想要的 `*Parcel`。
+
+这看起来很好，但是代码基本上变得更难维护了。它有 `N` 个实现，每种我们需要支持的原始值类型各一个（如包括：`int`, `long`, `byte`, `char`, `short`, `float`, `double`, `boolean`, `void`, 再加上 `Object`）! 这需要维护很多样板。
+
+既然我们已经熟悉了「类型专业化」，也知晓了手动实现它并不是很友好，就来看看 Scala 是如何通过引入 `@specialized` 注解来帮我们改善这个问题：
+```scala
+case class Parcel[@specialized A](value: A)
+```
+
+如上所示我们将 `@specialized` 注解应用到了类型参数 `A` 上，从而指示编译器生成该类的所有专业化变量，它们是：`ByteParcel`, `IntParcel`, `LongParcel`, `FloatParcel`, `DoubleParcel`, `BooleanParcel`, `CharParcel`, `ShortParcel`, `CharParcel` 甚至以及 `VoidParcel` （这并不是实际的名字，但你应该明白了大概的意思）。编译器也同时承担调用正确的版本，所以我们只需要专心写代码，而不必关心一个类是否被专业化了，编译器会尽可能使用适合的版本（如果可以的话）：
+```scala
+val pi = Parcel(1)     // will use `int` specialized methods
+val pl = Parcel(1L)    // will use `long` specialized methods
+val pb = Parcel(false) // will use `boolean` specialized methods
+val po = Parcel("pi")  // will use `Object` methods
+```
+
+### 24.2. Miniboxing 
+
+> ❌ 该章节作者尚未完成  
+
+这不是 Scala 的一个特性，但是可以作为 scalac 的一个插件来使用。
+
+> TODO, there’s a project from withing EPFL to make specialization more efficient: Scala Miniboxing
 
 ## 25. Type Lambda
 
