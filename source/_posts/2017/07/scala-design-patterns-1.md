@@ -2,8 +2,8 @@
 title: Scala 与设计模式（一）：Singleton 单例模式  
 author: Prefert
 tags:
+- 设计模式
 - Java
-- Design Patterns
 description: 对比设计模式在 Java 与 Scala 中的不同
 date: 2017-07-10
 ---
