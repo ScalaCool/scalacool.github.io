@@ -205,7 +205,8 @@ static {};
 
 在 Scala 中并没有 `static` 关键字，你不用纠结太多，我们用 `object` 便能实现单例，再也不用为你的选择困难症烦恼！
 
-#### `obeject`  
+### object
+
 `object` 在 Scala 中被称作 "伴生对象" (`companion object`)。因其可与类同名存在而得名，我们可以在 `object` 中写一些常量或者工具函数等，比较典型的一点是 Scala 类的 `apply` 函数也写于 `obejct` 中（将在本系列工厂模式中详细提到，敬请期待）。看到 `object` 的介绍，大家就应该能从它身上闻到强烈的单例味。举个例子：
 ```Scala
 object Singleton2Scala {
