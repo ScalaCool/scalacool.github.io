@@ -175,6 +175,13 @@ val pb = Parcel(false) // will use `boolean` specialized methods
 val po = Parcel("pi")  // will use `Object` methods
 ```
 
+「太棒了，让我们尽情使用它」 — 这是大部分人发现「专业化」带来的好处之后的反应，因为它可以在降低内存使用率的同时成倍的加速低级操作。坏消息是，这也要付出不小的代价：当使用这些成倍数量的变量时代码量也变得十分巨大了，就像这样子：
+```scala
+class Thing[A, B](@specialized a: A, @specialized b: B)
+```
+
+在上面的例子中，我们使用了第二种应用专业化的风格 — 加在参数上，这效果等同于我们直接对 `A` 和 `B` 进行专业化。请注意，上述代码将生成 `8 * 8 = 64` 种实现，因为它必须处理如「A 是一个 `int`，B是一个 `int`」以及「A 是一个 `boolean`，但是 B 是一个 `long`」的情况 — 
+
 ### 24.2. Miniboxing 
 
 > ❌ 该章节作者尚未完成  
