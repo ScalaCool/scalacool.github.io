@@ -14,6 +14,10 @@ var authors = {
     blog: 'http://www.godpan.me',
     avatar: '/images/avatar/godpan.png'
   },
+  prefert: {
+    blog: 'http://prefer-tyl.site',
+    avatar: '/images/avatar/prefert.jpg'
+  },
   scalacool: {
     blog: 'http://twitter.com/scala_cool',
     avatar: '/images/avatar/scalacool.png'
