@@ -275,7 +275,7 @@ object AppRegistry extends xxClass with xxtrait{
 以下是对 Scala 和 Java 是实现单例模式的一个简单比较：
 
 | 场景 | Java        | Scala           |  
-| --- | ------------- |:-------------:|  
+| --- |:-------------:|:-------------:|  
 | 单线程  |  `static`       | `object` |  
 | 多线程  | `synchronized` +  `volatile`  | `object` |
 | 延迟加载 |  `enum` 、 `double-checked locking` | `object` + `lazy`    |  
