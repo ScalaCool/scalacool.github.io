@@ -4,15 +4,9 @@ author: Prefert
 tags:
 - 设计模式
 - Java
-<<<<<<< HEAD
-- Design Patterns
 description: 单例模式（`Singleton Pattern`）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。
-=======
-description: 对比设计模式在 Java 与 Scala 中的不同
->>>>>>> 0479bb9b18235761aa7ea5b1d29b4a402d6c8d83
 date: 2017-07-10
 ---
-
 
 <!--more-->
 
@@ -281,7 +275,7 @@ object AppRegistry extends xxClass with xxtrait{
 以下是对 Scala 和 Java 是实现单例模式的一个简单比较：
 
 | 场景 | Java        | Scala           |  
-| --- | ------------- |:-------------:|  
+| --- |:-------------:|:-------------:|  
 | 单线程  |  `static`       | `object` |  
 | 多线程  | `synchronized` +  `volatile`  | `object` |
 | 延迟加载 |  `enum` 、 `double-checked locking` | `object` + `lazy`    |  
