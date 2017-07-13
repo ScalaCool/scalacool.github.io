@@ -5,20 +5,16 @@ tags:
 - 设计模式
 - Java
 description: 单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。
-date: 2017-07-10
+date: 2017-07-12
 ---
 
-<!--more-->
+二十年前，软件设计领域的四位大师（ GoF ，"四人帮"，又称 Gang of Four，即Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides）通过论著《设计模式：可复用面向对象软件的基础》阐述了设计模式领域的开创性成果。设计模式（`Design Pattern`）是一套被反复使用、多数人知晓的、经过分类的、代码设计经验的总结。
 
-<!-- toc -->  
-
-二十年前，软件设计领域的四位大师（ GoF ，"四人帮"，又称 Gang of Four，即 Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides）通过论著《设计模式：可复用面向对象软件的基础》阐述了设计模式领域的开创性成果。设计模式（Design Pattern）是一套被反复使用、多数人知晓的、经过分类的、代码设计经验的总结。
 
 在 2017 年的今天，虽然一些传统的设计模式仍然适用，但部分设计已经发生改变，甚至被全新的语言特征所取代。
 本系列文章首先会介绍传统的设计模式在 Java 与 Scala 中的实现，之后会介绍 Scala 可以实现的 “新” 的设计模式。
 
 本文将会简单介绍单例模式在 Java 中的实现方式，以及如何将单例模式应用在 Scala 中，通过比较来阐述单例模式。
-<!-- toc -->  
 
 ## 概念  
 
@@ -205,7 +201,7 @@ static {};
 
 在 Scala 中并没有 `static` 关键字，你不用纠结太多，我们用 `object` 便能实现单例，再也不用为你的选择困难症烦恼！
 
-#### `obeject`  
+### object 
 `object` 在 Scala 中被称作 「单例对象」 (Singleton Objects)。
 
 > object 关键字创建一个新的单例类型，就像一个 class 只有一个被命名的实例。如果你熟悉 Java, 在 Scala 中声明一个 object 有些像创建了一个匿名类的实例。      ——引自 《Scala 函数式编程》
@@ -216,6 +212,7 @@ object Singleton2Scala {
   def sum(l: List[Int]): Int = l.sum
 }
 ```
+
 测试:
 ```Scala
 object Test {
