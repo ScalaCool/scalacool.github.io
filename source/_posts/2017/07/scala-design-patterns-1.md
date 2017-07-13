@@ -210,7 +210,7 @@ static {};
 
 > object 关键字创建一个新的单例类型，就像一个 class 只有一个被命名的实例。如果你熟悉 Java, 在 Scala 中声明一个 object 有些像创建了一个匿名类的实例。      ——引自 《Scala 函数式编程》
 
-
+举个例子：
 ```Scala
 object Singleton2Scala {
   def sum(l: List[Int]): Int = l.sum
