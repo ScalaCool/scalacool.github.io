@@ -4,7 +4,7 @@ author: Prefert
 tags:
 - 设计模式
 - Java
-description: 单例模式（`Singleton Pattern`）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。
+description: 单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。
 date: 2017-07-10
 ---
 
@@ -12,7 +12,7 @@ date: 2017-07-10
 
 <!-- toc -->  
 
-二十年前，软件设计领域的四位大师（ GoF ，"四人帮"，又称 Gang of Four，即Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides）通过论著《设计模式：可复用面向对象软件的基础》阐述了设计模式领域的开创性成果。设计模式（`Design Pattern`）是一套被反复使用、多数人知晓的、经过分类的、代码设计经验的总结。
+二十年前，软件设计领域的四位大师（ GoF ，"四人帮"，又称 Gang of Four，即 Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides）通过论著《设计模式：可复用面向对象软件的基础》阐述了设计模式领域的开创性成果。设计模式（Design Pattern）是一套被反复使用、多数人知晓的、经过分类的、代码设计经验的总结。
 
 在 2017 年的今天，虽然一些传统的设计模式仍然适用，但部分设计已经发生改变，甚至被全新的语言特征所取代。
 本系列文章首先会介绍传统的设计模式在 Java 与 Scala 中的实现，之后会介绍 Scala 可以实现的 “新” 的设计模式。
@@ -206,7 +206,11 @@ static {};
 在 Scala 中并没有 `static` 关键字，你不用纠结太多，我们用 `object` 便能实现单例，再也不用为你的选择困难症烦恼！
 
 #### `obeject`  
-`object` 在 Scala 中被称作 "伴生对象" (`companion object`)。因其可与类同名存在而得名，我们可以在 `object` 中写一些常量或者工具函数等，比较典型的一点是 Scala 类的 `apply` 函数也写于 `obejct` 中（将在本系列工厂模式中详细提到，敬请期待）。看到 `object` 的介绍，大家就应该能从它身上闻到强烈的单例味。举个例子：
+`object` 在 Scala 中被称作 「单例对象」 (Singleton Objects)。
+
+> object 关键字创建一个新的单例类型，就像一个 class 只有一个被命名的实例。如果你熟悉 Java, 在 Scala 中声明一个 object 有些像创建了一个匿名类的实例。      ——引自 《Scala 函数式编程》
+
+
 ```Scala
 object Singleton2Scala {
   def sum(l: List[Int]): Int = l.sum
@@ -248,7 +252,7 @@ public final class Singleton.Scala.Singleton2Scala {
 ```
 从上方代码我们能看到，所有的方法前都带上了 `static` 关键字。
 
-在实际项目开发的时候，我们还可以继承其他 类 与 特质。举个例子：
+在实际项目开发的时候，我们还可以继承其他 class(类) 与 trait(特质)。举个例子：
 ```Scala
 object AppRegistry extends xxClass with xxtrait{
   println("Registry initialization block called.")
@@ -278,7 +282,7 @@ object AppRegistry extends xxClass with xxtrait{
 | --- |:-------------:|:-------------:|  
 | 单线程  |  `static`       | `object` |  
 | 多线程  | `synchronized` +  `volatile`  | `object` |
-| 延迟加载 |  `enum` 、 `double-checked locking` | `object` + `lazy`    |  
+| 延迟加载 |  `enum` 、 `double-checked locking` | `object` + `lazy`(参数延迟加载)    |  
 
 人们对单例模式的看法褒贬不一，甚至被称为是 `anti-pattern` (反面模式）。如果你是一名 Java 开发者，可能 Spring 框架中 `Dependency Injection` 是你的 better choice 。但是单例模式你不能否认的是单例模式在 Android SDK 中得到了广泛的应用。在 Scala 中，伴生对象出现的频率更是非常之高。当你面对的业务场景需要用到单例模式的时候，请务必注意 **多线程** 与 **性能开销** 的问题。
 
