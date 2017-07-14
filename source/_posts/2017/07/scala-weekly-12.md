@@ -21,17 +21,37 @@ date: 2017-07-11
   Akka 监控
 
 - [Scala 2.12 and the road towards 3.0 by Adriaan Moors](https://www.youtube.com/watch?v=Xnesyv7NFHQ)
-
+  at Scala Days Copenhagen 2017
 
 - [<译> Scala 类型的类型（四）](https://juejin.im/post/595defd351882568b462f818)
   翻译
 
 - [Redesigned collections v0.2.0](http://www.scala-lang.org/blog/2017/07/02/collections-0.2.0.html)
-  
+  collection strawman 动态
+
+- [When Dotty is out, will people still use Option and Either?](https://www.reddit.com/r/scala/comments/6lfltr/when_dotty_is_out_will_people_still_use_option/)
+  马丁回答
+
+- [Simplified Testing with ScalaTest and Custom Matchers](https://hackernoon.com/simplified-testing-with-scalatest-and-custom-matchers-bd5297128ebc)
+  ScalaTest 实践
+
+- [What is coming with Dotty?](http://www.cakesolutions.net/teamblogs/dotty)
+  Dotty 带来了哪些新东西
+
+- [Using cats with reactive-kafka](https://www.iravid.com/posts/using-cats-with-reactive-kafka.html)
+  cats + reactive-kafka
 
 ## 一周速递
 
 - DeepLearning.scala 2.0.0-RC1 [发布](http://deeplearning.thoughtworks.school/2017/07/03/Announcing-DeepLearning.scala-2.0.0-RC1.html)
 
 - Scala.js 1.0.0-M1 [发布](https://www.scala-js.org/news/2017/07/03/announcing-scalajs-1.0.0-M1/)
+
+- Play 2.6.1 [发布](https://blog.playframework.com/play-2-6-1-released/)
+
+- Lagom 1.3.5 [发布](https://www.lagomframework.com/blog/lagom-1-3-5.html)
+
+- Ammonite #Scala REPL/Scripts 1.0.0 [发布](http://ammonite.io/#1.0.0)
+
+- Streamz 0.9-M [发布](https://github.com/krasserm/streamz)
 
