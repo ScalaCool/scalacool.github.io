@@ -17,8 +17,8 @@ date: 2017-07-17
 - [21. 结构类型](#21-结构类型)
 - [22. 路径依赖类型](#22-路径依赖类型)
 - [23. 类型投影](#23-类型投影)
-- [24. Specialized Types](#19-自身类型注解)
-- [25. Type Lambda](#20-幽灵类型)
+- [24. Specialized Types](#24-Specialized-Types)
+- [25. Type Lambda](#25-Type-Lambda)
 
 ## 21. 结构类型
 
@@ -123,6 +123,46 @@ class ChildrenContainer(p: Parent) {
 我们将很快在 [类型投影]() 章节中看到如何引入任何一个 parent 的 child 类型。
 
 ## 23. 类型投影
+
+类型投影（Type Projections）类似「路径依赖类型」，可以支持在在一个内部类中引用一个类型。在语法上看，你可以组织内部类的路径结构，然后通过 `#` 符号分离开来。我们先来看看这些路径依赖类型（`.` 语法）和类型投影（`#` 语法）的第一个且主要的差别：
+```scala
+// our example class structure
+class Outer {
+  class Inner
+}
+
+// Type Projection (and alias) refering to Inner
+type OuterInnerProjection = Outer#Inner
+
+val out1 = new Outer
+val out1in = new out1.Inner
+```
+
+另一个准确的直觉是相比「路径依赖」，「类型投影」可以用于「类型层面的编程」，如 （存在类型）Existential Types。
+
+「存在类型」是跟「类型擦除」密切相关的东西，就是 JVM 层面而言，必须与之相处的玩意儿。
+```scala
+val thingy: Any = ???
+
+thingy match {
+  case l: List[a] =>
+     // lower case 'a', matches all types... what type is 'a'?!
+}
+```
+因为运行时类型被擦除了，所以我们不知道 `a` 的类型。我们知道 List 是一个类型构造器 `* -> *` ，所以肯定有某个类型，它可以用来构造一个有效的 `List[T]`。这个「某个类型」，就是 **存在类型**。
+
+Scala 为它提供了一种快捷方式：
+```scala
+List[_]
+ //  ^ some type, no idea which one!
+```
+
+假设你在使用一些抽象类型成员，在我们的例子中将会是一些 Monad 。我们想要强制我们类的使用者只能使用这个 Monad 中的 `Cool` 实例，因为比如我们的 Monad 只有针对这些类型才有意义。我们可以通过这些**存在类型 T** 的类型边界来实现：
+```scala
+type Monad[T] forSome { type T >: Cool }
+```
+
+[http://mikeslinn.blogspot.com/2012/08/scala-existential-types.html](http://mikeslinn.blogspot.com/2012/08/scala-existential-types.html)
 
 ## 24. Specialized Types
 
