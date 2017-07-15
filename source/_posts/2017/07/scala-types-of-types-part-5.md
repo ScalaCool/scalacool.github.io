@@ -5,7 +5,7 @@ tags:
 - 类型相关
 - 翻译
 description: 结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。
-date: 2017-07-14
+date: 2017-07-17
 ---
 
 ## 上一篇
@@ -181,6 +181,30 @@ class Thing[A, B](@specialized a: A, @specialized b: B)
 ```
 
 在上面的例子中，我们使用了第二种应用专业化的风格 — 加在参数上，这效果等同于我们直接对 `A` 和 `B` 进行专业化。请注意，上述代码将生成 `8 * 8 = 64` 种实现，因为它必须处理如「A 是一个 `int`，B是一个 `int`」以及「A 是一个 `boolean`，但是 B 是一个 `long`」的情况 — 
+事实上生成的类的数量大约在 `2 * 10^(nr_of_type_specializations)`，对于只有 3 个类型参数的情况，它也很容易达到了数千个类。
+
+有一些方法可以防止这个「指数级爆炸」，例如通过限制专业化的目标类型。假设 `Parcel` 大部分情况只处理整数，从不跟浮点数打交道，我们就可以编译器只专业化 `Long` 和 `Int`，如：
+```scala
+case class Parcel[@specialized(Int, Long) A](value: A)
+```
+
+这次让我们使用 `:javap Parcel` 来研究一点字节码：
+```java
+// Parcel, specialized for Int and Long
+public class Parcel extends java.lang.Object implements scala.Product,scala.Serializable{
+    public java.lang.Object value(); // generic version, "catch all"
+    public int value$mcI$sp();       // int specialized version
+    public long value$mcJ$sp();}     // long specialized version
+
+    public boolean specInstance$();  // method to check if we're a specialized class impl.
+}
+```
+
+如你所见，编译器提供了额外的专业化方法，如 `value$mcI$sp()`，它将返回 `int` ， `long` 也有类似的方法。值得一提的是这里还有另外一个叫做 `specInstance$` 的方法，如果使用的实现是一个专业化的类，它会返回 `true` 。
+
+可能你比较好奇当前在 Scala 中那些类被专业化了，它们有（可能不完整）：Function0, Function1, Function2, Tuple1, Tuple2, Product1, Product2, AbstractFunction0, AbstractFunction1, AbstractFunction2 。由于当前专业化 2 个参数的成本已经很高，一个趋势是我们不要再专业化更多的参数了，虽然我们可以这么干。
+
+> 为什么我们要避免进行装箱，一个典型的例子就是「内存效率」。想象一个 `boolean` 值，如果它的存储只消耗 1 位那是极好的，不幸的是实际上并不是这样的（包含我了解的所有 JVM），例如在 HotSpot 上一个 `boolean` 被当做一个 `int`，所以它要占用 **4 个字节**的空间。
 
 ### 24.2. Miniboxing 
 
