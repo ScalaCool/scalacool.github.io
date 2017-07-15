@@ -41,7 +41,7 @@
 <meta property="og:url" content="http://scala.cool/2017/07/scala-types-of-types-part-5/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。">
-<meta property="og:updated_time" content="2017-07-15T00:53:00.000Z">
+<meta property="og:updated_time" content="2017-07-15T01:05:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<译> Scala 类型的类型（五）">
 <meta name="twitter:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。">
@@ -185,7 +185,7 @@
 <p>如你所见，编译器提供了额外的专业化方法，如 <code>value$mcI$sp()</code>，它将返回 <code>int</code> ， <code>long</code> 也有类似的方法。值得一提的是这里还有另外一个叫做 <code>specInstance$</code> 的方法，如果使用的实现是一个专业化的类，它会返回 <code>true</code> 。</p>
 <p>可能你比较好奇当前在 Scala 中那些类被专业化了，它们有（可能不完整）：Function0, Function1, Function2, Tuple1, Tuple2, Product1, Product2, AbstractFunction0, AbstractFunction1, AbstractFunction2 。由于当前专业化 2 个参数的成本已经很高，一个趋势是我们不要再专业化更多的参数了，虽然我们可以这么干。</p>
 <blockquote>
-<p>为什么我们要避免进行装箱，一个典型的例子就是「内存效率」。想象一个 <code>boolean</code> 值，如果它的存储只消耗 1 位那是极好的，不幸的是实际上并不是这样的（包含我了解的所有 JVM），例如在 HotSpot 上一个 <code>boolean</code> 被当做一个 <code>int</code>，所以它要占用 <strong>4 个字节</strong>的空间。</p>
+<p>为什么我们要避免进行装箱，一个典型的例子就是「内存效率」。想象一个 <code>boolean</code> 值，如果它的存储只消耗 1 位那是极好的，不幸的是实际上并不是这样的（包含我了解的所有 JVM），例如在 HotSpot 上一个 <code>boolean</code> 被当做一个 <code>int</code>，所以它要占用 <strong>4 个字节</strong>的空间。它的兄弟 <code>java.lang.Boolean</code> 类似所有 Java 对象一样，则有 <strong>8 字节</strong>的对象头，然后再存储 <code>boolean</code> （额外增加 <strong>4 字节</strong>）。由于 <strong>Java 对象布局的排列规则</strong>，这个对象占用的空间再分配 <strong>16 字节</strong>（8 个字节给对象头，4 个字节给值，4 个字节给 padding）。这就是为啥我们希望避免装箱的另外一个悲伤的原因。</p>
 </blockquote>
 <h3 id="24-2-Miniboxing"><a href="#24-2-Miniboxing" class="headerlink" title="24.2. Miniboxing"></a>24.2. Miniboxing</h3><blockquote>
 <p>❌ 该章节作者尚未完成  </p>
