@@ -41,7 +41,7 @@
 <meta property="og:url" content="http://scala.cool/2017/07/scala-types-of-types-part-5/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。">
-<meta property="og:updated_time" content="2017-07-11T12:48:30.000Z">
+<meta property="og:updated_time" content="2017-07-15T00:53:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<译> Scala 类型的类型（五）">
 <meta name="twitter:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。">
@@ -130,7 +130,7 @@
       </h1>
 
       <time class="post-time">
-          7月14日
+          7月17日
       </time>
       
         <span class="author-split">|</span>
@@ -179,7 +179,14 @@
 <p>既然我们已经熟悉了「类型专业化」，也知晓了手动实现它并不是很友好，就来看看 Scala 是如何通过引入 <code>@specialized</code> 注解来帮我们改善这个问题：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Parcel</span>[@specialized <span class="type">A</span>](<span class="params">value: <span class="type">A</span></span>)</span></div></pre></td></tr></table></figure></p>
 <p>如上所示我们将 <code>@specialized</code> 注解应用到了类型参数 <code>A</code> 上，从而指示编译器生成该类的所有专业化变量，它们是：<code>ByteParcel</code>, <code>IntParcel</code>, <code>LongParcel</code>, <code>FloatParcel</code>, <code>DoubleParcel</code>, <code>BooleanParcel</code>, <code>CharParcel</code>, <code>ShortParcel</code>, <code>CharParcel</code> 甚至以及 <code>VoidParcel</code> （这并不是实际的名字，但你应该明白了大概的意思）。编译器也同时承担调用正确的版本，所以我们只需要专心写代码，而不必关心一个类是否被专业化了，编译器会尽可能使用适合的版本（如果可以的话）：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> pi = <span class="type">Parcel</span>(<span class="number">1</span>)     <span class="comment">// will use `int` specialized methods</span></div><div class="line"><span class="keyword">val</span> pl = <span class="type">Parcel</span>(<span class="number">1</span>L)    <span class="comment">// will use `long` specialized methods</span></div><div class="line"><span class="keyword">val</span> pb = <span class="type">Parcel</span>(<span class="literal">false</span>) <span class="comment">// will use `boolean` specialized methods</span></div><div class="line"><span class="keyword">val</span> po = <span class="type">Parcel</span>(<span class="string">"pi"</span>)  <span class="comment">// will use `Object` methods</span></div></pre></td></tr></table></figure></p>
 <p>「太棒了，让我们尽情使用它」 — 这是大部分人发现「专业化」带来的好处之后的反应，因为它可以在降低内存使用率的同时成倍的加速低级操作。坏消息是，这也要付出不小的代价：当使用这些成倍数量的变量时代码量也变得十分巨大了，就像这样子：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Thing</span>[<span class="type">A</span>, <span class="type">B</span>](<span class="params">@specialized a: <span class="type">A</span>, @specialized b: <span class="type">B</span></span>)</span></div></pre></td></tr></table></figure></p>
-<p>在上面的例子中，我们使用了第二种应用专业化的风格 — 加在参数上，这效果等同于我们直接对 <code>A</code> 和 <code>B</code> 进行专业化。请注意，上述代码将生成 <code>8 * 8 = 64</code> 种实现，因为它必须处理如「A 是一个 <code>int</code>，B是一个 <code>int</code>」以及「A 是一个 <code>boolean</code>，但是 B 是一个 <code>long</code>」的情况 — </p>
+<p>在上面的例子中，我们使用了第二种应用专业化的风格 — 加在参数上，这效果等同于我们直接对 <code>A</code> 和 <code>B</code> 进行专业化。请注意，上述代码将生成 <code>8 * 8 = 64</code> 种实现，因为它必须处理如「A 是一个 <code>int</code>，B是一个 <code>int</code>」以及「A 是一个 <code>boolean</code>，但是 B 是一个 <code>long</code>」的情况 —<br>事实上生成的类的数量大约在 <code>2 * 10^(nr_of_type_specializations)</code>，对于只有 3 个类型参数的情况，它也很容易达到了数千个类。</p>
+<p>有一些方法可以防止这个「指数级爆炸」，例如通过限制专业化的目标类型。假设 <code>Parcel</code> 大部分情况只处理整数，从不跟浮点数打交道，我们就可以编译器只专业化 <code>Long</code> 和 <code>Int</code>，如：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Parcel</span>[@specialized(<span class="type">Int</span>, <span class="type">Long</span>) <span class="type">A</span>](<span class="params">value: <span class="type">A</span></span>)</span></div></pre></td></tr></table></figure></p>
+<p>这次让我们使用 <code>:javap Parcel</code> 来研究一点字节码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Parcel, specialized for Int and Long</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Parcel</span> <span class="keyword">extends</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Object</span> <span class="keyword">implements</span> <span class="title">scala</span>.<span class="title">Product</span>,<span class="title">scala</span>.<span class="title">Serializable</span></span>&#123;</div><div class="line">    <span class="keyword">public</span> java.lang.<span class="function">Object <span class="title">value</span><span class="params">()</span></span>; <span class="comment">// generic version, "catch all"</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> value$mcI$sp();       <span class="comment">// int specialized version</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">long</span> value$mcJ$sp();&#125;     <span class="comment">// long specialized version</span></div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> specInstance$();  <span class="comment">// method to check if we're a specialized class impl.</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如你所见，编译器提供了额外的专业化方法，如 <code>value$mcI$sp()</code>，它将返回 <code>int</code> ， <code>long</code> 也有类似的方法。值得一提的是这里还有另外一个叫做 <code>specInstance$</code> 的方法，如果使用的实现是一个专业化的类，它会返回 <code>true</code> 。</p>
+<p>可能你比较好奇当前在 Scala 中那些类被专业化了，它们有（可能不完整）：Function0, Function1, Function2, Tuple1, Tuple2, Product1, Product2, AbstractFunction0, AbstractFunction1, AbstractFunction2 。由于当前专业化 2 个参数的成本已经很高，一个趋势是我们不要再专业化更多的参数了，虽然我们可以这么干。</p>
+<blockquote>
+<p>为什么我们要避免进行装箱，一个典型的例子就是「内存效率」。想象一个 <code>boolean</code> 值，如果它的存储只消耗 1 位那是极好的，不幸的是实际上并不是这样的（包含我了解的所有 JVM），例如在 HotSpot 上一个 <code>boolean</code> 被当做一个 <code>int</code>，所以它要占用 <strong>4 个字节</strong>的空间。</p>
+</blockquote>
 <h3 id="24-2-Miniboxing"><a href="#24-2-Miniboxing" class="headerlink" title="24.2. Miniboxing"></a>24.2. Miniboxing</h3><blockquote>
 <p>❌ 该章节作者尚未完成  </p>
 </blockquote>
@@ -210,15 +217,9 @@
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2017/07/scala-weekly-12/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">Scala 技术周刊 | 第12期</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
     
-    
-      <a class="next" href="/2017/07/scala-design-patterns-1/">
-        <span class="next-text nav-default">Scala 与设计模式（一）：Singleton 单例模式</span>
+      <a class="next" href="/2017/07/scala-weekly-12/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第12期</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
