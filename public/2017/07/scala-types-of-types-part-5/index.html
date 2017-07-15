@@ -41,7 +41,7 @@
 <meta property="og:url" content="http://scala.cool/2017/07/scala-types-of-types-part-5/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。">
-<meta property="og:updated_time" content="2017-07-15T14:31:40.000Z">
+<meta property="og:updated_time" content="2017-07-15T14:49:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<译> Scala 类型的类型（五）">
 <meta name="twitter:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。">
@@ -174,9 +174,11 @@
 <p>Scala 为它提供了一种快捷方式：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="type">List</span>[_]</div><div class="line"> <span class="comment">//  ^ some type, no idea which one!</span></div></pre></td></tr></table></figure></p>
 <p>假设你在使用一些抽象类型成员，在我们的例子中将会是一些 Monad 。我们想要强制我们的使用者只能使用这个 Monad 中的 <code>Cool</code> 实例，因为比如我们的 Monad 只有针对这些类型才有意义。我们可以通过这些<strong>存在类型 T</strong> 的类型边界来实现：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">type</span> <span class="title">Monad</span>[<span class="type">T</span>] <span class="title">forSome</span> </span>&#123; <span class="class"><span class="keyword">type</span> <span class="title">T</span> <span class="title">&gt;</span></span>: <span class="type">Cool</span> &#125;</div></pre></td></tr></table></figure></p>
 <p><a href="http://mikeslinn.blogspot.com/2012/08/scala-existential-types.html" target="_blank" rel="external">http://mikeslinn.blogspot.com/2012/08/scala-existential-types.html</a></p>
-<blockquote>
-<p>译者注：可以阅读 <a href="http://www.cakesolutions.net/teamblogs/existential-types-in-scala" target="_blank" rel="external">Existential types in Scala</a> 加深对「存在类型」的了解。</p>
-</blockquote>
+<h3 id="译者注："><a href="#译者注：" class="headerlink" title="译者注："></a>译者注：</h3><p>建议阅读以下文章，以加深对本部分的理解：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/9443004/what-does-the-operator-mean-in-scala" target="_blank" rel="external">What does the # operator mean in Scala?</a></li>
+<li><a href="http://www.cakesolutions.net/teamblogs/existential-types-in-scala" target="_blank" rel="external">Existential types in Scala</a></li>
+</ul>
 <h2 id="24-Specialized-Types"><a href="#24-Specialized-Types" class="headerlink" title="24. Specialized Types"></a>24. Specialized Types</h2><h3 id="24-1-specialized"><a href="#24-1-specialized" class="headerlink" title="24.1. @specialized"></a>24.1. @specialized</h3><p>类型专业化（Type specialization）与普通的「类型系统的东西」相比，更多的是一种性能方面的技巧。但如果你想编写出良好性能的集合，它是非常重要的，我们需要掌握它。举个例子，我们将实现一个非常有用的集合，称为 <code>Parcel[A]</code>，它可以保存一个指定类型的值 — 确实有用！<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Parcel</span>[<span class="type">A</span>](<span class="params">value: <span class="type">A</span></span>)</span></div></pre></td></tr></table></figure></p>
 <p>以上是我们最基本的实现。有什么问题吗？没错，因为 <code>A</code> 可以是任何东西，所以它就会被表示为一个 Java 对象，就算我们仅对 <code>Int</code> 值进行装箱。因此上面的类会导致对原始值进行装箱和拆箱，因为容器正在处理对象：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> i: <span class="type">Int</span> = <span class="type">Int</span>.unbox(<span class="type">Parcel</span>.apply(<span class="type">Int</span>.box(<span class="number">1</span>)))</div></pre></td></tr></table></figure></p>
 <p>众所周知，当你不是真正需要的时候，装箱不是一个好主意，因为它通过在 <code>int</code> 和 <code>object Int</code> 之间进行来回转换，产生了更多运行时的工作。怎样才能消除这个问题呢？一种技巧就是将我们的 <code>Parcel</code> 对所有的原始类型进行「专业化」（这里拿 <code>Long</code> 和 <code>Int</code> 做例子就够了），如下：</p>

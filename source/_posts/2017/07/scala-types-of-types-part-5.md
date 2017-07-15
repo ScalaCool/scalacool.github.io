@@ -164,7 +164,11 @@ type Monad[T] forSome { type T >: Cool }
 
 [http://mikeslinn.blogspot.com/2012/08/scala-existential-types.html](http://mikeslinn.blogspot.com/2012/08/scala-existential-types.html)
 
-> 译者注：可以阅读 [Existential types in Scala](http://www.cakesolutions.net/teamblogs/existential-types-in-scala) 加深对「存在类型」的了解。
+### 译者注：
+
+建议阅读以下文章，以加深对本部分的理解：
+- [What does the # operator mean in Scala?](https://stackoverflow.com/questions/9443004/what-does-the-operator-mean-in-scala)
+- [Existential types in Scala](http://www.cakesolutions.net/teamblogs/existential-types-in-scala)
 
 ## 24. Specialized Types
 
