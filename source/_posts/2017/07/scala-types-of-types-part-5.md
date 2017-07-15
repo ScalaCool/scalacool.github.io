@@ -22,9 +22,9 @@ date: 2017-07-17
 
 ## 21. 结构类型
 
-结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，这在直觉上是一个很好的比喻。
+结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。
 
-迄今为止，我们在类型方面考虑的都是这样的问题：「它实现了接口 X 吗？」，有了「结构类型」，我们就可以深入一步，开始对一个指定对象的结构（名字的由来）进行推理。当我们在检查一个采用了结构类型的类型的匹配问题时，我们需要把问题改为：「这里存在带有这种签名的方法吗？」。
+迄今为止，我们在类型方面考虑的都是这样的问题：「它实现了接口 X 吗？」，有了「结构类型」，我们就可以深入一步，开始对一个指定对象的结构（因此得名）进行推理。当我们在检查一个采用了结构类型的类型匹配问题时，我们需要把问题改为：「这里存在带有这种签名的方法吗？」。
 
 让我们举一个很常见的例子，来看看它为什么如此强大。想象你有很多支持被 **closed** 的东西，在 Java 里，通常会实现 `java.io.Closeable` 接口，以便写出一些常用的 `Closeable` 工具类（事实上，**Google Guava** 就有这样的一个类）。现在再想象有人还实现了一个 `MyOwnCloseable` 类，但没有实现 `java.io.Closeable` 。由于静态类型的缘故，你的 `Closeables` 类库就会出问题，你就不能传 `MyOwnCloseable` 的实例给它。让我们使用结构类型来解决这个问题：
 ```scala
@@ -74,7 +74,7 @@ def on(it: OpenerCloser)(fun: OpenerCloser => Unit) = {
 
 ## 22. 路径依赖类型
 
-这个类型（Path Dependent Type）允许我们在一个类的内部对另外一个类进行「类型检查」，这看起来似乎比较奇怪，但下面的例子非常直观：
+这个类型（Path Dependent Type）允许我们对类型内部的类型进行「类型检查」，这看起来似乎比较奇怪，但下面的例子非常直观：
 ```scala
 class Outer {
   class Inner
@@ -118,9 +118,9 @@ class ChildrenContainer(p: Parent) {
 }
 ```
 
-我们现在使用的路径依赖类型，已经被编码到了类型系统和逻辑中。这个容器应该只包含这个父类的子类，而没有任何父类 。
+我们现在使用的路径依赖类型，已经被编码到了类型系统的逻辑中。这个容器应该只包含这个 `Parent` 的 `Child` 对象，而不是任何 `Parent`。
 
-我们将很快在 [类型投影]() 章节中看到如何引入任何一个父类的子类类型。
+我们将很快在 [类型投影](#23-类型投影) 章节中看到如何引入任何一个 `Parent` 的 `Child` 对象。
 
 ## 23. 类型投影
 
@@ -140,7 +140,7 @@ val out1in = new out1.Inner
 
 另一个准确的直觉是相比「路径依赖」，「类型投影」可以用于「类型层面的编程」，如 （存在类型）Existential Types。
 
-「存在类型」是跟「类型擦除」密切相关的东西，就是 JVM 层面而言，必须与之相处的玩意儿。
+「存在类型」是跟「类型擦除」密切相关的东西。
 ```scala
 val thingy: Any = ???
 
@@ -163,6 +163,8 @@ type Monad[T] forSome { type T >: Cool }
 ```
 
 [http://mikeslinn.blogspot.com/2012/08/scala-existential-types.html](http://mikeslinn.blogspot.com/2012/08/scala-existential-types.html)
+
+> 译者注：可以阅读 [Existential types in Scala](http://www.cakesolutions.net/teamblogs/existential-types-in-scala) 加深对「存在类型」的了解。
 
 ## 24. Specialized Types
 
