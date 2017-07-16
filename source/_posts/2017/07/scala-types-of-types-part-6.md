@@ -39,3 +39,47 @@ def size[T : (Int |∨| String)#λ](t : T) = t match {
 ```
 
 ## 27. 延迟初始化
+
+## 29. 参考条目及感谢
+
+自从我们开始讨论 Scala 中的「奇异类型」，我们就会安排专门的章节来介绍每一个类型。延迟初始化（Delayed Init）实际上只是一种编译器的技巧而已，它对类型系统而言并不是非常重要。但是一旦你理解了它，就会明白 `scala.App` 是如何运作的，所以看看下面的例子吧：
+
+```scala
+object Main extends App {
+  println("Hello world!")
+}
+```
+
+查看这段代码，根据我们已知的 Scala 基础知识，我们会下这样结论：「那么，`println` 是在 `Main` 类的构造函数中！」。这通常是对的，**但在这里却并不是这样的**，因为 `App` 继承了 `DelayedInit` 特质：
+
+```scala
+trait App extends DelayedInit {
+  // code here ...
+}
+```
+
+让我们来看看延迟初始化的特质的完整源代码：
+
+```scala
+trait DelayedInit {
+  def delayedInit(x: => Unit): Unit
+}
+```
+
+正如你所见，它并没有包含任何的实现 — 所有围绕它的工作实际上都是编译器执行的，它将以一种特殊的方式来对待「继承了 `DelayedInit`」的类和对象（注：特质不会像这样一样重写）。
+
+特殊待遇是这样子的：
+- xxx 
+- xxx
+
+```scala
+// we write:
+object Main extends DelayedInit {
+  println("hello!")
+}
+
+// the compiler emits:
+object Main extends DelayedInit {
+  def delayedInit(x: => Unit = { println("Hello!") }) = // impl is left for us to fill in
+}
+```
