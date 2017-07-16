@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。"/>
+
+
+
+
+  <meta name="keywords" content="类型相关,翻译," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/07/scala-types-of-types-part-6/"/>
+
+
+<meta name="description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<译> Scala 类型的类型（六）">
+<meta property="og:url" content="http://scala.cool/2017/07/scala-types-of-types-part-6/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。">
+<meta property="og:updated_time" content="2017-07-16T01:30:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<译> Scala 类型的类型（六）">
+<meta name="twitter:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> <译> Scala 类型的类型（六） - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                News
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <译> Scala 类型的类型（六）
+        
+      </h1>
+
+      <time class="post-time">
+          7月21日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Yison"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="Yison"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h2 id="上一篇"><a href="#上一篇" class="headerlink" title="上一篇"></a>上一篇</h2><p><a href="http://scala.cool/2017/07/scala-types-of-types-part-5/">Scala 类型的类型（五）</a></p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#26-联合类型">26. 联合类型</a></li>
+<li><a href="#27-延迟初始化">27. 延迟初始化</a></li>
+<li><a href="#28-动态类型">28. 动态类型</a></li>
+<li><a href="#29-参考条目">29. 参考条目及感谢</a></li>
+</ul>
+<h2 id="26-联合类型"><a href="#26-联合类型" class="headerlink" title="26. 联合类型"></a>26. 联合类型</h2><blockquote>
+<p>❌ 本部分尚未完成，但你可以通过 Miles 的博客（下方有链接）获得更多了解 :-)</p>
+</blockquote>
+<p>让我们开始来讨论这个类型，这次要借助下「集合论」，然后把我们已经学过的 <code>A with B</code> 当做一个「交集类型」。</p>
+<p>为什么呢？因为只有同时带有类型 <code>A</code> 和类型 <code>B</code> 的对象才能符合这个类型，因此在集合论中，它将是一个交集。</p>
+<p>这是两个集合的联合。我们的任务是使用 Scala 类型系统来引入这样的类型。虽然它们不是 Scala 中的第一等构造（不是内置的），我们也可以很容易地实现和使用它们。<strong>Miles Sabin</strong> 在博客中在 Scala 中通过「 Curry-Howard 同构」深入地解释了这一技术，如果你比较好奇，可以去看看。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">type</span> <span class="title">|∨|</span>[<span class="type">T</span>, <span class="type">U</span>] </span>= &#123; <span class="class"><span class="keyword">type</span> <span class="title">λ</span>[<span class="type">X</span>] </span>= ¬¬[<span class="type">X</span>] &lt;:&lt; (<span class="type">T</span> ∨ <span class="type">U</span>) &#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">size</span></span>[<span class="type">T</span> : (<span class="type">Int</span> |∨| <span class="type">String</span>)#λ](t : <span class="type">T</span>) = t <span class="keyword">match</span> &#123;</div><div class="line">    <span class="keyword">case</span> i : <span class="type">Int</span> =&gt; i</div><div class="line">    <span class="keyword">case</span> s : <span class="type">String</span> =&gt; s.length</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="27-延迟初始化"><a href="#27-延迟初始化" class="headerlink" title="27. 延迟初始化"></a>27. 延迟初始化</h2>
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/类型相关/">类型相关</a>
+          
+            <a href="/tags/翻译/">翻译</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2017/07/scala-types-of-types-part-5/">
+        <span class="next-text nav-default"><译> Scala 类型的类型（五）</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+    2017
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>
