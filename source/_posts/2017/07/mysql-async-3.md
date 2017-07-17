@@ -51,6 +51,8 @@ date: 2017-07-17
 主要流程如下图
 ![新连接池](/images/2017/07/async-new-pool.png)
 
+
+主要代码如下
 ```scala
 def withConnection[A](f: Connection => Future[A]): Future[A] = {
     val now = System.currentTimeMillis
@@ -93,22 +95,6 @@ def withConnection[A](f: Connection => Future[A]): Future[A] = {
     }
   }
 
-  private def reconnectIfDead(c: Future[Connection]): Future[Connection] = {
-    c.flatMap {
-      case cc if cc.isConnected => c
-      case cc =>
-        cc.disconnect
-        allActive.remove(c)
-        createNew()
-    }
-  }
-
-  private def createNew() = {
-    logger.info(s"Creating new connection ${configuration.host}:${configuration.port}")
-    val c = factory(configuration).connect.flatMap(cc => cc.sendQuery("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED").map(_ => cc))
-    allActive.add(c)
-    c
-  }
 
   private def release(c: Future[Connection]) = {
     val wait = queue.poll()
