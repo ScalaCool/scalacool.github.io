@@ -12,7 +12,7 @@
 
 
 
-  <meta name="description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。"/>
+  <meta name="description" content="让我们开始来讨论这个类型，这次要借助下「集合论」，然后把我们已经学过的 A with B 当做一个「交集类型」。"/>
 
 
 
@@ -35,16 +35,16 @@
 <link rel="canonical" href="http://scala.cool/2017/07/scala-types-of-types-part-6/"/>
 
 
-<meta name="description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。">
+<meta name="description" content="让我们开始来讨论这个类型，这次要借助下「集合论」，然后把我们已经学过的 A with B 当做一个「交集类型」。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="<译> Scala 类型的类型（六）">
 <meta property="og:url" content="http://scala.cool/2017/07/scala-types-of-types-part-6/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。">
-<meta property="og:updated_time" content="2017-07-16T02:18:12.000Z">
+<meta property="og:description" content="让我们开始来讨论这个类型，这次要借助下「集合论」，然后把我们已经学过的 A with B 当做一个「交集类型」。">
+<meta property="og:updated_time" content="2017-07-18T14:05:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<译> Scala 类型的类型（六）">
-<meta name="twitter:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。">
+<meta name="twitter:description" content="让我们开始来讨论这个类型，这次要借助下「集合论」，然后把我们已经学过的 A with B 当做一个「交集类型」。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -158,22 +158,50 @@
 <p>❌ 本部分尚未完成，但你可以通过 Miles 的博客（下方有链接）获得更多了解 :-)</p>
 </blockquote>
 <p>让我们开始来讨论这个类型，这次要借助下「集合论」，然后把我们已经学过的 <code>A with B</code> 当做一个「交集类型」。</p>
-<p>为什么呢？因为只有同时带有类型 <code>A</code> 和类型 <code>B</code> 的对象才能符合这个类型，因此在集合论中，它将是一个交集。</p>
-<p>这是两个集合的联合。我们的任务是使用 Scala 类型系统来引入这样的类型。虽然它们不是 Scala 中的第一等构造（不是内置的），我们也可以很容易地实现和使用它们。<strong>Miles Sabin</strong> 在博客中在 Scala 中通过「 Curry-Howard 同构」深入地解释了这一技术，如果你比较好奇，可以去看看。</p>
+<p>为什么呢？因为只有同时带有类型 <code>A</code> 和类型 <code>B</code> 的对象才能符合这个类型，因此在集合论中，它将是一个交集。此外，我们思考下什么是「联合类型」。</p>
+<p>这是两个集合的联合，逐集看每个元素的类型要么是 <code>A</code> 或者 <code>B</code>。我们的任务是使用 Scala 类型系统来引入这样的类型。虽然它们不是 Scala 中的第一等构造（不是内置的），我们也可以很容易地实现和使用它们。<strong>Miles Sabin</strong> 在博客中在 Scala 中通过「 Curry-Howard 同构」深入地解释了这一技术，如果你比较好奇，可以去看看。</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">type</span> <span class="title">|∨|</span>[<span class="type">T</span>, <span class="type">U</span>] </span>= &#123; <span class="class"><span class="keyword">type</span> <span class="title">λ</span>[<span class="type">X</span>] </span>= ¬¬[<span class="type">X</span>] &lt;:&lt; (<span class="type">T</span> ∨ <span class="type">U</span>) &#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">size</span></span>[<span class="type">T</span> : (<span class="type">Int</span> |∨| <span class="type">String</span>)#λ](t : <span class="type">T</span>) = t <span class="keyword">match</span> &#123;</div><div class="line">    <span class="keyword">case</span> i : <span class="type">Int</span> =&gt; i</div><div class="line">    <span class="keyword">case</span> s : <span class="type">String</span> =&gt; s.length</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="27-延迟初始化"><a href="#27-延迟初始化" class="headerlink" title="27. 延迟初始化"></a>27. 延迟初始化</h2><h2 id="29-参考条目及感谢"><a href="#29-参考条目及感谢" class="headerlink" title="29. 参考条目及感谢"></a>29. 参考条目及感谢</h2><p>自从我们开始讨论 Scala 中的「奇异类型」，我们就会安排专门的章节来介绍每一个类型。延迟初始化（Delayed Init）实际上只是一种编译器的技巧而已，它对类型系统而言并不是非常重要。但是一旦你理解了它，就会明白 <code>scala.App</code> 是如何运作的，所以看看下面的例子吧：</p>
+<h2 id="27-延迟初始化"><a href="#27-延迟初始化" class="headerlink" title="27. 延迟初始化"></a>27. 延迟初始化</h2><p>自从我们开始讨论 Scala 中的「奇异类型」，我们就会安排专门的章节来介绍每一个类型。延迟初始化（Delayed Init）实际上只是一种编译器的技巧而已，它对类型系统而言并不是非常重要。但是一旦你理解了它，就会明白 <code>scala.App</code> 是如何运作的，所以看看下面的例子吧：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Main</span> <span class="keyword">extends</span> <span class="title">App</span> </span>&#123;</div><div class="line">  println(<span class="string">"Hello world!"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>查看这段代码，根据我们已知的 Scala 基础知识，我们会下这样结论：「那么，<code>println</code> 是在 <code>Main</code> 类的构造函数中！」。这通常是对的，<strong>但在这里却并不是这样的</strong>，因为 <code>App</code> 继承了 <code>DelayedInit</code> 特质：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">DelayedInit</span> </span>&#123;</div><div class="line">  <span class="comment">// code here ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>让我们来看看延迟初始化的特质的完整源代码：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">DelayedInit</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">delayedInit</span></span>(x: =&gt; <span class="type">Unit</span>): <span class="type">Unit</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>正如你所见，它并没有包含任何的实现 — 所有围绕它的工作实际上都是编译器执行的，它将以一种特殊的方式来对待「继承了 <code>DelayedInit</code>」的类和对象（注：特质不会像这样一样重写）。</p>
+<p>正如你所见，它并没有包含任何的实现 — 所有围绕它的工作实际上都是编译器执行的，它将以一种特殊的方式来对待「继承了 <code>DelayedInit</code>」的类和单例（注：特质不会像这样一样重写）。</p>
 <p>特殊待遇是这样子的：</p>
 <ul>
-<li>xxx </li>
-<li>xxx</li>
+<li>假设你的类/单例主体是一个函数，在主体中做所有的事情</li>
+<li>编译器为你创建了这个函数，并将它传递给了延迟初始化方法（x: =&gt; Unit），</li>
 </ul>
+<p>我们马上来举个例子，手动来重新实现一遍 <code>App</code> 为我们自动做的事情（在 <code>delayedInit</code> 的帮助下）：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// we write:</span></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Main</span> <span class="keyword">extends</span> <span class="title">DelayedInit</span> </span>&#123;</div><div class="line">  println(<span class="string">"hello!"</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// the compiler emits:</span></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Main</span> <span class="keyword">extends</span> <span class="title">DelayedInit</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">delayedInit</span></span>(x: =&gt; <span class="type">Unit</span> = &#123; println(<span class="string">"Hello!"</span>) &#125;) = <span class="comment">// impl is left for us to fill in</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用这种机制，你可以随时运行你的类的主体。我们已经了解了延迟初始化如何工作，接下来再来实现下我们自己版本的 <code>scala.App</code> 吧（这实际上也是以相同方式实现的）。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">delayedInit</span></span>(body: =&gt; <span class="type">Unit</span>) &#123;</div><div class="line">    initCode += (() =&gt; body)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]) = &#123;</div><div class="line">    println(<span class="string">"Whoa, I'm a SimpleApp!"</span>)</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (proc &lt;- initCode) proc()</div><div class="line"></div><div class="line">    println(<span class="string">"So long and thanks for all the fish!"</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">                                <span class="comment">// Running the bellow class would print print:</span></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">SimpleApp</span> </span>&#123; <span class="comment">//</span></div><div class="line">                                <span class="comment">// Whoa, I'm a SimpleApp!</span></div><div class="line">  println(<span class="string">"  Hello World!"</span>)     <span class="comment">//   Hello World!</span></div><div class="line">                                <span class="comment">// So long and thanks for all the fish!</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="28-动态类型"><a href="#28-动态类型" class="headerlink" title="28. 动态类型"></a>28. 动态类型</h2><p>我曾拿不定主意是否要介绍这种类型。最后我还是加入了它，因为这样对类型的介绍会更完整。所以问题是，我为什么会犹豫不决呢？</p>
+<p><strong>Scala 允许我们在一个静态、严格类型的语言中也有动态类型！</strong>这就是为什么我之前跳过它，并留一个单独的部分来解释它的原因 — 因为它基本上 hack 了所有之前提及的描述。让我们看看它的实际操作，以及如何融入到 Scala 的类型生态系统中。</p>
+<p>想想一个包含任意 JSON 数据的类 <code>JsonObject</code>，同时有个可以匹配 JSON 对象的键的方法，返回一个 <code>Option[JValue]</code>，这个 JValue 可以是另一个 <code>JObject</code>、<code>JArray</code> 或 <code>JString</code> / <code>JNumber</code>，用法请看下述例子。</p>
+<p>在此之前，记住先给指定的文件（或 REPL ）开启这个语言特性。有一些特性（如实验宏）需要显式地被引入到目标文件。如果你想了解更多，看看 <a href="http://www.scala-lang.org/api/current/index.html#scala.language$" target="_blank" rel="external">scala.language</a>  或者阅读 Scala 改进计划 <a href="https://docs.google.com/document/d/1nlkvpoIRkx7at1qJEZafJwthZ3GeIklTFhqmXMvTX9Q/edit" target="_blank" rel="external">SIP-18</a> 。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// remember, that we have to enable this language feature by importing it!</span></div><div class="line"><span class="keyword">import</span> scala.language.dynamics</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// TODO: Has missing implementation</div><div class="line">class Json(s: String) extends Dynamic &#123;</div><div class="line">  ???</div><div class="line">&#125;</div><div class="line"></div><div class="line">val jsonString = """</div><div class="line">  &#123;</div><div class="line">    "name": "Konrad",</div><div class="line">    "favLangs": ["Scala", "Go", "SML"]</div><div class="line">  &#125;</div><div class="line">"""</div><div class="line"></div><div class="line">val json = new Json(jsonString)</div><div class="line"></div><div class="line">val name: Option[String] = json.name</div><div class="line">// will compile (once we implement)!</div></pre></td></tr></table></figure>
+<p>所以，我们如何将其与静态类型语言进行匹配呢？答案很简单 — 编译器重写和一个特殊的标记特质：<code>scala.Dynamic</code> 。</p>
+<p>好了，最后回到基本的问题上。那么，我们如何使用动态呢？事实上，通过实现一些「魔术」方法来使用它：</p>
+<ul>
+<li><strong>applyDynamic</strong></li>
+<li><strong>applyDynamicNamed</strong></li>
+<li><strong>selectDynamic</strong></li>
+<li><strong>updateDynamic</strong></li>
+</ul>
+<p>让我们来看一看（以上每个都有例子，我们将从最典型的开始讲起，然后转移到那些允许以上构造函数的例子），同时让其能够运作。</p>
+<h3 id="28-1-applyDynamic"><a href="#28-1-applyDynamic" class="headerlink" title="28.1 applyDynamic"></a>28.1 applyDynamic</h3><p>好了，第一个神奇的方法如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// applyDynamic example</div><div class="line">object OhMy extends Dynamic &#123;</div><div class="line">  def applyDynamic(methodName: String)(args: Any*) &#123;</div><div class="line">    println(s"""|  methodName: $methodName,</div><div class="line">                |args: $&#123;args.mkString(",")&#125;""".stripMargin)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">OhMy.dynamicMethod("with", "some", 1337)</div></pre></td></tr></table></figure>
+<p><strong>applyDynamic</strong> 采用了方法名作为参数。很显然，我们必须按照它们的顺序来访问。这里很好地构建了一些字符串，我们的实现只会打印被调用的方法，这样真的就能得到我们执行的时的值和方法名吗？输入如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">methodName: dynamicMethod,</div><div class="line">  args: <span class="keyword">with</span>,some,<span class="number">1337</span></div></pre></td></tr></table></figure>
+<h3 id="28-2-applyDynamicNamed"><a href="#28-2-applyDynamicNamed" class="headerlink" title="28.2 applyDynamicNamed"></a>28.2 applyDynamicNamed</h3><p>好吧，这很容易，但我们并不能很好地控制参数的名字。如果我们能够书写 JSON 的节点，岂不妙哉！事实证明我们可以！</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// applyDynamicNamed example</span></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">JSON</span> <span class="keyword">extends</span> <span class="title">Dynamic</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">applyDynamicNamed</span></span>(name: <span class="type">String</span>)(args: (<span class="type">String</span>, <span class="type">Any</span>)*) &#123;</div><div class="line">    println(<span class="string">s""</span><span class="string">"Creating a $name, for:\n "</span>$&#123;args.head._1&#125;<span class="string">": "</span>$&#123;args.head._2&#125;<span class="string">" "</span><span class="string">""</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="type">JSON</span>.node(nickname = <span class="string">"ktoso"</span>)</div></pre></td></tr></table></figure>
+<p>这次除了值的列表外，我们还得到了它们的名字。这个例子的结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Creating a node, for:</div><div class="line">&quot;nickname&quot;: &quot;ktoso&quot;</div></pre></td></tr></table></figure>
+<p>我可以很轻易地想到可以基于此创建一些花哨的 DSL 。</p>
+<h3 id="28-3-selectDynamic"><a href="#28-3-selectDynamic" class="headerlink" title="28.3 selectDynamic"></a>28.3 selectDynamic</h3><h2 id="29-参考条目及感谢"><a href="#29-参考条目及感谢" class="headerlink" title="29. 参考条目及感谢"></a>29. 参考条目及感谢</h2>
             </div>
           
 
