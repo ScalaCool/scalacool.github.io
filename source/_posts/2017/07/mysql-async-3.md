@@ -39,30 +39,19 @@ date: 2017-07-17
 
 + 使用两个 `ConcurrentLinkedQueue` 保存等待列表和空闲链接，全程不存在锁
 + 使用 `Semaphore` 保证连接数和队列长度不超过限制
-+ 获取链接时如果有空闲链接则立即返回，没有创建 `Promise` 则加入一个等待队列
-+ 执行异步结束后立即查看队列是否为空，否则立即使第一个 `Promise` 返回
-+ 使用一个定时调度器清理超时等待的 `Promise`。
-
-上述设计相比原始连接池拥有以下优点
-
-+ 大幅度减少了线程切换，不需要经过多个线程池，有时甚至直接可以获得链接。
-+ 实现大幅度简化，提升可靠性，完全杜绝了内存泄漏的可能
-
-主要流程如下图
-![新连接池](/images/2017/07/async-new-pool.png)
 
 
-主要代码如下
+主要代码如下（部分）
 ```scala
+val conns: ConcurrentLinkedQueue[Future[Connection]] = ...
+val queue: ConcurrentLinkedQueue[Promise[Connection]] = ...
+val createSemaphore: Semaphore = ...
+val queueSemaphore: Semaphore = ...
+
 def withConnection[A](f: Connection => Future[A]): Future[A] = {
-    val now = System.currentTimeMillis
-    val last = lastReportTime.get()
-    if ((now - last) > 3000 && lastReportTime.compareAndSet(last, now)) {
-      logger.info(s"[NewPool-stat] active: ${allActive.size}, queue: ${queue.size} - ${queueSemaphore.availablePermits()}, free: ${conns.size} - ${createSemaphore.availablePermits()}")
-    }
     val c = acquire()
     c.flatMap { cc =>
-      f(cc).andThen {
+      f(cc).andThen { //此处可能需要 try catch 处理不按套路抛出异常的情况
         case _ => release(c)
       }
     }
@@ -70,27 +59,15 @@ def withConnection[A](f: Connection => Future[A]): Future[A] = {
 
   private def acquire(): Future[Connection] = {
     val conn = conns.poll()
-    if (conn != null) {
+    if (conn != null) { //有空余链接，则返回这个链接
       reconnectIfDead(conn)
-    } else if (createSemaphore.tryAcquire()) {
-      logger.debug(s"Creating new connection")
+    } else if (createSemaphore.tryAcquire()) { //连接数少于最大链接数，创建一个
       createNew()
-    } else if (queueSemaphore.tryAcquire()) {
+    } else if (queueSemaphore.tryAcquire()) { //队列未满，入队
       val p = Promise[Connection]
-      queue.offer(p)
-      val to = timer.newTimeout(new TimerTask {
-        def run(out: Timeout): Unit = {
-          if (p.tryFailure(WaitTimeout)) {
-            queue.remove(p)
-            queueSemaphore.release()
-          }
-        }
-      }, waitTimeout, TimeUnit.SECONDS)
-      p.future.andThen {
-        case Success(v) =>
-          to.cancel()
-      }
-    } else {
+      enqueueTask(p)
+      p.future
+    } else { //返回队列已满
       Future.failed(QueueIsFull)
     }
   }
@@ -106,3 +83,28 @@ def withConnection[A](f: Connection => Future[A]): Future[A] = {
     }
   }
 ```
+
+`Semaphore` 的 trypAcquire 操作和 `ConcurrentLinkedQueue` 都不会产生锁，确实做到了 Lock-Free。
+
+
+## 性能测试
+
+为了验证上述猜测，我基于 [scalameter](https://scalameter.github.io/) 做了简单的性能测试。结果如下
+
+### 简单查询（SELECT 1）
+
+新的方案（图中蓝色线条）对非常简单的查询，仍旧有 100% 的性能提升
+
+![select performance](/images/2017/07/select-performance.png)
+
+### 简单事务（SELECT + UPDATE）
+
+执行 SQL 如下
+```scala
+for {
+  u <- c.sendQuery(s"SELECT * FROM user WHERE id = ${id}")
+  r <- c.sendQuery(s"UPDATE user SET remain = remain + 100 WHERE id = ${id}")
+} yield r
+```
+可以看到新方案（图中绿色线条）有非常大幅度提升
+![transaction performance](/images/2017/07/transaction-performance.png)
