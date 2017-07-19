@@ -93,7 +93,7 @@ def withConnection[A](f: Connection => Future[A]): Future[A] = {
 
 ### 简单查询（SELECT 1）
 
-新的方案（图中蓝色线条）对非常简单的查询，仍旧有 100% 的性能提升
+新的方案（图中蓝色线条）对非常简单的查询，仍旧有 100% 左右的性能提升
 
 ![select performance](/images/2017/07/select-performance.png)
 
