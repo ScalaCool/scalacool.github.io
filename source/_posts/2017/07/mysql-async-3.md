@@ -19,7 +19,7 @@ date: 2017-07-17
 [前文](/2017/05/mysql-async-2/)中曾经提到 `SingleThreadedAsyncObjectPool` 这个单线程的连接池实现并不是完全非阻塞的，再多个线程请求链接情况下仍旧会产生锁阻塞。
 同时文章中也提到 Play!Framework 这样的框架主线程数可以非常少，所以不用过分担忧。
 
-事实证明这时错误的，因为 `PartitionedAsyncObjectPool` 使用了 `Executors.newCachedThreadPool`， 这就导致不论主线程数多少，高并发情况下会创建大量线程同时去获取链接。
+事实证明这时错误的，因为 `PartitionedAsyncObjectPool` 默认使用了 `Executors.newCachedThreadPool`， 这就导致不论主线程数多少，高并发情况下会创建大量线程同时去获取链接。
 而 `SingleThreadedAsyncObjectPool` 使用了 `Executors.newFixedThreadPool`，显然这意味着每次入队都会产生一个锁阻塞，在系统并发非常高的情况下，这会极大加剧锁竞争
 
 ## 频繁的线程切换
