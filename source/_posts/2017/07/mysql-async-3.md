@@ -4,8 +4,8 @@ author: Jilen
 tags:
 - 网络编程
 - 数据库
-description: Mysql Async 异步驱动存在的缺点分析
-date: 2017-07-17
+description: Mysql Async 连接池改进方案
+date: 2017-07-20
 ---
 
 [上一篇文章](/2017/05/mysql-async-2/)分析了 Mysql 异步驱动的一些缺点，大部分已经在我们[内部版本](https://github.com/dripower/postgresql-async)中修复了。
@@ -20,7 +20,7 @@ date: 2017-07-17
 同时文章中也提到 Play!Framework 这样的框架主线程数可以非常少，所以不用过分担忧。
 
 事实证明这是错误的，因为 `PartitionedAsyncObjectPool` 默认使用了 `Executors.newCachedThreadPool`， 这就导致不论主线程数多少，高并发情况下会创建大量线程同时去获取链接。
-而 `SingleThreadedAsyncObjectPool` 使用了 `Executors.newFixedThreadPool`，显然这意味着每次入队都会产生一个锁阻塞，在系统并发非常高的情况下，这会极大加剧锁竞争
+而 `SingleThreadedAsyncObjectPool` 使用了 `Executors.newFixedThreadPool`，显然这意味着每次入队都会产生一个锁阻塞，在系统并发非常高的情况下，这会极大加剧锁竞争，一旦获得锁线程被中断，则所有的线程都会处于
 
 ## 频繁的线程切换
 
@@ -29,7 +29,7 @@ date: 2017-07-17
 ## 难以定位的内存泄漏
 
 在实际使用过程中，我们经历了运行一段时间后 JVM 疯狂 FGC 的情况。
-经分析发现存在链接泄漏，连接池存在大量被回收的 `MySQLConnection` 对象，并且非常诡异的我们无法定位到底是谁持有了这些未释放的 Connection。
+经分析发现存在链接泄漏，连接池存在大量未被回收的 `MySQLConnection` 对象，并且非常诡异的我们无法定位到底是谁持有了这些未释放的 Connection。
 
 考虑到上述问题，我开始着手设计一个全新的链接池，名字就叫 `NewPool`
 
