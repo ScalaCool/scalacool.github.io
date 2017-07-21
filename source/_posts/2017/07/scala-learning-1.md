@@ -1,5 +1,5 @@
 ---
-title: Scala学习笔记 （1）：初见
+title: Scala 学习笔记 （1）：初见
 author: Koon
 tags:
 - 学习笔记
