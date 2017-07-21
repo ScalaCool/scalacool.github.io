@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="Scala学习笔记"/>
+
+
+
+
+  <meta name="keywords" content="Scala学习笔记," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/07/scala-learning-1/"/>
+
+
+<meta name="description" content="关于笔记​   大家好⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄，我是 Koon ，作为一名刚刚离开学校，开始体悟社会百态的大学僧， Scala 将作为我第一份工作不可或缺的一部分。为了高效学习、巩固知识以及督促自我，我决定记录我的学习历程。 ​   这里所有的记录内容都将是我遇到的问题的解决，以及一些问题的看法，我会将所有所遇到的问题用学习清单的方式展示，而这些问题的来源，可能来自下面的学习列表，也可能来自">
+<meta name="keywords" content="Scala学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scala学习笔记">
+<meta property="og:url" content="http://scala.cool/2017/07/scala-learning-1/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="关于笔记​   大家好⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄，我是 Koon ，作为一名刚刚离开学校，开始体悟社会百态的大学僧， Scala 将作为我第一份工作不可或缺的一部分。为了高效学习、巩固知识以及督促自我，我决定记录我的学习历程。 ​   这里所有的记录内容都将是我遇到的问题的解决，以及一些问题的看法，我会将所有所遇到的问题用学习清单的方式展示，而这些问题的来源，可能来自下面的学习列表，也可能来自">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://pic1.zhimg.com/201d2f029fe0968f1ae87fc5aef8e830_b.jpg">
+<meta property="og:updated_time" content="2017-07-21T02:42:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scala学习笔记">
+<meta name="twitter:description" content="关于笔记​   大家好⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄，我是 Koon ，作为一名刚刚离开学校，开始体悟社会百态的大学僧， Scala 将作为我第一份工作不可或缺的一部分。为了高效学习、巩固知识以及督促自我，我决定记录我的学习历程。 ​   这里所有的记录内容都将是我遇到的问题的解决，以及一些问题的看法，我会将所有所遇到的问题用学习清单的方式展示，而这些问题的来源，可能来自下面的学习列表，也可能来自">
+<meta name="twitter:image" content="https://pic1.zhimg.com/201d2f029fe0968f1ae87fc5aef8e830_b.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Scala学习笔记 - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                News
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Scala学习笔记
+        
+      </h1>
+
+      <time class="post-time">
+          7月21日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Koon"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="Koon"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h2 id="关于笔记"><a href="#关于笔记" class="headerlink" title="关于笔记"></a>关于笔记</h2><p>​   大家好⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄，我是 <em>Koon</em> ，作为一名刚刚离开学校，开始体悟社会百态的大学僧， <code>Scala</code> 将作为我第一份工作不可或缺的一部分。为了<strong>高效学习</strong>、<strong>巩固知识</strong>以及<strong>督促自我</strong>，我决定记录我的学习历程。</p>
+<p>​   这里所有的记录内容都将是我遇到的<strong>问题的解决</strong>，以及一些<strong>问题的看法</strong>，我会将所有所遇到的问题用<a href="#jump-to-detail">学习清单</a>的方式展示，而这些问题的来源，可能来自下面的<a href="#jump-to-list">学习列表</a>，也可能来自我的学习内容，但是我都将注明出处。</p>
+<h2 id="关于学习"><a href="#关于学习" class="headerlink" title="关于学习"></a>关于学习</h2><p>​   我为什么选择<code>Scala</code> 作为我今后学习、工作的主要语言？</p>
+<p>​   很简单，<strong>因为我喜欢尝试</strong>。在初学计算机编程时，我想大多数人的经历会和我一样，学校为我们挑选一门语言，大多为  <code>C</code>  或 <code>Java</code> ，先是基本的数据类型，然后是程序控制语句，学习定义一个函数，那么程序就是一条一条的指令，告诉计算机该如何操作即可。那么 <code>Scala</code> 对于我而言就是一场冒险。</p>
+<p>​   另一个原因，我并<strong>不满足现在所学的知识框架</strong>，就像前面所提及的学习过程一样，慢慢地，我们开始尝试一些逻辑上的概念来简化程序，比如<strong>迭代</strong>，比如<strong>递归</strong>。老师用事实告诉我们，就像<strong>斐波那契数列</strong>，在指令式的环境下，迭代优于递归。</p>
+<p>​   在长期的教学过程中，只有命令式编程得到了强调，那就是程序员要告诉计算机应该怎么做，而不是告诉计算机做什么。而递归则通过灵巧的函数定义，告诉计算机做什么。我们为自己某种能力的丧失编织了一个美丽的谎言，直到越来越多的编程语言变得流行起来，使我们有机会看到各种语言、各种风格写出的程序，才发现自己应该重新审视递归这一概念。</p>
+<p>​   无独有偶，很多优秀的性质在<code>Scala</code> 或者其他函数式的语言上得以体现，现在我们可以将函数视作数学上的函数，变量视作代数系统的变量，语句视作函数的语法糖，如果把<strong>面向对象比作搭积木</strong>的话，那么<strong>函数式就是拼线条</strong>，更灵活更有创意。</p>
+<p>​   我认为，正确的学习方式是鲁迅先生所谓的<strong>拿来主义</strong>，既不全盘吸收，也不全盘放弃。现在网络上充斥着各种声音，有些激进有些委婉，同样的意思，不同人的说法可能带来的理解也不一样，因此你需要自己的标准，我认为最好的标准就是<strong>教科书</strong>，我现在使用的是<strong> Cay S.Horstmann著 高宇翔译《快学Scala》</strong>，当然，书，肯定有更好的。</p>
+<center><br>​   <img src="https://pic1.zhimg.com/201d2f029fe0968f1ae87fc5aef8e830_b.jpg" alt="pic"><br></center>
+
+
+<h2 id="关于使用"><a href="#关于使用" class="headerlink" title="关于使用"></a>关于使用</h2><p>​   如何使用这本笔记？我是一名初学者，每一天的学习，我都会遇到各种各样的问题，之后的每一篇的开始，我都将列下一份<strong>列表</strong>与<strong>清单</strong>，就像这里的例子。</p>
+<p>​   如果你与我一样正在学习，你也可以根据自己的所学，进行一个<strong>测试</strong>，你可以给自己的学习做一个判断，然后去解决没有解决的问题，我会对于清单中的难点和重点进行深层次的调研。</p>
+<p>​   如果你走在我的前面，非常欢迎你给我提供<strong>任何的意见</strong>，无论是内容排布，或者是在内容理解方面。</p>
+<p><span id="jump-to-list"></span></p>
+<h2 id="学习列表（例）"><a href="#学习列表（例）" class="headerlink" title="学习列表（例）"></a>学习列表（例）</h2><p></p>
+<blockquote>
+<ol>
+<li><a href="https://twitter.github.io/scala_school/" target="_blank" rel="external">twitter Scala 课堂</a>, by twitter</li>
+<li><a href="http://www.runoob.com/scala/scala-tutorial.html" target="_blank" rel="external">菜鸟教程</a>, by 菜鸟教程</li>
+<li><a href="http://hongjiang.info/scala/" target="_blank" rel="external">写点什么</a>, by hongjiang</li>
+<li><a href="https://www.coursera.org/learn/progfun1" target="_blank" rel="external">Coursera 课程</a>, by coursera</li>
+<li><a href="http://www.jianshu.com/p/92a9877996ed" target="_blank" rel="external">其他学习资料整合</a>, by 小柑</li>
+</ol>
+</blockquote>
+<p><span id="jump-to-detail"></span></p>
+<h2 id="学习清单（例）"><a href="#学习清单（例）" class="headerlink" title="学习清单（例）"></a>学习清单（例）</h2><p></p>
+<blockquote>
+<ol>
+<li><p>Scala 中的 String 就是 Java 中的 String ，因此可以使用 String 的所有方法；但是 Scala 不仅仅是更好的 Java ，应该用全新的头脑来学习他。</p>
+</li>
+<li><p>在命令行下可以使用解释器创建的变量名，但是在 idea 下，不能在 worksheet 下直接使用这个变量名。</p>
+</li>
+<li><p>Scala 中 <code>if-else if…</code> 最终一定要有 <code>else</code>。</p>
+</li>
+<li><p>函数和方法很相似，而当真正遇到方法和函数之间的差异的时候，你可能会感到困惑。区别有：方法不是一个值，而函数是，可以将一个方法转为函数赋值给变量，有时候根据上下文编译器可以自动将方法转化为函数，而不需要使用下划线。</p>
+</li>
+<li><p>什么时候应该使用特质而不是抽象类。使用特质优先；而需要使用构造函数参数的时候，使用抽象类，因为 <code>trait t(i: Int){}</code> 中参数 i 是非法的。</p>
+</li>
+<li><p>关于函数的泛型，用方括号语法引入的类型参数。</p>
+</li>
+<li><p>关于 apply 方法，当类或对象有一个主要用途的时候， apply 方法提供了一个很好的语法糖。定义一个 def ，用 <code>apply()=…</code> 表示了类的主要功能或者说是用途…</p>
+</li>
+</ol>
+</blockquote>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>​   这里是<strong>《Scala学习笔记》</strong>的序言，因为内容较多，所以干脆取名为<strong>“1”</strong>，下一篇，我们将开启新世界的大门，以上 :)</p>
+<blockquote>
+<p>​ 停止炫耀你的忙碌！从“慢些匆忙”到“告别匆忙”，从“从容不迫”到“懂慢的人”。<br>​ 慢慢来，比较快。</p>
+</blockquote>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Scala学习笔记/">Scala学习笔记</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2017/07/mysql-async-3/">
+        <span class="next-text nav-default">MySQL 异步驱动浅析 （三）：连接池改进方案</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+    2017
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

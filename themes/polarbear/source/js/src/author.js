@@ -18,6 +18,10 @@ var authors = {
     blog: 'http://prefer-tyl.site',
     avatar: '/images/avatar/prefert.jpg'
   },
+  koon: {
+    blog: 'http://zpkoon.xyz',
+    avatar: '/images/avatar/zpkoon.png'
+  },
   scalacool: {
     blog: 'http://twitter.com/scala_cool',
     avatar: '/images/avatar/scalacool.png'
