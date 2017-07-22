@@ -274,3 +274,7 @@ class EitherMonad[A] extends Monad[({type λ[α] = Either[A, α]})#λ] {
   def bind[B, C](m: Either[A, B])(f: B => Either[A, C]): Either[A, C]
 }
 ```
+
+## 下一篇
+
+[Scala 类型的类型（六）](http://scala.cool/2017/07/scala-types-of-types-part-6/)
