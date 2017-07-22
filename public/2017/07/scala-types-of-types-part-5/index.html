@@ -41,7 +41,7 @@
 <meta property="og:url" content="http://scala.cool/2017/07/scala-types-of-types-part-5/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。">
-<meta property="og:updated_time" content="2017-07-16T00:52:15.000Z">
+<meta property="og:updated_time" content="2017-07-22T09:05:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<译> Scala 类型的类型（五）">
 <meta name="twitter:description" content="结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。">
@@ -212,6 +212,7 @@
 </blockquote>
 <p>在 type lambda 的部分我们会使用 「路径依赖类型」及 「结构类型」，如果你忽略了这两个章节，你可以先跳回去看看。</p>
 <p>在了解 Type Lambdas 之前，让我们先回顾下关于「函数」和「柯里化」的某些细节：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">EitherMonad</span>[<span class="type">A</span>] <span class="keyword">extends</span> <span class="title">Monad</span>[(&#123;type λ[α] </span>= <span class="type">Either</span>[<span class="type">A</span>, α]&#125;)#λ] &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">point</span></span>[<span class="type">B</span>](b: <span class="type">B</span>): <span class="type">Either</span>[<span class="type">A</span>, <span class="type">B</span>]</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">bind</span></span>[<span class="type">B</span>, <span class="type">C</span>](m: <span class="type">Either</span>[<span class="type">A</span>, <span class="type">B</span>])(f: <span class="type">B</span> =&gt; <span class="type">Either</span>[<span class="type">A</span>, <span class="type">C</span>]): <span class="type">Either</span>[<span class="type">A</span>, <span class="type">C</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="下一篇"><a href="#下一篇" class="headerlink" title="下一篇"></a>下一篇</h2><p><a href="http://scala.cool/2017/07/scala-types-of-types-part-6/">Scala 类型的类型（六）</a></p>
 
             </div>
           

@@ -239,3 +239,6 @@ val Circle(r)
 val r2 = r + r
 ```
 
+## 下一篇
+
+[Scala 类型的类型（四）](http://scala.cool/2017/07/scala-types-of-types-part-4/)
