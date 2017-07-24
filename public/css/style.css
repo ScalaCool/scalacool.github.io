@@ -450,7 +450,7 @@ h6 {
 
 #primary.home {
   width: 73%;
-  float: left; }
+  float: right; }
 
 #primary {
   max-width: 850px;
@@ -485,6 +485,33 @@ article.post .author-info a {
 hr {
   border-bottom: 1px solid #eee; }
 
+/** hacking **/
+#logo {
+  text-align: right;
+  margin-bottom: 80px; }
+
+#logo > a {
+  display: block;
+  height: 70px; }
+
+#logo img {
+  width: 70px;
+  border-radius: 50%; }
+
+.says {
+  font-size: 13px;
+  font-style: italic;
+  margin-top: 30px;
+  color: #999;
+  border-radius: 10px;
+  opacity: 0.7;
+  line-height: 1; }
+
+.says > em {
+  font-size: 20px;
+  margin-right: 8px;
+  color: #333; }
+
 @media only screen and (max-width: 750px) {
   .site-header-inner, .content {
     width: 90%; }
@@ -514,6 +541,9 @@ hr {
   right: 0;
   left: 0;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.15); }
+
+#masthead.home {
+  box-shadow: none; }
 
 .site-header-inner {
   height: 65px;
@@ -841,8 +871,8 @@ hr {
       transform: translateX(4px); }
 
 #secondary {
-  width: 19%;
-  float: right;
+  width: 18%;
+  float: left;
   padding-top: 40px;
   color: rgba(0, 0, 0, 0.6); }
   #secondary ol, #secondary ul {
@@ -860,7 +890,8 @@ hr {
     letter-spacing: 1px;
     padding-bottom: 5px;
     font-weight: 300;
-    border-bottom: 1px solid #ddd; }
+    /* border-bottom: 1px solid #ddd; */
+    text-align: right; }
   .widget-area .category-list-item {
     line-height: 1.9; }
     .widget-area .category-list-item .category-list-link {
@@ -882,7 +913,8 @@ hr {
   font-size: 14px;
   border: 1px solid #ff;
   display: block;
-  background: #fff; }
+  background: #fff;
+  text-align: right; }
   .widget_tags .tag-list-item .tag-list-link {
     color: rgba(0, 0, 0, 0.6); }
 
