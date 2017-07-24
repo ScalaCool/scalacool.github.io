@@ -508,7 +508,7 @@ hr {
   line-height: 1; }
 
 .says a {
-  color: #333; }
+  color: #000; }
 
 .says a:hover {
   text-decoration: underline; }
