@@ -4,11 +4,11 @@
         <img src="http://scala.cool/images/avatar/scalacool.png" />
       </a>
       <div class="says">
-        <em>“</em>
-        这是<a href="http://drip.im">「水滴产品团队」</a>
+        <em>「</em>
+        这是 <a href="http://drip.im">水滴产品团队</a>
         <br />
         面向 Scala 的技术博客。
-        <em>”</em>
+        <em>」</em>
       </div>
     </div>
     {% include "./_widget/custom.swig" %}
