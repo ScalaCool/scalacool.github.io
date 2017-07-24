@@ -43,7 +43,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="现在我们来深入了解「类型别名」的使用场景 — 抽象类型成员。有了抽象类型成员，我们就可以说「我希望有人告诉我某个类型 — 我将通过名称 MyType 来引用它」。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-05-11T11:00:17.000Z">
+<meta property="og:updated_time" content="2017-07-24T06:53:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;译&gt; Scala 类型的类型（三）">
 <meta name="twitter:description" content="现在我们来深入了解「类型别名」的使用场景 — 抽象类型成员。有了抽象类型成员，我们就可以说「我希望有人告诉我某个类型 — 我将通过名称 MyType 来引用它」。">
@@ -204,6 +204,7 @@
 <p>① <code>x</code> 和 <code>y</code> 自动被定义为 <code>val</code> 成员；<br>② 一个 <code>Point</code> 的伴身对象会同时产生，它有一个 <code>apply(x: Int, y: Int)</code> 方法，我们可以借此创建实例；<br>③ 生成的 <code>toString</code> 方法包含了类名以及 case class 的参数值；<br>④ <code>copy(...)</code> 方法支持我们轻松创建拷贝的对象，改变选定的字段；<br>⑤ case class 基于值来判等 ( <code>equals</code> 和 <code>hashCode</code> 被生成，它们基于 case class 的参数实现)  </p>
 <p>除此之外，一个 case class 还可被用于模式匹配，使用惯常的或者「抽取器模式」语法：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="type">Circle</span>(<span class="number">2.5</span>) <span class="keyword">match</span> &#123;</div><div class="line">  <span class="keyword">case</span> <span class="type">Circle</span>(r) =&gt; println(<span class="string">"Radius = "</span> + r)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">val</span> <span class="type">Circle</span>(r)</div><div class="line"><span class="keyword">val</span> r2 = r + r</div></pre></td></tr></table></figure>
+<h2 id="下一篇"><a href="#下一篇" class="headerlink" title="下一篇"></a>下一篇</h2><p><a href="http://scala.cool/2017/07/scala-types-of-types-part-4/">Scala 类型的类型（四）</a></p>
 
             </div>
           
