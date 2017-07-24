@@ -65,6 +65,7 @@ hr {
 
 .says {
   font-size: 13px;
+  font-style: italic;
   margin-top: 30px;
   color: #666;
   border-radius: 10px;
@@ -73,6 +74,10 @@ hr {
 }
 
 .says a {
+  color: #333;
+}
+
+.says a:hover {
   text-decoration: underline;
 }
 
