@@ -23,6 +23,10 @@
     box-shadow: 0 0 1px rgba(0,0,0,.15);
 }
 
+#masthead.home {
+    box-shadow: none;
+}
+
 .site-header-inner {
     height: $site-header-height;
     line-height: $site-header-height;
