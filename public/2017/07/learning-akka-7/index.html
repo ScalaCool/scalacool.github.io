@@ -12,12 +12,12 @@
 
 
 
-  <meta name="description" content="这次把这部分内容提到现在写，是因为这段时间开发的项目刚好在这一块遇到了一些难点，所以准备把经验分享给大家，我们在使用Akka时，会经常遇到一些存储Actor内部状态的场景，在系统正常运行的情况下，我们不需要担心什么，但是当系统出错，比如Actor错误需要重启，或者内存溢出，亦或者整个系统崩溃，如果我们不采取一定的方案的话，在系统重启时Actor的状态就会丢失，这会导致我们丢失一些关键的数据，造成系统数据不一致的问题。Akka作为一款成熟的生产环境应用，为我们提供了相应的解决方案就是Akka persistence。"/>
+  <meta name="description" content="这次把这部分内容提到现在写，是因为这段时间开发的项目刚好在这一块遇到了一些难点，所以准备把经验分享给大家，我们在使用Akka时，会经常遇到一些存储Actor内部状态的场景…"/>
 
 
 
 
-  <meta name="keywords" content="Akka,翻译," />
+  <meta name="keywords" content="Akka," />
 
 
 
@@ -35,19 +35,19 @@
 <link rel="canonical" href="http://scala.cool/2017/07/learning-akka-7/"/>
 
 
-<meta name="description" content="这次把这部分内容提到现在写，是因为这段时间开发的项目刚好在这一块遇到了一些难点，所以准备把经验分享给大家，我们在使用Akka时，会经常遇到一些存储Actor内部状态的场景，在系统正常运行的情况下，我们不需要担心什么，但是当系统出错，比如Actor错误需要重启，或者内存溢出，亦或者整个系统崩溃，如果我们不采取一定的方案的话，在系统重启时Actor的状态就会丢失，这会导致我们丢失一些关键的数据，造成系">
-<meta name="keywords" content="Akka,翻译">
+<meta name="description" content="这次把这部分内容提到现在写，是因为这段时间开发的项目刚好在这一块遇到了一些难点，所以准备把经验分享给大家，我们在使用Akka时，会经常遇到一些存储Actor内部状态的场景…">
+<meta name="keywords" content="Akka">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Akka系列（七）：Actor持久化之Akka persistence">
+<meta property="og:title" content="Akka 系列（七）：Actor 持久化之 Akka persistence">
 <meta property="og:url" content="http://scala.cool/2017/07/learning-akka-7/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="这次把这部分内容提到现在写，是因为这段时间开发的项目刚好在这一块遇到了一些难点，所以准备把经验分享给大家，我们在使用Akka时，会经常遇到一些存储Actor内部状态的场景，在系统正常运行的情况下，我们不需要担心什么，但是当系统出错，比如Actor错误需要重启，或者内存溢出，亦或者整个系统崩溃，如果我们不采取一定的方案的话，在系统重启时Actor的状态就会丢失，这会导致我们丢失一些关键的数据，造成系">
+<meta property="og:description" content="这次把这部分内容提到现在写，是因为这段时间开发的项目刚好在这一块遇到了一些难点，所以准备把经验分享给大家，我们在使用Akka时，会经常遇到一些存储Actor内部状态的场景…">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2017/07/result-persistence-demo.png">
-<meta property="og:updated_time" content="2017-07-25T05:12:19.000Z">
+<meta property="og:updated_time" content="2017-07-25T05:13:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Akka系列（七）：Actor持久化之Akka persistence">
-<meta name="twitter:description" content="这次把这部分内容提到现在写，是因为这段时间开发的项目刚好在这一块遇到了一些难点，所以准备把经验分享给大家，我们在使用Akka时，会经常遇到一些存储Actor内部状态的场景，在系统正常运行的情况下，我们不需要担心什么，但是当系统出错，比如Actor错误需要重启，或者内存溢出，亦或者整个系统崩溃，如果我们不采取一定的方案的话，在系统重启时Actor的状态就会丢失，这会导致我们丢失一些关键的数据，造成系">
+<meta name="twitter:title" content="Akka 系列（七）：Actor 持久化之 Akka persistence">
+<meta name="twitter:description" content="这次把这部分内容提到现在写，是因为这段时间开发的项目刚好在这一块遇到了一些难点，所以准备把经验分享给大家，我们在使用Akka时，会经常遇到一些存储Actor内部状态的场景…">
 <meta name="twitter:image" content="http://scala.cool/images/2017/07/result-persistence-demo.png">
 
 
@@ -83,7 +83,7 @@
 
 
 
-    <title> Akka系列（七）：Actor持久化之Akka persistence - Scala Cool </title>
+    <title> Akka 系列（七）：Actor 持久化之 Akka persistence - Scala Cool </title>
   </head>
 
   <body>
@@ -121,7 +121,7 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          Akka系列（七）：Actor持久化之Akka persistence
+          Akka 系列（七）：Actor 持久化之 Akka persistence
         
       </h1>
 
@@ -210,8 +210,6 @@
         <div class="post-tags">
           
             <a href="/tags/Akka/">Akka</a>
-          
-            <a href="/tags/翻译/">翻译</a>
           
         </div>
 
