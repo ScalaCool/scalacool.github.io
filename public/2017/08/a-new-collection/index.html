@@ -12,7 +12,7 @@
 
 
 
-  <meta name="description" content="Scala 中的集合（三）：实现一个新的 Collection 类"/>
+  <meta name="description" content="Scala 中的 collection 库是奉行 DRY 原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。"/>
 
 
 
@@ -35,18 +35,16 @@
 <link rel="canonical" href="http://scala.cool/2017/08/a-new-collection/"/>
 
 
-<meta name="description" content="水滴技术团队">
-<meta name="keywords" content="集合">
+<meta name="description" content="Scala 中的 collection 库是奉行 DRY 原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Scala 中的集合（三）：实现一个新的 Collection 类">
 <meta property="og:url" content="http://scala.cool/2017/08/a-new-collection/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="水滴技术团队">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-07-25T09:22:53.000Z">
+<meta property="og:description" content="Scala 中的 collection 库是奉行 DRY 原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
+<meta property="og:updated_time" content="2017-07-25T15:13:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala 中的集合（三）：实现一个新的 Collection 类">
-<meta name="twitter:description" content="水滴技术团队">
+<meta name="twitter:description" content="Scala 中的 collection 库是奉行 DRY 原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -141,7 +139,16 @@
 
     
             <div class="post-content">
-            
+            <p>Scala 中的 collection 库是奉行 <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="_blank" rel="external">DRY</a> 原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个强大的新集合类型。</p>
+<p>本文将介绍「如何实现一个新集合类」，但在开始之前，我们先来了解下 Scala 2.8 版本后的集合结构设计。</p>
+<h2 id="集合通用操作"><a href="#集合通用操作" class="headerlink" title="集合通用操作"></a>集合通用操作</h2><p>看过 <a href="http://localhost:4000/2017/03/how-to-handle-collection-in-scala-1/" target="_blank" rel="external">Scala 中的集合（一）</a> 的朋友已经知道，Scala 的集合类系统地区分了可变的和不可变的集合，它们存在于以下三个包中：</p>
+<ul>
+<li>scala.collection</li>
+<li>scala.collection.mutable</li>
+<li>scala.collection.immutable</li>
+</ul>
+<p>然而，以上所有的集合都继承了两个相同的特质 — <code>Traversable</code> 和 <code>Iterable</code>（后者继承了前者）。</p>
+<h3 id="Traversable"><a href="#Traversable" class="headerlink" title="Traversable"></a>Traversable</h3>
             </div>
           
 
