@@ -21,6 +21,4 @@ Scala 中的 collection 库是奉行 [DRY](https://en.wikipedia.org/wiki/Don%27t
 
 然而，以上所有的集合都继承了两个相同的特质 — `Traversable` 和 `Iterable`（后者继承了前者）。
 
-### Traversable
-
 
