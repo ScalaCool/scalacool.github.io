@@ -44,7 +44,7 @@
 <meta property="og:description" content="2013 年在几场 「JavaOne 大会」之后，掀起了一些关于 「Scala 类型」方面的热议，这篇博文也应运而生。我想我们缺少一个详尽的清单，来指明跟 Scala 类型打交道的方法，所以我决定总结下自己已有的经验，分享在 Scala 中为什么我们需要这些类型。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2017/03/scala-unified-types.png">
-<meta property="og:updated_time" content="2017-05-11T08:23:56.000Z">
+<meta property="og:updated_time" content="2017-07-25T05:29:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;译&gt; Scala 类型的类型（一）">
 <meta name="twitter:description" content="2013 年在几场 「JavaOne 大会」之后，掀起了一些关于 「Scala 类型」方面的热议，这篇博文也应运而生。我想我们缺少一个详尽的清单，来指明跟 Scala 类型打交道的方法，所以我决定总结下自己已有的经验，分享在 Scala 中为什么我们需要这些类型。">
@@ -152,7 +152,7 @@
 <li><a href="#5-底类型-Nothing-与-Null">5. 底类型 - Nothing 与 Null</a></li>
 </ul>
 <h2 id="1-Scala-类型的不同类型"><a href="#1-Scala-类型的不同类型" class="headerlink" title="1. Scala 类型的不同类型"></a>1. Scala 类型的不同类型</h2><p>2013 年在几场 「JavaOne 大会」之后，掀起了一些关于 「Scala 类型」方面的热议，这篇博文也应运而生。  </p>
-<p>在这些讨论声中，我发现不同的人在学习 Scala 的过程中，经常重复提出相同的问题。我想我们缺少一个详尽的清单，来指明跟 Scala 类型打交道的方法，所以我决定总结下自己已有的经验，分享在 Scala 中为什么我们需要这些类型。</p>
+<p>在这些讨论声中，我发现不同的人在学习 Scala 的过程中，经常重复提出相同的问题。我想我们缺少一个详尽的清单，来指明跟 Scala 类型打交道的方法，所以我决定总结下自己的经验，分享在 Scala 中为什么我们需要这些类型。</p>
 <h2 id="2-写作进度"><a href="#2-写作进度" class="headerlink" title="2. 写作进度"></a>2. 写作进度</h2><p>尽管我写这篇文章已经有段时间了，但始终还有很多内容未完成。比如说「高阶类型」部分需要重新梳理，「Self Type」还得补充更多细节，等等等等。详情参见计划清单。</p>
 <p>此外，如果你看到某个部分被打上了 ❌ ，则表示该部分需要修改或者是未完成。</p>
 <h2 id="3-Type-Ascription"><a href="#3-Type-Ascription" class="headerlink" title="3. Type Ascription"></a>3. Type Ascription</h2><p>Scala 有「类型推导」，这意味着我们可以在源码中省略一些类型声明。在不显式声明类型的前提下，我们只要书写 <code>val</code> 或 <code>def</code> 就够了。</p>
