@@ -43,7 +43,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-07-26T02:49:07.000Z">
+<meta property="og:updated_time" content="2017-07-26T03:21:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala 中的集合（三）：实现一个新的 Collection 类">
 <meta name="twitter:description" content="Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
@@ -223,8 +223,49 @@
 </tr>
 </tbody>
 </table>
-<p>由此，一个集合仅需定义 <code>foreach</code> 方法，以上所有其它方法都可以从 <code>Traversable</code> 继承。</p>
-<h3 id="Iterable"><a href="#Iterable" class="headerlink" title="Iterable"></a>Iterable</h3><h2 id="Builder-类"><a href="#Builder-类" class="headerlink" title="Builder 类"></a>Builder 类</h2>
+<p><strong>由此，一个集合仅需定义 <code>foreach</code> 方法，以上所有其它方法都可以从 <code>Traversable</code> 继承。</strong></p>
+<h3 id="Iterable"><a href="#Iterable" class="headerlink" title="Iterable"></a>Iterable</h3><p>Scala 当前版本的 <code>Iterable</code> 设计略显尴尬，它实现了 <code>Traversable</code>，也同时被其它所有集合实现。然而事实上这并不是一个好的设计，原因如下：</p>
+<ul>
+<li><code>Traversable</code> 存在未暴露的隐式行为，容易导致 API 出错</li>
+<li>遍历一个 <code>Traversable</code> 比 <code>Iterable</code> 性能要差</li>
+<li>所有实现了 <code>Traversable</code> 的数据类型，无不接受 <code>Iterator</code> 的实现，前者显得多余</li>
+</ul>
+<blockquote>
+<p>详情参见 @Alexelcu 的文章 — <a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="external">Why scala.collection.Traversable Is Bad Design</a> </p>
+</blockquote>
+<p>因此，正在进行的 <a href="https://contributors.scala-lang.org/t/ongoing-work-on-standard-collections-redesign/293" target="_blank" rel="external">Scala collection redesign</a> 项目也已经抛弃了 <code>Traversable</code>。</p>
+<p>然而，这并不妨碍我们研究 <code>Iterable</code> 中的通用方法，它们也在 <a href="https://github.com/scala/collection-strawman" target="_blank" rel="external">collection-strawman</a> 中被保留，如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象方法</td>
+<td>iterator</td>
+</tr>
+<tr>
+<td>其他迭代器</td>
+<td>grouped / sliding</td>
+</tr>
+<tr>
+<td>子集合</td>
+<td>takeRight / dropRight</td>
+</tr>
+<tr>
+<td>拉链操作</td>
+<td>zip / zipAll</td>
+</tr>
+<tr>
+<td>比对</td>
+<td>sameElements</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Builder-类"><a href="#Builder-类" class="headerlink" title="Builder 类"></a>Builder 类</h2>
             </div>
           
 

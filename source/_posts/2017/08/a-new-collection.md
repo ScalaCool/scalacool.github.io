@@ -56,9 +56,29 @@ Scala 文档对这些操作方法进行了归类，如下所示：
 | 字符串转化 | mkString / addString / stringPrefix |
 | 视图生成 | view  |
 
-由此，一个集合仅需定义 `foreach` 方法，以上所有其它方法都可以从 `Traversable` 继承。
+**由此，一个集合仅需定义 `foreach` 方法，以上所有其它方法都可以从 `Traversable` 继承。**
 
 ### Iterable
+
+Scala 当前版本的 `Iterable` 设计略显尴尬，它实现了 `Traversable`，也同时被其它所有集合实现。然而事实上这并不是一个好的设计，原因如下：
+
+- `Traversable` 存在未暴露的隐式行为，容易导致 API 出错
+- 遍历一个 `Traversable` 比 `Iterable` 性能要差
+- 所有实现了 `Traversable` 的数据类型，无不接受 `Iterator` 的实现，前者显得多余
+
+> 详情参见 @Alexelcu 的文章 — [Why scala.collection.Traversable Is Bad Design](https://alexn.org/blog/2017/01/13/traversable.html) 
+
+因此，正在进行的 [Scala collection redesign](https://contributors.scala-lang.org/t/ongoing-work-on-standard-collections-redesign/293) 项目也已经抛弃了 `Traversable`。
+
+然而，这并不妨碍我们研究 `Iterable` 中的通用方法，它们也在 [collection-strawman](https://github.com/scala/collection-strawman) 中被保留，如下所示：
+
+| 分类  | 方法 |
+| ---- | ------------------ |
+| 抽象方法 | iterator |
+| 其他迭代器 | grouped / sliding |
+| 子集合 | takeRight / dropRight |
+| 拉链操作 | zip / zipAll |
+| 比对 | sameElements |
 
 
 ## Builder 类
