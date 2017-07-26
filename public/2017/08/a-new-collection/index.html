@@ -12,7 +12,7 @@
 
 
 
-  <meta name="description" content="Scala 中的 collection 库是奉行 DRY 原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。"/>
+  <meta name="description" content="Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。"/>
 
 
 
@@ -35,16 +35,18 @@
 <link rel="canonical" href="http://scala.cool/2017/08/a-new-collection/"/>
 
 
-<meta name="description" content="Scala 中的 collection 库是奉行 DRY 原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
+<meta name="description" content="Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
+<meta name="keywords" content="集合">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Scala 中的集合（三）：实现一个新的 Collection 类">
 <meta property="og:url" content="http://scala.cool/2017/08/a-new-collection/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="Scala 中的 collection 库是奉行 DRY 原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
-<meta property="og:updated_time" content="2017-07-25T15:18:11.000Z">
+<meta property="og:description" content="Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-26T02:49:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala 中的集合（三）：实现一个新的 Collection 类">
-<meta name="twitter:description" content="Scala 中的 collection 库是奉行 DRY 原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
+<meta name="twitter:description" content="Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -139,16 +141,90 @@
 
     
             <div class="post-content">
-            <p>Scala 中的 collection 库是奉行 <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="_blank" rel="external">DRY</a> 原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个强大的新集合类型。</p>
-<p>本文将介绍「如何实现一个新集合类」，但在开始之前，我们先来了解下 Scala 2.8 版本后的集合结构设计。</p>
-<h2 id="集合通用操作"><a href="#集合通用操作" class="headerlink" title="集合通用操作"></a>集合通用操作</h2><p>看过 <a href="http://localhost:4000/2017/03/how-to-handle-collection-in-scala-1/" target="_blank" rel="external">Scala 中的集合（一）</a> 的朋友已经知道，Scala 的集合类系统地区分了可变的和不可变的集合，它们存在于以下三个包中：</p>
+            <p>Scala 中的 collection 库是符合 <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="_blank" rel="external">DRY</a> 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个强大的新集合类型。</p>
+<p>本文将介绍「如何实现一个新集合类」，在开始之前，我们先来了解下 Scala 2.8 版本后的集合结构设计。</p>
+<h2 id="集合通用设计"><a href="#集合通用设计" class="headerlink" title="集合通用设计"></a>集合通用设计</h2><p>看过 <a href="http://localhost:4000/2017/03/how-to-handle-collection-in-scala-1/" target="_blank" rel="external">Scala 中的集合（一）</a> 的朋友已经知道，Scala 的集合类系统地区分了可变的和不可变的集合，它们存在于以下三个包中：</p>
 <ul>
 <li>scala.collection</li>
 <li>scala.collection.mutable</li>
 <li>scala.collection.immutable</li>
 </ul>
-<p>然而，以上所有的集合都继承了两个相同的特质 — <code>Traversable</code> 和 <code>Iterable</code>（后者继承了前者）。</p>
-
+<p>然而，以上所有的集合都实现了两个相同的特质 — <code>Traversable</code> 和 <code>Iterable</code>（后者实现了前者）。</p>
+<h3 id="Traversable"><a href="#Traversable" class="headerlink" title="Traversable"></a>Traversable</h3><p><code>Traversable</code> 是集合类最高级的特性，它具有一个抽象方法：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foreach</span></span>[<span class="type">U</span>](f: <span class="type">Elem</span> =&gt; <span class="type">U</span>)</div></pre></td></tr></table></figure>
+<p>顾名思义，<code>foreach</code> 方法用于遍历集合类的所有元素，然后进行指定的操作。<code>Iterable</code> 实现了 <code>Traversable</code>，也实现了 <code>foreach</code> 方法，继而所有实现了 <code>Iterable</code> 的集合类同时也获得了一个 <code>foreach</code> 的基础版本。</p>
+<p>很多集合操作都是基于 <code>foreach</code> 实现，因此它的性能非常关键。一些 <code>Iterable</code> 子类覆写了这个方法的实现，从而获得了符合不同集合特性的优化。</p>
+<p>那么，常见的集合类型（如 <code>Seq</code>） 是如何实现通用操作的呢（如 <code>map</code>）？</p>
+<p><strong>原来，<code>Traversable</code> 除了唯一的抽象方法以外，还包含了大量通用的集合操作方法。</strong></p>
+<p>Scala 文档对这些操作方法进行了归类，如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象方法</td>
+<td>foreach</td>
+</tr>
+<tr>
+<td>相加</td>
+<td>++</td>
+</tr>
+<tr>
+<td>Map</td>
+<td>map / flatMap / collect</td>
+</tr>
+<tr>
+<td>集合转换</td>
+<td>toArray / toList / toIterable / toSeq / toIndexedSeq / toStream / toSet / toMap</td>
+</tr>
+<tr>
+<td>拷贝</td>
+<td>copyToBuffer / copyToArray</td>
+</tr>
+<tr>
+<td>size 信息</td>
+<td>不可变的</td>
+</tr>
+<tr>
+<td>元素检索</td>
+<td>head / last / headOption / lastOption / find</td>
+</tr>
+<tr>
+<td>子集合检索</td>
+<td>tail / init / slice / take / drop / takeWhilte / dropWhile / filter / filteNot / withFilter</td>
+</tr>
+<tr>
+<td>拆分</td>
+<td>splitAt / span / partition / groupBy</td>
+</tr>
+<tr>
+<td>元素测试</td>
+<td>exists / forall / count</td>
+</tr>
+<tr>
+<td>折叠</td>
+<td>foldLeft / foldRight / /: / :\ / reduceLeft / reduceRight</td>
+</tr>
+<tr>
+<td>特殊折叠</td>
+<td>sum / product / min / max</td>
+</tr>
+<tr>
+<td>字符串转化</td>
+<td>mkString / addString / stringPrefix</td>
+</tr>
+<tr>
+<td>视图生成</td>
+<td>view</td>
+</tr>
+</tbody>
+</table>
+<p>由此，一个集合仅需定义 <code>foreach</code> 方法，以上所有其它方法都可以从 <code>Traversable</code> 继承。</p>
+<h3 id="Iterable"><a href="#Iterable" class="headerlink" title="Iterable"></a>Iterable</h3><h2 id="Builder-类"><a href="#Builder-类" class="headerlink" title="Builder 类"></a>Builder 类</h2>
             </div>
           
 
