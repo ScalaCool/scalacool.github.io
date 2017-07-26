@@ -82,3 +82,15 @@ Scala 当前版本的 `Iterable` 设计略显尴尬，它实现了 `Traversable`
 
 
 ## Builder 类
+
+几乎所有的集合操作都由「遍历器」和「构建器」完成，在了解以上内容之后，我们再来了解下如何构建一个新的集合。在当前的 Scala 中，是利用一个 `Builder` 类实现的。
+
+```scala
+package scala.collection.mutable
+class Builder[-Elem, +To] {
+  def +=(elem: Elem): this.type
+  def result(): To
+  def clear(): Unit
+  def mapResult[NewTo](f: To => NewTo): Builder[Elem, NewTo] = ...
+}
+```
