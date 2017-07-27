@@ -3,7 +3,7 @@ title: Play! Framework 系列（一）：初探 play 框架
 author: Shaw
 tags:
 - Play
-- 响应式
+- 响应式编程
 description: Play! 是一种高效率的 Java 和 Scala Web 应用程序框架，它能够用来开发「响应式」 Web 应用，同时它也集成了现代 Web 应用程序开发所需的组件和 API。
 date: 2017-07-26
 ---
