@@ -1,5 +1,5 @@
 ---
-title: Scala 技术周刊 | 第8期
+title: Scala 技术周刊 | 第 8 期
 author: ScalaCool
 tags:
 - Weekly

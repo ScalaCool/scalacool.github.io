@@ -1,5 +1,5 @@
 ---
-title: Scala 技术周刊 | 第4期
+title: Scala 技术周刊 | 第 4 期
 author: ScalaCool
 tags:
 - Weekly
