@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="Play! 是一种高效率的 Java 和 Scala Web 应用程序框架，它能够用来开发「响应式」 Web 应用，同时它也集成了现代 Web 应用程序开发所需的组件和 API。"/>
+
+
+
+
+  <meta name="keywords" content="Play,响应式编程," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/07/play-1/"/>
+
+
+<meta name="description" content="Play! 是一种高效率的 Java 和 Scala Web 应用程序框架，它能够用来开发「响应式」 Web 应用，同时它也集成了现代 Web 应用程序开发所需的组件和 API。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Play! Framework 系列（一）：初探 play 框架">
+<meta property="og:url" content="http://scala.cool/2017/07/play-1/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="Play! 是一种高效率的 Java 和 Scala Web 应用程序框架，它能够用来开发「响应式」 Web 应用，同时它也集成了现代 Web 应用程序开发所需的组件和 API。">
+<meta property="og:image" content="http://scala.cool/images/2017/07/architecture-of-the-play.png">
+<meta property="og:image" content="http://scala.cool/images/2017/07/thread.png">
+<meta property="og:image" content="http://scala.cool/images/2017/07/thread-handle.png">
+<meta property="og:image" content="http://scala.cool/images/2017/07/event.png">
+<meta property="og:image" content="http://scala.cool/images/2017/07/event-handle.png">
+<meta property="og:image" content="http://scala.cool/images/2017/07/state.png">
+<meta property="og:image" content="http://scala.cool/images/2017/07/stateless.png">
+<meta property="og:image" content="http://scala.cool/images/2017/07/play-java-layer.png">
+<meta property="og:updated_time" content="2017-07-28T13:47:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Play! Framework 系列（一）：初探 play 框架">
+<meta name="twitter:description" content="Play! 是一种高效率的 Java 和 Scala Web 应用程序框架，它能够用来开发「响应式」 Web 应用，同时它也集成了现代 Web 应用程序开发所需的组件和 API。">
+<meta name="twitter:image" content="http://scala.cool/images/2017/07/architecture-of-the-play.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Play! Framework 系列（一）：初探 play 框架 - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" ><div class="site-header-inner">
+      
+    <h1 class="site-title">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+      
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                News
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Play! Framework 系列（一）：初探 play 框架
+        
+      </h1>
+
+      <time class="post-time">
+          7月26日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Shaw"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="Shaw"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>Play! 是一种高效率的 Java 和 Scala Web 应用程序框架，它能够用来开发「响应式」 Web 应用，同时它也集成了现代 Web 应用程序开发所需的组件和 API。本文将介绍一下 Play! 的基本性质以及利用该框架开发 Web 程序的优势。</p>
+<h2 id="响应式-Web-开发框架"><a href="#响应式-Web-开发框架" class="headerlink" title="响应式 Web 开发框架"></a>响应式 Web 开发框架</h2><center><br><img src="/images/2017/07/architecture-of-the-play.png" alt="Image of play"><br></center>
+
+<p>Play! 抛弃了传统的 Java Web 框架的模式，而是选择拥抱「响应式」（Reactive）应用的理念，从头开始设计，这使得 Play! 可以够构建出即使在高负载下也能够对用户行为进行实时响应的 Web 应用。 Play! 作为一个全栈「响应式框架」主要有如下特点：</p>
+<ol>
+<li><p>响应式（Responsive）—— 在用户层面，Play! 能够快速响应用户的行为</p>
+</li>
+<li><p>可伸缩（Scalable）—— 在负载层面，Play! 能实现良好的水平扩展</p>
+</li>
+<li><p>事件驱动（Event-driven）—— Play! 的 HTTP Server 就是基于事件模型实现的</p>
+</li>
+</ol>
+<p>接下来我们就 Play！的这几个主要的特点进行介绍。</p>
+<h2 id="事件模型-Web-服务器（Evented-Web-Application-Server）"><a href="#事件模型-Web-服务器（Evented-Web-Application-Server）" class="headerlink" title="事件模型 Web 服务器（Evented Web Application Server）"></a>事件模型 Web 服务器（Evented Web Application Server）</h2><p>在 Play 2.6.x 之前，Play! 的 HTTP Server 是基于 Netty 实现的，最新版的 Play 2.6.x 是基于 Akka HTTP 实现的，在介绍 Play! 的 HTTP Server 的优势之前，我们先看一下传统的 Java Web 框架所采用的 HTTP Server 是怎样的。</p>
+<p>当前比较主流的实现 HTTP Server 的模型主要有两类——「线程模型」以及「事件模型」。</p>
+<h3 id="线程模型服务器（THREADED-SERVERS）"><a href="#线程模型服务器（THREADED-SERVERS）" class="headerlink" title="线程模型服务器（THREADED SERVERS）"></a>线程模型服务器（THREADED SERVERS）</h3><p>传统的 Java Web 框架所采用的服务器就是基于线程模型来实现的，比如非常流行的 Apache Tomcat，该模型的工作方式如下图所示：</p>
+<center><br><img src="/images/2017/07/thread.png" alt="Image of Thread"><br></center>
+
+<p>「接收者线程」（Accpter thread）接受客户端的 HTTP 请求，然后将这些请求分配给「请求处理线程」进行处理。</p>
+<p>这种模型的弊端就是，「工作线程」（也就是上面提到的「请求处理线程」）是有限的，而客户端发来的请求数量往往会大于「工作线程」的数量。当此种情况发生时，那些没有得到处理的线程就会一直处于阻塞和等待状态，反映到用户层面就是页面迟迟得不到响应，如果等待时间过长，耐心的用户最终会看到请求超时（Request timeout）的信息，急性子的用户就会关掉这个页面。</p>
+<p>另外采用线程这种方式也非常地耗费资源，如果某个请求很耗费时间，那么处理该请求的工作线程大概是这样工作的：</p>
+<center><br><img src="/images/2017/07/thread-handle.png" alt="Image of thread-handle"><br></center>
+
+<p>其中绿色是程序运行时间，红色是等待时间，可以看到由于 I/O 操作比较慢，所以这个线程的工作时间大部分都在等待，极大地消耗了资源，如果是采用多线程，那消耗的资源将会多倍增加。</p>
+<h3 id="事件模型服务器（EVENTED-SERVERS）"><a href="#事件模型服务器（EVENTED-SERVERS）" class="headerlink" title="事件模型服务器（EVENTED SERVERS）"></a>事件模型服务器（EVENTED SERVERS）</h3><p>Play! 的 HTTP Server 是基于 Netty 或者 Akka HTTP 实现的，这两个框架都具有异步非阻塞的优点。我们先看一下 Play! 的事件模型服务器是如何工作的：</p>
+<center><br><img src="/images/2017/07/event.png" alt="Image of Event"><br></center>
+
+<p>我们知道，当用户发送一个请求的时候，往往这个请求包含了许多操作，而 Play! 则能将这些请求分割为一个一个的事件，然后异步去处理这些事件。例如，当某一个事件正在被操作系统处理的时候，这个过程可能会花费一些时间，之前说过，如果线程一直等待这个事件执行完然后再去执行下一个事件就有点浪费资源了，所以在这个等待时间里，event loop（消息线程）可以去执行事件队列中的其他事件。当某个事件执行完之后，就会发出一个中断，这个中断也算一个事件，然后加入到事件队列中，等待执行。这种异步非阻塞的模式使得 Play! 能够以较少的资源应对大流量的访问。反映在用户层面就是，Play! 能够快速地对用户的行为作出响应。</p>
+<p>为了与「线程模型」进行对比，我们画一个类似的图来解释为什么「事件模型」消耗的资源更少而处理的请求更多：</p>
+<center><br><img src="/images/2017/07/event-handle.png" alt="Image of Event handle"><br></center>
+
+<p>图中绿色的部分为事件的执行时间，橙色部分为「空闲时间」，注意这里是「空闲时间」而非前面所说的「等待时间」，在这个空闲时间内，event loop 可以去执行其他事件而不必等待前面某个事件执行完成，当某个事件执行完成之后，会发出中断，这个中断也会产生一个新的事件，最终 event loop 也会执行这个事件。这就是「事件模型」处理某个请求的流程，可以看到，没有了等待时间，大大提高了程序运行的效率，也使得系统能够以较少的资源处理大量的请求。</p>
+<h4 id="异步非阻塞"><a href="#异步非阻塞" class="headerlink" title="异步非阻塞"></a>异步非阻塞</h4><p>Play! 通过重新设计并实现了自己 HTTP Server 这使得 Play! 能够以「异步」的方式去处理每一个请求。在利用 Play! 进行开发的时候，Play! 默认配置的 controller 就是异步的，所以我们可以利用 Play! 很方便地写出异步非阻塞的代码。我们知道，在 Java8 之前，要编写异步非阻塞的代码往往需要使用回调，但是当业务逻辑变得复杂，回调变多的时候就会出现传说中的 “回调地狱”，这使得代码的可读性极差。而 Scala 语言引入了 Future ，极大地简化了多个回调的处理，使代码看上去优雅很多（关于如何在 Play! 中利用Future实现异步逻辑，我们将会在后面的文章中进一步的介绍）。所以在 Play! 中利用 scala 编写异步代码将会变得非常高效。</p>
+<h2 id="无状态（Stateless）"><a href="#无状态（Stateless）" class="headerlink" title="无状态（Stateless）"></a>无状态（Stateless）</h2><p>Play! 框架抛弃了 Servlet/JSP 里 Session 等概念，内置没有提供方法将对象与服务器实例进行绑定，在每次 HTTP Request 之间不会在 Server 端存储状态，所需的状态都需要在 HTTP Request 之间传递，这样做的好处就是使得应用在负载层面实现了良好的水平扩展，接下来我们分别介绍一些有状态的部署方式与无状态的部署方式。</p>
+<h3 id="有状态部署"><a href="#有状态部署" class="headerlink" title="有状态部署"></a>有状态部署</h3><center><br><img src="/images/2017/07/state.png" alt="Image of state"><br></center>
+
+<p>如果我们在 session 中保存了大量与客户端的「状态信息」的话，为了防止某台机器宕机而导致用户与服务器保存的会话状态丢失，我们需要在各个节点之间共享这些「状态信息」。比较常见的做法是采用集群，比如采用 tomcat 或者 jboss 的集群功能，采用此种方式并不能通过增加节点来解决系统负载过大的问题，因为随着节点增加，各个节点之间 session 的通信会增加，从而使系统开销增大。所以采用有状态的部署方式不能使系统具有良好的伸缩性。</p>
+<h3 id="无状态部署"><a href="#无状态部署" class="headerlink" title="无状态部署"></a>无状态部署</h3><center><br><img src="/images/2017/07/stateless.png" alt="Image of stateless"><br></center>
+
+<p>如图所示，采用无状态的部署方式，每个节点不保存诸如 session 之类的状态信息，各个节点之间也没有共享状态，它们彼此都是独立的。当系统的负载增加时，我们只需要增加一个节点，然后在前端通过均衡负载就可以使系统的性能提高。这样就使得系统具有良好的伸缩性。当然，没有了 session，那 Play! 如何来保存状态呢，我们可以使用 Play! 中基于 Cookie 的客户端用户会话以及「外部缓存」（这些在之后的文章中会介绍）。</p>
+<h2 id="ROR风格"><a href="#ROR风格" class="headerlink" title="ROR风格"></a>ROR风格</h2><p>对于很多公司而言，快速地开发出一款产品并上线非常重要，由于 <a href="https://en.wikipedia.org/wiki/Ruby_on_Rails" target="_blank" rel="external">ROR （Ruby on Rails）</a> 风格的框架在开发效率上面非常高，所以很多公司在快速构建应用时往往会选择这类框架，而不是传统的 Java 框架。</p>
+<center><br><img src="/images/2017/07/play-java-layer.png" alt="Image of play and java layer"><br></center>
+
+<p>通过上图可以对比一下 Play! 与传统的 Java EE 框架的区别，可以看到 Play! 在架构上更加清晰简洁。在 Play! 之前， 相比于 ROR 风格的框架，传统的 Java Web 框架在开发网页应用的时候往往耗时比较长，原因主要有两个：</p>
+<p>1、依赖 Servlet</p>
+<p>传统的 Java Web 框架都是基于 Servlet 来构建的，开发人员开发的应用也需要在 Servlet 容器中运行，但是这就带来了一个后果，开发人员每次修改完代码之后，都需要重新启动 Web 服务器才能看到修改后的效果。如果某一个项目规模较小，那重启以及编译的时间还能接受，但是如果项目很大，那开发过程中所花的大部分时间都浪费在重启以及编译上面了。</p>
+<p>而 Play! 框架通过 ClassLoader 在源代码修改的时候动态加载类，解决了修改代码需要重启服务器的问题，使得开发效率变高。</p>
+<p>2、 复杂的 XML 配置文件</p>
+<p>传统的 Java Web 框架在开发某个 Web 应用的时候需要引入大量的 XML 配置文件，这些文件在配置起来比较麻烦，如果数量很多且分散在不同的文件下面会使得维护成本增加。</p>
+<p>Play! 框架深谙 ROR 之道，采用 约定优于配置，只有一个全局的配置文件 application.conf，其他大部分配置都是默认的，我们只需要按照它约定的去做好了。</p>
+<h2 id="RESTFul"><a href="#RESTFul" class="headerlink" title="RESTFul"></a>RESTFul</h2><p>传统的 Java Web 框架利用 Servlet 将 Http协议隐藏了起来，也就是说开发者不能很直观地看到某一个请求对应的某个操作。而 Play! 在设计上拥抱了 Http 协议，比如我们要获取一个用户列表，我们就可以在 route 文件中这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GET      /customer/list      controllers.CustomerController.list</div></pre></td></tr></table></figure>
+<p>那么 /customer/list 这个 URL 对应的就是 CustomerController 中的 list 方法。</p>
+<p>这样看上去更加直观。</p>
+<h2 id="强类型模板"><a href="#强类型模板" class="headerlink" title="强类型模板"></a>强类型模板</h2><p>从 Play! 2 开始， Play! 的模板就全面拥抱了 Scala，所以 Play! 的模板都是可以编译的 Scala 函数，这就意味着我们可以在编译的时候直接在浏览器或者控制台中看到模板的错误信息，而不用等到将应用部署，调用页面之后才能发现错误。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Play/">Play</a>
+          
+            <a href="/tags/响应式编程/">响应式编程</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/07/scala-weekly-14/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Scala 技术周刊 | 第 14 期</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/07/learning-akka-7/">
+        <span class="next-text nav-default">Akka 系列（七）：Actor 持久化之 Akka persistence</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+    2017
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a> 强力驱动
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

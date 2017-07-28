@@ -1,5 +1,5 @@
 ---
-title: Scala 技术周刊 | 第11期
+title: Scala 技术周刊 | 第 11 期
 author: ScalaCool
 tags:
 - Weekly
