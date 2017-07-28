@@ -1,5 +1,5 @@
 ---
-title: Scala 技术周刊 | 第6期
+title: Scala 技术周刊 | 第 6 期
 author: ScalaCool
 tags:
 - Weekly

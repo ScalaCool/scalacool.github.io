@@ -1,5 +1,5 @@
 ---
-title: Scala 技术周刊 | 第14期
+title: Scala 技术周刊 | 第 14 期
 author: ScalaCool
 tags:
 - Weekly
