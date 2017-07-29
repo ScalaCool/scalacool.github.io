@@ -62,9 +62,9 @@ Scala 文档对这些操作方法进行了归类，如下所示：
 
 Scala 当前版本的 `Iterable` 设计略显尴尬，它实现了 `Traversable`，也同时被其它所有集合实现。然而事实上这并不是一个好的设计，原因如下：
 
-- `Traversable` 存在未暴露的隐式行为，容易导致 API 出错
+- `Traversable` 具有隐式的行为假设，它在公开的签名中是不可见的，容易导致 API 出错
 - 遍历一个 `Traversable` 比 `Iterable` 性能要差
-- 所有实现了 `Traversable` 的数据类型，无不接受 `Iterator` 的实现，前者显得多余
+- 所有继承了 `Traversable` 的数据类型，无不接受 `Iterator` 的实现，前者显得多余
 
 > 详情参见 @Alexelcu 的文章 — [Why scala.collection.Traversable Is Bad Design](https://alexn.org/blog/2017/01/13/traversable.html) 
 
@@ -95,12 +95,13 @@ class Builder[-Elem, +To] {
 }
 ```
 
-注意类型参数，`Elem` 表示元素的类型，`To` 表示容器的类型，如一个 `List[Int]` 对应 `Builder[Int, List]`。
+注意类型参数，`Elem` 表示元素的类型（如 `Int` ），`To` 表示集合的类型（如 `Array[Int]`）。
+
 此外：
-- `+=` 支持元素拼加操作
-- `result` 返回
-- `clear` 清空当前集合
-- `mapResult` 可以返回一个新的集合类型
+- `+=` 可以增加元素
+- `result` 返回一个集合
+- `clear` 把集合重置为空状态
+- `mapResult` 返回一个 `Builder`，拥有新的集合类型
 
 我们来看下`Builder` 如何结合 `foreach` 方法，实现常见的 `filter` 操作：
 
@@ -147,8 +148,8 @@ trait CanBuildFrom[-From, -Elem, +To] {
 
 这种利用 TypeClass 技术 — 采用隐式转换来获得扩展的方式，显得强大且灵活，但在新手看来会比较怵。
 
-通过字面的理解，我们知晓 — `From` 代表当前的集合容器类型，`Elem` 代表元素类型，`To` 代表目标容器的类型。
-所以我们可以如此解读 `CanBuildFrom`：「**有这么一个方法，由给定的 From 容器类型的集合，使用 Elem 类型，建立 To 容器类型的集合**」。
+通过字面的理解，我们知晓 — `From` 代表当前的集合类型，`Elem` 代表元素类型，`To` 代表目标集合的类型。
+所以我们可以如此解读 `CanBuildFrom`：「**有这么一个方法，由给定的 From 类型的集合，使用 Elem 类型，建立 To 类型的集合**」。
 
 ## 新集合类实现
 

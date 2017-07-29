@@ -41,7 +41,7 @@
 <meta property="og:url" content="http://scala.cool/2017/08/a-new-collection/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
-<meta property="og:updated_time" content="2017-07-29T10:51:55.000Z">
+<meta property="og:updated_time" content="2017-07-29T11:22:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala 中的集合（三）：实现一个新的 Collection 类">
 <meta name="twitter:description" content="Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
@@ -224,9 +224,9 @@
 <p><strong>由此，一个集合仅需定义 <code>foreach</code> 方法，以上所有其它方法都可以从 <code>Traversable</code> 继承。</strong></p>
 <h3 id="Iterable"><a href="#Iterable" class="headerlink" title="Iterable"></a>Iterable</h3><p>Scala 当前版本的 <code>Iterable</code> 设计略显尴尬，它实现了 <code>Traversable</code>，也同时被其它所有集合实现。然而事实上这并不是一个好的设计，原因如下：</p>
 <ul>
-<li><code>Traversable</code> 存在未暴露的隐式行为，容易导致 API 出错</li>
+<li><code>Traversable</code> 具有隐式的行为假设，它在公开的签名中是不可见的，容易导致 API 出错</li>
 <li>遍历一个 <code>Traversable</code> 比 <code>Iterable</code> 性能要差</li>
-<li>所有实现了 <code>Traversable</code> 的数据类型，无不接受 <code>Iterator</code> 的实现，前者显得多余</li>
+<li>所有继承了 <code>Traversable</code> 的数据类型，无不接受 <code>Iterator</code> 的实现，前者显得多余</li>
 </ul>
 <blockquote>
 <p>详情参见 @Alexelcu 的文章 — <a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="external">Why scala.collection.Traversable Is Bad Design</a> </p>
@@ -265,12 +265,13 @@
 </table>
 <h2 id="Builder-类"><a href="#Builder-类" class="headerlink" title="Builder 类"></a>Builder 类</h2><p>几乎所有的集合操作都由「遍历器」和「构建器」完成，在了解以上内容之后，我们再来了解下如何构建一个集合类型。在当前的 Scala 中，是利用一个 <code>Builder</code> 类实现的。</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> scala.collection.mutable</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Builder</span>[-<span class="type">Elem</span>, +<span class="type">To</span>] </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">+=</span></span>(elem: <span class="type">Elem</span>): <span class="keyword">this</span>.<span class="keyword">type</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">result</span></span>(): <span class="type">To</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">clear</span></span>(): <span class="type">Unit</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">mapResult</span></span>[<span class="type">NewTo</span>](f: <span class="type">To</span> =&gt; <span class="type">NewTo</span>): <span class="type">Builder</span>[<span class="type">Elem</span>, <span class="type">NewTo</span>] = ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>注意类型参数，<code>Elem</code> 表示元素的类型，<code>To</code> 表示容器的类型，如一个 <code>List[Int]</code> 对应 <code>Builder[Int, List]</code>。<br>此外：</p>
+<p>注意类型参数，<code>Elem</code> 表示元素的类型（如 <code>Int</code> ），<code>To</code> 表示集合的类型（如 <code>Array[Int]</code>）。</p>
+<p>此外：</p>
 <ul>
-<li><code>+=</code> 支持元素拼加操作</li>
-<li><code>result</code> 返回</li>
-<li><code>clear</code> 清空当前集合</li>
-<li><code>mapResult</code> 可以返回一个新的集合类型</li>
+<li><code>+=</code> 可以增加元素</li>
+<li><code>result</code> 返回一个集合</li>
+<li><code>clear</code> 把集合重置为空状态</li>
+<li><code>mapResult</code> 返回一个 <code>Builder</code>，拥有新的集合类型</li>
 </ul>
 <p>我们来看下<code>Builder</code> 如何结合 <code>foreach</code> 方法，实现常见的 <code>filter</code> 操作：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">filter</span></span>(p: <span class="type">Elem</span> =&gt; <span class="type">Boolean</span>): <span class="type">Repr</span> = &#123;</div><div class="line">  <span class="keyword">val</span> b = newBuilder</div><div class="line">  foreach &#123; elem =&gt; <span class="keyword">if</span> (p(elem)) b += elem &#125;</div><div class="line">  b.result</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -285,7 +286,7 @@
 <p>一个大发现 — <strong>当前版本的 Scala 原来是利用 <code>CanBuildFrom</code> 类型来解决如何集合「类型转换」的问题</strong>。</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> scala.collection.generic</div><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">CanBuildFrom</span>[-<span class="type">From</span>, -<span class="type">Elem</span>, +<span class="type">To</span>] </span>&#123;</div><div class="line">  <span class="comment">// 创建一个新的构造器(builder)</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(from: <span class="type">From</span>): <span class="type">Builder</span>[<span class="type">Elem</span>, <span class="type">To</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这种利用 TypeClass 技术 — 采用隐式转换来获得扩展的方式，显得强大且灵活，但在新手看来会比较怵。</p>
-<p>通过字面的理解，我们知晓 — <code>From</code> 代表当前的集合容器类型，<code>Elem</code> 代表元素类型，<code>To</code> 代表目标容器的类型。<br>所以我们可以如此解读 <code>CanBuildFrom</code>：「<strong>有这么一个方法，由给定的 From 容器类型的集合，使用 Elem 类型，建立 To 容器类型的集合</strong>」。</p>
+<p>通过字面的理解，我们知晓 — <code>From</code> 代表当前的集合类型，<code>Elem</code> 代表元素类型，<code>To</code> 代表目标集合的类型。<br>所以我们可以如此解读 <code>CanBuildFrom</code>：「<strong>有这么一个方法，由给定的 From 类型的集合，使用 Elem 类型，建立 To 类型的集合</strong>」。</p>
 <h2 id="新集合类实现"><a href="#新集合类实现" class="headerlink" title="新集合类实现"></a>新集合类实现</h2><p>通过以上的介绍，大家对 Scala 的集合结构设计有了整体的认识，现在开始来实现一个新的集合类。</p>
 <blockquote>
 <p>以下例子来自 Scala 文档，细节有调整，精简。</p>
