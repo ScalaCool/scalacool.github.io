@@ -4,7 +4,7 @@ author: Yison
 tags:
 - 集合
 description: Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。
-date: 2017-08-01
+date: 2017-07-29
 ---
 
 Scala 中的 collection 库是符合 [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个强大的新集合类型。
