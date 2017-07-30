@@ -12,7 +12,7 @@
 
 
 
-  <meta name="description" content="CanBuildFrom is probably the most infamous abstraction of the current collections. It is mainly criticised for making scary type signatures."/>
+  <meta name="description" content="从上一篇文章看出， CanBuildFrom 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的语法。"/>
 
 
 
@@ -35,16 +35,16 @@
 <link rel="canonical" href="http://scala.cool/2017/08/canbuildfrom/"/>
 
 
-<meta name="description" content="CanBuildFrom is probably the most infamous abstraction of the current collections. It is mainly criticised for making scary type signatures.">
+<meta name="description" content="从上一篇文章看出， CanBuildFrom 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的语法。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Scala 中的集合（四）：CanBuildFrom">
 <meta property="og:url" content="http://scala.cool/2017/08/canbuildfrom/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="CanBuildFrom is probably the most infamous abstraction of the current collections. It is mainly criticised for making scary type signatures.">
-<meta property="og:updated_time" content="2017-07-29T14:36:53.000Z">
+<meta property="og:description" content="从上一篇文章看出， CanBuildFrom 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的语法。">
+<meta property="og:updated_time" content="2017-07-30T12:43:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala 中的集合（四）：CanBuildFrom">
-<meta name="twitter:description" content="CanBuildFrom is probably the most infamous abstraction of the current collections. It is mainly criticised for making scary type signatures.">
+<meta name="twitter:description" content="从上一篇文章看出， CanBuildFrom 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的语法。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -142,6 +142,14 @@
             <blockquote>
 <p>CanBuildFrom is probably the most infamous abstraction of the current collections. It is mainly criticised for making scary type signatures.</p>
 </blockquote>
+<p>从 <a href="http://scala.cool/2017/07/a-new-collection/">上一篇文章</a> 看出， <code>CanBuildFrom</code> 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的设计。</p>
+<p>本文将详细介绍 <code>CanBuildFrom</code> 的特性，以及它到底解决了哪些问题，却又为何饱受诟病。</p>
+<h2 id="map-的问题"><a href="#map-的问题" class="headerlink" title="map 的问题"></a>map 的问题</h2><p><code>map</code> 是集合中最常用的操作方法之一，利用它我们可以做到：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="type">List</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>).map(_.toString) <span class="comment">// 集合元素类型的转化，Int -&gt; String</span></div></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://www.youtube.com/watch?v=ecekSCX3B4Q" target="_blank" rel="external">SF Scala: Martin Odersky, Scala – the Simple Parts</a></li>
+<li><a href="https://www.scala-lang.org/blog/2017/05/30/tribulations-canbuildfrom.html" target="_blank" rel="external">Trinulations of CanBuildFrom</a></li>
+</ul>
 
             </div>
           
@@ -159,12 +167,6 @@
         
         
   <nav class="post-nav">
-    
-      <a class="prev" href="/2017/08/scala-learning-3/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">F-bounded types 与 Typeclasses</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
     
     
       <a class="next" href="/2017/07/a-new-collection/">
