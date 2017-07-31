@@ -10,7 +10,7 @@
 
 {# Website description #}
 {% if page.description %}
-  <meta name="description" content="这是 — 水滴产品团队面向 Scala 的技术博客，原创 Scala 文章、教程。"/>
+  <meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
 {% elif page.title %}
   <meta name="description" content="{{ page.title }}"/>
 {% elif config.description %}
