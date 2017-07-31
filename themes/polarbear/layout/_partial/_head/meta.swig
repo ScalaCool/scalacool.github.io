@@ -6,6 +6,8 @@
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
 {# Website description #}
 {% if page.description %}
   <meta name="description" content="{{ page.description }}"/>
