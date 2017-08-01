@@ -3,7 +3,7 @@ title: Scala 中的集合（四）：CanBuildFrom
 author: Yison
 tags:
 - 集合
-- Type class
+- Typeclass
 description: 从上一篇文章看出， CanBuildFrom 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的语法。
 date: 2017-08-01
 ---
