@@ -126,10 +126,10 @@ res0: List[String] = List(1, 2, 3)
 于是，我们决定看下 `TraversableLike` 中 `map` 的 Scala 源码实现：
 
 ```scala
-def map[B, That](p: Elem => B)
-    (implicit bf: CanBuildFrom[B, That, This]): That = {
+def map[B, That](f: Elem => B)
+    (implicit bf: CanBuildFrom[Repr, B, That]): That = {
   val b = bf(this)
-  for (x <- this) b += f(x)
+  this.foreach(x => b += f(x))
   b.result
 }
 ```
