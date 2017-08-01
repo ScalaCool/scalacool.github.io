@@ -20,6 +20,14 @@ date: 2017-08-04
 - [FP in Scala for OOP Programmers (Part 1)](https://medium.com/@Tom1212121/fp-in-scala-for-oop-programmers-part-1-ef26ec56442a)
   Scala 函数式开发
 
+- [Free Applicative and Free Monad](https://functionaltechramblings.wordpress.com/2017/06/25/free-applicative-and-free-monad/)
+  Free 和 FreeAp
+
+- [Functional Programming In Scala For the Working Class Java Programmer Part 1](https://www.youtube.com/watch?v=a16FCa65xt4)
+  基于 《Scala Design Patterns》
+
+- [Akka 系列（七）：Actor 持久化之 Akka persistence](http://scala.cool/2017/07/learning-akka-7/)
+  Akka 系列
 
 ## 一周速递
 
