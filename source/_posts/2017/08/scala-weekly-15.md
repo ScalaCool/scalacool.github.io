@@ -35,7 +35,7 @@ date: 2017-08-04
 - [Don’t fear the Monad](https://medium.com/zendesk-engineering/dont-fear-the-monad-f424260f29f6)
   Monad 介绍
 
-- [Play! Framework 系列（一）：初探 play 框架](https://juejin.im/post/5979765f6fb9a03c322387e0)
+- [Play! Framework 系列（一）：初探 play 框架](http://scala.cool/2017/07/play-1/)
   Play! Framework 系列
 
 - [Hacker News API Part 1](http://justinhj.github.io/2017/07/26/hacker-news-api-1.html)
