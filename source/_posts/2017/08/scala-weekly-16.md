@@ -32,7 +32,18 @@ date: 2017-08-011
 - [Benefits of Scala](https://www.reddit.com/r/scala/comments/6quvc2/benefits_of_scala/)
   Reddit 问答
 
+- [5 Differences Between PHP And Scala-Based Architectures](http://blog.functorhub.com/2017/08/03/5-differences-between-php-and-scala/)
+  PHP vs Scala
+
+- [dotty 将会为 scala 带来哪些新的概念和实际的好处？](https://www.zhihu.com/question/36883388)
+  知乎问答
+
 
 
 ## 一周速递
 
+- sbt-api-mappings v1.1.0 [发布](https://github.com/ThoughtWorksInc/sbt-api-mappings/releases/tag/v1.1.0)
+
+- Cats 1.0.0-MF [发布](http://typelevel.org/blog/2017/08/04/cats-1.0-mf.html)
+
+- shapeless 2.3.2 [发布](https://github.com/milessabin/shapeless)
