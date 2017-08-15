@@ -1,10 +1,10 @@
 ---
-title: Akka系列（八）：Akka persistence设计理念之CQRS
+title: Akka 系列（八）：Akka persistence 设计理念之 CQRS
 author: Godpan
 tags: 
 - Akka
 description: 这一篇文章主要是讲解Akka persistence的核心设计理念，也是CQRS（Command Query Responsibility Segregation）架构设计的典型应用，就让我们来看看为什么Akka persistence会采用CQRS架构设计。
-date: 2017-08-08
+date: 2017-08-15
 ---
 
 这一篇文章主要是讲解Akka persistence的核心设计理念，也是CQRS（Command Query Responsibility Segregation）架构设计的典型应用，就让我们来看看为什么Akka persistence会采用CQRS架构设计。
@@ -17,13 +17,17 @@ date: 2017-08-08
 
 我们先来看看普通的方式：
 
+<center>
 ![acid](/images/2017/08/acid.png)
+</center>
 
 我们可以看出，我们对数据的请求都是通过相应的接口直接对数据库进行操作，这在并发大的时候肯定会对数据库造成很大的压力，虽然架构简单，但在面对并发高的情况下力不从心。
 
 那么CQRS的方式有什么不同呢？我们也来看看它的执行方式：
 
+<center>
 ![acid](/images/2017/08/cqrs.png)
+</center>
 
 乍得一看，似乎跟普通的方式没什么不同啊，不就多了一个事件和存储DB么，其实不然，小小的改动便是核心理念的转换，首先我们可以看到在CQRS架构中会多出一个Event，那它到底代表着什么含义呢？其实看过上篇文章的同学很容易理解，Event是我们系统根据请求处理得出的一个领域模型，比如一个修改余额操作事件，当然这个Event中只会保存关键性的数据。
 
@@ -49,13 +53,17 @@ date: 2017-08-08
 
 从三种方式各自的特点可以看出，单数据库模式的在大量读写的情况下有很大的性能瓶颈，但简单的读写分离在面对大量写操作的时候也还是力不从心，比如最常见的库存修改查询场景：
 
+<center>
 ![common-action](/images/2017/08/common-action.png)
+</center>
 
 我们可以发现在这种模式下写数据库的压力还会很大，而且还有数据同步，数据延迟等问题。
 
 那么我们用CQRS架构设计会是怎么样呢：
 
+<center>
 ![cqrs-action](/images/2017/08/cqrs-action.png)
+</center>
 
 首先我们可以业务模型进行分离，对不同的查询进行分离，另外避免不了的同一区间数据段进行异步持久化，在保证数据一致性的情况下提升系统的吞吐量。这种设计我们很少会遇到事务竞争，另外还可以使用内存数据库（当然如果是内存操作那就最快）来提升数据的写入。（以上的数据库都可为分布式数据库，不担心单机宕机）
 
@@ -73,7 +81,9 @@ date: 2017-08-08
 
 通过上面的讲解，相信大家对CQRS已经有了一定的了解，下面我们就来看看它在Akka Persistence中的具体应用，这里我就结合上一篇文章抽奖的例子，比如其中的LotteryCmd便是一个写操作命令，系统经过相应的处理后得到相应的领域事件，比如其中LuckyEvent，然后我们将LuckyEvent进行持久化，并修改内存中抽奖的余额，返回相应的结果，这里我们就可以同时将结果反馈给用户，并对结果进行异步持久化，流程如下：
 
+<center>
 ![cqrs-example](/images/2017/08/cqrs-example.png)
+</center>
 
 可以看出，Akka Persistence的原理完全是基于CQRS的架构设计的，另外Persistence Actor还会保存一个内存状态，相当于一个in memory数据库，可以用来提供关键数据的存储和查询，比如前面说到的库存，余额等数据，这部分的设计取决于具体的业务场景。
 
