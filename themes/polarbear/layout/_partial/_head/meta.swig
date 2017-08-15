@@ -11,3 +11,6 @@
 
 {# Website keywords #}
 <meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>

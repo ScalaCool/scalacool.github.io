@@ -16,6 +16,8 @@
 
 <meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
 
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
 
 
 
@@ -166,9 +168,22 @@
         
   <div class="comments" id="comments">
     
-    <div style="text-align:center;margin-top: 50px;">
+    <!--<div style="text-align:center;margin-top: 50px;">
       <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
-    </div>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var gitalk = new Gitalk({
+        clientID: '06af515825099ea48b8f',
+        clientSecret: '201a70dabe94740ba97c5d6a2aecad9f2e8367c3',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yison-dripower'],
+        id: 'Demo',
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
   </div>
 
 

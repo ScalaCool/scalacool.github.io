@@ -15,8 +15,21 @@
            data-title="{{ page.title }}" data-url="{{ page.permalink }}">
       </div>
     {% endif %}
-    <div style="text-align:center;margin-top: 50px;">
+    <!--<div style="text-align:center;margin-top: 50px;">
       <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
-    </div>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var gitalk = new Gitalk({
+        clientID: '06af515825099ea48b8f',
+        clientSecret: '201a70dabe94740ba97c5d6a2aecad9f2e8367c3',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yison-dripower'],
+        id: 'Demo',
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
   </div>
 {% endif %}

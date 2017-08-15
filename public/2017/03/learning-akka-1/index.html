@@ -16,6 +16,8 @@
 
 <meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
 
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
 
 
 
@@ -193,15 +195,15 @@
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2017/03/scala-news-beta-release/">
+      <a class="prev" href="/2017/03/how-to-use-algebraic-data-type-in-scala-development/">
         <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">ScalaNews beta releases !</span>
+        <span class="prev-text nav-default">如何在 Scala 中利用 ADT 良好地组织业务</span>
         <span class="prev-text nav-mobile">Prev</span>
       </a>
     
     
-      <a class="next" href="/2017/03/how-to-use-algebraic-data-type-in-scala-development/">
-        <span class="next-text nav-default">如何在 Scala 中利用 ADT 良好地组织业务</span>
+      <a class="next" href="/2017/03/how-to-handle-collection-in-scala-1/">
+        <span class="next-text nav-default">Scala 中的集合（一）：集合类型与操作</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
@@ -211,9 +213,22 @@
         
   <div class="comments" id="comments">
     
-    <div style="text-align:center;margin-top: 50px;">
+    <!--<div style="text-align:center;margin-top: 50px;">
       <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
-    </div>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var gitalk = new Gitalk({
+        clientID: '06af515825099ea48b8f',
+        clientSecret: '201a70dabe94740ba97c5d6a2aecad9f2e8367c3',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yison-dripower'],
+        id: 'Demo',
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
   </div>
 
 
