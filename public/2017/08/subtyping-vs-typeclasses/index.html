@@ -30,19 +30,19 @@
 
 
 
-<link rel="canonical" href="http://scala.cool/2017/06/scala-weekly-10/"/>
+<link rel="canonical" href="http://scala.cool/2017/08/subtyping-vs-typeclasses/"/>
 
 
-<meta name="description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
+<meta name="description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过三篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala 技术周刊 | 第 10 期">
-<meta property="og:url" content="http://scala.cool/2017/06/scala-weekly-10/index.html">
+<meta property="og:title" content="Subtyping vs Typeclasses（一）">
+<meta property="og:url" content="http://scala.cool/2017/08/subtyping-vs-typeclasses/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
-<meta property="og:updated_time" content="2017-07-29T12:12:10.000Z">
+<meta property="og:description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过三篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
+<meta property="og:updated_time" content="2017-08-21T13:47:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala 技术周刊 | 第 10 期">
-<meta name="twitter:description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
+<meta name="twitter:title" content="Subtyping vs Typeclasses（一）">
+<meta name="twitter:description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过三篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -77,7 +77,7 @@
 
 
 
-    <title> Scala 技术周刊 | 第 10 期 - Scala Cool </title>
+    <title> Subtyping vs Typeclasses（一） - Scala Cool </title>
   </head>
 
   <body>
@@ -115,21 +115,21 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          Scala 技术周刊 | 第 10 期
+          Subtyping vs Typeclasses（一）
         
       </h1>
 
       <time class="post-time">
-          6月30日
+          8月17日
       </time>
       
         <span class="author-split">|</span>
         <span class="author-info">
-          by <span class="_author-text-holder" data-author="ScalaCool"></span>
+          by <span class="_author-text-holder" data-author="Yison"></span>
         </span>
       
       
-        <span class="_author-avatar-holder" data-author="ScalaCool"></span>
+        <span class="_author-avatar-holder" data-author="Yison"></span>
       
     </header>
 
@@ -137,47 +137,9 @@
 
     
             <div class="post-content">
-            <blockquote>
-<p>这里有最新的 Scala 社区动态、技术博文。<br>微信搜索 「scalacool」关注我们，及时获取最新资讯。</p>
-</blockquote>
-<hr>
-<h2 id="深度阅读"><a href="#深度阅读" class="headerlink" title="深度阅读"></a>深度阅读</h2><ul>
-<li><p><a href="https://medium.com/@anler/type-safe-scala-tagged-types-e009cb7a4068" target="_blank" rel="external">Type safe Scala — Tagged types</a><br> Tagged types 介绍</p>
-</li>
-<li><p><a href="https://softwaremill.com/akka-monitoring-with-kamon-part-3/" target="_blank" rel="external">Akka monitoring with Kamon part 3</a><br>用 Kamon 监控 Akka 应用</p>
-</li>
-<li><p><a href="https://softwaremill.com/reactive-streams-in-scala-comparing-akka-streams-and-monix-part-1/" target="_blank" rel="external">Reactive Streams in Scala: Akka Streams vs Monix - part 1</a><br>Akka Streams 与 Moni 比较</p>
-</li>
-<li><p><a href="https://www.youtube.com/watch?v=hlB7pQkiMd0&amp;feature=share" target="_blank" rel="external">scala.bythebay.io: Li Haoyi, Scala Scripting</a><br>Li Haoyi 的 talk</p>
-</li>
-<li><p><a href="https://contributors.scala-lang.org/t/improving-the-compilation-error-reporting-of-sbt/935" target="_blank" rel="external">Improving the compilation error reporting of sbt</a><br>sbt 编译时报错信息改进建议</p>
-</li>
-<li><p><a href="https://medium.com/towards-data-science/simple-nlp-search-in-your-application-step-by-step-guide-in-scala-22ca1ce3e475" target="_blank" rel="external">Simple NLP Search in Your Application — Step-by-Step Guide in Scala</a><br>NLP</p>
-</li>
-<li><p><a href="https://www.reddit.com/r/scala/comments/6j6wuo/practical_functional_design_in_scala/" target="_blank" rel="external">Practical functional design in Scala?</a><br>围观 Reddit 上大佬评论</p>
-</li>
-<li><p><a href="https://techblog.appnexus.com/the-futures-abstraction-21caf9a03f34" target="_blank" rel="external">The Futures Abstraction</a><br>剖析 Future</p>
-</li>
-</ul>
-<h2 id="一周速递"><a href="#一周速递" class="headerlink" title="一周速递"></a>一周速递</h2><ul>
-<li><p><a href="https://github.com/ThoughtWorksInc/tryt.scala" target="_blank" rel="external">tryt.scala</a> — Monad transformers for exception handling</p>
-</li>
-<li><p><a href="https://github.com/ThoughtWorksInc/RAII.scala" target="_blank" rel="external">RAII.scala</a> — Resource Acquisition Is Initialization</p>
-</li>
-<li><p><a href="https://github.com/ThoughtWorksInc/feature.scala" target="_blank" rel="external">feature.scala</a> — Access Scala language features on the type-level </p>
-</li>
-<li><p>ScalaJS CSS <a href="https://scalajs-css.github.io/" target="_blank" rel="external">发布</a></p>
-</li>
-<li><p>Akka 2.5.3 <a href="http://akka.io/blog/news/2017/06/19/akka-2.5.3-released" target="_blank" rel="external">发布</a></p>
-</li>
-<li><p>Akka HTTP 10.0.8 <a href="http://akka.io/blog/news/2017/06/20/akka-http-10.0.8-released" target="_blank" rel="external">发布</a></p>
-</li>
-<li><p>Play 2.6.0 <a href="https://groups.google.com/forum/#!topic/play-framework/RFAIws9KBGg" target="_blank" rel="external">发布</a></p>
-</li>
-<li><p>sjson-new 0.8.0-M1 <a href="https://github.com/eed3si9n/sjson-new/releases/tag/v0.8.0-M1" target="_blank" rel="external">发布</a></p>
-</li>
-</ul>
-
+            <p>你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。</p>
+<p>然而，多态的含义远不止此，我们将通过三篇文章来进一步介绍：<strong>什么是多态</strong>、<strong>实现多态的技术</strong> 以及 <strong>不同技术的比较</strong>。</p>
+<h2 id="多态的类型"><a href="#多态的类型" class="headerlink" title="多态的类型"></a>多态的类型</h2>
             </div>
           
 
@@ -185,7 +147,9 @@
       <footer class="post-footer">
         <div class="post-tags">
           
-            <a href="/tags/Weekly/">Weekly</a>
+            <a href="/tags/类型相关/">类型相关</a>
+          
+            <a href="/tags/Typeclass/">Typeclass</a>
           
         </div>
 
@@ -193,15 +157,9 @@
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2017/07/scala-types-of-types-part-4/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default"><译> Scala 类型的类型（四）</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
     
-    
-      <a class="next" href="/2017/06/learning-akka-5/">
-        <span class="next-text nav-default">Akka 系列（五）：Java 和 Scala 中的 Future</span>
+      <a class="next" href="/2017/08/learning-akka-8/">
+        <span class="next-text nav-default">Akka 系列（八）：Akka persistence 设计理念之 CQRS</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
