@@ -33,16 +33,16 @@
 <link rel="canonical" href="http://scala.cool/2017/08/subtyping-vs-typeclasses/"/>
 
 
-<meta name="description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过三篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
+<meta name="description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过几篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Subtyping vs Typeclasses（一）">
 <meta property="og:url" content="http://scala.cool/2017/08/subtyping-vs-typeclasses/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过三篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
-<meta property="og:updated_time" content="2017-08-27T11:54:48.000Z">
+<meta property="og:description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过几篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
+<meta property="og:updated_time" content="2017-08-27T14:54:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Subtyping vs Typeclasses（一）">
-<meta name="twitter:description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过三篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
+<meta name="twitter:description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过几篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -137,8 +137,8 @@
 
     
             <div class="post-content">
-            <p>你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是典型的多态例子。然而，多态的含义远不止此，我们将用三篇文章来介绍：<strong>什么是多态</strong>，以及重点对比实现多态的两种技术 — <strong>Subtyping</strong> 与 <strong>Type Class</strong>。</p>
-<p>此外，我们也会探讨与之相关的某些概念，如 Inheritence（继承）、Duck Typing（鸭子类型） 等。</p>
+            <p>你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是典型的多态例子。然而，多态的含义远不止此，我们将用几篇文章来介绍：<strong>什么是多态</strong>，以及重点对比实现多态的两种技术 — <strong>Subtyping</strong> 与 <strong>Type Class</strong>。</p>
+<p>此外，我们也会探讨与之相关的某些概念，如 Inheritence、Structure Subtyping 等。</p>
 <h2 id="多态的类型"><a href="#多态的类型" class="headerlink" title="多态的类型"></a>多态的类型</h2><p>多态的单词 <strong>polymorphism</strong> 是希腊语 polys 与 morphē 组成，前者表示「很多」，后者表示「形态」。生物学中的「多态性」是指一个物种的同一种群中存在两种或多种明显不同的表型。在计算机科学中，对应地我们可以把它理解成：<strong>一个泛化记号可以与不同的特殊行为相关联</strong>。</p>
 <p>根据以上的定义，我们可以将多态大致分为三种：</p>
 <ul>
@@ -149,9 +149,27 @@
 <h3 id="一、参数多态"><a href="#一、参数多态" class="headerlink" title="一、参数多态"></a>一、参数多态</h3><p>顾名思义，参数多态就是把类型作为参数变量，在我们熟悉的面向对象程序设计中，这被叫做<a href="https://zh.wikipedia.org/wiki/%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B" target="_blank" rel="external">泛型编程</a>。如：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">cala&gt; <span class="function"><span class="keyword">def</span> <span class="title">head</span></span>[<span class="type">A</span>](xs: <span class="type">List</span>[<span class="type">A</span>]): <span class="type">A</span> = xs(<span class="number">0</span>)</div><div class="line">head: [<span class="type">A</span>](xs: <span class="type">List</span>[<span class="type">A</span>])<span class="type">A</span></div><div class="line"></div><div class="line">scala&gt; head(<span class="number">1</span> :: <span class="number">2</span> :: <span class="type">Nil</span>)</div><div class="line">res0: <span class="type">Int</span> = <span class="number">1</span></div><div class="line"></div><div class="line">scala&gt; <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Car</span>(<span class="params">make: <span class="type">String</span></span>)</span></div><div class="line">defined <span class="class"><span class="keyword">class</span> <span class="title">Car</span></span></div><div class="line"></div><div class="line">scala&gt; head(<span class="type">Car</span>(<span class="string">"Civic"</span>) :: <span class="type">Car</span>(<span class="string">"CR-V"</span>) :: <span class="type">Nil</span>)</div><div class="line">res1: <span class="type">Car</span> = <span class="type">Car</span>(<span class="type">Civic</span>)</div></pre></td></tr></table></figure>
 <h3 id="二、特定多态"><a href="#二、特定多态" class="headerlink" title="二、特定多态"></a>二、特定多态</h3><p>特定多态（add hoc polymorphism）并不是像参数多态那样适用于无穷多的类型，而是针对特定问题的解决方案，如熟悉的重载、强制类型转换机制。在 Scala 中我们可以通过 implicit conversion 或 implicit parameters 来实现特定多态，它比 Haskell 中的 Type Class 更加强大，我们会在后面进一步介绍。</p>
-<h3 id="三、子类型多态"><a href="#三、子类型多态" class="headerlink" title="三、子类型多态"></a>三、子类型多态</h3><p>子类型多态也被描述为「动态多态」，因为它指的是在运行期（非编译期）判断所引用对象的实际类型，通过使用类继承和虚函数机制来实现。本科程序设计教学中，这被直接称为多态。</p>
+<h3 id="三、子类型多态"><a href="#三、子类型多态" class="headerlink" title="三、子类型多态"></a>三、子类型多态</h3><p>子类型多态也被描述为「动态多态」，因为它指的是在运行期（非编译期）判断所引用对象的实际类型，可以通过使用类继承和虚函数机制来实现。本科程序设计教学中，这被直接称为多态。</p>
 <p>接下来，我们来重点了解下什么是子类型化（Subtyping）。</p>
-<h2 id="Subtyping"><a href="#Subtyping" class="headerlink" title="Subtyping"></a>Subtyping</h2>
+<h2 id="Subtyping"><a href="#Subtyping" class="headerlink" title="Subtyping"></a>Subtyping</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><blockquote>
+<p>In general, subtyping means the substitutability of values of an supertype by values of a subtype. </p>
+</blockquote>
+<p>可见，子类型化核心是一种「类型的替代性关系」，表示为：<code>S &lt;: T</code>（其中 <code>S</code> 是 <code>T</code> 的子类）。在需要 <code>T</code> 类型的地方，<code>S</code> 类型同样兼容，如 <code>Integer</code> 是 <code>Number</code> 的子类：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(a: <span class="type">Number</span>) = print(a)</div><div class="line">f: (a: <span class="type">Number</span>)<span class="type">Unit</span></div><div class="line"></div><div class="line">scala&gt; f(<span class="number">1</span>: <span class="type">Integer</span>)</div><div class="line"><span class="number">1</span></div><div class="line"></div><div class="line">scala&gt; f(<span class="string">"a"</span>)</div><div class="line">&lt;console&gt;:<span class="number">9</span>: error: <span class="class"><span class="keyword">type</span> <span class="title">mismatch</span></span></div></pre></td></tr></table></figure></p>
+<p>这不免让人想到 Java 中的类继承，<code>class A extends class B</code> 可以实现上述的类型替代，因为在 Java 中，类与类型大部分情况下都是等价的（在 Java 泛型出现前）。</p>
+<p>所以，Inheritence（继承） 与 Subtyping 就是等价的吗？答案是否定的。</p>
+<h3 id="Inheritence"><a href="#Inheritence" class="headerlink" title="Inheritence"></a>Inheritence</h3><p>先来看下什么是 Inheriting：</p>
+<blockquote>
+<p>Inheritance refers to reuse of implementations. A type B inherits from another type A if some functions for B are written in terms of functions of A.</p>
+</blockquote>
+<p>原来 Inheritence 与 Subtyping 本质上是完全不同的概念。前者强调「实现的复用」，而后者只是类型语义上的关系，与实现压根没关系。</p>
+<p>可以说，部分语言如 Java，由于在声明 subtyping 关系同时也声明了 inheritence 关系，所以造成了我们这种混淆。然而，在一些其它支持 structural subtyping （如 OCaml）中，两则的差异会非常明显。Scala 兼具了以上两者，所以我们可以通过 Scala 中的结构类型来了解后者。</p>
+<h3 id="Structural-Subtyping"><a href="#Structural-Subtyping" class="headerlink" title="Structural Subtyping"></a>Structural Subtyping</h3><p>Scala 中的结构类型（Stuctural Types）经常被描述为「类型安全的鸭子类型（<a href="https://en.wikipedia.org/wiki/Duck_typing" target="_blank" rel="external">duck typing</a>）」。</p>
+<blockquote>
+<p>你可以通过阅读 <a href="https://scala.cool/2017/07/scala-types-of-types-part-5/#21-结构类型">&lt;译&gt; Scala 类型的类型（五）</a> 来认识结构类型。</p>
+</blockquote>
+<p>简单来说，Scala 提供了结构类型，如 <code>{def foo: Bar}</code> 来代表任何对象，它们包含了一个叫作 <code>foo</code> 并返回 <code>Bar</code> 类型的方法。在这里，它代表了一个类型，且完美符合了 Subtyping 的类型替代原则，然而它不是一个类，并没有所谓的继承关系。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过本篇的介绍我们明白了什么是多态，什么是 Subtyping，以及实现 Subtyping 的两种不同的方式。在下一篇，我们将介绍 Type Class，如开头所提到，这是另一种实现多态的重要技术。</p>
+
             </div>
           
 
