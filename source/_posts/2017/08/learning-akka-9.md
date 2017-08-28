@@ -1,5 +1,5 @@
 ---
-title: Akka系列（九）：Akka分布式之Akka Remote
+title: Akka 系列（九）：Akka 分布式之 Akka Remote
 author: Godpan
 tags: 
 - Akka
