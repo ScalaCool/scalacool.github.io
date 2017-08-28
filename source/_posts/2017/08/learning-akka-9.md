@@ -4,8 +4,7 @@ author: Godpan
 tags: 
 - Akka
 description: Akka作为一个天生用于构建分布式应用的工具，当然提供了用于分布式组件即Akka Remote，那么我们就来看看如何用Akka Remote以及Akka Serialization来构建分布式应用。
-。
-date: 2017-08-28
+date: 2017-08-28 10:00
 ---
 
 Akka作为一个天生用于构建分布式应用的工具，当然提供了用于分布式组件即Akka Remote，那么我们就来看看如何用Akka Remote以及Akka Serialization来构建分布式应用。
