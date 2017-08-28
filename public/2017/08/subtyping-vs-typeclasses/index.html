@@ -34,12 +34,14 @@
 
 
 <meta name="description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过几篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
+<meta name="keywords" content="类型相关,Typeclass">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Subtyping vs Typeclasses（一）">
 <meta property="og:url" content="http://scala.cool/2017/08/subtyping-vs-typeclasses/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过几篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
-<meta property="og:updated_time" content="2017-08-27T14:54:53.000Z">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-08-28T01:34:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Subtyping vs Typeclasses（一）">
 <meta name="twitter:description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过几篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
@@ -161,7 +163,7 @@
 <blockquote>
 <p>Inheritance refers to reuse of implementations. A type B inherits from another type A if some functions for B are written in terms of functions of A.</p>
 </blockquote>
-<p>原来 Inheritence 与 Subtyping 本质上是完全不同的概念。前者强调「实现的复用」，而后者只是类型语义上的关系，与实现压根没关系。</p>
+<p>原来 Inheritence 与 Subtyping 是完全不同的概念。前者强调「实现的复用」，而后者只是类型语义上的关系，与实现压根没关系。</p>
 <p>可以说，部分语言如 Java，由于在声明 subtyping 关系同时也声明了 inheritence 关系，所以造成了我们这种混淆。然而，在一些其它支持 structural subtyping （如 OCaml）中，两则的差异会非常明显。Scala 兼具了以上两者，所以我们可以通过 Scala 中的结构类型来了解后者。</p>
 <h3 id="Structural-Subtyping"><a href="#Structural-Subtyping" class="headerlink" title="Structural Subtyping"></a>Structural Subtyping</h3><p>Scala 中的结构类型（Stuctural Types）经常被描述为「类型安全的鸭子类型（<a href="https://en.wikipedia.org/wiki/Duck_typing" target="_blank" rel="external">duck typing</a>）」。</p>
 <blockquote>

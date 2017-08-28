@@ -77,7 +77,7 @@ scala> f("a")
 先来看下什么是 Inheriting：
 > Inheritance refers to reuse of implementations. A type B inherits from another type A if some functions for B are written in terms of functions of A.
 
-原来 Inheritence 与 Subtyping 本质上是完全不同的概念。前者强调「实现的复用」，而后者只是类型语义上的关系，与实现压根没关系。
+原来 Inheritence 与 Subtyping 是完全不同的概念。前者强调「实现的复用」，而后者只是类型语义上的关系，与实现压根没关系。
 
 可以说，部分语言如 Java，由于在声明 subtyping 关系同时也声明了 inheritence 关系，所以造成了我们这种混淆。然而，在一些其它支持 structural subtyping （如 OCaml）中，两则的差异会非常明显。Scala 兼具了以上两者，所以我们可以通过 Scala 中的结构类型来了解后者。
 
