@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/09/play2/"/>
+
+
+<meta name="description" content="本文将介绍一下 Play! 的整体结构，然后通过一个非常简单的例子来阐述各个结构之间的关系以及如何利用 Play! 。">
+<meta name="keywords" content="Play">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Play! Framework 系列（二）：play 的项目结构">
+<meta property="og:url" content="http://scala.cool/2017/09/play2/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="本文将介绍一下 Play! 的整体结构，然后通过一个非常简单的例子来阐述各个结构之间的关系以及如何利用 Play! 。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2017/09/play-package.png">
+<meta property="og:image" content="http://scala.cool/images/2017/09/employee-list.png">
+<meta property="og:image" content="http://scala.cool/images/2017/09/play-mvc.png">
+<meta property="og:updated_time" content="2017-09-06T06:02:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Play! Framework 系列（二）：play 的项目结构">
+<meta name="twitter:description" content="本文将介绍一下 Play! 的整体结构，然后通过一个非常简单的例子来阐述各个结构之间的关系以及如何利用 Play! 。">
+<meta name="twitter:image" content="http://scala.cool/images/2017/09/play-package.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Play! Framework 系列（二）：play 的项目结构 - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" ><div class="site-header-inner">
+      
+    <h1 class="site-title">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+      
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                News
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Play! Framework 系列（二）：play 的项目结构
+        
+      </h1>
+
+      <time class="post-time">
+          9月6日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Shaw"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="Shaw"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>在 <a href="http://shawdubie.com/notes/first-glance-at-play" target="_blank" rel="external">Play! Framework 系列（一）</a>中我们初步了解了一下 Play! 的各种特性以及优势，那么从现在开始我们将正式接触 Play!。本文将介绍一下 Play! 的整体结构，然后通过一个非常简单的例子来阐述各个结构之间的关系以及如何利用 Play! 约定的结构去合理地组织我们的业务逻辑。</p>
+<h2 id="结构概览"><a href="#结构概览" class="headerlink" title="结构概览"></a>结构概览</h2><center><br><img src="/images/2017/09/play-package.png" alt="Image of play"><br></center>
+
+<p>上图为基于 Play! 而创建的一个简单的 Web 应用，在<a href="http://shawdubie.com/notes/first-glance-at-play" target="_blank" rel="external">上一篇文章</a>中我们说过 Play! 是「ROR」风格的框架，通过上图我们也可以看到 Play! 是典型的 MVC 架构框架，另外 Play! 也采用 「约定由于配置」，我们只需要按照其约定的结构去组织我们的代码就可以很轻松地实现一个 Web 应用，那么接下来我们就去了解一下 Play! 中各个结构的特点以及功能吧。</p>
+<h2 id="业务描述"><a href="#业务描述" class="headerlink" title="业务描述"></a>业务描述</h2><p>我们将通过实现一个小应用的方式去了解 Play! 的基本结构，这样会更加清晰一些。需求描述：</p>
+<ul>
+<li>实现一个简单的公司员工信息列表。</li>
+</ul>
+<p>可以看到，我们将要实现的 Web 应用非常简单，接下来我们就通过这个小小的需求去把玩一下 Play! 吧。</p>
+<h2 id="app"><a href="#app" class="headerlink" title="app"></a>app</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">app</div><div class="line"> └ controllers</div><div class="line"> └ models</div><div class="line"> └ views</div></pre></td></tr></table></figure>
+<p>目录 app 排在结构图中的最上面，因为是按照首字母排列的，所以它理应在最前面。当然，它在我们整个 Play 应用中也是非常重要的，几乎我们所有的业务代码都包含在该目录下面，既然它如此重要，排在最前面也无可厚非。在 app 下三个子目录，分别是：controllers、models 以及 views。</p>
+<p>我们也可以在 app 目录下增加一些目录，比如，我们需要利用 Play! 的 Filter （后面会介绍）来实现一些需求，那么我们可以在该目录下新增一个 filters 目录，专门用来管理 Filter 的业务逻辑。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">app</div><div class="line"> └ controllers</div><div class="line"> └ models</div><div class="line"> └ views</div><div class="line"> └ filters</div></pre></td></tr></table></figure>
+<p>接下来我们将详细介绍该目录下的三个核心结构：controllers、models 以及 views。</p>
+<h3 id="models"><a href="#models" class="headerlink" title="models"></a>models</h3><p>在 MVC 结构的 Web 应用中，M 对应的就是 Model，在 models 下，我们实现数据访问的一些逻辑，一般来说，数据库中的一个表就对应一个 model 类。例如：</p>
+<p>我们将要显示「员工」列表，这里我们需要数据库中的「员工表」，那么在 models 下，我们创建一个表示员工信息的 model：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span> (<span class="params"></span></span></div><div class="line">  id: <span class="type">Long</span>,</div><div class="line">  name: <span class="type">String</span>,</div><div class="line">  sex: <span class="type">String</span>,</div><div class="line">  position: <span class="type">String</span></div><div class="line">)</div></pre></td></tr></table></figure>
+<p>一般情况下，我们也需要在 models 下实现操作数据库的逻辑，但是当业务比较复杂的时候，整个文件看上去会特别凌乱，并且后期也不好维护，所以这里我们引入 services，我们将在 services 下实现所有与数据库打交道的逻辑，而 models 下，我们只需要它定义相应的 model 类就可以了。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">app</div><div class="line"> └ controllers</div><div class="line"> └ models</div><div class="line"> └ views</div><div class="line"> └ services</div></pre></td></tr></table></figure>
+<h3 id="services"><a href="#services" class="headerlink" title="services"></a>services</h3><p>我们将在 services 下新建一个 EmployeeService 去实现员工信息的查询操作：</p>
+<p>注：本文不涉及数据库，所以在这里我们把数据都写死，数据库连接后面的文章会详细讲解。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">EmployeeService</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">val</span> jilen = <span class="type">Employee</span>(</div><div class="line">    id = <span class="number">1</span>,</div><div class="line">    name = <span class="string">"Jilen"</span>,</div><div class="line">    sex = <span class="string">"男"</span>,</div><div class="line">    position = <span class="string">"全干工程师"</span></div><div class="line">  )</div><div class="line"></div><div class="line">  <span class="keyword">val</span> yison = <span class="type">Employee</span>(</div><div class="line">    id = <span class="number">2</span>,</div><div class="line">    name = <span class="string">"Yison"</span>,</div><div class="line">    sex = <span class="string">"女"</span>,</div><div class="line">    position = <span class="string">"程序员鼓励师"</span></div><div class="line">  )</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">getEmployees</span></span>: <span class="type">Seq</span>[<span class="type">Employee</span>] = <span class="type">Seq</span>(jilen, yison)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="views"><a href="#views" class="headerlink" title="views"></a>views</h3><p>View 对应的就是 MVC 结构中的 V，在该结构下，我们实现程序中的视图，也就是利用 Play! 的模板去实现 html 页面，在 view 中，我们一般只做数据的渲染，很少实现复杂的逻辑。为了呈现员工列表，我们在 views 下创建一个名为 employeeList.scala.html 的文件，在该文件下，我们主要实现数据的渲染，这里只写一些主要的代码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@(employees: <span class="type">Seq</span>[<span class="type">Employee</span>])</div><div class="line"></div><div class="line">&lt;table <span class="class"><span class="keyword">class</span></span>=<span class="string">"employee-list"</span>&gt;</div><div class="line">  &lt;tr&gt;</div><div class="line">    &lt;th&gt;编号&lt;/th&gt;</div><div class="line">    &lt;th&gt;姓名&lt;/th&gt;</div><div class="line">    &lt;th&gt;性别&lt;/th&gt;</div><div class="line">    &lt;th&gt;职位&lt;/th&gt;</div><div class="line">  &lt;/tr&gt;</div><div class="line">  <span class="meta">@for</span>(e &lt;- employees)&#123;</div><div class="line">    &lt;tr&gt;</div><div class="line">      &lt;td&gt;<span class="meta">@e</span>.id&lt;/td&gt;</div><div class="line">      &lt;td&gt;<span class="meta">@e</span>.name&lt;/td&gt;</div><div class="line">      &lt;td&gt;<span class="meta">@e</span>.sex&lt;/td&gt;</div><div class="line">      &lt;td&gt;<span class="meta">@e</span>.position&lt;/td&gt;</div><div class="line">    &lt;/tr&gt;</div><div class="line">  &#125;</div><div class="line">&lt;/table&gt;</div></pre></td></tr></table></figure>
+<h3 id="controllers"><a href="#controllers" class="headerlink" title="controllers"></a>controllers</h3><p>前面我们创建好了 model、servic 以及 view，那如何将 model、service 中的数据渲染到 view 中去呢？这个时候就需要 controller 了，Controller 对应于 MVC 中的 的 C，在 controllers 下面，我们需要实现一些列的 action，通过这些 action 来将整个 Web 程序的数据联系在一起。为了将前面创建的 model、service 以及 view 联系起来，我们在 controllers 下创建一个 EmployeeController：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">EmployeeController</span> <span class="title">@Inject</span>(<span class="params"></span>) (<span class="params"></span></span></div><div class="line">  cc: <span class="type">ControllerComponents</span></div><div class="line">) <span class="keyword">extends</span> <span class="title">AbstractController</span>(<span class="params">cc</span>) &#123;</div><div class="line"></div><div class="line">  <span class="keyword">val</span> employeeSerivce = <span class="keyword">new</span> <span class="type">EmployeeSerivce</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">employeeList</span> </span>= <span class="type">Action</span> &#123; <span class="keyword">implicit</span> request: <span class="type">Request</span>[<span class="type">AnyContent</span>] =&gt;</div><div class="line">    <span class="keyword">val</span> employees = employeeSerivce.getEmployees()</div><div class="line">    <span class="type">Ok</span>(views.html.employeeList(employees))</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里我们简单介绍一下 Play 中的 <a href="https://www.playframework.com/documentation/2.5.x/api/scala/index.html#play.api.mvc.Action" target="_blank" rel="external">「Action」，Play 中的 「Action」 实际上是一个「特质（trait）」</a>，我们上面的代码实现了一个 「Action」， 这里实际上是使用了 <a href="https://www.playframework.com/documentation/2.5.x/api/scala/index.html#play.api.mvc.Action$" target="_blank" rel="external">object Action</a>，然后 「object Action」 中的 「apply」 方法会返回一个 Action：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// object Action 的 apply 方法</span></div><div class="line"></div><div class="line"><span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(block: ⇒ <span class="type">Result</span>): <span class="type">Action</span>[<span class="type">AnyContent</span>]</div></pre></td></tr></table></figure>
+<h2 id="conf"><a href="#conf" class="headerlink" title="conf"></a>conf</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">conf</div><div class="line"> └ application.conf</div><div class="line"> └ routes</div></pre></td></tr></table></figure>
+<p>在 conf 下面，我们主要放置整个项目的配置文件和路由文件。</p>
+<h3 id="application-conf"><a href="#application-conf" class="headerlink" title="application.conf"></a>application.conf</h3><p>该文件将配置 Play! 应用的一系列信息，比如 secret key，数据库信息等，由于我们的应用比较简单，所以这里不需要配置该项，在后面的文章中，我们将专门介绍如何管理 application.conf。</p>
+<h3 id="routes"><a href="#routes" class="headerlink" title="routes"></a>routes</h3><p>前面我们实现了 model、service、controller 以及 view，那我们如何通过浏览器去访问我们的应用呢，这里就需要使用「路由」了，应用程序的所有路由都将在 routes 中实现，这些路由就是应用程序的入口。例如：</p>
+<p>要想访问我们之前实现的「员工列表」，我们就需要在 routes 中指定相应的路由：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">GET    /employee/employee-list    controllers.EmployeeController.employeeList</div></pre></td></tr></table></figure>
+<p>指定好路由之后，当我们在浏览器中输入 <code>http://localhost:9000/employee/employee-list</code> 的时候，就能访问到「员工列表」页面了。</p>
+<center><br><img src="/images/2017/09/employee-list.png" alt="Image of employee-list"><br></center>
+
+<p>关于 routes，我们在 route 文件中只是写了这么一段去指定，当编译完成之后，我们在 <code>target/scala-2.12/routes/main/router/</code> 下可以看到一个名为 Route.scala 的文件，在文件的末尾可以看到：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">routes</span></span>: <span class="type">PartialFunction</span>[<span class="type">RequestHeader</span>, <span class="type">Handler</span>] = &#123;</div><div class="line"></div><div class="line">    <span class="keyword">case</span> controllers_EmployeeController_employeeList0_route(params) =&gt;</div><div class="line">      call &#123;</div><div class="line">        controllers_EmployeeController_employeeList0_invoker.call(<span class="type">EmployeeController_0</span>.employeeList)</div><div class="line">      &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>可见其实 routes 在 play! 中的实现是一个方法，它是一个「偏函数」当某个请求被匹配到了就调用相应的方法，如果没有匹配到则报错，所以我们也可以自己实现某个路由，而不用 play! 的这种方式，当然用 play! 约定好会更加清晰和简单。</p>
+<p>在介绍完 routes 之后，我们有必要知道一下当我们在浏览器中输入某个链接的时候，play! 的各个模块之间是如何调用的，如下图：</p>
+<center><br><img src="/images/2017/09/play-mvc.png" alt="Image of play-mvc"><br></center>
+
+<p>当我们访问某个链接的时候，该链接就是对应的一个路由，该路由会去匹配某个 Controller 中的 Action，接下来 Action 要去调用所依赖的 Service 中的方法，这些方法将数据获取到传递给 Action，然后 Action 将这些数据送给 View，View 就会将我们所需要的页面渲染出来了。这个流程如图中的实线所示，同时 Controller 也会依赖 Model，有时候 View 也会去依赖 Model 以及 Service。</p>
+<h2 id="build-sbt"><a href="#build-sbt" class="headerlink" title="build.sbt"></a>build.sbt</h2><p>该文件用来定义我们项目的一些基本信息以及项目所需要的一些依赖的信息，比如项目的名称、所属组织、版本信息、scala 的版本以及一些依赖的定义等等，在我们的应用中，build.sbt 可以这样定义：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">name := <span class="string">"HelloWorld"</span></div><div class="line">organization := <span class="string">"com.shawdubie"</span></div><div class="line"></div><div class="line">version := <span class="string">"1.0-SNAPSHOT"</span></div><div class="line"></div><div class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> root = (project in file(<span class="string">"."</span>)).enablePlugins(<span class="type">PlayScala</span>)</div><div class="line"></div><div class="line">scalaVersion := <span class="string">"2.12.2"</span></div><div class="line"></div><div class="line">libraryDependencies += guice</div><div class="line">libraryDependencies += <span class="string">"org.scalatestplus.play"</span> %% <span class="string">"scalatestplus-play"</span> % <span class="string">"3.1.0"</span> % <span class="type">Test</span></div></pre></td></tr></table></figure>
+<p>build.sbt 文件在 sbt 启动的时候就会被读取，然后 sbt 就会去加载我们在里面定义的一些信息，比如我们声明的一些依赖。build.sbt 可以包含许多信息，关于更详细的我们后面再讨论，这里只需要知道她。</p>
+<h2 id="project"><a href="#project" class="headerlink" title="project"></a>project</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">project</div><div class="line"> └ build.properties</div><div class="line"> └ plugins.sbt</div></pre></td></tr></table></figure>
+<p>该目录下主要放置 sbt 构建之后的文件，在构建之前，该目录下一般就只有上面所列的两个文件。</p>
+<h3 id="build-properties"><a href="#build-properties" class="headerlink" title="build.properties"></a>build.properties</h3><p>这里定义了该项目所依赖的 sbt 的版本信息，例如该项目中 sbt 的版本就可以这样声明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sbt.version=0.13.15</div></pre></td></tr></table></figure>
+<h3 id="plugins-sbt"><a href="#plugins-sbt" class="headerlink" title="plugins.sbt"></a>plugins.sbt</h3><p>在该文件下我们声明该项目所依赖的一些插件，比如我们使用了 play sbt 插件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">addSbtPlugin(&quot;com.typesafe.play&quot; % &quot;sbt-plugin&quot; % &quot;2.6.3&quot;)</div></pre></td></tr></table></figure>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>本文通过一个例子让我们大致了解了 Play! 的基本结构，文中有一些一笔带过的内容我们将在后面的文章中详细介绍，这里只需要知道就可以了。本文的例子请戳 <a href="https://github.com/Shonrain/Play-Demo/tree/master/play-demo-1" target="_blank" rel="external">源码链接</a></p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Play/">Play</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/09/subtyping-vs-typeclasses-2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Subtyping vs Typeclasses（二）</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/09/scala-weekly-19/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第 19 期</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yison-dripower'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+    2017
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>
