@@ -7,7 +7,7 @@ description: 本文将介绍一下 Play! 的整体结构，然后通过一个非
 date: 2017-09-06
 ---
 
-在 [Play! Framework 系列（一）](http://shawdubie.com/notes/first-glance-at-play)中我们初步了解了一下 Play! 的各种特性以及优势，那么从现在开始我们将正式接触 Play!。本文将介绍一下 Play! 的整体结构，然后通过一个非常简单的例子来阐述各个结构之间的关系以及如何利用 Play! 约定的结构去合理地组织我们的业务逻辑。
+在 [Play! Framework 系列（一）](https://scala.cool/2017/07/play-1/)中我们初步了解了一下 Play! 的各种特性以及优势，那么从现在开始我们将正式接触 Play!。本文将介绍一下 Play! 的整体结构，然后通过一个非常简单的例子来阐述各个结构之间的关系以及如何利用 Play! 约定的结构去合理地组织我们的业务逻辑。
 
 
 ## 结构概览
@@ -147,7 +147,7 @@ class EmployeeController @Inject() (
 }
 ```
 
-这里我们简单介绍一下 Play 中的 [「Action」，Play 中的 「Action」 实际上是一个「特质（trait）」](https://www.playframework.com/documentation/2.5.x/api/scala/index.html#play.api.mvc.Action)，我们上面的代码实现了一个 「Action」， 这里实际上是使用了 [object Action](https://www.playframework.com/documentation/2.5.x/api/scala/index.html#play.api.mvc.Action$)，然后 「object Action」 中的 「apply」 方法会返回一个 Action：
+这里我们简单介绍一下 Play 中的 [Action](https://www.playframework.com/documentation/2.5.x/api/scala/index.html#play.api.mvc.Action)，Play 中的 「Action」 实际上是一个「特质（trait）」，我们上面的代码实现了一个 「Action」， 这里实际上是使用了 [object Action](https://www.playframework.com/documentation/2.5.x/api/scala/index.html#play.api.mvc.Action$)，然后 「object Action」 中的 「apply」 方法会返回一个 Action：
 
 
 ```scala
