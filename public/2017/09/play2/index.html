@@ -44,7 +44,7 @@
 <meta property="og:image" content="http://scala.cool/images/2017/09/play-package.png">
 <meta property="og:image" content="http://scala.cool/images/2017/09/employee-list.png">
 <meta property="og:image" content="http://scala.cool/images/2017/09/play-mvc.png">
-<meta property="og:updated_time" content="2017-09-06T06:11:26.000Z">
+<meta property="og:updated_time" content="2017-09-06T06:12:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Play! Framework 系列（二）：play 的项目结构">
 <meta name="twitter:description" content="本文将介绍一下 Play! 的整体结构，然后通过一个非常简单的例子来阐述各个结构之间的关系以及如何利用 Play! 。">
@@ -146,7 +146,7 @@
             <p>在 <a href="https://scala.cool/2017/07/play-1/">Play! Framework 系列（一）</a>中我们初步了解了一下 Play! 的各种特性以及优势，那么从现在开始我们将正式接触 Play!。本文将介绍一下 Play! 的整体结构，然后通过一个非常简单的例子来阐述各个结构之间的关系以及如何利用 Play! 约定的结构去合理地组织我们的业务逻辑。</p>
 <h2 id="结构概览"><a href="#结构概览" class="headerlink" title="结构概览"></a>结构概览</h2><center><br><img src="/images/2017/09/play-package.png" alt="Image of play"><br></center>
 
-<p>上图为基于 Play! 而创建的一个简单的 Web 应用，在<a href="http://shawdubie.com/notes/first-glance-at-play" target="_blank" rel="external">上一篇文章</a>中我们说过 Play! 是「ROR」风格的框架，通过上图我们也可以看到 Play! 是典型的 MVC 架构框架，另外 Play! 也采用 「约定由于配置」，我们只需要按照其约定的结构去组织我们的代码就可以很轻松地实现一个 Web 应用，那么接下来我们就去了解一下 Play! 中各个结构的特点以及功能吧。</p>
+<p>上图为基于 Play! 而创建的一个简单的 Web 应用，在<a href="https://scala.cool/2017/07/play-1/">上一篇文章</a>中我们说过 Play! 是「ROR」风格的框架，通过上图我们也可以看到 Play! 是典型的 MVC 架构框架，另外 Play! 也采用 「约定由于配置」，我们只需要按照其约定的结构去组织我们的代码就可以很轻松地实现一个 Web 应用，那么接下来我们就去了解一下 Play! 中各个结构的特点以及功能吧。</p>
 <h2 id="业务描述"><a href="#业务描述" class="headerlink" title="业务描述"></a>业务描述</h2><p>我们将通过实现一个小应用的方式去了解 Play! 的基本结构，这样会更加清晰一些。需求描述：</p>
 <ul>
 <li>实现一个简单的公司员工信息列表。</li>

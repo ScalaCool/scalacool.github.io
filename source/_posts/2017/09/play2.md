@@ -16,7 +16,7 @@ date: 2017-09-06
 ![Image of play](/images/2017/09/play-package.png)
 </center>
 
-上图为基于 Play! 而创建的一个简单的 Web 应用，在[上一篇文章](http://shawdubie.com/notes/first-glance-at-play)中我们说过 Play! 是「ROR」风格的框架，通过上图我们也可以看到 Play! 是典型的 MVC 架构框架，另外 Play! 也采用 「约定由于配置」，我们只需要按照其约定的结构去组织我们的代码就可以很轻松地实现一个 Web 应用，那么接下来我们就去了解一下 Play! 中各个结构的特点以及功能吧。
+上图为基于 Play! 而创建的一个简单的 Web 应用，在[上一篇文章](https://scala.cool/2017/07/play-1/)中我们说过 Play! 是「ROR」风格的框架，通过上图我们也可以看到 Play! 是典型的 MVC 架构框架，另外 Play! 也采用 「约定由于配置」，我们只需要按照其约定的结构去组织我们的代码就可以很轻松地实现一个 Web 应用，那么接下来我们就去了解一下 Play! 中各个结构的特点以及功能吧。
 
 ## 业务描述
 
