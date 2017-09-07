@@ -1,7 +1,7 @@
 <div id="secondary">
     <div id="logo">
       <a href="/">
-        <img src="https://scala.cool/images/avatar/scalacool.png" />
+        <img src="/images/avatar/scalacool.png" onmouseover="this.src='/images/avatar/scalacool-blind.png'" onmouseout="this.src='/images/avatar/scalacool.png'" />
       </a>
       <div class="says">
         <em>「</em>
