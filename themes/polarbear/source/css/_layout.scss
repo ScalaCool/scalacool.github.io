@@ -18,11 +18,11 @@
   position: absolute;
   right: 10px;
   top: 0;
-  opacity: 0;
-  transition: all 5s; }
+  opacity: 0; }
 
 #primary.home .post:hover .js-author {
-  opacity: 1;}
+  opacity: 1;
+  transition: all 3s;}
 
 #primary.home .js-author img {
   width: 30px;
