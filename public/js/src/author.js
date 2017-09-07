@@ -63,4 +63,10 @@ $(document).ready(function () {
       $(this).replaceWith(html)
     })
   }
+  setInterval(function () {
+    $('#logo img').attr('src', '/images/avatar/scalacool-blind.png')
+    setTimeout(function () {
+      $('#logo img').attr('src', '/images/avatar/scalacool.png')
+    }, 200)
+  }, 5000)
 });
