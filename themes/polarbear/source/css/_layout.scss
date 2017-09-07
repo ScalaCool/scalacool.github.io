@@ -17,7 +17,13 @@
 #primary.home .js-author {
   position: absolute;
   right: 10px;
-  top: 0; }
+  top: 0;
+  opacity: 0;
+  transition: all 5s; }
+
+#primary.home .post:hover .js-author {
+  opacity: 1;}
+
 #primary.home .js-author img {
   width: 30px;
   height: 30px;
