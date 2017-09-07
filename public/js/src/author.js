@@ -44,6 +44,12 @@ function generateTextAuthorHtml (nick) {
     author.blog ? '</a>' : ''
   ].join('')
 }
+function blink () {
+  $('#logo img').attr('src', '/images/avatar/scalacool-blind.png')
+    setTimeout(function () {
+      $('#logo img').attr('src', '/images/avatar/scalacool.png')
+    }, 200)
+}
 $(document).ready(function () {
   var isHome = $('#primary').hasClass('home')
   var isPost = $('article').hasClass('post')
@@ -64,9 +70,9 @@ $(document).ready(function () {
     })
   }
   setInterval(function () {
-    $('#logo img').attr('src', '/images/avatar/scalacool-blind.png')
-    setTimeout(function () {
-      $('#logo img').attr('src', '/images/avatar/scalacool.png')
-    }, 200)
+    blink()
   }, 5000)
+  setTimeout(function () {
+    blink()
+  }, 1000)
 });
