@@ -459,7 +459,12 @@ h6 {
 #primary.home .js-author {
   position: absolute;
   right: 10px;
-  top: 0; }
+  top: 0;
+  opacity: 0; }
+
+#primary.home .post:hover .js-author {
+  opacity: 1;
+  transition: all 3s;}
 
 #primary.home .js-author img {
   width: 30px;
