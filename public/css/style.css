@@ -464,7 +464,7 @@ h6 {
 
 #primary.home .post:hover .js-author {
   opacity: 1;
-  transition: all 3s;}
+  transition: all 1s;}
 
 #primary.home .js-author img {
   width: 30px;
