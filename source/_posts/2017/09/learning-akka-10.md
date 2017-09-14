@@ -1,5 +1,5 @@
 ---
-title: Akka系列（十）：Akka集群之Akka Cluster
+title: Akka 系列（十）：Akka 集群之 Akka Cluster
 author: Godpan
 tags: 
 - Akka
