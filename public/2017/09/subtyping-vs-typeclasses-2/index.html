@@ -30,19 +30,19 @@
 
 
 
-<link rel="canonical" href="http://scala.cool/2017/09/scala-weekly-19/"/>
+<link rel="canonical" href="http://scala.cool/2017/09/subtyping-vs-typeclasses-2/"/>
 
 
-<meta name="description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
+<meta name="description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala 技术周刊 | 第 19 期">
-<meta property="og:url" content="http://scala.cool/2017/09/scala-weekly-19/index.html">
+<meta property="og:title" content="Subtyping vs Typeclasses（二）">
+<meta property="og:url" content="http://scala.cool/2017/09/subtyping-vs-typeclasses-2/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
-<meta property="og:updated_time" content="2017-09-14T13:26:10.000Z">
+<meta property="og:description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
+<meta property="og:updated_time" content="2017-09-14T14:26:27.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala 技术周刊 | 第 19 期">
-<meta name="twitter:description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
+<meta name="twitter:title" content="Subtyping vs Typeclasses（二）">
+<meta name="twitter:description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -77,7 +77,7 @@
 
 
 
-    <title> Scala 技术周刊 | 第 19 期 - Scala Cool </title>
+    <title> Subtyping vs Typeclasses（二） - Scala Cool </title>
   </head>
 
   <body>
@@ -115,21 +115,21 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          Scala 技术周刊 | 第 19 期
+          Subtyping vs Typeclasses（二）
         
       </h1>
 
       <time class="post-time">
-          9月1日
+          9月20日
       </time>
       
         <span class="author-split">|</span>
         <span class="author-info">
-          by <span class="_author-text-holder" data-author="ScalaCool"></span>
+          by <span class="_author-text-holder" data-author="Yison"></span>
         </span>
       
       
-        <span class="_author-avatar-holder" data-author="ScalaCool"></span>
+        <span class="_author-avatar-holder" data-author="Yison"></span>
       
     </header>
 
@@ -137,44 +137,15 @@
 
     
             <div class="post-content">
-            <blockquote>
-<p>这里有最新的 Scala 社区动态、技术博文。<br>微信搜索 「scalacool」关注我们，及时获取最新资讯。</p>
+            <p>本文我们将介绍 Type Classes，类似 <a href="https://scala.cool/2017/08/subtyping-vs-typeclasses/">上一篇文章</a> 提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。</p>
+<h2 id="什么是-Type-Classes"><a href="#什么是-Type-Classes" class="headerlink" title="什么是 Type Classes"></a>什么是 Type Classes</h2><p>Type Classes 是发源于 Haskell 的一个概念。顾名思义，不少人把它理解成 「class of types」，这其实并不科学。事实上，Haskell 并没有类似 Java 中的 class 的概念，一个更准确的理解，可以是「<strong>constructor class</strong>」 — 本质上它区别于单态，但也不是多态，而是提供一个介于两者之间的过渡机制。</p>
+<p>让我们看看 <a href="http://learnyouahaskell.com/introduction" target="_blank" rel="external">《Learn You a Haskell for Great Good! 》</a> 中对 Type classes 的相关描述：</p>
+<blockquote>
+<p>A typeclass is a sort of interface that defines some behavior. If a type is a part of a typeclass, that means that it supports and implements the behavior the typeclass describes. </p>
 </blockquote>
-<hr>
-<h2 id="深度阅读"><a href="#深度阅读" class="headerlink" title="深度阅读"></a>深度阅读</h2><ul>
-<li><p><a href="https://medium.com/extend/clean-code-smart-developer-vs-professional-developer-7fc4aa9a45bc" target="_blank" rel="external">Clean code: Smart developer vs Professional developer</a><br>工程师类型的有趣观点</p>
-</li>
-<li><p>Crafting production-ready Backup as a Service solution using Akka Streams</p>
-<ul>
-<li><a href="https://medium.com/@bszwej/crafting-production-ready-backup-as-a-service-solution-using-akka-streams-130725df20cb" target="_blank" rel="external">Part 1</a></li>
-<li><a href="https://medium.com/@bszwej/crafting-production-ready-backup-as-a-service-solution-using-akka-streams-part-2-5ac84ca45b47" target="_blank" rel="external">Part 2</a></li>
-</ul>
-</li>
-<li><p><a href="https://scala.cool/2017/08/scala-design-patterns-4-factory/">Scala 与设计模式（四）：Factory 工厂模式</a><br>Scala 与设计模式系列</p>
-</li>
-<li><p><a href="https://lazicbrano.wordpress.com/2017/08/10/jwt-authentication-with-akka-http/" target="_blank" rel="external">JWT authentication with Akka HTTP</a><br>Akka HTTP</p>
-</li>
-<li><p><a href="https://sidstechcafe.com/kotlin-not-a-scala-killer-just-better-java-5bf191c66019" target="_blank" rel="external">Kotlin: Not a Scala Killer, just better Java</a><br>Kotlin vs Java</p>
-</li>
-<li><p><a href="https://medium.com/@albamus/testing-and-error-handling-in-http4s-2a05572e535d" target="_blank" rel="external">Testing and Error Handling in http4s</a><br>http4s 实践</p>
-</li>
-<li><p><a href="https://medium.com/@gkossakowski/a-note-on-kentucky-mule-and-twitters-scala-compiler-announcement-3294b5baf2ea" target="_blank" rel="external">A note on Kentucky Mule and Twitter’s Scala compiler announcement</a><br>关于 Reasonable Scala compiler</p>
-</li>
-<li><p><a href="https://softwaremill.com/akka-2.5.4-features/" target="_blank" rel="external">5 New features in Akka (Streams) 2.5.4 you may have missed</a><br>Akka 2.5.4 新特性</p>
-</li>
-<li><p><a href="https://manuel.bernhardt.io/2017/08/26/akka-anti-patterns-naming-your-application-after-akka-concepts/" target="_blank" rel="external">Akka anti-patterns: naming your application components after Akka concepts</a><br>Akka 反设计模式系列</p>
-</li>
-</ul>
-<h2 id="一周速递"><a href="#一周速递" class="headerlink" title="一周速递"></a>一周速递</h2><ul>
-<li><p>Lagom 1.3.7 <a href="https://www.lagomframework.com/blog/lagom-1-3-7.html" target="_blank" rel="external">发布</a></p>
-</li>
-<li><p>akka reactive-kafka v0.17 <a href="https://github.com/akka/reactive-kafka" target="_blank" rel="external">发布</a></p>
-</li>
-<li><p>http4s v0.18.0-M1 <a href="https://github.com/http4s/http4s" target="_blank" rel="external">发布</a></p>
-</li>
-<li><p>scopt 3.7.0 <a href="https://github.com/scopt/scopt/releases/tag/v3.7.0" target="_blank" rel="external">发布</a></p>
-</li>
-</ul>
+<p>简单理解，我们可以基于一个 type class 创造不同的类型，来实现多态的需求。</p>
+<p>接下来我们将通过具体的例子来进一步认识 type classes，目前，你可能仍然不明白，但你可以把它想象为类似于 Java 中的 Interfaces，虽然这也不准确。</p>
+<p>## </p>
 
             </div>
           
@@ -183,7 +154,9 @@
       <footer class="post-footer">
         <div class="post-tags">
           
-            <a href="/tags/Weekly/">Weekly</a>
+            <a href="/tags/类型相关/">类型相关</a>
+          
+            <a href="/tags/Typeclass/">Typeclass</a>
           
         </div>
 
@@ -191,15 +164,9 @@
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2017/09/play2/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">Play! Framework 系列（二）：play 的项目结构</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
     
-    
-      <a class="next" href="/2017/08/learning-akka-9/">
-        <span class="next-text nav-default">Akka 系列（九）：Akka 分布式之 Akka Remote</span>
+      <a class="next" href="/2017/09/reactive-web-applications-2/">
+        <span class="next-text nav-default"><译> 响应式 Web 应用（二）</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
