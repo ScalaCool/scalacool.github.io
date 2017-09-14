@@ -6,12 +6,12 @@ tags:
 - 响应式编程
 - 翻译
 description: 如果你正在阅读本书，你可能听过诸如「响应式应用」、「响应式编程」、「响应式流」或「响应式宣言」等概念。这些词加上「响应式」前缀后感觉更加高大上了，但是你可能会去思考在这些不同场景下「响应式」的含义。那就让我们去看看这个词在计算机系统中的起源，从中寻求答案。
-date: 2017-09-12
+date: 2017-09-14
 ---
 
-## 原书
+## 上一篇
 
-[https://www.manning.com/books/reactive-web-applications](https://www.manning.com/books/reactive-web-applications)
+[<译> 响应式 Web 应用（一）](https://scala.cool/2017/08/reactive-web-applications-1/)
 
 ## 1.1.3 响应式编程
 
