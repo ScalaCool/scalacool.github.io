@@ -132,9 +132,9 @@ implicit def caseClassShow[A, R <: HList](
 ```
 
 我们可视化以下编译器自动推导出 `Show[Foo]` 的过程
-
+<center>
 ![编译器自动推导过程](/images/2017/09/shapeless-infer.png)
-
+</center>
 Shapeless 巧妙的利用编译器自动推导功能，推导出了任意 case class 对象的 `Show` 实例。
 整个过程虽然理解起来很复杂，但规则却意外的简单：编译器自动推导。
 这样实例派生过程就转化成了 `Generic` 对象和对应 `HList` 的 typeclass 派生。
