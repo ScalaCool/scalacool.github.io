@@ -89,20 +89,18 @@ trait Show[A] {
 > 基本类型 Show 实例
 
 ```scala
-object instances {
-  implicit val intShow: Show[Int] = new Show[Int] {
-    def show(a: Int) = a.toString
-  }
 
-  implicit val stringShow: Show[String] = new Show[String] {
-    def show(a: String) = "\"" + a + "\""
-  }
-
-  implicit val booleanShow: Show[Boolean] = new Show[Boolean] {
-    def show(a: Boolean) = if(a) "true" else "false"
-  }
+implicit val intShow: Show[Int] = new Show[Int] {
+  def show(a: Int) = a.toString
 }
 
+implicit val stringShow: Show[String] = new Show[String] {
+  def show(a: String) = "\"" + a + "\""
+}
+
+implicit val booleanShow: Show[Boolean] = new Show[Boolean] {
+  def show(a: Boolean) = if(a) "true" else "false"
+}
 ```
 
 现在来看看如何派生任意 case class 的 Show 实例。当然我们可以通过反射或者 macro 实现，这里我们展示 shapeless 如何利用 scala 编译器自动推导出需要实例
