@@ -123,10 +123,10 @@ implicit def hlistShow[H, T <: HList](
 }
 
 implicit def caseClassShow[A, R <: HList](
- implicit val gen: Generic.Aux[A, R],
+ implicit    gen: Generic.Aux[A, R],
  hlistShow: Show[R]
-): Show[A] = {
-  def show(a: A) = hlistShow(gen.to(a))
+): Show[A] = new Show[A] {
+  def show(a: A) = hlistShow.show(gen.to(a))
 }
 
 ```
