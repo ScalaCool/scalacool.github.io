@@ -132,7 +132,7 @@ implicit def caseClassShow[A, R <: HList](
 implicitly[Show[Foo]]
 ```
 
-我们可视化以下编译器自动推导出 `Show[Foo]` 的过程
+编译器自动推导出 `Show[Foo]` 的过程如下
 
 ![编译器自动推导过程](/images/2017/09/shapeless-infer.png)
 
