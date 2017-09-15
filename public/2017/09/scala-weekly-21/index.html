@@ -30,21 +30,21 @@
 
 
 
-<link rel="canonical" href="http://scala.cool/2017/09/subtyping-vs-typeclasses-2/"/>
+<link rel="canonical" href="http://scala.cool/2017/09/scala-weekly-21/"/>
 
 
-<meta name="description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
-<meta name="keywords" content="类型相关,Typeclass">
+<meta name="description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
+<meta name="keywords" content="Weekly">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Subtyping vs Typeclasses（二）">
-<meta property="og:url" content="http://scala.cool/2017/09/subtyping-vs-typeclasses-2/index.html">
+<meta property="og:title" content="Scala 技术周刊 | 第 21 期">
+<meta property="og:url" content="http://scala.cool/2017/09/scala-weekly-21/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
+<meta property="og:description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-15T09:29:51.000Z">
+<meta property="og:updated_time" content="2017-09-15T09:30:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Subtyping vs Typeclasses（二）">
-<meta name="twitter:description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
+<meta name="twitter:title" content="Scala 技术周刊 | 第 21 期">
+<meta name="twitter:description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -79,7 +79,7 @@
 
 
 
-    <title> Subtyping vs Typeclasses（二） - Scala Cool </title>
+    <title> Scala 技术周刊 | 第 21 期 - Scala Cool </title>
   </head>
 
   <body>
@@ -117,21 +117,21 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          Subtyping vs Typeclasses（二）
+          Scala 技术周刊 | 第 21 期
         
       </h1>
 
       <time class="post-time">
-          9月20日
+          9月15日
       </time>
       
         <span class="author-split">|</span>
         <span class="author-info">
-          by <span class="_author-text-holder" data-author="Yison"></span>
+          by <span class="_author-text-holder" data-author="ScalaCool"></span>
         </span>
       
       
-        <span class="_author-avatar-holder" data-author="Yison"></span>
+        <span class="_author-avatar-holder" data-author="ScalaCool"></span>
       
     </header>
 
@@ -139,15 +139,44 @@
 
     
             <div class="post-content">
-            <p>本文我们将介绍 Type Classes，类似 <a href="https://scala.cool/2017/08/subtyping-vs-typeclasses/">上一篇文章</a> 提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。</p>
-<h2 id="什么是-Type-Classes"><a href="#什么是-Type-Classes" class="headerlink" title="什么是 Type Classes"></a>什么是 Type Classes</h2><p>Type Classes 是发源于 Haskell 的一个概念。顾名思义，不少人把它理解成 「class of types」，这其实并不科学。事实上，Haskell 并没有类似 Java 中的 class 的概念，一个更准确的理解，可以是「<strong>constructor class</strong>」 — 本质上它区别于单态，但也不是多态，而是提供一个介于两者之间的过渡机制。</p>
-<p>让我们看看 <a href="http://learnyouahaskell.com/introduction" target="_blank" rel="external">《Learn You a Haskell for Great Good! 》</a> 中对 Type classes 的相关描述：</p>
-<blockquote>
-<p>A typeclass is a sort of interface that defines some behavior. If a type is a part of a typeclass, that means that it supports and implements the behavior the typeclass describes. </p>
+            <blockquote>
+<p>这里有最新的 Scala 社区动态、技术博文。<br>微信搜索 「scalacool」关注我们，及时获取最新资讯。</p>
 </blockquote>
-<p>简单理解，我们可以基于一个 type class 创造不同的类型，来实现多态的需求。</p>
-<p>接下来我们将通过具体的例子来进一步认识 type classes，目前，你可能仍然不明白，但你可以把它想象为类似于 Java 中的 Interfaces，虽然这也不准确。</p>
-<p>## </p>
+<hr>
+<h2 id="深度阅读"><a href="#深度阅读" class="headerlink" title="深度阅读"></a>深度阅读</h2><ul>
+<li><p><a href="https://scala.cool/2017/09/play2/">Play! Framework 系列（二）：play 的项目结构</a><br>Play! Framework 系列</p>
+</li>
+<li><p><a href="http://www.cakesolutions.net/teamblogs/scalameta-tut-cache" target="_blank" rel="external">Scalameta tutorial: Cache decorator</a><br>Scalameta 实战</p>
+</li>
+<li><p><a href="http://pedrorijo.com/blog/scala-exceptions/" target="_blank" rel="external">Handling exceptions in Scala</a><br>Scala 异常处理</p>
+</li>
+<li><p><a href="https://www.youtube.com/watch?v=E_ykcwHpqlA" target="_blank" rel="external">Scalable Web Frontend Development in Scala – Otto Chrons</a><br>Scala Web 前端开发 talk</p>
+</li>
+<li><p><a href="https://medium.com/@maximilianofelice/builder-pattern-in-scala-with-phantom-types-3e29a167e863" target="_blank" rel="external">Builder Pattern in Scala with Phantom Types</a><br>设计模式</p>
+</li>
+<li><p><a href="https://bitcoin.science/scorex-scala-based-blockchain-framework-7b3753f63af0" target="_blank" rel="external">Scorex — Scala-based Blockchain Framework</a><br>Scala 区块链框架</p>
+</li>
+<li><p><a href="https://typelevel.org/blog/2017/09/05/three-types-of-strings.html" target="_blank" rel="external">There are at least three types of strings</a><br>类型相关</p>
+</li>
+<li><p><a href="https://medium.com/@shanielh/covariance-contravariance-and-culture-in-scala-d0317fd02e19" target="_blank" rel="external">Covariance, Contravariance and Culture in Scala</a><br>型变</p>
+</li>
+<li><p><a href="https://reactdom.com/blog/scala-books" target="_blank" rel="external">Best Scala tutorials, courses, videos &amp; books 2017</a><br>Scala 学习资源</p>
+</li>
+<li><p><a href="https://caitiem.com/2017/09/07/getting-started-with-distributed-systems/" target="_blank" rel="external">Resources for Getting Started with Distributed Systems</a><br>分布式系统学习资源</p>
+</li>
+</ul>
+<h2 id="一周速递"><a href="#一周速递" class="headerlink" title="一周速递"></a>一周速递</h2><ul>
+<li><p>Scala Native 0.3.3 <a href="https://github.com/scala-native/scala-native/releases/tag/v0.3.3" target="_blank" rel="external">发布</a></p>
+</li>
+<li><p>Lagom 1.4.0-M2 <a href="https://www.lagomframework.com/blog/lagom-1-4-0-M2.html" target="_blank" rel="external">发布</a></p>
+</li>
+<li><p>Kittens 1.0.0-RC0 <a href="https://www.reddit.com/r/scala/comments/6ymfm2/kittens_100rc0_is_released_we_are_finally_ready/?ref=share&amp;ref_source=twitter" target="_blank" rel="external">发布</a></p>
+</li>
+<li><p>akka-log4j <a href="https://github.com/hseeberger/akka-log4j/releases/tag/v1.5.0" target="_blank" rel="external">发布</a></p>
+</li>
+<li><p>Dotty version 0.3.0-RC2 <a href="http://scala-lang.org/blog/2017/09/07/third-dotty-milestone-release.html" target="_blank" rel="external">发布</a></p>
+</li>
+</ul>
 
             </div>
           
@@ -156,9 +185,7 @@
       <footer class="post-footer">
         <div class="post-tags">
           
-            <a href="/tags/类型相关/">类型相关</a>
-          
-            <a href="/tags/Typeclass/">Typeclass</a>
+            <a href="/tags/Weekly/">Weekly</a>
           
         </div>
 
@@ -166,9 +193,15 @@
         
   <nav class="post-nav">
     
+      <a class="prev" href="/2017/09/subtyping-vs-typeclasses-2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Subtyping vs Typeclasses（二）</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
     
-      <a class="next" href="/2017/09/scala-weekly-21/">
-        <span class="next-text nav-default">Scala 技术周刊 | 第 21 期</span>
+    
+      <a class="next" href="/2017/09/shapeless-1/">
+        <span class="next-text nav-default">Shapeless 入门指南（一）：自动派生 typeclass 实例</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
