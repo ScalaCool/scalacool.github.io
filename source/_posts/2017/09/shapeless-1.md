@@ -134,8 +134,13 @@ implicit def caseClassShow[A, R <: HList](
 implicitly[Show[Foo]]
 ```
 
+<<<<<<< HEAD
 我们可视化以下编译器自动推导出 `Show[Foo]` 的过程
 <center>
+=======
+编译器自动推导出 `Show[Foo]` 的过程如下
+
+>>>>>>> 6fd13541a59122c5f3f847043e1b200f6da874f0
 ![编译器自动推导过程](/images/2017/09/shapeless-infer.png)
 </center>
 Shapeless 巧妙的利用编译器自动推导功能，推导出了任意 case class 对象的 `Show` 实例。

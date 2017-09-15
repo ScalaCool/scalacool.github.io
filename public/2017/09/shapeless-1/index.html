@@ -42,7 +42,7 @@
 <meta property="og:description" content="本文将介绍一下 shapeless 中 HList 和 case class 的互操作，并在此基础上阐述自动派生 typeclass 实例的功能。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2017/09/shapeless-infer.png">
-<meta property="og:updated_time" content="2017-09-15T05:16:41.000Z">
+<meta property="og:updated_time" content="2017-09-15T05:17:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shapeless 入门指南（一）：自动派生 typeclass 实例">
 <meta name="twitter:description" content="本文将介绍一下 shapeless 中 HList 和 case class 的互操作，并在此基础上阐述自动派生 typeclass 实例的功能。">
@@ -173,8 +173,23 @@
 <p>任意 <code>case class</code> 的 <code>Show</code> 实例</p>
 </blockquote>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">implicit</span> <span class="keyword">val</span> hnilShow: <span class="type">Show</span>[<span class="type">HNil</span>] = <span class="keyword">new</span> <span class="type">Show</span>[<span class="type">HNil</span>] &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">HNil</span>) = <span class="string">""</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">hlistShow</span></span>[<span class="type">H</span>, <span class="type">T</span> &lt;: <span class="type">HList</span>](</div><div class="line">  <span class="keyword">implicit</span> hs: <span class="type">Show</span>[<span class="type">H</span>],</div><div class="line">           ts: <span class="type">Show</span>[<span class="type">T</span>]</div><div class="line">): <span class="type">Show</span>[<span class="type">H</span> :: <span class="type">T</span>] = <span class="keyword">new</span> <span class="type">Show</span>[<span class="type">H</span> :: <span class="type">T</span>]&#123;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">H</span> :: <span class="type">T</span>) = hs.show(a.head) + <span class="string">","</span> + ts.show(a.tail)</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">caseClassShow</span></span>[<span class="type">A</span>, <span class="type">R</span> &lt;: <span class="type">HList</span>](</div><div class="line"> <span class="keyword">implicit</span>    gen: <span class="type">Generic</span>.<span class="type">Aux</span>[<span class="type">A</span>, <span class="type">R</span>],</div><div class="line"> hlistShow: <span class="type">Show</span>[<span class="type">R</span>]</div><div class="line">): <span class="type">Show</span>[<span class="type">A</span>] = <span class="keyword">new</span> <span class="type">Show</span>[<span class="type">A</span>] &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">A</span>) = hlistShow.show(gen.to(a))</div><div class="line">&#125;</div><div class="line"></div><div class="line">implicitly[<span class="type">Show</span>[<span class="type">Foo</span>]]</div></pre></td></tr></table></figure>
-<p>我们可视化以下编译器自动推导出 <code>Show[Foo]</code> 的过程</p>
-<p><center><br><img src="/images/2017/09/shapeless-infer.png" alt="编译器自动推导过程"><br></center><br>Shapeless 巧妙的利用编译器自动推导功能，推导出了任意 case class 对象的 <code>Show</code> 实例。<br>整个过程虽然理解起来很复杂，但规则却意外的简单：编译器自动推导。<br>这样实例派生过程就转化成了 <code>Generic</code> 对象和对应 <code>HList</code> 的 typeclass 派生。</p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD<br>我们可视化以下编译器自动推导出 <code>Show[Foo]</code> 的过程</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a><center></center></h1><p>编译器自动推导出 <code>Show[Foo]</code> 的过程如下</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>6fd13541a59122c5f3f847043e1b200f6da874f0<br><img src="/images/2017/09/shapeless-infer.png" alt="编译器自动推导过程"><br><br>Shapeless 巧妙的利用编译器自动推导功能，推导出了任意 case class 对象的 <code>Show</code> 实例。<br>整个过程虽然理解起来很复杂，但规则却意外的简单：编译器自动推导。<br>这样实例派生过程就转化成了 <code>Generic</code> 对象和对应 <code>HList</code> 的 typeclass 派生。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
 <p>当然，现实应用过程中，我们经常需要属性名和递归以及嵌套定义情况，本文中的实现不支持这些场景，后续文章中，我会介绍这些情况处理。</p>
 
             </div>
