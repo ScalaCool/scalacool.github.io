@@ -1,5 +1,5 @@
 ---
-title: Shapeless入门指南（一）：自动派生 typeclass 实例
+title: Shapeless 入门指南（一）：自动派生 typeclass 实例
 author: jilen
 tags:
 - 类型相关
