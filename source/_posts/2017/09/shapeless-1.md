@@ -6,7 +6,7 @@ tags:
 - Typeclass
 - Shapeless
 description: 本文将介绍一下 shapeless 中 HList 和 case class 的互操作，并在此基础上阐述自动派生 typeclass 实例的功能。
-date: 2017-09-011
+date: 2017-09-15
 ---
 
 [shapeless](https://github.com/milessabin/shapeless) 是一个类型相关的库，提供了很多有趣的功能。
