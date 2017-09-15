@@ -129,6 +129,7 @@ implicit def caseClassShow[A, R <: HList](
   def show(a: A) = hlistShow.show(gen.to(a))
 }
 
+implicitly[Show[Foo]]
 ```
 
 我们可视化以下编译器自动推导出 `Show[Foo]` 的过程
