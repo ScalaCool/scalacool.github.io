@@ -6,7 +6,7 @@ tags:
 - Typeclass
 - Java
 description: 本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。
-date: 2017-09-20
+date: 2017-09-18
 ---
 
 本文我们将介绍 Type Classes，类似 [上一篇文章](https://scala.cool/2017/08/subtyping-vs-typeclasses/) 提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。
