@@ -21,6 +21,11 @@ date: 2017-09-25
 
 > I have a type hierarchy … how do I declare a supertype method that returns the “current” type?
 
+这个问题的产生与 Scala 推崇不可变性有关，于是方法们经常要返回一个修改后的 `this` 的副本， 但要保证返回类型足够的精确又是棘手的，这便是本文要探讨的话题。
+
+解决该问题最“标准的”方法（如 stdlib collections）就是使用一个 **F-bounded type**，它大多数是管用的，但却不能完全地强制约束（它实施了一些原则，也留了一些坑）。这里要赞赏下 [@nuttycom](https://twitter.com/nuttycom) 的工作，他探索了 [F-Bounded Type 方法存在哪些陷阱](http://logji.blogspot.co.id/2012/11/f-bounded-type-polymorphism-give-up-now.html)。
+
+一个更好的方案是使用一个 **typeclass**，
 
 ## 延伸
 
