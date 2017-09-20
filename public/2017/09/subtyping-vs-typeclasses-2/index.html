@@ -34,14 +34,14 @@
 
 
 <meta name="description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
-<meta name="keywords" content="类型相关,Typeclass,Java">
+<meta name="keywords" content="类型相关,Java,Typeclass">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Subtyping vs Typeclasses（二）">
 <meta property="og:url" content="http://scala.cool/2017/09/subtyping-vs-typeclasses-2/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-18T01:56:42.000Z">
+<meta property="og:updated_time" content="2017-09-20T01:49:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Subtyping vs Typeclasses（二）">
 <meta name="twitter:description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
@@ -181,7 +181,7 @@
 <p>因此，优化语法后的代码如下：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">findMvp</span></span>[<span class="type">T</span>:<span class="type">Comparator</span>](list: <span class="type">List</span>[<span class="type">T</span>]): <span class="type">T</span> = &#123;</div><div class="line">  list.reduce((a, b) =&gt; <span class="keyword">if</span> (implicitly[<span class="type">Comparator</span>[<span class="type">T</span>]] &gt;=(a, b)) a <span class="keyword">else</span> b)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上的介绍，我们发现 Type Classes 是一种灵活且强大的技术，Scala 标准库以及其它很多知名的类库（如 Cats）都大量使用了这种模式。</p>
-<p>它有点类似我们熟悉的 Interfaces，都可以通过名字、输入、输出，描述一系列相关的操作。然而，它们又显著地不同，在下一篇文章中，我们将对这两种技术进一步的分析比较。</p>
+<p>它有点类似我们熟悉的 Interfaces（对应 Scala 中的 Trait），都可以通过名字、输入、输出，描述一系列相关的操作。然而，它们又显著地不同，在下一篇文章中，我们将对 Subtyping 和 Typeclasses 这两种技术做进一步的分析比较。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="http://learnyouahaskell.com/" target="_blank" rel="external">Learn You a Haskell</a></li>
 <li><a href="https://medium.com/@aarshkshah1992/type-classes-in-scala-d968d77bc711" target="_blank" rel="external">Type Classes in Scala</a></li>
@@ -197,9 +197,9 @@
           
             <a href="/tags/类型相关/">类型相关</a>
           
-            <a href="/tags/Typeclass/">Typeclass</a>
-          
             <a href="/tags/Java/">Java</a>
+          
+            <a href="/tags/Typeclass/">Typeclass</a>
           
         </div>
 
