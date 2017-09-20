@@ -59,7 +59,7 @@ scala> val b = a.renamed("Bob")
 b: Fish = Fish(Bob,2)
 ```
 
-然而这种方案的一个局限在于我们的特质实际上并没有足够地约束对它的实现。我们仅仅只是要求返回一个 `Pet`，并没有必须是相同的宠物类型。所以这里可以把一个 `Kitty` 变成一个 `Fish` 在我们进行重命名后。
+然而这种方案的一个局限在于我们的特质实际上并没有足够地约束对它的实现。我们仅仅只是要求返回一个 `Pet`，并没有必须是相同的宠物类型。所以这里我们可以在进行重命名后，把一个 `Kitty` 变成一个 `Fish`。
 
 ```scala
 case class Kitty(name: String, color: Color) extends Pet {

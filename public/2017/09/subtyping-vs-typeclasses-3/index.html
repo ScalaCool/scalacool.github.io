@@ -39,7 +39,7 @@
 <meta property="og:url" content="http://scala.cool/2017/09/subtyping-vs-typeclasses-3/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="上一篇文章介绍了 Type Classes，但并没有深入分析它的优势。tpolecat 写了一篇文章很好地比较了 Subtyping 和 Typeclasses ，本文进行了翻译。文末则是该文章引发的一些探讨。">
-<meta property="og:updated_time" content="2017-09-20T14:25:35.000Z">
+<meta property="og:updated_time" content="2017-09-20T14:32:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Subtyping vs Typeclasses（三）">
 <meta name="twitter:description" content="上一篇文章介绍了 Type Classes，但并没有深入分析它的优势。tpolecat 写了一篇文章很好地比较了 Subtyping 和 Typeclasses ，本文进行了翻译。文末则是该文章引发的一些探讨。">
@@ -157,7 +157,7 @@
 <p>在我们 <code>Fish</code> 中， <code>name</code> 是通过一个 case class 的字段来实现的，<code>rename</code> 方法则很简单地采用了随之生成的 <code>copy</code> 方法…… 需要注意的是它返回的类型是 <code>Fish</code> 而不是 <code>Pet</code>。之所以允许这么做是因为「返回类型处于一个<a href="https://scala.cool/2017/04/scala-types-of-types-part-2/#7-Scala-中的型变">协变</a>的位置」，所以我们总是可以返回比承诺的更具体的东西。</p>
 <p>理智情况下，我们可以创建一个 <code>Fish</code> 然后进行重命名，一切正常，返回的静态类型也是我们想要的。</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="keyword">val</span> a = <span class="type">Fish</span>(<span class="string">"Jimmy"</span>, <span class="number">2</span>)</div><div class="line">a: <span class="type">Fish</span> = <span class="type">Fish</span>(<span class="type">Jimmy</span>,<span class="number">2</span>)</div><div class="line"></div><div class="line">scala&gt; <span class="keyword">val</span> b = a.renamed(<span class="string">"Bob"</span>)</div><div class="line">b: <span class="type">Fish</span> = <span class="type">Fish</span>(<span class="type">Bob</span>,<span class="number">2</span>)</div></pre></td></tr></table></figure>
-<p>然而这种方案的一个局限在于我们的特质实际上并没有足够地约束对它的实现。我们仅仅只是要求返回一个 <code>Pet</code>，并没有必须是相同的宠物类型。所以这里可以把一个 <code>Kitty</code> 变成一个 <code>Fish</code> 在我们进行重命名后。</p>
+<p>然而这种方案的一个局限在于我们的特质实际上并没有足够地约束对它的实现。我们仅仅只是要求返回一个 <code>Pet</code>，并没有必须是相同的宠物类型。所以这里我们可以在进行重命名后，把一个 <code>Kitty</code> 变成一个 <code>Fish</code>。</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Kitty</span>(<span class="params">name: <span class="type">String</span>, color: <span class="type">Color</span></span>) <span class="keyword">extends</span> <span class="title">Pet</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">renamed</span></span>(newName: <span class="type">String</span>): <span class="type">Fish</span> = <span class="keyword">new</span> <span class="type">Fish</span>(newName, <span class="number">42</span>) <span class="comment">// oops</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="延伸"><a href="#延伸" class="headerlink" title="延伸"></a>延伸</h2><ul>
 <li><p><a href="https://gist.github.com/odersky/56323c309a186cffe9af" target="_blank" rel="external">A simpler way to returning the “current” type in Scala</a></p>
