@@ -18,6 +18,7 @@ rss: default
 # ===========================================
 menu:
   News: http://news.scala.cool
+  About: https://scala.cool/2017/03/hello-scala/
 #  Archives: /archives
 
 # ===========================================
