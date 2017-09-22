@@ -5,7 +5,7 @@
       </a>
       <div class="says">
         <em>「</em>
-        这是 — <a href="http://drip.im">水滴产品团队</a>
+        这是 — <a href="https://scala.cool/2017/03/hello-scala/">水滴产品团队</a>
         <br />
         面向 Scala 的技术博客
         <em>」</em>
