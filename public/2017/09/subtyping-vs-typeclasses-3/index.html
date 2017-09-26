@@ -39,7 +39,7 @@
 <meta property="og:url" content="http://scala.cool/2017/09/subtyping-vs-typeclasses-3/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="上一篇文章介绍了 Type Classes，但并没有深入分析它的优势。tpolecat 写了一篇文章很好地比较了 Subtyping 和 Typeclasses ，本文进行了翻译。文末则是该文章引发的一些探讨。">
-<meta property="og:updated_time" content="2017-09-20T14:32:54.000Z">
+<meta property="og:updated_time" content="2017-09-26T14:23:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Subtyping vs Typeclasses（三）">
 <meta name="twitter:description" content="上一篇文章介绍了 Type Classes，但并没有深入分析它的优势。tpolecat 写了一篇文章很好地比较了 Subtyping 和 Typeclasses ，本文进行了翻译。文末则是该文章引发的一些探讨。">
@@ -97,6 +97,15 @@
                             
                             
                                 News
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                About
                             
                         </a>
                     </li>
@@ -159,6 +168,19 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="keyword">val</span> a = <span class="type">Fish</span>(<span class="string">"Jimmy"</span>, <span class="number">2</span>)</div><div class="line">a: <span class="type">Fish</span> = <span class="type">Fish</span>(<span class="type">Jimmy</span>,<span class="number">2</span>)</div><div class="line"></div><div class="line">scala&gt; <span class="keyword">val</span> b = a.renamed(<span class="string">"Bob"</span>)</div><div class="line">b: <span class="type">Fish</span> = <span class="type">Fish</span>(<span class="type">Bob</span>,<span class="number">2</span>)</div></pre></td></tr></table></figure>
 <p>然而这种方案的一个局限在于我们的特质实际上并没有足够地约束对它的实现。我们仅仅只是要求返回一个 <code>Pet</code>，并没有必须是相同的宠物类型。所以这里我们可以在进行重命名后，把一个 <code>Kitty</code> 变成一个 <code>Fish</code>。</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Kitty</span>(<span class="params">name: <span class="type">String</span>, color: <span class="type">Color</span></span>) <span class="keyword">extends</span> <span class="title">Pet</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">renamed</span></span>(newName: <span class="type">String</span>): <span class="type">Fish</span> = <span class="keyword">new</span> <span class="type">Fish</span>(newName, <span class="number">42</span>) <span class="comment">// oops</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们在试图对重命名进行抽象的问题上遇到了麻烦。举个例子，以下这样一个通用的重命名方法在编译的时候会出错，因为 <code>renamed</code> 返回的类型对一个任意的 <code>A &lt;: Pet</code> 还不够具体，这里最好是返回 <code>Pet</code>。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">esquire</span></span>[<span class="type">A</span> &lt;: <span class="type">Pet</span>](a: <span class="type">A</span>): <span class="type">A</span> = a.renamed(a.name + <span class="string">", Esq."</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;console&gt;:<span class="number">28</span>: error: <span class="class"><span class="keyword">type</span> <span class="title">mismatch</span></span>;</div><div class="line"> found   : <span class="type">Pet</span></div><div class="line"> required: <span class="type">A</span></div><div class="line">       <span class="function"><span class="keyword">def</span> <span class="title">esquire</span></span>[<span class="type">A</span> &lt;: <span class="type">Pet</span>](a: <span class="type">A</span>): <span class="type">A</span> = a.renamed(a.name + <span class="string">", Esq."</span>)</div></pre></td></tr></table></figure>
+<p>因此该方法并不能实现我们的目标，即 <code>renamed</code> 方法需要返回跟它的接受者一样的类型，我们无法对重命名的操作实现抽象，所以我们就看看能不能让类型变得更丰富些吧。</p>
+<h2 id="F-Bounded-Types"><a href="#F-Bounded-Types" class="headerlink" title="F-Bounded Types"></a>F-Bounded Types</h2><p>一个 F-Bounded Type 是<strong>对它的子类型进行参数化</strong>，它允许我们把要「实现的类型」作为参数「传递」给父类。<br><code>Pet[A &lt;: Pet[A]]</code> 这种自引用的语法看起来令人疑惑，如果你不能一下子理解，那么就继续往下看，慢慢就会明白。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Pet</span>[<span class="type">A</span> &lt;: <span class="type">Pet</span>[<span class="type">A</span>]] </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">name</span></span>: <span class="type">String</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">renamed</span></span>(newName: <span class="type">String</span>): <span class="type">A</span> <span class="comment">// note this return type</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>好了，<code>Pet</code> 任意的子类型都需要传递「自身」作为一个类型参数。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Fish</span>(<span class="params">name: <span class="type">String</span>, age: <span class="type">Int</span></span>) <span class="keyword">extends</span> <span class="title">Pet</span>[<span class="type">Fish</span>] </span>&#123; <span class="comment">// note the type argument</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">renamed</span></span>(newName: <span class="type">String</span>) = copy(name = newName)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>大功告成。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="keyword">val</span> a = <span class="type">Fish</span>(<span class="string">"Jimmy"</span>, <span class="number">2</span>)</div><div class="line">a: <span class="type">Fish</span> = <span class="type">Fish</span>(<span class="type">Jimmy</span>,<span class="number">2</span>)</div><div class="line"></div><div class="line">scala&gt; <span class="keyword">val</span> b = a.renamed(<span class="string">"Bob"</span>)</div><div class="line">b: <span class="type">Fish</span> = <span class="type">Fish</span>(<span class="type">Bob</span>,<span class="number">2</span>)</div></pre></td></tr></table></figure>
+<p>这一次之所以可以写一个通用的重命名方法，是因为现在我们的 <code>renamed</code> 有了一个更具体的返回类型。任何 <code>Pet[A]</code> 都会返回一个 <code>A</code>。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">esquire</span></span>[<span class="type">A</span> &lt;: <span class="type">Pet</span>[<span class="type">A</span>]](a: <span class="type">A</span>): <span class="type">A</span> = a.renamed(a.name + <span class="string">", Esq."</span>)</div><div class="line">esquire: [<span class="type">A</span> &lt;: <span class="type">Pet</span>[<span class="type">A</span>]](a: <span class="type">A</span>)<span class="type">A</span></div><div class="line"></div><div class="line">scala&gt; esquire(a)</div><div class="line">res8: <span class="type">Fish</span> = <span class="type">Fish</span>(<span class="type">Jimmy</span>, <span class="type">Esq</span>.,<span class="number">2</span>)</div></pre></td></tr></table></figure>
+<p>这是一个不小的进步。我们终于可以讨论一下所谓的「当前」的类型，它变成了一个参数。</p>
 <h2 id="延伸"><a href="#延伸" class="headerlink" title="延伸"></a>延伸</h2><ul>
 <li><p><a href="https://gist.github.com/odersky/56323c309a186cffe9af" target="_blank" rel="external">A simpler way to returning the “current” type in Scala</a></p>
 </li>
@@ -186,8 +208,8 @@
   <nav class="post-nav">
     
     
-      <a class="next" href="/2017/09/subtyping-vs-typeclasses-2/">
-        <span class="next-text nav-default">Subtyping vs Typeclasses（二）</span>
+      <a class="next" href="/2017/09/scala-weekly-22/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第 22 期</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>

@@ -67,7 +67,62 @@ case class Kitty(name: String, color: Color) extends Pet {
 }
 ```
 
+我们在试图对重命名进行抽象的问题上遇到了麻烦。举个例子，以下这样一个通用的重命名方法在编译的时候会出错，因为 `renamed` 返回的类型对一个任意的 `A <: Pet` 还不够具体，这里最好是返回 `Pet`。
 
+```scala
+def esquire[A <: Pet](a: A): A = a.renamed(a.name + ", Esq.")
+```
+
+```scala
+<console>:28: error: type mismatch;
+ found   : Pet
+ required: A
+       def esquire[A <: Pet](a: A): A = a.renamed(a.name + ", Esq.")
+```
+
+因此该方法并不能实现我们的目标，即 `renamed` 方法需要返回跟它的接受者一样的类型，我们无法对重命名的操作实现抽象，所以我们就看看能不能让类型变得更丰富些吧。
+
+## F-Bounded Types
+
+一个 F-Bounded Type 是**对它的子类型进行参数化**，它允许我们把要「实现的类型」作为参数「传递」给父类。
+`Pet[A <: Pet[A]]` 这种自引用的语法看起来令人疑惑，如果你不能一下子理解，那么就继续往下看，慢慢就会明白。
+
+```scala
+trait Pet[A <: Pet[A]] {
+  def name: String
+  def renamed(newName: String): A // note this return type
+}
+```
+
+好了，`Pet` 任意的子类型都需要传递「自身」作为一个类型参数。
+
+```scala
+case class Fish(name: String, age: Int) extends Pet[Fish] { // note the type argument
+  def renamed(newName: String) = copy(name = newName)
+}
+```
+
+大功告成。
+
+```scala
+scala> val a = Fish("Jimmy", 2)
+a: Fish = Fish(Jimmy,2)
+
+scala> val b = a.renamed("Bob")
+b: Fish = Fish(Bob,2)
+```
+
+这一次之所以可以写一个通用的重命名方法，是因为现在我们的 `renamed` 有了一个更具体的返回类型。任何 `Pet[A]` 都会返回一个 `A`。
+
+```scala
+scala> def esquire[A <: Pet[A]](a: A): A = a.renamed(a.name + ", Esq.")
+esquire: [A <: Pet[A]](a: A)A
+
+scala> esquire(a)
+res8: Fish = Fish(Jimmy, Esq.,2)
+```
+
+这是一个不小的进步。我们终于可以讨论一下所谓的「当前」的类型，它变成了一个参数。
 
 ## 延伸
 
