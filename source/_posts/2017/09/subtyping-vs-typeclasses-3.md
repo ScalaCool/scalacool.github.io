@@ -80,7 +80,7 @@ def esquire[A <: Pet](a: A): A = a.renamed(a.name + ", Esq.")
        def esquire[A <: Pet](a: A): A = a.renamed(a.name + ", Esq.")
 ```
 
-因此该方法并不能实现我们的目标，即 `renamed` 方法需要返回跟它的接受者一样的类型，我们无法对重命名的操作实现抽象，所以我们就看看能不能让类型变得更丰富些吧。
+因此该方法并不能实现我们的目标，即 `renamed` 方法需要返回跟它的接收者一样的类型，我们无法对重命名的操作实现抽象，那么就看看能不能让类型变得更丰富些吧。
 
 ## F-Bounded Types
 
@@ -122,7 +122,57 @@ scala> esquire(a)
 res8: Fish = Fish(Jimmy, Esq.,2)
 ```
 
-这是一个不小的进步。我们终于可以讨论一下所谓的「当前」的类型，它变成了一个参数。
+这是一个不小的进步，我们终于可以讨论一下所谓的「当前」的类型，它变成了一个参数。
+
+然而，这仍然存在「当前」类型撒谎的问题。因为并没有对传递的参数类型进行限制，我们的 `Kitty` 再一次变成了 `Fish`。
+
+```scala
+case class Kitty(name: String, color: Color) extends Pet[Fish] { // oops
+  def renamed(newName: String): Fish = new Fish(newName, 42)
+}
+```
+
+该死！我们需要限制声明为 `A` 类型的实现类，确实类型为 `A`。Scala 也确实提供了一个方法：一个 **自身类型**（self-type）注解。
+
+```scala
+trait Pet[A <: Pet[A]] { this: A => // self-type
+  def name: String
+  def renamed(newName: String): A 
+}
+```
+
+现在当我们尝试把 `Kitty` 定义为 `Fish` 时，编译器就会说不。
+
+```scala
+case class Kitty(name: String, color: Color) extends Pet[Fish] {
+  def renamed(newName: String): Fish = new Fish(newName, 42)
+}
+```
+
+```scala
+<console>:19: error: illegal inheritance;
+ self-type Kitty does not conform to Pet[Fish]'s selftype Fish
+       case class Kitty(name: String, color: Color) extends Pet[Fish] {
+                                                            ^
+```
+
+这相当给力，我们几乎认为已经解决了问题。但遗憾的是，我们依旧可以通过继承另一个满足该限制的类型，来对「当前」类型进行欺骗，Subtyping 存在一个讨厌的漏洞。
+
+```scala
+class Mammal(val name: String) extends Pet[Mammal] {
+  def renamed(newName: String) = new Mammal(newName)
+}
+
+class Monkey(name: String) extends Mammal(name) // hmm, Monkey is a Pet[Mammal]
+```
+
+就是这样，我已经想不到进一步限制 F-bounded type 的方法了。因此，如果我们使用这项技术，我们可以做得相当出色，但仍然不能完全保证重命名会满足指定的条件。还要注意的是，引入基于 `Pet` 的类型参数并没有提供任何信息，它纯粹只是一种限制实现的机制而已。
+
+那么，就让我们试试其它方法吧。
+
+## Typeclass
+
+
 
 ## 延伸
 
