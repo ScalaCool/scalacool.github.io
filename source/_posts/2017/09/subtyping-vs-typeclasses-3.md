@@ -172,7 +172,57 @@ class Monkey(name: String) extends Mammal(name) // hmm, Monkey is a Pet[Mammal]
 
 ## Typeclass
 
+通常情况下，我们可以使用 Typeclass 来避免 Subtyping 相关的问题。我们不需要再定义一个 `renamed` 方法了，而是定义一个相应的 typeclass 来处理这个操作。
 
+```scala
+trait Pet {
+  def name: String
+}
+
+trait Rename[A] {
+  def rename(a: A, newName: String): A
+}
+```
+
+现在可以定义一个 `Fish` 以及 `Rename[Fish]` 的一个实例了。我们让这个实例为 implicit ，并在伴生对象中进行定义，因此它会在隐式范围中被搜索到。
+
+```scala
+case class Fish(name: String, age: Int) extends Pet
+
+object Fish {
+  implicit val FishRename = new Rename[Fish] {
+    def renamed(a: Fish, newName: String) = a.copy(name = newName)
+  }
+}
+```
+
+正如我们所见，一个 implicit class 能够实现之前方法的操作，如此通过 implicit conversion 任何 `Pet` 带有一个 `Rename` 实例就可以自动获得一个 `renamed` 方法。
+
+```scala
+implicit class RenameOps[A](a: A)(implicit ev: Rename[A]) {
+  def renamed(newName: String) = ev.renamed(a, newName)
+}
+```
+
+同时我们的测试用例依旧有效，虽然实现机制已经大不同。
+
+```scala
+scala> val a = Fish("Jimmy", 2)
+a: Fish = Fish(Jimmy,2)
+
+scala> val b = a.renamed("Bob")
+b: Fish = Fish(Bob,2)
+```
+
+有了 typeclass 的这种设计，就不能简单地定义一个 `Rename[Kitty]` 实例，然后返回不是 `Kitty` 类型的东西了。这里的类型十分清晰。我们的 `esquire` 方法是个陷阱，它的类型边界是不同的，但是实现与上述的 F-bounded 例子等价。
+
+```scala
+scala> def esquire[A <: Pet : Rename](a: A): A = a.renamed(a.name + ", Esq.")
+esquire: [A <: Pet](a: A)(implicit evidence$1: Rename[A])A
+
+scala> esquire(a)
+res10: Fish = Fish(Jimmy, Esq.,2)
+```
 
 ## 延伸
 
