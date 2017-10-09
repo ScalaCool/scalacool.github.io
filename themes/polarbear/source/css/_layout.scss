@@ -95,6 +95,7 @@ hr {
 
 .gt-initing-text {
   text-align: center;
+  display: none;
 }
 
 @include max-screen() {
