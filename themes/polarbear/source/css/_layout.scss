@@ -93,6 +93,11 @@ hr {
   color: #333;
 }
 
+.gt-initing-text {
+  text-align: center;
+  display: none;
+}
+
 @include max-screen() {
   .site-header-inner, .content {
     width: 90%;
