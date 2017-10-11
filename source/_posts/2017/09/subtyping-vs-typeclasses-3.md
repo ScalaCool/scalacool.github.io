@@ -6,7 +6,7 @@ tags:
 - Typeclass
 - 翻译
 description: 上一篇文章介绍了 Type Classes，但并没有深入分析它的优势。tpolecat 写了一篇文章很好地比较了 Subtyping 和 Typeclasses ，本文进行了翻译。此外，文末则附加了一些链接，关于该文章引发的一些讨论。
-date: 2017-09-25
+date: 2017-10-12
 ---
 
 [上一篇文章](https://scala.cool/2017/09/subtyping-vs-typeclasses-2/)介绍了 Type Classes，但并没有深入分析它的优势。tpolecat 写了一篇文章很好地比较了 Subtyping 和 Typeclasses ，本文进行了翻译。此外，文末则附加了一些链接，关于该文章引发的一些讨论。
@@ -223,6 +223,203 @@ esquire: [A <: Pet](a: A)(implicit evidence$1: Rename[A])A
 scala> esquire(a)
 res10: Fish = Fish(Jimmy, Esq.,2)
 ```
+
+这是一个通用的策略，通过识别需要我们返回「当前类型」的方法，并把它们装进一个 typeclass 中，这样就能满足我们所期望的约束。然而，这确实还有一点别扭：功能被 trait 和 typeclass 分割开来了，同时也并没有要求所有的 `Pet` 实现都拥有一个 `Rename` 实例（我们必须在上面的 `esquire` 中指定类型上界以及上下文边界）。
+
+## 只使用一个 Typeclass 的方案
+
+考虑一下以下的实现，`Pet` 是一个带有相关语法的 typeclass。我们完全抛弃了子类型多态，并通过特定多态来定义 pets：任何类型 `A` 都可以作为一个 `Pet`，只要给出一个 `Pet[A]` 的实例。
+
+```scala
+trait Pet[A] {
+  def name(a: A): String
+  def renamed(a: A, newName: String): A
+}
+
+implicit class PetOps[A](a: A)(implicit ev: Pet[A]) {
+  def name = ev.name(a)
+  def renamed(newName: String): A = ev.renamed(a, newName)
+}
+```
+
+这是我们的 `Fish` 类，现在没有一个有趣的超类，还有一个隐式实例 `Pet[Fish]` 在它的伴生对象中。
+
+```scala
+ase class Fish(name: String, age: Int)
+
+object Fish {
+  implicit val FishPet = new Pet[Fish] {
+    def name(a: Fish) = a.name
+    def renamed(a: Fish, newName: String) = a.copy(name = newName)
+  }
+}
+```
+
+`renamed` 方法通过 `PetOps` 的隐式应用起作用。
+
+```scala
+scala> Fish("Bob", 42).renamed("Steve")
+res0: Fish = Fish(Steve,42)
+```
+
+有一种有趣的猜想，即在一门编程语言中，特定多态和参数多态就是我们所需要的全部。如果没有子类型化，我们依旧可以运转良好。Haskell 就是这种语言的典型代表，在 Scala 采用这种方法是一种有趣的实践，或者至少成为我们设计空间的一部分。在我的经验里，从未后悔过用一个 typeclass 来替代一个超类。
+
+这可能已经足够作为本文的结尾了，但我想要进一步思考一些东西。因为一旦我们回答了文章最开始的问题，那么下一个问题就是：
+
+> 很好，我有一个 F-bounded type（或者是一个 typeclass）在工作了，但是我不了解「该如何在一个列表中保存一堆实例，却不会丢失所有的类型信息」。
+
+那么就让我们继续探究下去吧。
+
+## 彩蛋：我们如何处理集合？
+
+一个有趣的练习是考虑我们有不同种类的宠物的情况。具体来说，我们如何对一个宠物的列表用 `esquire` 实施 `map` 操作呢？我应该说明的是，至少对我来说这只是一个学术上的题目，因为我们从没有在现实生活中这么干过。
+
+我们先考虑下 F-bounded type 的例子，这是我们全部的实现：
+
+```scala
+import java.awt.Color
+
+trait Pet[A <: Pet[A]] { this: A =>
+  def name: String
+  def renamed(newName: String): A 
+}
+
+case class Fish(name: String, age: Int) extends Pet[Fish] { 
+  def renamed(newName: String) = copy(name = newName)
+}
+
+case class Kitty(name: String, color: Color) extends Pet[Kitty] {
+  def renamed(newName: String) = copy(name = newName)
+}
+
+def esquire[A <: Pet[A]](a: A): A = a.renamed(a.name + ", Esq.")
+
+val bob  = Fish("Bob", 12)
+val thor = Kitty("Thor", Color.ORANGE)
+```
+
+对一个同时包含 `bob` 和 `thor` 的列表，用 `esquire` 操作进行 `map` 可能比你预期的要复杂，但在 Scala 中是可以表示的。你可能想要暂停，在 REPL 中尝试下（你可以 `:paste` 上面的代码）…… `List(bob, thor).map(esquire)` 是一个合适的开端，尽管这并不能通过编译。
+
+因此，结果显示这样一个列表的正确量化的的元素类型是 `A forSome { A <: Pet[A] }`，代表了每个元素都是一个 `Pet` 的独特合适的 f-bounded 子类。此外，默认的 η-expanded `esquire` 的类型还不够精确。一个罕见的例子是 `foo _` 和 `foo(_)` 并不相等。在任何情况，你看：
+
+```scala
+scala> List[A forSome { type A <: Pet[A] }](bob, thor).map(esquire(_))
+res18: List[A forSome { type A <: Pet[A] }] = List(Fish(Bob, Esq.,12), Kitty(Thor, Esq.,java.awt.Color[r=255,g=200,b=0]))
+```
+
+在特定多态的实现方案中，我们有另外的问题。这是我们的完整实现，参考如下：
+```scala
+import java.awt.Color
+
+trait Pet[A] {
+  def name(a: A): String
+  def renamed(a: A, newName: String): A
+}
+
+implicit class PetOps[A](a: A)(implicit ev: Pet[A]) {
+  def name = ev.name(a)
+  def renamed(newName: String): A = ev.renamed(a, newName)
+}
+
+case class Fish(name: String, age: Int)
+
+object Fish {
+  implicit object FishPet extends Pet[Fish] {
+    def name(a: Fish) = a.name
+    def renamed(a: Fish, newName: String) = a.copy(name = newName)
+  }
+}
+
+case class Kitty(name: String, color: Color)
+
+object Kitty {
+  implicit object KittyPet extends Pet[Kitty] {
+    def name(a: Kitty) = a.name
+    def renamed(a: Kitty, newName: String) = a.copy(name = newName)
+  }
+}
+
+def esquire[A: Pet](a: A): A = a.renamed(a.name + ", Esq.")
+
+val bob  = Fish("Bob", 12)
+val thor = Kitty("Thor", Color.ORANGE)
+```
+
+这里我们遇到一个挑战，因为压根不清楚一个包含 `bob` 和 `thor` 的列表的元素类型是什么。它们没有公共的超类，而存在的 `Pet` 的实例并不是我们可以用类型参数进行表达的东西。`List[A: Pet]` 并不是一个有效的类型。
+
+为了在列表上用 `esquire` 进行 `map` 操作，我们必须记住它实际上有两个参数：`A` 和 `Pet[A]`。实际上，每个列表元素都需要携带上它的 `Pet` 实例。因此，列表的类型需要为 `(A, Pet[A]) forSome { type A }`，代表每个元素有一个不同的类型 `A`，同时它也对应了一个相应的 `Pet` 实例。
+
+```scala
+scala> val pets = List[(A, Pet[A]) forSome { type A }]((bob, implicitly[Pet[Fish]]), (thor, implicitly[Pet[Kitty]]))
+pets: List[(A, Pet[A]) forSome { type A }] = List((Fish(Bob,12),Fish$FishPet$@1d4c9cde), (Kitty(Thor,java.awt.Color[r=255,g=200,b=0]),Kitty$KittyPet$@31f63352))
+```
+
+现在对列表进行 `map` 已经很简单了，不是吗？
+
+```scala
+scala> pets.map(p => esquire(p._1)(p._2))
+<console>:23: error: type mismatch;
+ found   : Pet[(some other)A(in value pets)]
+ required: Pet[A(in value pets)]
+              pets.map(p => esquire(p._1)(p._2))
+                                            ^
+```
+
+额，好吧。。。这里的问题是 `p._1` 和 `p._2` 的类型的联系在上下文中丢失了，所以编译器并不知道如何将它们正确地排列。解决这个问题的方法，通常是使用一个模式匹配，来防止丢失。
+
+```scala
+scala> pets.map { case (a, pa)  => esquire(a)(pa) }
+res6: List[Any] = List(Fish(Bob, Esq.,12), Kitty(Thor, Esq.,java.awt.Color[r=255,g=200,b=0]))
+```
+
+好了，在这一点上你可能感到不适，深感抱歉。
+
+## 等等，还没完！
+
+在我发布完这篇文章之后，有人建议我展示一些其它的方法来处理对一个列表的 `map` 操作，它包含的是类型并不相关的元素，但是却有一个公共的超类，我们继续前进。
+
+[@nuttycom](https://twitter.com/nuttycom) 建议将存在 `(A, Pet[A]) forSome { type A }` 的东西改成一个类型成员，所以我们先看看这个。我们的 `∃[F[_]]` trait （对不起，没忍住）包装了一个为某种类型，并含有一个 `F` 的实例的值。我们在对一个 `List[∃[Pet]]` 进行 `map` 操作时，可以不需要一个模式匹配。这依旧有点痛苦，但是如果这里要多次操作的话，它是值得的。
+
+```scala
+trait ∃[F[_]] {
+  type A
+  val a: A
+  val fa: F[A]
+  override def toString = a.toString
+}
+
+object ∃ {
+  def apply[F[_], A0](a0: A0)(implicit ev: F[A0]): ∃[F] =
+    new ∃[F] {
+      type A = A0
+      val a = a0
+      val fa = ev
+    }
+}
+
+scala> List[∃[Pet]](∃(bob), ∃(thor)).map(e => ∃(esquire(e.a)(e.fa))(e.fa))
+res15: List[∃[Pet]] = List(Fish(Bob, Esq.,12), Kitty(Thor, Esq.,java.awt.Color[r=255,g=200,b=0]))
+```
+
+最后，一个真正吸引人的方法，是使用一个 [shapeless](https://github.com/milessabin/shapeless) 的 `HList`，它有一个非常精确的类型，可以单独识别每个元素。我们可以使用一个叫做 `Poly1` 的多态函数值，来对一个 `HList` 进行 `map` 操作。它（不像 `Function1`）允许我们表达所想要的 typeclass 约束。我承认我不得不寻找 [@travisbrown](https://twitter.com/travisbrown) 来帮忙…… 我确实需要坐下来好好学下这些东西。
+
+```scala
+import shapeless._
+
+object polyEsq extends Poly1 {
+  implicit def default[A: Pet] = at[A](esquire(_))
+}
+
+scala> (bob :: thor :: HNil) map polyEsq // output reformatted for readability
+res11: shapeless.::[Fish,shapeless.::[Kitty,shapeless.HNil]] = 
+  Fish(Bob, Esq.,12) :: 
+  Kitty(Thor, Esq.,java.awt.Color[r=255,g=200,b=0]) :: 
+  HNil
+```
+
+## 结束
+
+好了，我们探索了两种方案，来实现在 Scala 中返回「当前」的类型。这涉及到了「子类型化」以及「特定多态」之间的紧张关系，并且与「存在类型」之间也发生了轻微的冲突。我希望这能够回答一些问题，并且开辟新的探索途径。
 
 ## 延伸
 
