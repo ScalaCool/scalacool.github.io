@@ -33,21 +33,21 @@
 <link rel="canonical" href="http://scala.cool/2017/10/reactive-web-applications-3/"/>
 
 
-<meta name="description" content="通过重新思考应用程序对计算机资源的利用率，可以帮助我们更好地去理解为什么我们需要采用响应式应用以及响应式应用时怎样的。">
+<meta name="description" content="通过重新思考应用程序对计算机资源的利用率，可以帮助我们更好地去理解「为什么我们需要采用响应式应用」以及「响应式应用时怎样的」。">
 <meta name="keywords" content="翻译,Play,响应式编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt;译&gt; 响应式 Web 应用（三）">
 <meta property="og:url" content="http://scala.cool/2017/10/reactive-web-applications-3/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="通过重新思考应用程序对计算机资源的利用率，可以帮助我们更好地去理解为什么我们需要采用响应式应用以及响应式应用时怎样的。">
+<meta property="og:description" content="通过重新思考应用程序对计算机资源的利用率，可以帮助我们更好地去理解「为什么我们需要采用响应式应用」以及「响应式应用时怎样的」。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2017/10/Threaded-web-server.png">
 <meta property="og:image" content="http://scala.cool/images/2017/10/threaded-web-application-servers-as-train-stations.png">
 <meta property="og:image" content="http://scala.cool/images/2017/10/Evented-web-server.png">
-<meta property="og:updated_time" content="2017-10-12T05:38:09.000Z">
+<meta property="og:updated_time" content="2017-10-12T05:42:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;译&gt; 响应式 Web 应用（三）">
-<meta name="twitter:description" content="通过重新思考应用程序对计算机资源的利用率，可以帮助我们更好地去理解为什么我们需要采用响应式应用以及响应式应用时怎样的。">
+<meta name="twitter:description" content="通过重新思考应用程序对计算机资源的利用率，可以帮助我们更好地去理解「为什么我们需要采用响应式应用」以及「响应式应用时怎样的」。">
 <meta name="twitter:image" content="http://scala.cool/images/2017/10/Threaded-web-server.png">
 
 
@@ -153,14 +153,14 @@
     
             <div class="post-content">
             <h2 id="上一篇"><a href="#上一篇" class="headerlink" title="上一篇"></a>上一篇</h2><p><a href="https://scala.cool/2017/09/reactive-web-applications-2/">&lt;译&gt; 响应式 Web 应用（二）</a></p>
-<h2 id="1-2-重新思考对计算机资源的利用"><a href="#1-2-重新思考对计算机资源的利用" class="headerlink" title="1.2 重新思考对计算机资源的利用"></a>1.2 重新思考对计算机资源的利用</h2><p>要理解为什么要采用响应式应用以及响应式应用是怎样的，我们首先需要快速了解一下计算机方面的知识。计算机在过去的几十年中已经进步了许多。特别是在CPU的时钟速度（MHz到GHz）和内存（千字节到千兆字节）方面。</p>
+<h2 id="1-2-重新思考对计算机资源的利用"><a href="#1-2-重新思考对计算机资源的利用" class="headerlink" title="1.2 重新思考对计算机资源的利用"></a>1.2 重新思考对计算机资源的利用</h2><p>要理解「为什么要采用响应式应用」以及「响应式应用是怎样的」，我们首先需要快速了解一下计算机方面的知识。计算机在过去的几十年中已经进步了许多。特别是在CPU的时钟速度（MHz到GHz）和内存（千字节到千兆字节）方面。</p>
 <p>然而，CPU 内核的数量在不断变化才是过去几年中发生的最大变化，尽管单个 CPU 的时钟速度没有增加。在撰写本文时，大多数计算机至少有4个 CPU 内核，并且已经有供应商能够提供具有1024个内核的 CPU 了。</p>
 <p>另一方面，计算机的整体架构以及程序的执行机制尚未放生重大变化。因此，这种架构的一些局限性（比如冯·诺依曼的瓶颈）现在已成为一个问题。要了解这种演变是如何影响 Web 应用程序开发的，我们需要先来看看两个最受欢迎的 Web 服务器体系结构。</p>
 <h3 id="1-2-1-基于线程或者事件的-web-应用服务器"><a href="#1-2-1-基于线程或者事件的-web-应用服务器" class="headerlink" title="1.2.1 基于线程或者事件的 web 应用服务器"></a>1.2.1 基于线程或者事件的 web 应用服务器</h3><p>大致来说，有两种可以用来实现 web 服务器的编程模型，分别是线程模型以及事件模型。在线程模型中，大量的线程负责处理传入的请求。在事件模型中，少量的请求处理线程通过消息传递彼此进行通信。响应式 web 应用服务器采用的是事件模型。</p>
 <h4 id="基于线程模型的服务器"><a href="#基于线程模型的服务器" class="headerlink" title="基于线程模型的服务器"></a>基于线程模型的服务器</h4><p>基于线程的服务器（比如 Apache Tomcat），可以看作是一个有很多个月台的火车站，站长（接收者线程）决定哪列火车（HTTP 请求）到达哪个月台（请求处理线程）。不难看出，有多少个月台，就可以同时接纳多少列火车。下图说明了基于线程的服务器是如何处理 HTTP 请求的。</p>
 <center><br><img src="/images/2017/10/Threaded-web-server.png" alt="Image of Threaded web server"><br></center>
 
-<p>顾名思义，基于线程的 web 服务器依赖于在队列中尽可能多的使用线程，<br>关于火车和线程服务器之间的比较如表1.2所示。</p>
+<p>顾名思义，基于线程的 web 服务器依赖于在队列中尽可能多地使用线程，<br>关于火车和线程服务器之间的比较如表1.2所示。</p>
 <center><br><img src="/images/2017/10/threaded-web-application-servers-as-train-stations.png" alt="Imgage of threaded web application servers as train stations.png"><br></center>
 
 
