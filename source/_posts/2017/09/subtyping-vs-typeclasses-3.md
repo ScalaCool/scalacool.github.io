@@ -214,7 +214,7 @@ scala> val b = a.renamed("Bob")
 b: Fish = Fish(Bob,2)
 ```
 
-有了 typeclass 的这种设计，就不能简单地定义一个 `Rename[Kitty]` 实例，然后返回不是 `Kitty` 类型的东西了。这里的类型十分清晰。我们的 `esquire` 方法是个陷阱，它的类型边界是不同的，但是实现与上述的 F-bounded 例子等价。
+有了 typeclass 的这种设计，就不能简单地定义一个 `Rename[Kitty]` 实例，然后返回不是 `Kitty` 类型的东西了。这里的类型十分清晰。我们的 `esquire` 方法很简单，它的类型边界是不同的，但是实现与上述的 F-bounded 例子等价。
 
 ```scala
 scala> def esquire[A <: Pet : Rename](a: A): A = a.renamed(a.name + ", Esq.")
