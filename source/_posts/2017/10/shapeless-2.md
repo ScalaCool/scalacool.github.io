@@ -81,13 +81,24 @@ object Sum {
     type Aux[A <: Nat, B <: Nat, C <: Nat] = Sum[A, B] { type Out = C }
     // 对应 1 处定义
     implicit def sum1[B <: Nat]: Aux[_0, B, B] = new Sum[_0, B] { type Out = B }
-    // 对应 2 处定义，递归可推导出所有 `Sum[Nat]` 实例
+    // 此处定义与 2 处略有不同
     implicit def sum2[A <: Nat, B <: Nat, C <: Nat]
       (implicit sum : Sum.Aux[A, Succ[B], C]): Aux[Succ[A], B, C] =
       new Sum[Succ[A], B] { type Out = C }
 }
 
 ```
+
+这里第 2 条规则定义为 `Sum[A, Succ[B]].C = Sum[Succ[A] , B].C`，而加法的第二个规则则要求 `Sum[A, Succ[B]].C = Succ[Sum[A, B].C]`
+shapeless 这里定义实际上可以推导出第 2 规则。
+
+将上述类型转换成命题： a + S(b) =  S(a) + b => a + S(b) = S(a + b)
+
+> 下面是证明过程 (S 为后继映射，即 Succ)
+
++ b = 0 时 `a + S(0) = S(a) + 0 = S(a) = S(a + 0)`
++ 假设 b = x 时, `a + S(x) = S(a + x)` 成立，则 b = S(x) 时 `a + S(S(x)) = S(a) + S(x) = S(S(a) + x) = S(a + S(x))`，可以得出对于 `b = S(x) ，a + S(b) = S(a + b)` 也成立
++ 上述两者归纳得出命题成立
 
 现在来看看[如何使用](https://scalafiddle.io/sf/ceGYBDZ/1) `Sum` 来约束类型
 
