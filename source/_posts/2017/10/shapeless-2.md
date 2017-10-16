@@ -1,5 +1,5 @@
 ---
-title: Shapeless 入门指南（二）：Nat - 自然数类型
+title: Shapeless 入门指南（二）：自然数类型 Nat
 author: jilen
 tags:
 - 类型相关
