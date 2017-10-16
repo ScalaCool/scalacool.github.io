@@ -80,7 +80,7 @@ object Sum {
     type Aux[A <: Nat, B <: Nat, C <: Nat] = Sum[A, B] { type Out = C }
     // 对应 1 处定义
     implicit def sum1[B <: Nat]: Aux[_0, B, B] = new Sum[_0, B] { type Out = B }
-    // 对应 2 处定义
+    // 对应 2 处定义，递归可推导出所有 `Sum[Nat]` 实例
     implicit def sum2[A <: Nat, B <: Nat, C <: Nat]
       (implicit sum : Sum.Aux[A, Succ[B], C]): Aux[Succ[A], B, C] =
       new Sum[Succ[A], B] { type Out = C }
