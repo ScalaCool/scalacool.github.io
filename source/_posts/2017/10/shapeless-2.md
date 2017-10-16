@@ -8,7 +8,8 @@ description: 本文将介绍一下 shapeless Nat 类型
 date: 2017-10-16
 ---
 
-[上一篇文章](/2017/09/shapeless-1/)介绍了 shapeless 的重要功能：自动派生 typeclass 实例。本文将阐述一个看起来没什么作用，但实际上是 shapeless 关于泛型编程的重要基石： Nat （自然数）
+[上一篇文章](/2017/09/shapeless-1/)介绍了 shapeless 的重要功能：自动派生 typeclass 实例。
+本文将阐述一个看起来没什么作用，但实际上是 shapeless 关于泛型编程的重要基石： Nat （自然数）
 
 ## 皮亚诺公理(Peano axioms)
 
