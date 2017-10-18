@@ -41,7 +41,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="本文将介绍一下 shapeless Nat 类型">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-10-18T04:59:11.000Z">
+<meta property="og:updated_time" content="2017-10-18T05:03:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shapeless 入门指南（二）：自然数类型 Nat">
 <meta name="twitter:description" content="本文将介绍一下 shapeless Nat 类型">
@@ -184,11 +184,11 @@
 <ul>
 <li>第 1 条，_0 是 Nat 子类型</li>
 <li>第 2 条，_0 显然不是任何类型的 Succ，scala 编译器的类型检查可以保证 Succ[P] 不等于 _0</li>
-<li>第 2 条，假设存在 A, B 满足 A != B 且 Succ[A] =　Succ[B]，同样编译器类型检查可以保证如果 A != B，则 Succ[A] != Succ[B]，即 Succ 是一个单射</li>
-<li>第四条，Succ 的定义直接指出如果 P 是 Nat，则 Succ 亦是 Nat</li>
-<li>第五条，A 就是 Nat 类型的定义，（这里形式化证明过于困难，暂不做证明）</li>
+<li>第 3 条，假设存在 A, B 满足 A != B 且 Succ[A] =　Succ[B]，同样编译器类型检查可以保证如果 A != B，则 Succ[A] != Succ[B]，即 Succ 是一个单射</li>
+<li>第 4 条，Succ 的定义直接指出如果 P 是 Nat，则 Succ 亦是 Nat</li>
+<li>第 5 条，A 就是 Nat 类型的定义，（这里形式化证明过于困难，暂不做证明）</li>
 </ul>
-<h2 id="加法定义"><a href="#加法定义" class="headerlink" title="加法定义"></a>加法定义</h2><p>有了上述公理之后，可以建披亚诺算术系统，我们以加法为例<br>加法定义为满足以下关系的映射</p>
+<h2 id="加法定义"><a href="#加法定义" class="headerlink" title="加法定义"></a>加法定义</h2><p>有了上述公理之后，可以建皮亚诺算术系统，我们以加法为例<br>加法定义为满足以下关系的映射</p>
 <blockquote>
 <ol>
 <li>a + 0 = 0</li>
