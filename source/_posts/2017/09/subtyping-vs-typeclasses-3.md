@@ -403,6 +403,8 @@ res15: List[∃[Pet]] = List(Fish(Bob, Esq.,12), Kitty(Thor, Esq.,java.awt.Color
 
 最后，一个真正吸引人的方法，是使用一个 [shapeless](https://github.com/milessabin/shapeless) 的 `HList`，它有一个非常精确的类型，可以单独识别每个元素。我们可以使用一个叫做 `Poly1` 的多态函数值，来对一个 `HList` 进行 `map` 操作。它（不像 `Function1`）允许我们表达所想要的 typeclass 约束。我承认我不得不寻找 [@travisbrown](https://twitter.com/travisbrown) 来帮忙…… 我确实需要坐下来好好学下这些东西。
 
+> 译者注：同事正在书写 [《Shapeless 入门指南》](https://scala.cool/tags/Shapeless/)
+
 ```scala
 import shapeless._
 
