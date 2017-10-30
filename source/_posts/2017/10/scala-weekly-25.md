@@ -35,8 +35,15 @@ date: 2017-10-30
 - [SIP meeting: October 2017](https://www.youtube.com/watch?v=aIc-o1pcRhw)
   Scala SIP 会议
 
+- [The Limitations of Type Classes as Subtyped Implicits](https://adelbertc.github.io/publications/typeclasses-scala17.pdf)
+  Type Classes
+
 ## 一周速递
 
 - ScalaFiddle [更新](https://users.scala-lang.org/t/scalafiddle-updated-with-support-for-scala-2-12-and-more-libs/1818)，支持 Scala 2.12 以及更多类库
 
 - Quill [支持](https://github.com/getquill/quill/pull/941) Spark SQL
+
+- scalajs-react v1.1.1 [发布](https://github.com/japgolly/scalajs-react/blob/master/doc/changelog/1.1.1.md)
+
+- Frameless 0.4 [发布](https://github.com/typelevel/frameless)
