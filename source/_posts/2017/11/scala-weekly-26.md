@@ -20,5 +20,12 @@ date: 2017-11-06
 - [Typesafety 101: Knowing your Types](https://www.cakesolutions.net/teamblogs/typesafety-101-knowing-your-types)
   类型安全
 
+- [Intervals in Scala: IntervalMap](https://github.com/rklaehn/intervalset/blob/master/IntervalMap.md#intervalmap)
+  数据结构
+
+- [Scala、Groovy、Clojure 、Kotlin分别解决了Java 的什么痛点？](https://www.zhihu.com/question/48633827)
+  知乎问答
+
 ## 一周速递
 
+- Typelevel Scala 4 [发布](https://github.com/typelevel/scala/blob/typelevel-readme/notes/typelevel-4.md)
