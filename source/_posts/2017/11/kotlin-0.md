@@ -67,7 +67,7 @@ Kotlin 是一种在 JVM 上运行的静态类型编程语言，可以编译成 J
 [Anko](https://github.com/Kotlin/anko) 与 [kovenant](http://kovenant.komponents.nl/android/features/) 让 Kotlin 在 Android 的开发中更加方便，如果你看过这两个库，一定也为之青睐。
 
 除 Android 外，其实企业级别的 Java 项目也可以考虑使用 Kotlin：  
- 1. **它有一个成熟的公司强大的商业支持**，JetBrains 致力于该项目的房展，拥有一支高效的团队和稳定的商业模式。在较长的时间内，你都不用担心 Kotlin 被抛弃。  
+ 1. **它有一个成熟的公司强大的商业支持**，JetBrains 致力于该项目的发展，拥有一支高效的团队和稳定的商业模式。在较长的时间内，你都不用担心 Kotlin 被抛弃。  
 
  2. **Kotlin 的风险很低**：可以由一两个成员尝试在某个功能块使用，但并不会影响其他模块：Kotlin 类可以导出一个与常规 Java 代码看起来相同的 Java API。
 
