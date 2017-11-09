@@ -18,13 +18,13 @@ Java诞生至今，有好多种IO模型，从最早的Java IO到后来的Java NI
 
 其实Java NIO模型相对来说也还是比较简单的，它的核心主要有三个，分别是：Selector、Channel和Buffer,我们先来看看它们之间的关系：
 
-![java-nio](/images/2017/11/java-nio.png)
+![java-nio](https://scala.cool/images/2017/11/java-nio.png)
 
-它们之间的关系很清晰，一个线程对应着一个Selecter，一个Selecter对应着多个Channel，一个Channel对应着一个Buffer，当然这只是通常的做法，一个Channel也可以对应多个Selecter，一个Channel对应着多个Buffer。
+它们之间的关系很清晰，一个线程对应着一个Selector，一个 Selector 对应着多个Channel，一个Channel对应着一个Buffer，当然这只是通常的做法，一个Channel也可以对应多个Selector，一个Channel对应着多个Buffer。
 
-#### Selecter
+#### Selector
 
-个人认为Selecter是Java NIO的最大特点，之前我们说过，传统的Java IO在面对大量IO请求的时候有心无力，因为每个维护每一个IO请求都需要一个线程，这带来的问题就是，系统资源被极度消耗，吞吐量直线下降，引起系统相关问题，那么Java NIO是如何解决这个问题的呢？答案就是Selecter，简单来说它对应着多路IO复用中的监管角色，它负责统一管理IO请求，监听相应的IO事件，并通知对应的线程进行处理，这种模式下就无需为每个IO请求单独分配一个线程，另外也减少线程大量阻塞，资源利用率下降的情况，所以说Selecter是Java NIO的精髓，在Java中我们可以这么写：
+个人认为Selector是Java NIO的最大特点，之前我们说过，传统的Java IO在面对大量IO请求的时候有心无力，因为每个维护每一个IO请求都需要一个线程，这带来的问题就是，系统资源被极度消耗，吞吐量直线下降，引起系统相关问题，那么Java NIO是如何解决这个问题的呢？答案就是Selector，简单来说它对应着多路IO复用中的监管角色，它负责统一管理IO请求，监听相应的IO事件，并通知对应的线程进行处理，这种模式下就无需为每个IO请求单独分配一个线程，另外也减少线程大量阻塞，资源利用率下降的情况，所以说Selector是Java NIO的精髓，在Java中我们可以这么写：
 
 ```java
 // 打开服务器套接字通道
@@ -50,7 +50,7 @@ Channel本意是通道的意思，简单来说，它在Java NIO中表现的就�
 - SocketChannel：传输TCP连接数据时的通道，与Java IO中的Socket对应
 - ServerSocketChannel: 监听套接词连接时的通道，与Java IO中的ServerSocket对应
 
-当然其中最重要以及最常用的就是SocketChannel和ServerSocketChannel，也是Java NIO的精髓，ServerSocketChannel可以设置成非阻塞模式，然后结合Selecter就可以实现多路复用IO，使用一个线程管理多个Socket连接，具体使用可以参数上面的代码。
+当然其中最重要以及最常用的就是SocketChannel和ServerSocketChannel，也是Java NIO的精髓，ServerSocketChannel可以设置成非阻塞模式，然后结合 Selector 就可以实现多路复用IO，使用一个线程管理多个Socket连接，具体使用可以参数上面的代码。
 
 #### Buffer
 
@@ -97,7 +97,7 @@ ByteBuffer directBuffer = ByteBuffer.allocateDirect(1024);
 ByteBuffer buffer = ByteBuffer.allocate(10);
 ```
 
-![init-buffer](/images/2017/11/init-buffer.png)
+![init-buffer](https://scala.cool/images/2017/11/init-buffer.png)
 
 2.向Buffer中写入两个字节：
 
@@ -105,7 +105,7 @@ ByteBuffer buffer = ByteBuffer.allocate(10);
 buffer.put("my".getBytes());
 ```
 
-![write-buffer-1](/images/2017/11/write-buffer-1.png)
+![write-buffer-1](https://scala.cool/images/2017/11/write-buffer-1.png)
 
 3.再Buffer中写入四个字节：
 
@@ -113,7 +113,7 @@ buffer.put("my".getBytes());
 buffer.put("blog".getBytes());
 ```
 
-![write-buffer-2](/images/2017/11/write-buffer-2.png)
+![write-buffer-2](https://scala.cool/images/2017/11/write-buffer-2.png)
 
 4.现在我们需要从Buffer中获取数据，首先我们先将写模式转换为读模式：
 
@@ -134,7 +134,7 @@ public final Buffer flip() {
 
 从源码中可以看出，flip方法根据Buffer目前的相应属性来修改对应的属性，所以flip()方法之后，Buffer目前的状态：
 
-![read-buffer](/images/2017/11/read-buffer.png)
+![read-buffer](https://scala.cool/images/2017/11/read-buffer.png)
 
 5.接着我们从Buffer中读取数据
 
@@ -147,7 +147,7 @@ public final Buffer flip() {
 
 此时Buffer的状态如下图所示：
 
-![read-buffer-2](/images/2017/11/read-buffer-2.png)
+![read-buffer-2](https://scala.cool/images/2017/11/read-buffer-2.png)
 
 我们可以按照这种方式读取完我们所需数据，最终调用clear()方法将Buffer置为初始状态。
 
