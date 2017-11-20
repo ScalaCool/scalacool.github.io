@@ -193,7 +193,7 @@ iphoneX.play();
 
 
 ### 优点
-适配器模式主要有以下几个优点：  
+总的来说，适配器模式主要有以下几个优点：  
 1. 将目标类和适配者类解耦，通过引入一个适配器类来重用现有的适配者类，无须修改原有结构。
 2. 增加了类的透明性和复用性，将具体的业务实现过程封装在适配者类中，对于客户端类而言是透明的，而且提高了适配者的复用性，同一个适配者类可以在多个不同的系统中复用。  
 3. 灵活性和扩展性都非常好，通过使用配置文件，可以很方便地更换适配器，也可以在不修改原有代码的基础上增加新的适配器类，完全符合「开闭原则」。
@@ -228,7 +228,7 @@ val headsetAdapter = new HeadsetAdapter
 headsetAdapter.audioTraditionally
 ```
 
-当然，除了这种方式，Scala 里还可以通过隐式转换来实现适配 Final 类的适配器
+当然，除了这种方式，Scala 里还可以通过隐式转换来实现适配 `final` 类的适配器:
 ```Scala
 final class FinalPhoneJackConector {
     def  audioTraditionally = println("通过 PhoneJack 播放声音")
@@ -254,7 +254,7 @@ light.audioWithLightning()
 > Hint: 对于不熟悉 `implicit` 的朋友可以 [看一下这里](https://docs.scala-lang.org/zh-cn/overviews/core/implicit-classes.html) 
 
 ## 总结
-光从代码量来说，Scala 简洁比 Java 表现的好太多。
+光从代码量来说，Scala 简洁比 Java 表现的好太多。  
 
 其次，Scala 结合了「类适配器」和「对象适配器」所有的优点，并消除了自身问题。与 Java 相比，Scala 有如下特点：
 
