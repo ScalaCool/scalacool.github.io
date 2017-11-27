@@ -30,21 +30,21 @@
 
 
 
-<link rel="canonical" href="http://scala.cool/2017/11/scala-weekly-27/"/>
+<link rel="canonical" href="http://scala.cool/2017/11/cats-1/"/>
 
 
-<meta name="description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
-<meta name="keywords" content="Weekly">
+<meta name="description" content="知乎上出现过一个很好的问题：「什么是函数式编程思维？」。">
+<meta name="keywords" content="Cats,函数式编程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala 技术周刊 | 第 27 期">
-<meta property="og:url" content="http://scala.cool/2017/11/scala-weekly-27/index.html">
+<meta property="og:title" content="Cats（一）：从函数式编程思维谈起">
+<meta property="og:url" content="http://scala.cool/2017/11/cats-1/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
+<meta property="og:description" content="知乎上出现过一个很好的问题：「什么是函数式编程思维？」。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-27T09:29:07.000Z">
+<meta property="og:updated_time" content="2017-11-27T10:11:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala 技术周刊 | 第 27 期">
-<meta name="twitter:description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
+<meta name="twitter:title" content="Cats（一）：从函数式编程思维谈起">
+<meta name="twitter:description" content="知乎上出现过一个很好的问题：「什么是函数式编程思维？」。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -79,7 +79,7 @@
 
 
 
-    <title> Scala 技术周刊 | 第 27 期 - Scala Cool </title>
+    <title> Cats（一）：从函数式编程思维谈起 - Scala Cool </title>
   </head>
 
   <body>
@@ -126,21 +126,21 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          Scala 技术周刊 | 第 27 期
+          Cats（一）：从函数式编程思维谈起
         
       </h1>
 
       <time class="post-time">
-          11月27日
+          12月8日
       </time>
       
         <span class="author-split">|</span>
         <span class="author-info">
-          by <span class="_author-text-holder" data-author="ScalaCool"></span>
+          by <span class="_author-text-holder" data-author="Yison"></span>
         </span>
       
       
-        <span class="_author-avatar-holder" data-author="ScalaCool"></span>
+        <span class="_author-avatar-holder" data-author="Yison"></span>
       
     </header>
 
@@ -148,35 +148,7 @@
 
     
             <div class="post-content">
-            <blockquote>
-<p>这里有最新的 Scala 社区动态、技术博文。<br>微信搜索 「scalacool」关注我们，及时获取最新资讯。</p>
-</blockquote>
-<hr>
-<h2 id="深度阅读"><a href="#深度阅读" class="headerlink" title="深度阅读"></a>深度阅读</h2><ul>
-<li><p><a href="https://www.reddit.com/r/scala/comments/7dqtwc/replacing_intellij_with_emacs_for_scala/" target="_blank" rel="external">Replacing IntelliJ with Emacs for Scala Development</a><br>用 Emacs 进行 Scala 开发</p>
-</li>
-<li><p><a href="https://medium.com/@diego_pacheco/the-power-of-scala-type-classes-95fa61cd084d" target="_blank" rel="external">The power of Scala Type Classes</a><br>TypeClass</p>
-</li>
-<li><p><a href="http://localhost:4000/2017/11/scala-design-patterns-5/" target="_blank" rel="external">Scala 与设计模式（五）：Adapter 适配器模式</a><br>Scala 与设计模式系列</p>
-</li>
-<li><p><a href="http://www.lihaoyi.com/post/SowhatswrongwithSBT.html" target="_blank" rel="external">So, what’s wrong with SBT?</a><br>关于 SBT 的槽点以及事实</p>
-</li>
-<li><p><a href="https://blog.softwaremill.com/akka-streams-pitfalls-to-avoid-part-1-75ef6403c6e6" target="_blank" rel="external">Akka Streams pitfalls to avoid — part 1</a><br>Akaa Stream 的陷阱</p>
-</li>
-<li><p><a href="https://medium.com/@dreamtoipo/should-you-use-scala-for-startup-3085c750884" target="_blank" rel="external">Should you use Scala for Startup?</a><br>初创公司适合用 Scala 吗</p>
-</li>
-</ul>
-<h2 id="一周速递"><a href="#一周速递" class="headerlink" title="一周速递"></a>一周速递</h2><ul>
-<li><p>Akka 2.5.7 <a href="https://t.co/uZkaye23vg" target="_blank" rel="external">发布</a></p>
-</li>
-<li><p>akka-stream-kafka 0.18 for Akka 2.5.7 <a href="https://doc.akka.io/docs/akka-stream-kafka/current/home.html" target="_blank" rel="external">发布</a></p>
-</li>
-<li><p>scalafix v0.5.6 <a href="https://github.com/scalacenter/scalafix/releases/tag/v0.5.6" target="_blank" rel="external">发布</a></p>
-</li>
-<li><p>Quill 2.3.0 <a href="https://github.com/getquill/quill/blob/master/CHANGELOG.md#230" target="_blank" rel="external">发布</a></p>
-</li>
-</ul>
-
+            
             </div>
           
 
@@ -184,7 +156,9 @@
       <footer class="post-footer">
         <div class="post-tags">
           
-            <a href="/tags/Weekly/">Weekly</a>
+            <a href="/tags/Cats/">Cats</a>
+          
+            <a href="/tags/函数式编程/">函数式编程</a>
           
         </div>
 
@@ -192,15 +166,9 @@
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2017/11/cats-1/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">Cats（一）：从函数式编程思维谈起</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
     
-    
-      <a class="next" href="/2017/11/scala-design-patterns-5/">
-        <span class="next-text nav-default">Scala 与设计模式（五）：Adapter 适配器模式</span>
+      <a class="next" href="/2017/11/scala-weekly-27/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第 27 期</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
