@@ -3,7 +3,7 @@ title: Asyncdb（三）：MySQL网络协议分析
 author: Godpan
 tags: 
 - Asyncdb
-- Java
+- 数据库
 - 网络编程
 description: MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序。
 ---
