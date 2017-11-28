@@ -1,10 +1,11 @@
 ---
 title: MySQL网络协议分析
-layout: post
-guid: urn:uuid:8d2f2b63-g930-3d54-8ca7-fbgbds2a4fge
-tags:
-  - MySQL
-  - 网络协议
+author: Godpan
+tags: 
+- Asyncdb
+- Java
+- 网络编程
+description: MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序。
 ---
 
 MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序，在Java中你可能一开始会使用原生mysql-connector-java来进行操作，后来你会接触到Hibernate，Mybatis等ORM框架，其实它们底层也是基于mysql-connector-java，但很多时候我们并不清楚程序是怎么跟数据库具体交互的，比如执行一个SQL查询，程序是如何从MySQL中获取数据的呢？今天就让我们来看看最基础的MySQL网络协议分析。
@@ -76,7 +77,9 @@ SELECT DISTINCT connection_type from performance_schema.threads where connection
 
 通信中最重要的就是数据，那么程序是如何和MySQL Server进行通信，并交互数据的呢？比如如何验证账户，发送查询语句，返回执行结果等，我先画一个流程图来模拟一下整个过程，帮助大家理解：
 
+<center>
 ![mysql-process](/images/2017/11/mysql-process.png)
+</center>
 
 整个过程相对来说还是比较清晰的，我们对连接请求和断开请求不需要过分关心，只需要了解这一点就可以了，重要的是其他几点，那么在这几步中，数据是怎么进行交互的呢？
 
