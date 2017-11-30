@@ -76,7 +76,7 @@ date: 2017-12-08
 - 可以作为过程的结果返回
 - 可以包含在其它的数据结构中
 
-举个例子，我们可以定义一个过程中，它接受的参数是一个过程，返回的是另外一个过程，这似乎看起来有点怪。
+举个例子，我们可以定义一个过程，它接受的参数是一个过程，返回的是另外一个过程，这似乎看起来有点怪。
 换个例子，定义一个过程，它接受的参数是一个数，返回的是另外一个数，这是不是就熟悉多了？
 
 在函数式编程中，我们会发现其实「过程」和「数据」的界限有时候是模糊的。也就是说，有时我们可以把它们当作一个东西。
@@ -86,6 +86,8 @@ date: 2017-12-08
 我们于是可以这么理解，函数式编程要解决的第一个问题：**就是需要足够高的抽象能力，能对各种数据和过程进行抽象，提供类型（代数结构）**。
 
 这也同样是后续我们在学习 Cats 过程中要获得解答的一个疑问，它是如何帮助我们实现这一点。
+
+> 推荐阅读 @shaw 写的 [如何在 Scala 中利用 ADT 良好地组织业务](https://scala.cool/2017/03/how-to-use-algebraic-data-type-in-scala-development/)
 
 ## 图灵完备与 Lambda 演算
 
@@ -103,7 +105,7 @@ date: 2017-12-08
 
 ## 面向组合子编程
 
-最后，我们再来聊聊核心，所谓的「组合」。
+我们再来聊聊核心，所谓的「组合」。
 
 「面向组合子编程」是十年前 javaeye 的牛人 @Ajoo 提出的概念。
 
@@ -111,14 +113,84 @@ date: 2017-12-08
 
 **前者是归纳法，后者是演绎法**。
 
-也就说，我们在用 Java 这些面向对象的语言进行程序设计的时候，通常采用的是总结的方法，然而函数式编程语言提倡的「组合」，更类似于数学里的映射，它是一种推导。
+也就说，我们在用 Java 这些面向对象的语言进行程序设计的时候，通常采用的是总结的方法，然而函数式编程语言提倡的「组合」，更贴近数学的思维，它是一种推导。
 
-所以，函数式编程所关心的组合，更多做的是对一些类型关系的转化，所谓的 transformer。
+所以，函数式编程所关心的组合，更多做的是先高度抽象类型关系，然后对这些关系的转化，所谓的 transformer。
 
 于是，我们得出第二个关键的问题：**即 Cats 如何提供足够的 transformer，来帮助我们实现各种关系之间的组合**。
 
+## 举例
+
+对于第一次接触这些概念的朋友来说，还是有点抽象，下面我们来举一个实际的例子来加深认识。
+
+假设我们现在要设计一个抽奖活动的参与过程，涉及以下逻辑：
+- 获取活动奖品数据
+- 判断活动的开始、进行、结束、奖品是否抢光等状态
+
+### 命令式风格
+
+```scala
+import org.joda.time.DateTime
+import scala.concurrent.Future
+
+case class Activity(id: Long, start: DateTime, end: DateTime)
+case class Prize(id: Long, name: String, count: Int)
+
+val activity = syncGetActivity()
+val prizes = syncGetPrizes(activity.id)
+
+if (activity.start.isBefore(DateTime.now())) {
+  println("activity not starts")
+} else if (activity.end.isBefore(DateTime.now())) {
+  println("activity ends")
+} else if (prizes.map(_.count).sum < 1) {
+  println("activity has no prizes")
+} else {
+  println("activity is running")
+}
+```
+
+### 函数式风格
+
+```scala
+import org.joda.time.DateTime
+import scala.concurrent.Future
+
+case class Activity(id: Long, start: DateTime, end: DateTime)
+case class Prize(id: Long, name: String, count: Int)
+
+sealed trait ActivityStatus {
+  val activity: Activity
+  val prizes: Seq[Prize]
+}
+case class ActivityNotStarts(activity: Activity, prizes: Seq[Prize]) extends ActivityStatus
+case class ActivityEnds(activity: Activity, prizes: Seq[Prize]) extends ActivityStatus
+case class ActivityPrizeEmpty(activity: Activity, prizes: Seq[Prize]) extends ActivityStatus
+case class ActivityRunning(activity: Activity, prizes: Seq[Prize]) extends ActivityStatus
+
+def getActivityStatus(): Future[ActivityStatus] = {
+  for {
+    activity <- asyncGetActivity()
+    prizes <- asyncGetPrizes(activity.id)
+  } yield (activity, prizes) match {
+    case (a, pzs) if a.start.isBefore(DateTime.now()) => ActivityNotStarts(a, pzs)
+    case (a, pzs) if a.end.isBefore(DateTime.now()) => ActivityNotStarts(a, pzs)
+    case (a, pzs) if pzs.map(_.count).sum < 1 => ActivityPrizeEmpty(a, pzs)
+    case (a, pzs) => ActivityRunning(a, pzs)
+  }
+}
+```
+
+以上，我们可以发现函数式风格，会倾向于基于更高的业务层次进行抽象，直觉上是一个 **describe what** 的设计，而不是 **how to do**。
+
+值得一提的是，`asyncGetActivity` 这个从数据库异步获取活动数据过程，它的类型是一个高阶类型 `Future[Activity]`，这也就是我们之前提到的对过程进行抽象，定义类型。
+
+通过对 `asyncGetActivity` 和 `asyncGetPrizes` 两个异步过程的组合，我们最终转化得到了 `ActivityStatus` 这个类型的对象结果。
+
 ## 总结
 
-通过该篇文章，我们大概了解了函数式编程大致上的特点，在下一篇文章中，我们会介绍下函数式编程所带来的优势。
+Scala 是一门结合「面向对象」和「函数式」的编程语言，我们用它可以写出截然不同的代码风格。很多人把它当作 better Java 来使用，但如果结合 Cats 这个函数式类库，我们就可以更好地采用函数式编程思维来设计程序，从而发挥 Scala 更大的威力。
+
+通过该篇文章，我们对函数式编程有了直觉上的感受。当然，你可能依旧云里雾里，不要紧，我们会在后续的文章里进一步的讨论。在下一篇文章中，我们会介绍下函数式编程所带来的优势。
 
 
