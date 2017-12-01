@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/11/mysql-protocol/"/>
+
+
+<meta name="description" content="MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序。">
+<meta name="keywords" content="网络编程,数据库,Asyncdb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Asyncdb（三）：MySQL网络协议分析">
+<meta property="og:url" content="http://scala.cool/2017/11/mysql-protocol/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2017/11/mysql-process.png">
+<meta property="og:updated_time" content="2017-11-28T07:23:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Asyncdb（三）：MySQL网络协议分析">
+<meta name="twitter:description" content="MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序。">
+<meta name="twitter:image" content="http://scala.cool/images/2017/11/mysql-process.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Asyncdb（三）：MySQL网络协议分析 - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" ><div class="site-header-inner">
+      
+    <h1 class="site-title">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+      
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                News
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Asyncdb（三）：MySQL网络协议分析
+        
+      </h1>
+
+      <time class="post-time">
+          11月28日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Godpan"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="Godpan"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序，在Java中你可能一开始会使用原生mysql-connector-java来进行操作，后来你会接触到Hibernate，Mybatis等ORM框架，其实它们底层也是基于mysql-connector-java，但很多时候我们并不清楚程序是怎么跟数据库具体交互的，比如执行一个SQL查询，程序是如何从MySQL中获取数据的呢？今天就让我们来看看最基础的MySQL网络协议分析。</p>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>阅读本文之前你需要对网络协议需要有基本的了解，比如两台机子之间的数据是如何通信的，硬件层可以暂时不需了解，但网络层和传输层的协议要有一定的理解，比如IP数据包，TCP/IP协议，UDP协议等相关概念，有了这些基础，有利于你阅读本文。</p>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在历史悠久的时代，数据库只作为单机存储，也不怎么需要与程序进行交互的时候的首，它的网络通信并不是那么重要，但随着时代的发展，数据库不再只是单纯的作为一个数据的仓库了，它需要提供与外界的交互，比如远程连接，程序操作数据库等，这时候一份规范的网络通信的协议就非常重要了，比如它是如何校验权限，如何解析SQL语句，如何返回执行结果都需要用到相应的协议，很多时候我们并不需要接触这些内容，因为它太底层了，我们直接使用把它们封装好的第三方包就可以了，为什么还要去学习它的网络协议呢？确实对于一开始学习编程的人来说，这有点操之过急，反而有时候会适得其反，但当你对这一方面有了一定的了解之后，你便会迫不及待得想去探索更深层的奥秘，去了解并学习我们平常用的第三方类库是怎么去实现，明白它的底层原理，甚至对一些莫名其妙的bug也不会再害怕。</p>
+<h1 id="MySQL连接方式"><a href="#MySQL连接方式" class="headerlink" title="MySQL连接方式"></a>MySQL连接方式</h1><p>分析协议，我们首先要了解如何与数据库连接，说到MySQL连接方式，大家突然可能有点懵，其实它一直伴随着我们，比如我们第一次装数据库完成后执行的第一次登录，比如你没有设置密码：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot</div></pre></td></tr></table></figure>
+<p>这是最基本的一种数据库连接方式，那么MySQL连接方式到底有几种呢？到MySQL5.7为止，总共有五种，分别是TCP/IP，TLS/SSL，Unix Sockets，Shared Memory，Named pipes，下面我们就来看看这五种的区别：</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>默认开启</th>
+<th>支持系统</th>
+<th>只支持本机</th>
+<th>如何开启</th>
+<th>参数配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP/IP</td>
+<td>是</td>
+<td>所有系统</td>
+<td>否</td>
+<td>–skip-networking=yes/no.</td>
+<td>–port<br>–bind-address</td>
+</tr>
+<tr>
+<td>TLS/SSL</td>
+<td>是</td>
+<td>所有系统（基于TCP/IP)之上</td>
+<td>否</td>
+<td>–ssl=yes/no.</td>
+<td>–ssl-* options</td>
+</tr>
+<tr>
+<td>Unix Sockets</td>
+<td>是</td>
+<td>类Unix系统</td>
+<td>是</td>
+<td>设置–socket=<empty\> 来关闭.</empty\></td>
+<td>–socket=socket path</td>
+</tr>
+<tr>
+<td>Shared Memory</td>
+<td>否</td>
+<td>Windows系统</td>
+<td>是</td>
+<td>–shared-memory=on/off.</td>
+<td>–shared-memory-base-name=<name\></name\></td>
+</tr>
+<tr>
+<td>Named pipes</td>
+<td>否</td>
+<td>Windows系统</td>
+<td>否</td>
+<td>–enable-named-pipe=on/off.</td>
+<td>–socket=<name\></name\></td>
+</tr>
+</tbody>
+</table>
+<p>从上表中我们可以清晰看出每种连接方式的区别，接下里我会具体说明几种连接是怎么操作的，由于我的机子是Mac OS系统，这里只模拟非Windows系统下的三种方式,因为这三种方式都是默认开启的，我们不需要进行任何配置：</p>
+<h2 id="1-Unix-Sockets："><a href="#1-Unix-Sockets：" class="headerlink" title="1.Unix Sockets："></a>1.Unix Sockets：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot</div></pre></td></tr></table></figure>
+<p>若你在本机使用这种方式连接MySQL数据库的话，它默认会使用Unix Sockets。</p>
+<h2 id="2-TCP-IP："><a href="#2-TCP-IP：" class="headerlink" title="2.TCP/IP："></a>2.TCP/IP：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql <span class="comment">--protocol=tcp -uroot</span></div><div class="line">mysql -P3306 -h127.0.0.1 -uroot</div></pre></td></tr></table></figure>
+<p>连接的时候我们指定连接协议，或者指定相应的IP及端口，我们的连接方式就变成了TCP/IP方式。</p>
+<h2 id="3-TLS-SSL："><a href="#3-TLS-SSL：" class="headerlink" title="3.TLS/SSL："></a>3.TLS/SSL：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql <span class="comment">--protocol=tcp -uroot --ssl=on</span></div><div class="line">mysql -P3306 -h127.0.0.1 -uroot <span class="comment">--ssl=on</span></div></pre></td></tr></table></figure>
+<p>上表说过，TLS/SSL是基于TCP/IP的，所以我们只需再指定打开ssl配置即可。</p>
+<p>然后我们可以通过以下语句来查询目前数据库的连接情况：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> connection_type <span class="keyword">from</span> performance_schema.threads <span class="keyword">where</span> connection_type <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">null</span></div></pre></td></tr></table></figure>
+<p>那么我们如何选择连接方式呢？个人总结了以下几个原则：</p>
+<ul>
+<li>若是你能确定程序和数据库在同一台机子(类Unix系统)上，推荐使用Unix Sockets，因为它效率更高；</li>
+<li>若数据库分布在不同的机子上，且能确保连接安全或者安全性要求不是那么高，推荐使用TCP/IP，反之使用TLS/SSL；</li>
+</ul>
+<h1 id="MySQL数据包"><a href="#MySQL数据包" class="headerlink" title="MySQL数据包"></a>MySQL数据包</h1><p>通信中最重要的就是数据，那么程序是如何和MySQL Server进行通信，并交互数据的呢？比如如何验证账户，发送查询语句，返回执行结果等，我先画一个流程图来模拟一下整个过程，帮助大家理解：</p>
+<center><br><img src="/images/2017/11/mysql-process.png" alt="mysql-process"><br></center>
+
+<p>整个过程相对来说还是比较清晰的，我们对连接请求和断开请求不需要过分关心，只需要了解这一点就可以了，重要的是其他几点，那么在这几步中，数据是怎么进行交互的呢？</p>
+<p>其实主要就是两步，<strong>Client将执行命令编码成Server要求的格式传输给Server端执行，Server端将执行结果传输给Client端，Client端再根据相应的数据包格式解析获得所需的数据</strong>。</p>
+<h2 id="1-基本数据类型"><a href="#1-基本数据类型" class="headerlink" title="1.基本数据类型"></a>1.基本数据类型</h2><p>虽然网络中的数据是用字节传输的，但它背后的数据源都是有类型的数据，MySQL协议也有基本的数据类型，好比Java中的8种基本数据类型，但MySQL协议中简单的多，它只有两种基本数据类型，分别为Integer(整型)，String(字符串)，下面我们就来看看这两种类型。</p>
+<h3 id="Integer-整型"><a href="#Integer-整型" class="headerlink" title="Integer(整型)"></a>Integer(整型)</h3><p>首先Integer在MySQL协议中有两种编码方式，分别为FixedLengthInteger和LengthEncodedInteger<br>,其中前者用于存储无符号定长整数，实际中使用的不多，这里着重讲一下后者。</p>
+<p>使用LengthEncodedInteger编码的整数可能会使用1, 3, 4, 或者9 个字节，具体使用字节取决于数值的大小，下表是不同的数据长度的整数所使用的字节数：</p>
+<table>
+<thead>
+<tr>
+<th>最小值（包含）</th>
+<th>最大值（不包含）</th>
+<th>存储方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>251</td>
+<td>1个字节</td>
+</tr>
+<tr>
+<td>251</td>
+<td>2^16</td>
+<td>3个字节(0xFC + 2个字节具体数据)</td>
+</tr>
+<tr>
+<td>2^16</td>
+<td>2^24</td>
+<td>4个字节(0xFD + 3个字节具体数据)</td>
+</tr>
+<tr>
+<td>2^24</td>
+<td>2^64</td>
+<td>9个字节(0xFE + 8个字节具体数据)</td>
+</tr>
+</tbody>
+</table>
+<p>举个简单的例子，比如1024的编码为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">0xFC 0x00 0x04</div></pre></td></tr></table></figure>
+<p>其中0x代表16进制，实际数据传输中并没有该标识，第一位代表这是一个251~2^16之间的数值，所以后面两位为数值具体的值，这里使用的是小端字节序，MySQL默认使用的也是这种编码次序，所以这里1024是0x00 0x04，字节序相关知识可以参考：<a href="http://www.ruanyifeng.com/blog/2016/11/byte-order.html" target="_blank" rel="external">理解字节序</a>，到这里大家应该对这种编码格式有了一定的了解了，下面我们就来看看String。</p>
+<h3 id="String-字符串"><a href="#String-字符串" class="headerlink" title="String(字符串)"></a>String(字符串)</h3><p>String的编码格式相对Integer来说会复杂一点，主要有以下几种：</p>
+<ul>
+<li>FixedLengthString（定长方式）：需先知道String的长度，MySQL中的一个例子就是ERR_Packet包（后续会讲到）就使用了这种编码方式，因为它的长度固定，用5个字节存储所有数据。</li>
+<li>NullTerminatedString（Null结尾方式）: 字符串以遇到Null作为结束标志，相应的字节为00。</li>
+<li>VariableLengthString（动态计算字符串长度方式）: 字符串的长度取决于其他变量计算而定，比如一个字符串由Integer + Value组成，我们通过计算Integer的值来获取Value的具体的长度。</li>
+<li>LengthEncodedString（指定字符串长度方式）： 与VariableLengthString原理相似，是它的一种特殊情况，具体例子就是我上条举的这个例子。</li>
+<li>RestOfPacketString（包末端字符串方式）：一个包末端的字符串，可根据包的总长度金和当前位置得到字符串的长度，实际中并不常用。</li>
+</ul>
+<p>总的来说String的编码格式种类相对比较多，不同方式之间的区别也比较大，若要深刻理解还需从实际的例子里去学习，后续文章中我会写几个demo带大家一起去探索。</p>
+<h2 id="2-基本数据包格式"><a href="#2-基本数据包格式" class="headerlink" title="2.基本数据包格式"></a>2.基本数据包格式</h2><p>数据包格式也主要分为两种，一种是Server端向Client端发送的数据包格式，另一种则是Client向Server端发送的数据包。</p>
+<h3 id="Server-to-Client"><a href="#Server-to-Client" class="headerlink" title="Server to Client"></a>Server to Client</h3><p>Server向Client发送的数据包有两个原则：</p>
+<ul>
+<li>每个数据包大小不能超过2^24字节(16MB);</li>
+<li>每个数据包前都需要加上数据包信息；</li>
+</ul>
+<p>每个包的基本格式：</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int<3></3></td>
+<td>payload_length(包数据长度)</td>
+<td>具体数据包的内容长度，从出去头部四个字节后开始的内容</td>
+</tr>
+<tr>
+<td>int<1></1></td>
+<td>sequence_id(包序列id)</td>
+<td>每个包的序列id，总数据内容大于16MB时需要用，从0开始，依次增加，新的命令执行会重载为0</td>
+</tr>
+<tr>
+<td>string</td>
+<td>payload(具体数据)</td>
+<td>包中除去头部后的具体数据内容</td>
+</tr>
+</tbody>
+</table>
+<p>举个列子：</p>
+<table>
+<thead>
+<tr>
+<th>例子</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>    01 00 00 00 01</td>
+<td><li>payload_length: 1</li> <li>sequence_id: 0x00</li><li>payload: 0x01</li></td>
+</tr>
+</tbody>
+</table>
+<p>若是数据内容大于或者等于2^24-1个字节，将会拆分发送，举个例子，比如发送16 777 215 (2^24-1) 字节的内容，则会按一下这种方式发送 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ff ff ff 00 ...</div><div class="line">00 00 00 01</div></pre></td></tr></table></figure>
+<p>第一个数据包满载，第二个数据包是一个空数据包（一种临界情况）。</p>
+<h3 id="Client-to-Server"><a href="#Client-to-Server" class="headerlink" title="Client to Server"></a>Client to Server</h3><p>Client向Server端发送的格式相对来说就简单一点了</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int<1></1></td>
+<td>执行命令</td>
+<td>执行的操作，比如切换数据库，查询表等操作</td>
+</tr>
+<tr>
+<td>string</td>
+<td>参数</td>
+<td>命令相应的参数</td>
+</tr>
+</tbody>
+</table>
+<p>命令列表（摘抄自胡桃夹子的博客）：</p>
+<table>
+<thead>
+<tr>
+<th>类型值</th>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x00</td>
+<td>COM_SLEEP</td>
+<td>（内部线程状态)</td>
+</tr>
+<tr>
+<td>0x01</td>
+<td>COM_QUIT</td>
+<td>关闭连接</td>
+</tr>
+<tr>
+<td>0x02</td>
+<td>COM_INIT_DB</td>
+<td>切换数据库   </td>
+</tr>
+<tr>
+<td>0x03</td>
+<td>COM_QUERY</td>
+<td>SQL查询请求 </td>
+</tr>
+<tr>
+<td>0x04</td>
+<td>COM_FIELD_LIST</td>
+<td>获取数据表字段信息  </td>
+</tr>
+<tr>
+<td>0x05</td>
+<td>COM_CREATE_DB</td>
+<td>创建数据库</td>
+</tr>
+<tr>
+<td>0x06</td>
+<td>COM_DROP_DB</td>
+<td>删除数据库  </td>
+</tr>
+<tr>
+<td>0x07</td>
+<td>COM_REFRESH</td>
+<td>清除缓存    </td>
+</tr>
+<tr>
+<td>0x08</td>
+<td>COM_SHUTDOWN</td>
+<td>停止服务器 </td>
+</tr>
+<tr>
+<td>0x09</td>
+<td>COM_STATISTICS</td>
+<td>获取服务器统计信息 </td>
+</tr>
+<tr>
+<td>0x0A</td>
+<td>COM_PROCESS_INFO</td>
+<td>获取当前连接的列表</td>
+</tr>
+<tr>
+<td>0x0B</td>
+<td>COM_CONNECT</td>
+<td>（内部线程状态)</td>
+</tr>
+<tr>
+<td>0x0C</td>
+<td>COM_PROCESS_KILL</td>
+<td>中断某个连接</td>
+</tr>
+<tr>
+<td>0x0D</td>
+<td>COM_DEBUG</td>
+<td>保存服务器调试信息 </td>
+</tr>
+<tr>
+<td>0x0E</td>
+<td>COM_PING</td>
+<td>测试连通性 </td>
+</tr>
+<tr>
+<td>0x0F</td>
+<td>COM_TIME</td>
+<td>（内部线程状态） </td>
+</tr>
+<tr>
+<td>0x10</td>
+<td>COM_DELAYED_INSERT</td>
+<td>（内部线程状态）  </td>
+</tr>
+<tr>
+<td>0x11</td>
+<td>COM_CHANGE_USER</td>
+<td>重新登陆（不断连接）</td>
+</tr>
+<tr>
+<td>0x12</td>
+<td>COM_BINLOG_DUMP</td>
+<td>获取二进制日志信息</td>
+</tr>
+<tr>
+<td>0x13</td>
+<td>COM_TABLE_DUMP</td>
+<td>获取数据表结构信息</td>
+</tr>
+<tr>
+<td>0x14</td>
+<td>COM_CONNECT_OUT</td>
+<td>（内部线程状态)</td>
+</tr>
+<tr>
+<td>0x15</td>
+<td>COM_REGISTER_SLAVE</td>
+<td>从服务器向主服务器进行注册 </td>
+</tr>
+<tr>
+<td>0x16</td>
+<td>COM_STMT_PREPARE</td>
+<td>预处理SQL语句 </td>
+</tr>
+<tr>
+<td>0x17</td>
+<td>COM_STMT_EXECUTE</td>
+<td>执行预处理语句 </td>
+</tr>
+<tr>
+<td>0x18</td>
+<td>COM_STMT_SEND_LONG_DATA</td>
+<td>发送BLOB类型的数据 </td>
+</tr>
+<tr>
+<td>0x19</td>
+<td>COM_STMT_CLOSE</td>
+<td>销毁预处理语句 </td>
+</tr>
+<tr>
+<td>0x1A</td>
+<td>COM_STMT_RESET</td>
+<td>清除预处理语句参数缓存 </td>
+</tr>
+<tr>
+<td>0x1B</td>
+<td>COM_SET_OPTION</td>
+<td>设置语句选项  </td>
+</tr>
+<tr>
+<td>0x1C</td>
+<td>COM_STMT_FETCH</td>
+<td>获取预处理语句的执行结果 </td>
+</tr>
+</tbody>
+</table>
+<p>这里距一个常见的的例子，比如切换数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">use godpan</div></pre></td></tr></table></figure>
+<p>相应的报文格式则为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">0x02 0x67 0x6f 0x64 0x70 0x61 0x6e</div></pre></td></tr></table></figure>
+<p>其中0x02代表切换数据库命令，后面的字节则为godpan的16进制表达。</p>
+<h2 id="数据包类型"><a href="#数据包类型" class="headerlink" title="数据包类型"></a>数据包类型</h2><p>有了以上的基础，我们基本知道的与MySQL通信之间的方式以及数据格式，那么与其通信间到底有哪几种数据包呢？接下去的内容是建立在MySQL4.1版本以后，之前版本的数据包类型这里不再论述。</p>
+<p>这里主要分为两个阶段，第一个阶段是数据库账户认证阶段，第二个阶段则是执行具体命令阶段，我们先来看看前者。</p>
+<h3 id="数据库账户认证阶段"><a href="#数据库账户认证阶段" class="headerlink" title="数据库账户认证阶段"></a>数据库账户认证阶段</h3><p>这个阶段就是我们平常所说的登录，主要步骤如下：</p>
+<ul>
+<li>1.Client与Server进行连接</li>
+<li>2.Server向Client发送Handshake packet</li>
+<li>3.Client与Server发送Auth packet</li>
+<li>4.Server向Client发送OK packet或者ERR packet</li>
+</ul>
+<p>这里我们来看一看上面的Handshake packet和Auth packet，OK packet和ERR packet放在另一个阶段写。</p>
+<h4 id="Handshake-packet"><a href="#Handshake-packet" class="headerlink" title="Handshake packet"></a>Handshake packet</h4><p>Handshake packet是由Server向Client发送的初始化包，因为所有从Server向Client端发送的包都是一样的格式，所以前面的四个字节是包头，前三位代表Handshake packet具体内容的数据，另外包序列号为0，很显然这个包内容小于16MB，下面是Handshake packet具体内容的格式：</p>
+<table>
+<thead>
+<tr>
+<th>相对包内容的位置</th>
+<th>长度（字节）</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>协议版本</td>
+<td>协议版本的版本号，通常为10（0x0A）</td>
+</tr>
+<tr>
+<td>1</td>
+<td>len = strlen (server_version) + 1</td>
+<td>数据库版本</td>
+<td>使用前面的NullTerminatedString格式编码，长度为数据库版本字符串的长度加上标示结束的的一个字节</td>
+</tr>
+<tr>
+<td>len + 1</td>
+<td>4</td>
+<td>线程ID</td>
+<td>此次连接MySQL Server启动的线程ID</td>
+</tr>
+<tr>
+<td>len + 5</td>
+<td>8 + 1（0x00表示结束)</td>
+<td>挑战随机数（第一部分）</td>
+<td>用于后续账户密码验证</td>
+</tr>
+<tr>
+<td>len + 14</td>
+<td>2</td>
+<td>协议协商</td>
+<td>用于与客户端协商通讯方式</td>
+</tr>
+<tr>
+<td>len + 16</td>
+<td>1</td>
+<td>编码格式</td>
+<td>标识数据库目前的编码方式</td>
+</tr>
+<tr>
+<td>len + 17</td>
+<td>2</td>
+<td>服务器状态</td>
+<td>用于表示服务器状态，比如是否是事务模式或者自动提交模式</td>
+</tr>
+<tr>
+<td>len + 19</td>
+<td>13</td>
+<td>保留字节</td>
+<td>未来可能会用到，预留字节</td>
+</tr>
+<tr>
+<td>len + 32</td>
+<td>12 + 1（0x00表示结束)</td>
+<td>挑战随机数（第二部分）</td>
+<td>用于后续账户密码验证</td>
+</tr>
+</tbody>
+</table>
+<p>上表就是整个Handshake packet的这个包结构，属性的含义以及规范都有相应的说明，下面是我本机解析的某次连接数据库的Handshake packet包，仅供参考：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;protocolVersion=10, serverVersion=&apos;5.7.13&apos;, threadId=4055, scramble=[49, 97, 80, 3, 35, 118, 45, 15, 5, 118, 9, 11, 124, 93, 93, 5, 31, 47, 111, 109, 0, 0, 0, 0, 0], serverCapabilities=65535, serverLanguage=33, serverStatus=2&#125;</div></pre></td></tr></table></figure>
+<h4 id="Auth-packet"><a href="#Auth-packet" class="headerlink" title="Auth packet"></a>Auth packet</h4><p>Auth packet是由Client向Server发送的认证包，用于验证数据库账户登录，相应内容的格式：</p>
+<table>
+<thead>
+<tr>
+<th>相对包内容的位置</th>
+<th>长度（字节）</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>协议协商</td>
+<td>用于与服务端协商通讯方式</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>消息最长长度</td>
+<td>客户端可以发送或接收的最长长度，0表示不做任何限制</td>
+</tr>
+<tr>
+<td>8</td>
+<td>1</td>
+<td>字符编码</td>
+<td>客服端字符编码方式</td>
+</tr>
+<tr>
+<td>9</td>
+<td>23</td>
+<td>保留字节</td>
+<td>未来可能会用到，预留字节，用0代替</td>
+</tr>
+<tr>
+<td>    32</td>
+<td>不定</td>
+<td>认证字符串</td>
+<td>主要有三部分内容<br> <li>用户名：NullTerminatedString格式编码</li><li>加密后的密码：LengthEncodedString格式编码</li><li>数据库名称（可选）：NullTerminatedString格式编码</li></td>
+</tr>
+</tbody>
+</table>
+<p>这部分内容是由客户端自己生成，所以说如果我们如果要写一个程序连接数据库，那么这个包就得按照这个格式，不然服务端将会无法识别。</p>
+<h3 id="命令执行阶段"><a href="#命令执行阶段" class="headerlink" title="命令执行阶段"></a>命令执行阶段</h3><p>在我们正确连接数据库后，我们就要执行相应的命令了，比如切换数据库，执行CRUD操作等，这个阶段主要分为两步，Client发送命令（上文已经给出，下面不再讨论），Server端接收命令执行相应的操作，我们主要关心Server端向我们发送数据包，可分为4类和一个最基础的报文结构Data Field：</p>
+<ul>
+<li>Data Field：包数据的一个基础结构；</li>
+<li>OK包(包括PREPARE_OK)：Server端发送正确处理信息的包，包头标识为0x00；</li>
+<li>Error包： Server端发送错误信息的包，包头标识为0xFF；</li>
+<li>EOF包：用于Server向Client发送结束包，包头标识为0xFE；</li>
+<li>Result Set包：用于Server向Client发送的查询结果包；</li>
+</ul>
+<h4 id="Data-Field"><a href="#Data-Field" class="headerlink" title="Data Field"></a>Data Field</h4><p>Data Field是Server回应包里的一个核心，主要是数据的一种编码结构，跟我之前讲的LengthEncodedInteger和LengthEncodedString很类似，也主要分为三个部分</p>
+<table>
+<thead>
+<tr>
+<th>最小数据长度（包含）</th>
+<th>最大数据长度（不包含）</th>
+<th>数据长度</th>
+<th>格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>251</td>
+<td>1个字节</td>
+<td>1字节 + 具体数据</td>
+</tr>
+<tr>
+<td>251</td>
+<td>2^16</td>
+<td>2个字节</td>
+<td>0xFC + 2个字节数据长度 + 具体数据</td>
+</tr>
+<tr>
+<td>2^16</td>
+<td>2^24</td>
+<td>4个字节</td>
+<td>0xFD + 4个字节数据长度 + 具体数据</td>
+</tr>
+<tr>
+<td>2^24</td>
+<td>2^64</td>
+<td>8个字节</td>
+<td>0xFE + 8个字节数据长度 + 具体数据</td>
+</tr>
+<tr>
+<td>NULL</td>
+<td>NULL</td>
+<td>0个字节</td>
+<td>0xFB</td>
+</tr>
+</tbody>
+</table>
+<p>要注意的一点是如果出现0xFB（251）开头说明这个数据对应的是MySQL中的NULL。</p>
+<h4 id="OK-包"><a href="#OK-包" class="headerlink" title="OK 包"></a>OK 包</h4><p>普通的OK包（PREPARE_OK包后面会讲到）会在以下几种情况下产生，由Server发送给相应的接收方：</p>
+<ul>
+<li>COM_PING: 连接或者测试数据库</li>
+<li>COM_QUERY： 不需要查询结果集的操作，比如INSERT, UPDATE, or ALTER TABLE</li>
+<li>COM_REFRESH： 数据刷新</li>
+<li>COM_REGISTER_SLAVE： 注册从服务器</li>
+</ul>
+<p>OK 包的主要结构：</p>
+<table>
+<thead>
+<tr>
+<th>相对包内容的位置</th>
+<th>长度（字节）</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>包头标识</td>
+<td>0x00 代表这是一个OK 包</td>
+</tr>
+<tr>
+<td>1</td>
+<td>rows_len</td>
+<td>影响行数</td>
+<td>相应操作影响的行数，比如一个Update操作的记录是5条，那么这个值就为5</td>
+</tr>
+<tr>
+<td>1 + rows_len</td>
+<td>id_len</td>
+<td>自增id</td>
+<td>插入一条记录时，如果是自增id的话，返回的id值</td>
+</tr>
+<tr>
+<td>1 + rows_len + id_len</td>
+<td>2</td>
+<td>服务器状态</td>
+<td>用于表示服务器状态，比如是否是事务模式或者自动提交模式</td>
+</tr>
+<tr>
+<td>3 + rows_len + id_len</td>
+<td>2</td>
+<td>警告数</td>
+<td>上次命令引起的警告数</td>
+</tr>
+<tr>
+<td>5 + rows_len + id_len</td>
+<td>msg_len</td>
+<td>额外信息</td>
+<td>此次操作的一些额外信息</td>
+</tr>
+</tbody>
+</table>
+<p>下面是我本机解析的某次正确连接数据库后的OK packet包，仅供参考：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">OK&#123;affectedRows=0, insertId=0, serverStatus=2, message=&apos;....&apos;&#125;</div></pre></td></tr></table></figure>
+<h4 id="Error-包"><a href="#Error-包" class="headerlink" title="Error 包"></a>Error 包</h4><p>顾名思义Error 包就是当出现错误的时候返回的信息，比如账户验证不通过，查询命令不合法，非空字段未指定值等相关操作，Server端都会向Client端发送Error 包。</p>
+<p>Error 包的主要结构：</p>
+<table>
+<thead>
+<tr>
+<th>相对包内容的位置</th>
+<th>长度（字节）</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>包头标识</td>
+<td>0xFF 代表这是一个Error 包</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>错误代码</td>
+<td>该错误的相应错误代码</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>标识位</td>
+<td>SQL执行状态标识位，用’#’进行标识</td>
+</tr>
+<tr>
+<td>4</td>
+<td>5</td>
+<td>执行状态</td>
+<td>SQL的具体执行状态</td>
+</tr>
+<tr>
+<td>9</td>
+<td>msg_len</td>
+<td>错误信息</td>
+<td>具体的错误信息</td>
+</tr>
+</tbody>
+</table>
+<p>比如我们现在已经连接了数据库，执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">use test_database;</div></pre></td></tr></table></figure>
+<p>但是我们数据库中并没有test_database这个数据库，我们将会得到相应的错误信息，下面是我本机解析的Error packet包，仅供参考：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Error&#123;errno=1046, sqlState=&apos;3D000&apos;, message=&apos;No database selected&apos;&#125;</div></pre></td></tr></table></figure>
+<h4 id="EOF-Packet"><a href="#EOF-Packet" class="headerlink" title="EOF Packet"></a>EOF Packet</h4><p>EOF Packet是用于标识某个阶段数据结束的标志包，会在一下几种情况中产生：</p>
+<ul>
+<li>结果集中字段信息结束的时候；</li>
+<li>结果集中列信息结束的时候；</li>
+<li>服务器确认停止服务的时候；</li>
+<li>客户端发送COM_SET_OPTION and COM_DEBUG命令后，服务器回应的时候；</li>
+<li>服务器请求使用MySQL4.1版本之前的认证方式的时候；</li>
+</ul>
+<p>EOF 包的主要结构：</p>
+<table>
+<thead>
+<tr>
+<th>相对包内容的位置</th>
+<th>长度（字节）</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>包头标识</td>
+<td>0xFE 代表这是一个EOF 包</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>警告数</td>
+<td>上次命令引起的警告数</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2</td>
+<td>服务器状态 </td>
+</tr>
+</tbody>
+</table>
+<p>这里要注意的一点，我们上面分析了Data Field的结构，发现它是用0xFE作为长度需要8个字节编码值得标识头，所以我们在判断一个包是否是EOF 包的时候，需要下面两个条件：</p>
+<ul>
+<li>标识头（第一个字节）为0xFE；</li>
+<li>包的总长度小于9个字节；</li>
+</ul>
+<h4 id="Result-Set包"><a href="#Result-Set包" class="headerlink" title="Result Set包"></a>Result Set包</h4><p>Result Set包产生于我们每次数据库执行需要返回结果集的时候，Server端发送给我们的包，比如平常的SELECT,SHOW等命令，Result Set包相对比较复杂，主要包含以下五个方面：</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Result Set Header</td>
+<td>返回数据的列数量</td>
+</tr>
+<tr>
+<td>Field</td>
+<td>返回数据的列信息（多个）</td>
+</tr>
+<tr>
+<td>EOF</td>
+<td>列结束</td>
+</tr>
+<tr>
+<td>Row Data</td>
+<td>行数据（多个）</td>
+</tr>
+<tr>
+<td>EOF</td>
+<td>数据结束</td>
+</tr>
+</tbody>
+</table>
+<p>我们逐个来分析，首先我们来看Result Set Header。</p>
+<h5 id="Result-Set-Header"><a href="#Result-Set-Header" class="headerlink" title="Result Set Header"></a>Result Set Header</h5><p>Result Set Header表示返回数据的列数量以及一些额外的信息，其主要结构为：</p>
+<table>
+<thead>
+<tr>
+<th>长度</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1-9字节</td>
+<td>数据的列数量（LengthEncodedInteger编码格式）</td>
+</tr>
+<tr>
+<td>1-9字节</td>
+<td>额外信息（LengthEncodedInteger编码格式）</td>
+</tr>
+</tbody>
+</table>
+<h5 id="Field"><a href="#Field" class="headerlink" title="Field"></a>Field</h5><p>Field表示Result Set中数据列的具体信息，可出现多次，具体次数取决于Result Set Header中数据的列数量，它的主要结构为：</p>
+<table>
+<thead>
+<tr>
+<th>长度</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>通常为ASCIIz字符串def</td>
+</tr>
+<tr>
+<td>n</td>
+<td>数据库名称（Data Field）</td>
+</tr>
+<tr>
+<td>n</td>
+<td>假如查询指定了表别名，就是表别名（Data Field）</td>
+</tr>
+<tr>
+<td>n</td>
+<td>原始的表名（Data Field）</td>
+</tr>
+<tr>
+<td>n</td>
+<td>假如查询指定了列别名，就是列别名（Data Field）</td>
+</tr>
+<tr>
+<td>n</td>
+<td>原始的列名（Data Field）</td>
+</tr>
+<tr>
+<td>1</td>
+<td>标识位，通常为12，表示接下去的12个字节是具体的field内容</td>
+</tr>
+<tr>
+<td>2</td>
+<td>field的编码</td>
+</tr>
+<tr>
+<td>4</td>
+<td>field的长度</td>
+</tr>
+<tr>
+<td>1</td>
+<td>field的类型</td>
+</tr>
+<tr>
+<td>2</td>
+<td>field的标识</td>
+</tr>
+<tr>
+<td>2</td>
+<td>field值的的小数点精度</td>
+</tr>
+<tr>
+<td>2</td>
+<td>预留字节</td>
+</tr>
+<tr>
+<td>n</td>
+<td>可选元素，如果存在，则表示该field的默认值</td>
+</tr>
+</tbody>
+</table>
+<p>其中field的类型与标识具体定义和对应变量含义可参考这篇文章：<a href="http://hutaow.com/blog/2013/11/06/mysql-protocol-analysis/#428-com_shutdown" target="_blank" rel="external">MySQL协议分析</a></p>
+<h5 id="EOF-包"><a href="#EOF-包" class="headerlink" title="EOF 包"></a>EOF 包</h5><p>这里的EOF包是标识这列信息的结束，具体结构信息参考上面的EOF包解释。</p>
+<h5 id="Row-Data"><a href="#Row-Data" class="headerlink" title="Row Data"></a>Row Data</h5><p>Row Data含着的是我们需要获取的数据，一个Result Set包里面包含着多个Row Data结构(得到的数据可能多行)，每个Row Data中包含着多个字段值，它们之间没有间隔，比如我们现在查询到的数据为（id: 1, name: godpan) 那么Row Data内容为（1，godpan),这两个值是连在一起的，对应的值都用LengthEncodedString编码。</p>
+<h5 id="EOF-包-1"><a href="#EOF-包-1" class="headerlink" title="EOF 包"></a>EOF 包</h5><p>等待Row Data发送完之后，Server最后会向Client端发送一个EOF包，标识所有的行数据已经发送完毕。</p>
+<h4 id="PREPARE-OK包"><a href="#PREPARE-OK包" class="headerlink" title="PREPARE_OK包"></a>PREPARE_OK包</h4><p>PREPARE_OK包产生在Client端向Server发送预处理SQL语句，Server进行正确回应的时候，大家写写Java的时候肯定用过PreparedStatement，这里PreparedStatement的功能就是进行SQL的预处理，预处理的优点比较多，比如效率高，防SQL注入等，有兴趣的同学可以自己去学习下。下面是PREPARE_OK包的结构：</p>
+<table>
+<thead>
+<tr>
+<th>长度</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0x00（标识是一个OK包）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>statement_handler_id（预处理语句id）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>number of columns in result set（结果集中列的数量）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>number of parameters in query（查询语句中参数的数量）</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0x00 (填充值)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>警告数</td>
+</tr>
+</tbody>
+</table>
+<p>比如我现在执执行下面的语句：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">PreparedStatement ps = connection.prepareStatement(<span class="string">"SELECT * FROM `godpan_fans` where id=?"</span>);</div><div class="line">ps.setInteger(<span class="number">1</span>, <span class="number">1</span>);</div><div class="line">ps.executeQuery();</div></pre></td></tr></table></figure>
+<p>得到下面的PREPARE_OK包，仅供参考：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PSOK&#123;statementId=1, columns=5, parameters=1&#125;</div></pre></td></tr></table></figure>
+<p>如果上面的columns大于0，以及parameters大于0，则将有额外的两个包传输，分别是columns的信息以及parameters的信息，对应信息结构：</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Field</td>
+<td>columns信息（多个）</td>
+</tr>
+<tr>
+<td>EOF</td>
+<td>columns信息结束</td>
+</tr>
+<tr>
+<td>Field</td>
+<td>parameters（多个）</td>
+</tr>
+<tr>
+<td>EOF</td>
+<td>parameters结束</td>
+</tr>
+</tbody>
+</table>
+<p>到此整个PREPARE_OK包发送完毕。</p>
+<h4 id="Row-Data-Binary"><a href="#Row-Data-Binary" class="headerlink" title="Row Data Binary"></a>Row Data Binary</h4><p>这个包跟上面提到的Row Data包有什么差别呢？主要有两点：</p>
+<ul>
+<li>用不同的方式定义NULL；</li>
+<li>数据编码不再单纯的使用LengthEncodedString，而是根据数据类型的不同进行相应的编码；</li>
+</ul>
+<p>后面我会分别解释这两点，我们先来看看它的结构：</p>
+<table>
+<thead>
+<tr>
+<th>相对包内容的位置</th>
+<th>长度（字节）</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>包头标识</td>
+<td>0x00</td>
+</tr>
+<tr>
+<td>1</td>
+<td>(col_count+7+2)/8</td>
+<td>Null Bit Map</td>
+<td>前两位为预留字节，主要用于区别与其他的几种包（OK，ERROR，EOF），在MySQL 5之后这两个字节都为0X00，其中col_count为列的数量</td>
+</tr>
+<tr>
+<td>(col_count+7+2)/8 + 1</td>
+<td>n</td>
+<td>column values</td>
+<td>具体的列值，重复多次，根据值类型编码</td>
+</tr>
+</tbody>
+</table>
+<p>现在我们来看一下它的两个特点，首先我们来看它是如何来定义NULL的，首先我们看到他的结构中有一个Null Bit Map，除去两个标识位，真正用于标识数据信息的就是(col_count+7)/8位字节，这里我先给出结论，后面再给大家具体分析：</p>
+<table>
+<thead>
+<tr>
+<th>参数个数</th>
+<th>长度（字节）</th>
+<th>具体值范围</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1-8</td>
+<td>1</td>
+<td>-1, 2^n组合</td>
+<td>1 = 2^0表示第一个参数为NULL，3 = 2^0 + 2^1表示第一个和第二参数为NULL…</td>
+</tr>
+</tbody>
+</table>
+<p>上面给出了标识NULL的基本算法，原则是哪个参数（次序为n)为NULL，则Null Bit Map相应的值加上2^n,8个参数为一个周期，以此类推。</p>
+<p>接着我们来看一下第二点，是如何用具体值类型来对相应的值进行编码的，这里主要分为三类，基本数据类型，时间类型，字符串类型；</p>
+<ul>
+<li>基本数据类型：比如TINYINT使用一个字节编码，FLOAT使用四个字节，DOUBLE使用8个字节等；</li>
+<li>时间类型：使用类似LengthEncodedString的编码方式编码，具体可参考<a href="https://dev.mysql.com/doc/dev/mysql-server/latest/PAGE_PROTOCOL.html" target="_blank" rel="external">MySQL_PROTOCOL</a>；</li>
+<li>字符串类：不属于上面两类的都属于字符串类型，使用普通的LengthEncodedString；</li>
+</ul>
+<h4 id="Execute包"><a href="#Execute包" class="headerlink" title="Execute包"></a>Execute包</h4><p>Execute包顾名思义是一个执行包，它是由Client端发送到Server端的，但它和普通的命令又有点不同，它主要是用来执行预处理语句，并会携带相应参数，具体结构如下：</p>
+<table>
+<thead>
+<tr>
+<th>长度</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>COM_EXECUTE（标识是一个Execute包）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>预处理语句id</td>
+</tr>
+<tr>
+<td>1</td>
+<td>游标类型</td>
+</tr>
+<tr>
+<td>4</td>
+<td>预留字节</td>
+</tr>
+<tr>
+<td>0</td>
+<td>接下去的内容只有在有参数的情况下</td>
+</tr>
+<tr>
+<td>(param_count+7)/8</td>
+<td>null_bit_map（描述参数中NULL的情况）</td>
+</tr>
+<tr>
+<td>1</td>
+<td>参数绑定情况</td>
+</tr>
+<tr>
+<td>n*2</td>
+<td>参数类型（依次存储）</td>
+</tr>
+<tr>
+<td>n</td>
+<td>参数具体值（非NULL)（依次存储，使用Row Data Binary方式编码）</td>
+</tr>
+</tbody>
+</table>
+<p>Execute包从Client端发送到Server端后可能会得到以下几个结果：</p>
+<ul>
+<li>OK包</li>
+<li>ERROR包</li>
+<li>Result Set包（可能多个）</li>
+</ul>
+<p>我们需要根据包的不同类型来进行不同的处理。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本篇文章主要讲述了MySQL的连接方式，通信过程及协议，以及传输包的基本格式和相关传输包的类型，内容相对来说，比较多也比较复杂，我也是将近三周才写完，但总体按照我自学的思路走，不会太绕，有些点可能需要细心思考下，写的有误的地方也希望大家能指正，希望对大家有所帮助，后面可能会写几个实例和大家一起学习。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/网络编程/">网络编程</a>
+          
+            <a href="/tags/数据库/">数据库</a>
+          
+            <a href="/tags/Asyncdb/">Asyncdb</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/11/cats-1/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Cats（一）：从函数式编程思维谈起</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/11/scala-weekly-27/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第 27 期</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yison-dripower'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+    2017
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

@@ -10,19 +10,29 @@ date: 2017-11-20
 
 不管你是不是果粉，肯定对 iphone X 都有所耳闻。最近的「掉漆门」和「人脸识别被破解」更是将其推到了风口浪尖上。
 
-<image src="http://om6vvgjw7.bkt.clouddn.com/iphone%20x2.jpg" width="300" height="400"></image>
+<center>
+<image src="/images/2017/11/iphone%20x2.jpg" width="300" height="400"></image>
+</center>
 
 但是对于我而言，最难以忍受的还是耳机接口被取消这一改变（自 Iphone 7 开始)，你可以想象这样一幅画面：当你开开心心地和小伙伴开着语音吃（song）着（kuai）鸡（di）或者是多人一起上（song）分时——你的电量见底，为了不影响队友（shou）的游戏体验，肯定得充电玩下去。
 
 这时你得面对一个难题：**只有一个孔，插耳机还是插电源！？**（在没有蓝牙耳机的前提下）  
 
-![](http://oznwqhlo5.bkt.clouddn.com/iPhone-X-Home-Button-Audio-Jack-960x540.jpg)(侵删)
+<center>
+![](/images/2017/11/iPhone-X-Home-Button-Audio-Jack-960x540.jpg)
+</center>
+
+(侵删)
 
 由于生活经常会欺骗我们，以及各种环境因素，所以不是每个人都选择蓝牙耳机（贫穷使我理智）。
 
 是否存在别的解决方法呢？还好有转接线这样的好东西
 
-![](http://oznwqhlo5.bkt.clouddn.com/%E8%BD%AC%E6%8E%A5%E7%BA%BF.jpg)(侵删)
+<center>
+![](/images/2017/11/zhuan-jie-xian.jpg)
+</center>
+
+(侵删)
 
 在编程中，我们也会遇上类似的问题：
   1. 当你想使用一个已经存在的类，而它的接口不符合你的需求；  
