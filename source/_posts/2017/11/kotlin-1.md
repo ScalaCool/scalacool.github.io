@@ -1,10 +1,14 @@
 ---
-title: Dive Into Kotlin（二）：kotlin 类型结构设计
-date: 2017-12-01 12:00:00  
+title: Dive Into Kotlin（一）：kotlin 类型结构设计
+author: prefert
+tags:
+- Kotlin
+- Android
+description: 类型系统在各种语言之间存在比较大的差异。最主要的差异存在于编译时期的语法，以及运行时期的操作实现方式。本文将为你介绍 Kotlin 中的类型结构设计。
+date: 2017-12-01
 ---
 
 无论在静态语言还是动态语言中，「类型系统」都起到了至关重要的作用。
-<!--more-->
 
 # 一、类型系统简介
 
