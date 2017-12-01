@@ -1,5 +1,5 @@
 ---
-title: Dive Into Kotlin（一）：kotlin 类型结构设计
+title: Dive Into Kotlin（二）：Kotlin 类型结构设计
 author: prefert
 tags:
 - Kotlin
