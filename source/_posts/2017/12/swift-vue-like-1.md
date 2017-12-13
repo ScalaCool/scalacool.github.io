@@ -110,7 +110,6 @@ VIPER 是 View + Interactor + Presenter + Entity + Router 的缩写。对比 And
 import UIKit
 import ReSwift
 
-// The global application store, which is responsible for managing the appliction state.
 let mainStore = Store<AppState>(
     reducer: appReducer,
     state: nil
