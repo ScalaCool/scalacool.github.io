@@ -41,7 +41,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="因水滴计划研发移动端的商家应用，笔者开始了 iOS 端的整体方案设计工作，我们基于 ReSwift 以及 Swift 这门语言的特性（核心是 extension）构建了一套类似 Vue + Vuex 的方案。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-13T04:31:32.000Z">
+<meta property="og:updated_time" content="2017-12-13T04:34:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用 Swift 模仿 Vue + Vuex 进行 iOS 开发（一）：ReSwift">
 <meta name="twitter:description" content="因水滴计划研发移动端的商家应用，笔者开始了 iOS 端的整体方案设计工作，我们基于 ReSwift 以及 Swift 这门语言的特性（核心是 extension）构建了一套类似 Vue + Vuex 的方案。">
@@ -150,7 +150,7 @@
             <div class="post-content">
             <p>因 <a href="https://drip.im/" target="_blank" rel="external">水滴</a> 计划研发移动端的商家应用，笔者开始了 iOS 端的整体方案设计工作。</p>
 <p>由于没有历史包袱，且团队愿意尝试一些不同的方案，经过两周专注的学习和调研之后，我们并没有采用主流的 MVVM 架构，而是基于 ReSwift 以及 Swift 这门语言的特性（核心是 extension）构建了一套类似 Vue + Vuex 的方案，笔者打算通过四篇文章来分享下这种思路。</p>
-<p>需要注意的是，笔者也是第一次接触 Swift 和 iOS，某种程度上来说，也是一名 iOS 菜鸟，行文中难免出现不高明之处，还望指正。但与此同时，笔者也有 Scala 和多年的 Web 前端开发经历，不同的平台和语言，会有相似的思维和知识结构，所以入门移动端原生应用开发，也并不特别困难。</p>
+<p>需要注意的是，笔者也是第一次接触 Swift 和 iOS，某种程度上来说，也是一名 iOS 菜鸟，行文中难免出现不高明之处，还望指正。但与此同时，笔者也有 Scala 和多年的 Web 前端开发经历，不同的平台和语言，会有相似的思维和知识结构，所以入门移动端原生应用开发时，也发现很多共同之处。</p>
 <p>以下是本系列文章的大纲：</p>
 <ol>
 <li>ReSwift</li>
@@ -161,7 +161,7 @@
 <h2 id="架构方式的演变"><a href="#架构方式的演变" class="headerlink" title="架构方式的演变"></a>架构方式的演变</h2><p>在介绍 ReSwift 之前，我们先来简单回顾下 iOS 端（不严谨地说，也可以看成是移动端应用开发）的架构演变历史。</p>
 <p>这方面介绍的好文章已经相当的多，重点还是推荐下 @Bohdan Orlov 的 <a href="https://medium.com/ios-os-x-development/ios-architecture-patterns-ecba4c38de52" target="_blank" rel="external">iOS Architecture Patterns</a>，非常的系统和容易理解。</p>
 <h3 id="Massive-View-Controller"><a href="#Massive-View-Controller" class="headerlink" title="Massive View Controller"></a>Massive View Controller</h3><p>在讨论架构模式的时候，MVC 是被提及最多的套路之一。众所周知，Apple 推出的 MVC 跟软件工程中传统的 MVC 是不一样的。</p>
-<p>很多人对于经典的 MVC 中的 Model 一直存在误解，认为其代表的仅仅只是一个领域建模，所谓的实体模型。其实，它正确的概念应该还包含大量的业务逻辑处理，相对的 Controller 只是在 View 和 Model 层建立一个桥梁而已。</p>
+<p>很多人对于经典的 MVC 中的 Model 一直存在误解，认为其代表的仅仅只是一个实体模型。其实，它准确的概念应该还包含大量的业务逻辑处理，相对的 Controller 只是在 View 和 Model 层建立一个桥梁而已。</p>
 <blockquote>
 <p>注：业界在发展过程中，围绕 MVC 也延伸讨论了很多的问题，典型的如「胖 Model 和瘦 Model」 的问题，甚至于十几年前，曾经在 JavaEye 上专门针对 Model 的设计有过一次相当激烈的讨论，<a href="http://www.iteye.com/topic/11712" target="_blank" rel="external">帖子</a>还在。</p>
 </blockquote>
