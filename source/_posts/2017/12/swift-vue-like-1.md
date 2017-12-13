@@ -148,7 +148,7 @@ func appReducer(action: Action, state: AppState?) -> AppState {
 
 ```
 
-#### **Modules/Module1/State/module1State.swift**
+#### **Modules/Module1/State/Module1State.swift**
 
 ```swift
 import ReSwift
@@ -158,7 +158,7 @@ struct Module1State {
 }
 ```
 
-#### **Modules/Module1/Reducers/module1Reducer.swift**
+#### **Modules/Module1/Reducers/Module1Reducer.swift**
 
 ```swift
 import ReSwift
