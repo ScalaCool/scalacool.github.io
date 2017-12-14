@@ -56,7 +56,7 @@ Apple 的 MVC 采用的是瘦 Model 的设计，ViewController 承载了大量�
 
 VIPER 是 View + Interactor + Presenter + Entity + Router 的缩写。对比 Android，这种架构似乎在 iOS 界更流行，但是整体上而言，采用这种架构的设计并不多。理论上，这是一种非常好的架构思想，灵感于所谓的 [The Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)。
 
-但更细的模块化设计，也让 VIPER 被不少人诟病为一种过渡工程。对它感兴趣的同学，可以看看 objc.io 的 [Architecting iOS Apps with VIPER](https://www.objc.io/issues/13-architecture/viper/)。
+但更细的模块化设计，也让 VIPER 被不少人诟病为一种过度工程。对它感兴趣的同学，可以看看 objc.io 的 [Architecting iOS Apps with VIPER](https://www.objc.io/issues/13-architecture/viper/)。
 
 ## ReSwift
 

@@ -41,7 +41,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="因水滴计划研发移动端的商家应用，笔者开始了 iOS 端的整体方案设计工作，我们基于 ReSwift 以及 Swift 这门语言的特性（核心是 extension）构建了一套类似 Vue + Vuex 的方案。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-13T10:38:36.000Z">
+<meta property="og:updated_time" content="2017-12-14T02:55:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用 Swift 模仿 Vue + Vuex 进行 iOS 开发（一）：ReSwift">
 <meta name="twitter:description" content="因水滴计划研发移动端的商家应用，笔者开始了 iOS 端的整体方案设计工作，我们基于 ReSwift 以及 Swift 这门语言的特性（核心是 extension）构建了一套类似 Vue + Vuex 的方案。">
@@ -175,7 +175,7 @@
 <h3 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h3><p>在笔者看来，MVVM 跟 MVP 其实是十分类似的，这种设计解决了 Massive View Controller 的问题，同时也引入了「双向数据绑定」，MVVM 也是 Web 前端同学十分熟悉的概念。</p>
 <p>可以这么说，MVVM 应该是当下 iOS 以及 Android 最流行的架构设计。</p>
 <h3 id="VIPER"><a href="#VIPER" class="headerlink" title="VIPER"></a>VIPER</h3><p>VIPER 是 View + Interactor + Presenter + Entity + Router 的缩写。对比 Android，这种架构似乎在 iOS 界更流行，但是整体上而言，采用这种架构的设计并不多。理论上，这是一种非常好的架构思想，灵感于所谓的 <a href="https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html" target="_blank" rel="external">The Clean Architecture</a>。</p>
-<p>但更细的模块化设计，也让 VIPER 被不少人诟病为一种过渡工程。对它感兴趣的同学，可以看看 objc.io 的 <a href="https://www.objc.io/issues/13-architecture/viper/" target="_blank" rel="external">Architecting iOS Apps with VIPER</a>。</p>
+<p>但更细的模块化设计，也让 VIPER 被不少人诟病为一种过度工程。对它感兴趣的同学，可以看看 objc.io 的 <a href="https://www.objc.io/issues/13-architecture/viper/" target="_blank" rel="external">Architecting iOS Apps with VIPER</a>。</p>
 <h2 id="ReSwift"><a href="#ReSwift" class="headerlink" title="ReSwift"></a>ReSwift</h2><p>在水滴内部，我们曾采用过 Angular 1.x 开发业务，所以对于「双向数据绑定」的概念并不陌生。随着我们业务的需要，我们过渡到了更加成熟的 Vue 2 + webpack 来组织 Web 前端的开发。在体验过不同的数据流方案之后，就偏好而言，我们还是更加喜爱「单向数据流」的套路，缘自于后者设计更简单，更有利于测试。</p>
 <p>所以，在学习了 MVVM 这个成熟的解决方案之后，笔者也开始寻求 iOS 的单向数据流解决方案，后面发现了<a href="http://reswift.github.io/ReSwift/master/" target="_blank" rel="external">ReSwift</a>，在经过两周的体验和测试，我们发现这或许是更加符合团队审美偏好的一种架构设计。</p>
 <h3 id="Redux"><a href="#Redux" class="headerlink" title="Redux"></a>Redux</h3><p>要了解「单向数据流」其实只要学习 <a href="https://redux.js.org/docs/introduction/" target="_blank" rel="external">Redux</a> 就行了。2014年 Facebook 提出了 <a href="https://facebook.github.io/flux/" target="_blank" rel="external">Flux</a> 架构的概念，2015年，Redux 出现，将 Flux 与函数式编程结合一起，很短时间内就成为了最热门的 Web 前端架构。 </p>
