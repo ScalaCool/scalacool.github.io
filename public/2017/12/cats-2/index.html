@@ -33,18 +33,16 @@
 <link rel="canonical" href="http://scala.cool/2017/12/cats-2/"/>
 
 
-<meta name="description" content="水滴技术团队 - Scala 中文博客">
-<meta name="keywords" content="Cats,函数式编程">
+<meta name="description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Cats（二）：引用透明性与等式推理">
+<meta property="og:title" content="Cats（二）：引用透明性和等式推理">
 <meta property="og:url" content="http://scala.cool/2017/12/cats-2/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="水滴技术团队 - Scala 中文博客">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-06T02:08:11.000Z">
+<meta property="og:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
+<meta property="og:updated_time" content="2017-12-17T10:48:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cats（二）：引用透明性与等式推理">
-<meta name="twitter:description" content="水滴技术团队 - Scala 中文博客">
+<meta name="twitter:title" content="Cats（二）：引用透明性和等式推理">
+<meta name="twitter:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -79,7 +77,7 @@
 
 
 
-    <title> Cats（二）：引用透明性与等式推理 - Scala Cool </title>
+    <title> Cats（二）：引用透明性和等式推理 - Scala Cool </title>
   </head>
 
   <body>
@@ -126,12 +124,12 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          Cats（二）：引用透明性与等式推理
+          Cats（二）：引用透明性和等式推理
         
       </h1>
 
       <time class="post-time">
-          12月11日
+          12月17日
       </time>
       
         <span class="author-split">|</span>
@@ -148,7 +146,15 @@
 
     
             <div class="post-content">
-            
+            <p><a href="https://scala.cool/2017/11/cats-1/">上一篇文章</a> 介绍了函数式编程的思维，这一篇我们来了解下函数式编程的魅力，所谓的 <a href="">引用透明性</a> 和 <a href="">等式推理</a>。</p>
+<p>注意，这不是一个介绍概念的文章系列，所以笔者打算从一个递归函数讲起。</p>
+<h2 id="代换模型"><a href="#代换模型" class="headerlink" title="代换模型"></a>代换模型</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = f(x)</div></pre></td></tr></table></figure>
+<p>用 Scala 开发的小伙伴看了相当气愤，这是一段自杀式的代码，如果我们执行了它，如 <code>f(1)</code> ，那么必然会导致死循环。</p>
+<p>这时，一个会 Haskell 的程序员路过，迷之微笑，花了 10 秒钟翻译成了以下的版本：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<p>纳尼！竟然成功返回了结果 1。这到底是怎么回事呢？</p>
+<h3 id="正则序-vs-应用序"><a href="#正则序-vs-应用序" class="headerlink" title="正则序 vs 应用序"></a>正则序 vs 应用序</h3><p>也许相当多开发的同学至今未曾思考过这个问题：<strong>编程语言中的表达式求值策略是怎样的？</strong></p>
+
             </div>
           
 
@@ -167,8 +173,8 @@
   <nav class="post-nav">
     
     
-      <a class="next" href="/2017/11/kotlin-1/">
-        <span class="next-text nav-default">Dive Into Kotlin（二）：Kotlin 类型结构设计</span>
+      <a class="next" href="/2017/12/swift-vue-like-1/">
+        <span class="next-text nav-default">用 Swift 模仿 Vue + Vuex 进行 iOS 开发（一）：ReSwift</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
