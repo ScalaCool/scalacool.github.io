@@ -22,6 +22,10 @@ var authors = {
     blog: 'http://zpkoon.xyz',
     avatar: '/images/avatar/zpkoon.png'
   },
+  knowhow: {
+    blog: 'http://knewhow.me',
+    avatar: '/images/avatar/knewhow.png'
+  },
   scalacool: {
     blog: 'http://twitter.com/scala_cool',
     avatar: '/images/avatar/scalacool.png'
