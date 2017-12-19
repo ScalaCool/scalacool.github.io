@@ -41,7 +41,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-19T08:36:04.000Z">
+<meta property="og:updated_time" content="2017-12-19T10:28:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cats（二）：引用透明性和等式推理">
 <meta name="twitter:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
@@ -131,7 +131,7 @@
       </h1>
 
       <time class="post-time">
-          12月17日
+          12月22日
       </time>
       
         <span class="author-split">|</span>
@@ -149,13 +149,20 @@
     
             <div class="post-content">
             <p><a href="https://scala.cool/2017/11/cats-1/">上一篇文章</a> 介绍了函数式编程的思维，这一篇我们来了解下函数式编程的魅力，所谓的 <a href="">引用透明性</a> 和 <a href="">等式推理</a>。</p>
-<p>注意，这不是一个介绍概念的文章系列，所以笔者打算从一个递归函数讲起。</p>
-<h2 id="代换模型"><a href="#代换模型" class="headerlink" title="代换模型"></a>代换模型</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = f(x)</div></pre></td></tr></table></figure>
-<p>用 Scala 开发的小伙伴看了相当气愤，这是一段自杀式的代码，如果我们执行了它，如 <code>f(1)</code> ，那么必然会导致死循环。</p>
+<p>注意，这不是一个介绍概念的文章系列，所以笔者打算从一段简单的代码讲起。</p>
+<h2 id="代换模型"><a href="#代换模型" class="headerlink" title="代换模型"></a>代换模型</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span></span>(x: <span class="type">Int</span>, y: <span class="type">Int</span>) = x</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = f2(x)</div><div class="line">f1(<span class="number">1</span>, f2(<span class="number">2</span>))</div></pre></td></tr></table></figure>
+<p>用 Scala 开发的小伙伴看了相当气愤，这是一段自杀式的代码，如果我们执行了它，那么 <code>f2</code> 必然被不断调用，从而导致死循环。</p>
 <p>这时，一个会 Haskell 的程序员路过，迷之微笑，花了 10 秒钟翻译成了以下的版本：</p>
-<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-<p>纳尼！竟然成功返回了结果 1。这到底是怎么回事呢？</p>
-<h3 id="正则序-vs-应用序"><a href="#正则序-vs-应用序" class="headerlink" title="正则序 vs 应用序"></a>正则序 vs 应用序</h3><p>也许相当多开发的同学至今未曾思考过这个问题：<strong>编程语言中的表达式求值策略是怎样的？</strong></p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="title">f1</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span></div><div class="line"><span class="title">f1</span> x y = x + y</div><div class="line"></div><div class="line"><span class="title">f2</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span></div><div class="line"><span class="title">f2</span> x = x</div></pre></td></tr></table></figure>
+<p>运行 <code>ghci</code> 载入函数后调用 <code>f1 1 (f2 2)</code>，你就会发现：纳尼！竟然成功返回了结果 1。这到底是怎么回事呢？</p>
+<h3 id="应用序-vs-正则序"><a href="#应用序-vs-正则序" class="headerlink" title="应用序 vs 正则序"></a>应用序 vs 正则序</h3><p>也许相当多开发的同学至今未曾思考过这个问题：<strong>编程语言中的表达式求值策略是怎样的？</strong></p>
+<p>其实，编程语言中存在两种不同的代换模型：<strong>应用序</strong> 和 <strong>正则序</strong>。</p>
+<p>大部分我们熟悉如 Scala、C、Java 是「应用序」语言，当要执行一个过程时，就会对过程参数进行求值，这也是上述 Scala 代码导致死循环的原因，当我们调用 <code>f1(1, f2(2))</code> 的时候，程序会先对 <code>f2(2)</code> 进行求值，从而不断地调用 <code>f2</code> 函数。</p>
+<p>然而，Haskell 采用了不一样的逻辑，它会延迟对过程参数的求值，直到确实需要用到它的时候，才进行计算，这就是所谓的「正则序」，也就是我们常说的 <a href="https://en.wikipedia.org/wiki/Lazy_evaluation" target="_blank" rel="external">惰性求值</a>。当我们调用 <code>f1 1 (f2 2)</code> 后，由于 <code>f1</code> 的过程中压根不需要用到 <code>y</code>，所以它就不会对 <code>f2 2</code> 进行求值，直接返回 <code>x</code> 值，也就是 1。</p>
+<blockquote>
+<p>注：对以上情况进行描述的角度，还有你可能知道的「传值调用」和「引用调用」。</p>
+</blockquote>
+<p>你会发现，Haskell 的套路更加类似于数学里的函数。</p>
 
             </div>
           
@@ -174,15 +181,9 @@
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2017/12/be_2_fe/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">后端工程师入门前端页面重构（一）：口诀</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
     
-    
-      <a class="next" href="/2017/12/swift-vue-like-1/">
-        <span class="next-text nav-default">用 Swift 模仿 Vue + Vuex 进行 iOS 开发（一）：ReSwift</span>
+      <a class="next" href="/2017/12/be_2_fe/">
+        <span class="next-text nav-default">后端工程师入门前端页面重构（一）：口诀</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
