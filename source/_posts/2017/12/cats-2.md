@@ -25,7 +25,7 @@ date: 2017-12-22
 
 > An expression is said to be referentially transparent if it can be replaced with its corresponding value without changing the program's behavior. As a result, evaluating a referentially transparent function gives the same value for same arguments. Such functions are called pure functions.
 
-简单地，我们可以理解为「**一个表达式在程序中可以被它等价的值替换，而不影响结果**」。如果是一个函数的输入相同，对应的计算结果也相同，那么它就具备「引用透明性」，它可被称为「纯函数」。
+简单地，我们可以理解为「**一个表达式在程序中可以被它等价的值替换，而不影响结果**」。如果一个函数的输入相同，对应的计算结果也相同，那么它就具备「引用透明性」，它可被称为「纯函数」。
 
 如以下代码：
 
