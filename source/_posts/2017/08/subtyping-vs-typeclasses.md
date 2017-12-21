@@ -43,7 +43,7 @@ res1: Car = Car(Civic)
 
 ### 二、特定多态
 
-特定多态（add hoc polymorphism）并不是像参数多态那样适用于无穷多的类型，而是针对特定问题的解决方案，如熟悉的重载、强制类型转换机制。在 Scala 中我们可以通过 implicit conversion 或 implicit parameters 来实现特定多态，它比 Haskell 中的 Type Class 更加强大，我们会在后面进一步介绍。
+特定多态（ad hoc polymorphism）并不是像参数多态那样适用于无穷多的类型，而是针对特定问题的解决方案，如熟悉的重载、强制类型转换机制。在 Scala 中我们可以通过 implicit conversion 或 implicit parameters 来实现特定多态，它比 Haskell 中的 Type Class 更加强大，我们会在后面进一步介绍。
 
 ### 三、子类型多态
 
