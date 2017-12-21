@@ -10,7 +10,7 @@ date: 2017-08-28
 
 你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是典型的多态例子。然而，多态的含义远不止此，我们将用几篇文章来介绍：**什么是多态**，以及重点对比实现多态的两种技术 — **Subtyping** 与 **Type Class**。
 
-此外，我们也会探讨与之相关的某些概念，如 Inheritence、Structure Subtyping 等。
+此外，我们也会探讨与之相关的某些概念，如 Inheritance、Structure Subtyping 等。
 
 ## 多态的类型
 
@@ -70,16 +70,16 @@ scala> f("a")
 
 这不免让人想到 Java 中的类继承，`class A extends class B` 可以实现上述的类型替代，因为在 Java 中，类与类型大部分情况下都是等价的（在 Java 泛型出现前）。
 
-所以，Inheritence（继承） 与 Subtyping 就是等价的吗？答案是否定的。
+所以，Inheritance（继承） 与 Subtyping 就是等价的吗？答案是否定的。
 
-### Inheritence
+### Inheritance
 
 先来看下什么是 Inheriting：
 > Inheritance refers to reuse of implementations. A type B inherits from another type A if some functions for B are written in terms of functions of A.
 
-原来 Inheritence 与 Subtyping 是完全不同的概念。前者强调「实现的复用」，而后者只是类型语义上的关系，与实现压根没关系。
+原来 Inheritance 与 Subtyping 是完全不同的概念。前者强调「实现的复用」，而后者只是类型语义上的关系，与实现压根没关系。
 
-可以说，部分语言如 Java，由于在声明 subtyping 关系同时也声明了 inheritence 关系，所以造成了我们这种混淆。然而，在一些其它支持 structural subtyping （如 OCaml）中，两则的差异会非常明显。Scala 兼具了以上两者，所以我们可以通过 Scala 中的结构类型来了解后者。
+可以说，部分语言如 Java，由于在声明 subtyping 关系同时也声明了 Inheritance 关系，所以造成了我们这种混淆。然而，在一些其它支持 structural subtyping （如 OCaml）中，两则的差异会非常明显。Scala 兼具了以上两者，所以我们可以通过 Scala 中的结构类型来了解后者。
 
 ### Structural Subtyping
 
