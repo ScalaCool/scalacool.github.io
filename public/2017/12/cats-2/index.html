@@ -39,7 +39,7 @@
 <meta property="og:url" content="http://scala.cool/2017/12/cats-2/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
-<meta property="og:updated_time" content="2017-12-20T15:26:50.000Z">
+<meta property="og:updated_time" content="2017-12-31T07:27:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cats（二）：引用透明性和等式推理">
 <meta name="twitter:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
@@ -149,7 +149,7 @@
             <p><a href="https://scala.cool/2017/11/cats-1/">上一篇文章</a> 介绍了函数式编程的思维，这一篇我们来了解下函数式编程的魅力。</p>
 <p>我们已经说过，函数式编程最关键的事情就是在做「组合」。然而，这种可被组合的「函数式组件」到底是怎样的？换句话说，它们必定符合某些规律和原则。</p>
 <p>当前我们已知晓的是，函数式编程是近似于数学中推理的过程。那么我们思考下，数学中的推理具备怎样的特点？</p>
-<p>很快，我们便可以发现数学推理最大的一个优点 —「<strong>只要逻辑正确，结果便千真万确</strong>」。</p>
+<p>很快，我们便可以发现数学推理最大的一个优点 —「<strong>只要推理逻辑正确，结果便千真万确</strong>」。</p>
 <p>其实，这也便是本篇文章要描述的函数式编程的一个很大的优势，所谓的「<a href="https://wiki.haskell.org/Equational_reasoning_examples" target="_blank" rel="external">等式推理</a>」。</p>
 <p>那么，我们再进一步探讨，「是所谓怎样的原则和方法，才能使函数式编程具备如此特点？」。</p>
 <h2 id="引用透明性"><a href="#引用透明性" class="headerlink" title="引用透明性"></a>引用透明性</h2><p>答案便是 <a href="https://en.wikipedia.org/wiki/Referential_transparency" target="_blank" rel="external">引用透明性</a>，它在数学和计算机中都有近似的定义。</p>

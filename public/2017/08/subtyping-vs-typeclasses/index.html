@@ -39,7 +39,12 @@
 <meta property="og:url" content="http://scala.cool/2017/08/subtyping-vs-typeclasses/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过几篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
+<<<<<<< HEAD
 <meta property="og:updated_time" content="2017-12-31T07:26:58.000Z">
+=======
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-21T09:38:12.000Z">
+>>>>>>> 844a6402df59f622330e06583bd9390f30024030
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Subtyping vs Typeclasses（一）">
 <meta name="twitter:description" content="你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是一个典型的多态例子。然而，多态的含义远不止此，我们将通过几篇文章来进一步介绍：什么是多态、实现多态的技术，以及不同技术的比较。">
@@ -147,7 +152,7 @@
     
             <div class="post-content">
             <p>你肯定听说过「多态」，它是 Java 面向对象的特征之一。如 Java 的类继承，这是典型的多态例子。然而，多态的含义远不止此，我们将用几篇文章来介绍：<strong>什么是多态</strong>，以及重点对比实现多态的两种技术 — <strong>Subtyping</strong> 与 <strong>Type Class</strong>。</p>
-<p>此外，我们也会探讨与之相关的某些概念，如 Inheritance、Structure Subtyping 等。</p>
+<p>此外，我们也会探讨与之相关的某些概念，如 Inheritence、Structure Subtyping 等。</p>
 <h2 id="多态的类型"><a href="#多态的类型" class="headerlink" title="多态的类型"></a>多态的类型</h2><p>多态的单词 <strong>polymorphism</strong> 是希腊语 polys 与 morphē 组成，前者表示「很多」，后者表示「形态」。生物学中的「多态性」是指一个物种的同一种群中存在两种或多种明显不同的表型。在计算机科学中，对应地我们可以把它理解成：<strong>一个泛化记号可以与不同的特殊行为相关联</strong>。</p>
 <p>根据以上的定义，我们可以将多态大致分为三种：</p>
 <ul>
@@ -165,13 +170,13 @@
 </blockquote>
 <p>可见，子类型化核心是一种「类型的替代性关系」，表示为：<code>S &lt;: T</code>（其中 <code>S</code> 是 <code>T</code> 的子类）。在需要 <code>T</code> 类型的地方，<code>S</code> 类型同样兼容，如 <code>Integer</code> 是 <code>Number</code> 的子类：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(a: <span class="type">Number</span>) = print(a)</div><div class="line">f: (a: <span class="type">Number</span>)<span class="type">Unit</span></div><div class="line"></div><div class="line">scala&gt; f(<span class="number">1</span>: <span class="type">Integer</span>)</div><div class="line"><span class="number">1</span></div><div class="line"></div><div class="line">scala&gt; f(<span class="string">"a"</span>)</div><div class="line">&lt;console&gt;:<span class="number">9</span>: error: <span class="class"><span class="keyword">type</span> <span class="title">mismatch</span></span></div></pre></td></tr></table></figure></p>
 <p>这不免让人想到 Java 中的类继承，<code>class A extends class B</code> 可以实现上述的类型替代，因为在 Java 中，类与类型大部分情况下都是等价的（在 Java 泛型出现前）。</p>
-<p>所以，Inheritance（继承） 与 Subtyping 就是等价的吗？答案是否定的。</p>
-<h3 id="Inheritance"><a href="#Inheritance" class="headerlink" title="Inheritance"></a>Inheritance</h3><p>先来看下什么是 Inheriting：</p>
+<p>所以，Inheritence（继承） 与 Subtyping 就是等价的吗？答案是否定的。</p>
+<h3 id="Inheritence"><a href="#Inheritence" class="headerlink" title="Inheritence"></a>Inheritence</h3><p>先来看下什么是 Inheriting：</p>
 <blockquote>
 <p>Inheritance refers to reuse of implementations. A type B inherits from another type A if some functions for B are written in terms of functions of A.</p>
 </blockquote>
-<p>原来 Inheritance 与 Subtyping 是完全不同的概念。前者强调「实现的复用」，而后者只是类型语义上的关系，与实现压根没关系。</p>
-<p>可以说，部分语言如 Java，由于在声明 subtyping 关系同时也声明了 Inheritance 关系，所以造成了我们这种混淆。然而，在一些其它支持 structural subtyping （如 OCaml）中，两则的差异会非常明显。Scala 兼具了以上两者，所以我们可以通过 Scala 中的结构类型来了解后者。</p>
+<p>原来 Inheritence 与 Subtyping 是完全不同的概念。前者强调「实现的复用」，而后者只是类型语义上的关系，与实现压根没关系。</p>
+<p>可以说，部分语言如 Java，由于在声明 subtyping 关系同时也声明了 inheritence 关系，所以造成了我们这种混淆。然而，在一些其它支持 structural subtyping （如 OCaml）中，两则的差异会非常明显。Scala 兼具了以上两者，所以我们可以通过 Scala 中的结构类型来了解后者。</p>
 <h3 id="Structural-Subtyping"><a href="#Structural-Subtyping" class="headerlink" title="Structural Subtyping"></a>Structural Subtyping</h3><p>Scala 中的结构类型（Stuctural Types）经常被描述为「类型安全的鸭子类型（<a href="https://en.wikipedia.org/wiki/Duck_typing" target="_blank" rel="external">duck typing</a>）」。</p>
 <blockquote>
 <p>你可以通过阅读 <a href="https://scala.cool/2017/07/scala-types-of-types-part-5/#21-结构类型">&lt;译&gt; Scala 类型的类型（五）</a> 来认识结构类型。</p>
