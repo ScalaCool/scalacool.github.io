@@ -3,8 +3,7 @@ title: Asyncdb（四）：MySQL驱动架构设计
 author: Godpan
 tags: 
 - Asyncdb
-- MySQL驱动
-- 架构设计
+- 数据库
 - 网络编程
 description: 上一篇文章我们讲了MySQL网络协议分析，包括如何与MySQL进行通信，数据包的格式等内容，今天我主要会讲讲如何设计一个MySQL解析包类库（类似mysql-connector-xxx山寨版)。
 ---
