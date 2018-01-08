@@ -42,7 +42,7 @@
 <meta property="og:description" content="MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2017/11/mysql-process.png">
-<meta property="og:updated_time" content="2018-01-05T01:49:37.000Z">
+<meta property="og:updated_time" content="2018-01-08T05:15:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Asyncdb（四）：MySQL网络协议分析">
 <meta name="twitter:description" content="MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序。">
@@ -323,7 +323,7 @@
 </tr>
 </tbody>
 </table>
-<p>若是数据内容大于或者等于2^24-1个字节，将会拆分发送，举个例子，比如发送16 777 215 (2^24-1) 字节的内容，则会按一下这种方式发送 </p>
+<p>若是数据内容大于或者等于2^24-1个字节，将会拆分发送，举个例子，比如发送16 777 215 (2^24-1) 字节的内容，则会按一下这种方式发送</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ff ff ff 00 ...</div><div class="line">00 00 00 01</div></pre></td></tr></table></figure>
 <p>第一个数据包满载，第二个数据包是一个空数据包（一种临界情况）。</p>
 <h3 id="Client-to-Server"><a href="#Client-to-Server" class="headerlink" title="Client to Server"></a>Client to Server</h3><p>Client向Server端发送的格式相对来说就简单一点了</p>
@@ -376,7 +376,7 @@
 <tr>
 <td>0x03</td>
 <td>COM_QUERY</td>
-<td>SQL查询请求 </td>
+<td>SQL查询请求</td>
 </tr>
 <tr>
 <td>0x04</td>
@@ -401,12 +401,12 @@
 <tr>
 <td>0x08</td>
 <td>COM_SHUTDOWN</td>
-<td>停止服务器 </td>
+<td>停止服务器</td>
 </tr>
 <tr>
 <td>0x09</td>
 <td>COM_STATISTICS</td>
-<td>获取服务器统计信息 </td>
+<td>获取服务器统计信息</td>
 </tr>
 <tr>
 <td>0x0A</td>
@@ -426,17 +426,17 @@
 <tr>
 <td>0x0D</td>
 <td>COM_DEBUG</td>
-<td>保存服务器调试信息 </td>
+<td>保存服务器调试信息</td>
 </tr>
 <tr>
 <td>0x0E</td>
 <td>COM_PING</td>
-<td>测试连通性 </td>
+<td>测试连通性</td>
 </tr>
 <tr>
 <td>0x0F</td>
 <td>COM_TIME</td>
-<td>（内部线程状态） </td>
+<td>（内部线程状态）</td>
 </tr>
 <tr>
 <td>0x10</td>
@@ -466,32 +466,32 @@
 <tr>
 <td>0x15</td>
 <td>COM_REGISTER_SLAVE</td>
-<td>从服务器向主服务器进行注册 </td>
+<td>从服务器向主服务器进行注册</td>
 </tr>
 <tr>
 <td>0x16</td>
 <td>COM_STMT_PREPARE</td>
-<td>预处理SQL语句 </td>
+<td>预处理SQL语句</td>
 </tr>
 <tr>
 <td>0x17</td>
 <td>COM_STMT_EXECUTE</td>
-<td>执行预处理语句 </td>
+<td>执行预处理语句</td>
 </tr>
 <tr>
 <td>0x18</td>
 <td>COM_STMT_SEND_LONG_DATA</td>
-<td>发送BLOB类型的数据 </td>
+<td>发送BLOB类型的数据</td>
 </tr>
 <tr>
 <td>0x19</td>
 <td>COM_STMT_CLOSE</td>
-<td>销毁预处理语句 </td>
+<td>销毁预处理语句</td>
 </tr>
 <tr>
 <td>0x1A</td>
 <td>COM_STMT_RESET</td>
-<td>清除预处理语句参数缓存 </td>
+<td>清除预处理语句参数缓存</td>
 </tr>
 <tr>
 <td>0x1B</td>
@@ -501,7 +501,7 @@
 <tr>
 <td>0x1C</td>
 <td>COM_STMT_FETCH</td>
-<td>获取预处理语句的执行结果 </td>
+<td>获取预处理语句的执行结果</td>
 </tr>
 </tbody>
 </table>
@@ -825,7 +825,7 @@
 <tr>
 <td>3</td>
 <td>2</td>
-<td>服务器状态 </td>
+<td>服务器状态</td>
 </tr>
 </tbody>
 </table>
