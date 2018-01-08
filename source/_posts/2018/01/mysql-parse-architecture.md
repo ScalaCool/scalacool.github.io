@@ -1,10 +1,11 @@
 ---
 title: Asyncdb（五）：MySQL驱动架构设计
 author: Godpan
-tags: 
+tags:
 - Asyncdb
 - 数据库
 - 网络编程
+date: 2018-01-05
 description: 上一篇文章我们讲了MySQL网络协议分析，包括如何与MySQL进行通信，数据包的格式等内容，今天我主要会讲讲如何设计一个MySQL解析包类库（类似mysql-connector-xxx山寨版)。
 ---
 
@@ -195,6 +196,3 @@ private static void dateEncoded () { //Date类型编码
 这篇文章主要讲解了如何去设计一个简单的数据库驱动，它最基本应该具备些什么，各个模块间又是怎么搭配的，这些内容不仅仅让我们了解与数据库通信的步骤，也可以让我们对目前使用的第三方数据库驱动有更深入的了解，最后我会画一张图里梳理了一下所有模块间的联系，帮助大家理解：
 
 ![mysql-connection](/images/2018/01/mysql-connection.png)
-
-
-
