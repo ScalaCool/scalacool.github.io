@@ -39,7 +39,7 @@
 <meta property="og:url" content="http://scala.cool/2017/12/cats-2/index.html">
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
-<meta property="og:updated_time" content="2017-12-31T08:42:52.000Z">
+<meta property="og:updated_time" content="2018-01-11T11:33:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cats（二）：引用透明性和等式推理">
 <meta name="twitter:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
@@ -129,7 +129,7 @@
       </h1>
 
       <time class="post-time">
-          12月31日
+          1月12日
       </time>
       
         <span class="author-split">|</span>
@@ -196,8 +196,26 @@
 <p>注：对以上情况进行描述的角度，还有你可能知道的「传值调用」和「引用调用」。</p>
 </blockquote>
 <p>那么这样做到底有什么好处呢？</p>
-<h2 id="惰性求值"><a href="#惰性求值" class="headerlink" title="惰性求值"></a>惰性求值</h2><p>跟 Scala 这种多范式的编程语言不同，Haskell 的函数更加类似于数学里的套路，也就是说用后者进行开发，一切都是需要符合「引用透明性」。</p>
-<p>因此，在一切函数都是「纯函数」的前提下，显然是否推迟计算都可以得到相同的计算结果。因此，</p>
+<h2 id="惰性求值"><a href="#惰性求值" class="headerlink" title="惰性求值"></a>惰性求值</h2><p>Haskell 是默认采用惰性求值的语言，在其它一些语言中（如 Scala 和 Swift），我们也可以利用 <code>lazy</code> 关键字来声明惰性的变量和函数。</p>
+<p>惰性求值可以带来很多优势，如部分人知晓的「无限长的列表结构」。当然，它也会制造一些麻烦，如使程序求值模型变得更加复杂，滥用惰性求值则会导致效率下降。</p>
+<p>这里，我们并不想深究惰性求值的利和弊，这并不是一个容易的问题。那么，我们为什么要介绍惰性求值呢？</p>
+<p>这是因为，它与我们一直在探讨的「组合」存在些许联系。</p>
+<h2 id="如何组合副作用"><a href="#如何组合副作用" class="headerlink" title="如何组合副作用"></a>如何组合副作用</h2><p><strong>函数式编程思维，就是抽象并组合一切，包括现实中的副作用。</strong></p>
+<p>常见的副作用，如 IO 操作，到底如何组合呢？</p>
+<p>来一段代码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">println(<span class="string">"I am a IO operation."</span>)</div></pre></td></tr></table></figure>
+<p>显然，这里的 <code>println</code> 不是个纯函数，它不利于组合。我们该如何解决这个问题？</p>
+<p>先看看 Haskell 中的惰性求值是如何实现的。</p>
+<h3 id="Thunk"><a href="#Thunk" class="headerlink" title="Thunk"></a>Thunk</h3><blockquote>
+<p>A <a href="https://wiki.haskell.org/Thunk" target="_blank" rel="external">thunk</a> is a value that is yet to be evaluated. It is used in Haskell systems, that implement non-strict semantics by lazy evaluation.</p>
+</blockquote>
+<p>Haskell 中的惰性求值是靠 Thunk 这种机制来实现的。我们也可以在其它编程语言中通过提供一个 thunk 函数来模拟类似的效果。</p>
+<p>要理解 Thunk 其实很容易，比如针对以上的非纯函数，我们就可以如此改造，让它变得 “lazy”：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Pure</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">println</span></span>(msg: <span class="type">String</span>) =</div><div class="line">    () =&gt; <span class="type">Predef</span>.println(msg)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如此，当我们的程序调用 <code>Pure.println(&quot;I am a IO operation.&quot;)</code> 的时候，它仅仅只是返回一个可以进行 <code>println</code> 的函数，它是惰性的，也是替代的。这样，我们就可以在程序中将这些 IO 操作进行组合，最后再执行它们。</p>
+<p>也许你还会思考，这里的 thunk 函数何时会被调用，以及如果要用以上的思路开发业务，我们该如何避免在业务过程中避免这些随机大量的 thunk 函数。</p>
+<p>关于这些，我们会在后续的文章中继续介绍，它跟所谓的 Free Monad 有关。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>第二篇文章进一步探索了函数式编程的几个特点和优势，似乎至此仍然没有提及 Cats。不着急，在下一篇中，我们将步入正题，我们计划先从「高阶类型」谈起。</p>
 
             </div>
           
@@ -217,8 +235,8 @@
   <nav class="post-nav">
     
     
-      <a class="next" href="/2017/12/scala-weekly-28/">
-        <span class="next-text nav-default">Scala 技术周刊 | 第 28 期</span>
+      <a class="next" href="/2018/01/scala-design-patterns-6/">
+        <span class="next-text nav-default">Scala 与设计模式（六）：Bridge 桥接模式</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
@@ -261,7 +279,9 @@
     
         &copy;
     
-    2017
+        2017 -
+    
+    2018
     <span class="footer-author">ScalaCool.</span>
     <span class="power-by">
         Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
