@@ -34,7 +34,7 @@ hexo.extend.helper.register('list_custom_tags', function (tags, options) {
       } else if (type == 1) {
         return tag.name.indexOf(specialPrefix) !== -1;
       } else {
-        return tag.name.indexOf(authorPrefix) === -1 && tag.name.indexOf(authorPrefix) === -1;
+        return tag.name.indexOf(specialPrefix) === -1 && tag.name.indexOf(authorPrefix) === -1;
       }
     }
   });
