@@ -15,22 +15,22 @@ date: 2018-01-12
 
 ## 深度阅读
 
-- [Is Shapeless worth it? What is Shapeless anyway?](https://medium.com/build-and-learn/is-shapeless-worth-it-what-is-shapeless-anyway-900cba6b717a)
+- [Is Shapeless worth it? What is Shapeless anyway?](https://medium.com/build-and-learn/is-shapeless-worth-it-what-is-shapeless-anyway-900cba6b717a)  
   Shapeless 介绍
 
-- [React with Play Framework 2.6.x](https://medium.com/@yohan.gz/react-with-play-framework-2-6-x-a6e15c0b7bd)
+- [React with Play Framework 2.6.x](https://medium.com/@yohan.gz/react-with-play-framework-2-6-x-a6e15c0b7bd)  
   React + Play 实践
 
-- [Optimizing Tagless Final – Saying farewell to Free](Optimizing Tagless Final – Saying farewell to Free)
+- [Optimizing Tagless Final – Saying farewell to Free](https://typelevel.org/blog/2017/12/27/optimizing-final-tagless.html)  
   Tagless Final 优化
 
-- [Mill - Your shiny new Scala build tool](https://github.com/lihaoyi/mill)
+- [Mill - Your shiny new Scala build tool](https://github.com/lihaoyi/mill)  
   sbt 替代品
 
-- [Learn Functional Programming course/tutorial on Scala](https://github.com/dehun/learn-fp)
+- [Learn Functional Programming course/tutorial on Scala](https://github.com/dehun/learn-fp)  
   Scala 入门函数式开发资料
 
-- [Scala 与设计模式（六）：Bridge 桥接模式](https://scala.cool/2018/01/scala-design-patterns-6/)
+- [Scala 与设计模式（六）：Bridge 桥接模式](https://scala.cool/2018/01/scala-design-patterns-6/)  
   Scala 与设计模式系列
 
 ## 一周速递
