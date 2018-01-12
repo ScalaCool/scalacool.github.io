@@ -3,6 +3,7 @@ title: Akka 系列（二）：Akka 中的 Actor 系统
 author: Godpan
 tags: 
 - Akka
+- ~Akka系列
 description: Actor模型作为Akka中最核心的概念，所以Actor在Akka中的组织结构也至关重要，本文主要介绍Akka中Actor系统。
 date: 2017-04-04
 ---

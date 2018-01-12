@@ -4,6 +4,7 @@ author: Yison
 tags:
 - 类型相关
 - 翻译
+- ~Scala 类型的类型
 description: Scala 的单例对象是通过 class 实现的（显然后者是 JVM 的基础构件）。然而你也会发现我们并不能像一个简单的类一样，轻松地获得一个 object 的类型……
 date: 2017-04-20
 ---

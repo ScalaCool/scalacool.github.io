@@ -4,6 +4,7 @@ author: Prefert
 tags: 
 - 设计模式
 - Java
+- ~Scala 与设计模式
 description: 创建者模式（Builder Pattern）支持以类方法而非类构造器的方式来创建实例。当一个类的构造器拥有多个版本以支持不同的用途时，这种模式尤其有用。
 date: 2017-07-21 12:00
 ---

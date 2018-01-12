@@ -5,6 +5,7 @@ tags:
 - 类型相关
 - Typeclass
 - Java
+- ~Subtyping vs Typeclasses
 description: 本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。
 date: 2017-09-18
 ---

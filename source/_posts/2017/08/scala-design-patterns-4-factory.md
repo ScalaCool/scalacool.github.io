@@ -4,6 +4,7 @@ author: Prefert
 tags:
 - 设计模式
 - Java
+- ~响应式 Web 应用
 description: 工厂模式（Factory Pattern）是一种实现了「工厂」概念的面向对象设计模式。就像其他创建型模式一样，它也是处理在不指定对象具体类型的情况下创建对象的问题。
 date: 2017-08-22
 ---

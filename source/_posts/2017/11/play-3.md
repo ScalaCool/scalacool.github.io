@@ -3,6 +3,7 @@ title: Play! Framework 系列（三）：依赖注入
 author: Shaw
 tags:
 - Play
+- ~Play! Framework 系列
 description: 在日常处理业务逻辑的时候，我们都会用到依赖注入，本文将介绍一下 Play! 中的依赖注入以及如何合理地去使用她。
 date: 2017-11-15
 ---

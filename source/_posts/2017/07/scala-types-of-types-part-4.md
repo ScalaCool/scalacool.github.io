@@ -4,6 +4,7 @@ author: Yison
 tags:
 - 类型相关
 - 翻译
+- ~Scala 类型的类型
 description: Scala 中并没有像 Java 一样支持枚举语法，但我们可以使用一些技巧（包含在 Enumeration）来写出类似的东西。
 date: 2017-07-06
 ---

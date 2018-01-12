@@ -4,6 +4,7 @@ tags:
 - Swift
 - iOS
 - 前端开发
+- ~用 Swift 模仿 Vue + Vuex 进行 iOS 开发
 description: 因水滴计划研发移动端的商家应用，笔者开始了 iOS 端的整体方案设计工作，我们基于 ReSwift 以及 Swift 这门语言的特性（核心是 extension）构建了一套类似 Vue + Vuex 的方案。
 date: 2017-12-13
 ---

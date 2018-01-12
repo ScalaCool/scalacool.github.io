@@ -3,6 +3,7 @@ title: Scala 中的集合（一）：集合类型与操作
 author: Shaw
 tags:
 - 集合
+- ~Scala 中的集合
 description: 在日常项目开发中，我们几乎都会用到Scala中的集合以及一些集合操作。科学合理地操作Scala中的集合可以使我们的代码变得更加简洁和高效。
 date: 2017-03-10
 ---

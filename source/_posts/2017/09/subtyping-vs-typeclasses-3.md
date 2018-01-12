@@ -5,6 +5,7 @@ tags:
 - 类型相关
 - Typeclass
 - 翻译
+- ~Subtyping vs Typeclasses
 description: 上一篇文章介绍了 Type Classes，但并没有深入分析它的优势。tpolecat 写了一篇文章很好地比较了 Subtyping 和 Typeclasses ，本文进行了翻译。此外，文末则附加了一些链接，关于该文章引发的一些讨论。
 date: 2017-10-12
 ---

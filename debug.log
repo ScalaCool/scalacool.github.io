@@ -1,0 +1,485 @@
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Hexo version: \u001b[35m3.3.8\u001b[39m","time":"2018-01-12T03:28:26.228Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Working directory: \u001b[35m~/Dev/scala.cool/\u001b[39m","time":"2018-01-12T03:28:26.230Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Config loaded: \u001b[35m~/Dev/scala.cool/_config.yml\u001b[39m","time":"2018-01-12T03:28:26.377Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":50,"err":{"message":"options is not defined","name":"ReferenceError","stack":"ReferenceError: options is not defined\n    at /Users/shaoziqi/Dev/scala.cool/themes/polarbear/scripts/index.js:69:4\n    at /Users/shaoziqi/Dev/scala.cool/node_modules/hexo/lib/hexo/index.js:232:12\n    at tryCatcher (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/util.js:16:23)\n    at Promise._settlePromiseFromHandler (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:512:31)\n    at Promise._settlePromise (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:569:18)\n    at Promise._settlePromise0 (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:614:10)\n    at Promise._settlePromises (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:693:18)\n    at Promise._fulfill (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:638:18)\n    at Promise._resolveCallback (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:432:57)\n    at Promise._settlePromiseFromHandler (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:524:17)\n    at Promise._settlePromise (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:569:18)\n    at Promise._settlePromise0 (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:614:10)\n    at Promise._settlePromises (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:693:18)\n    at Promise._fulfill (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:638:18)\n    at /Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/nodeback.js:42:21\n    at /Users/shaoziqi/Dev/scala.cool/node_modules/graceful-fs/graceful-fs.js:78:16\n    at tryToString (fs.js:449:3)\n    at FSReqWrap.readFileAfterClose [as oncomplete] (fs.js:436:12)"},"msg":"Script load failed: \u001b[35mthemes/polarbear/scripts/index.js\u001b[39m","time":"2018-01-12T03:28:26.391Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Plugin loaded: \u001b[35mhexo-deployer-git\u001b[39m","time":"2018-01-12T03:28:26.399Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Plugin loaded: \u001b[35mhexo-generator-archive\u001b[39m","time":"2018-01-12T03:28:26.402Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Plugin loaded: \u001b[35mhexo-generator-category\u001b[39m","time":"2018-01-12T03:28:26.404Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Plugin loaded: \u001b[35mhexo-generator-index\u001b[39m","time":"2018-01-12T03:28:26.406Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Plugin loaded: \u001b[35mhexo-generator-tag\u001b[39m","time":"2018-01-12T03:28:26.407Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Plugin loaded: \u001b[35mhexo-renderer-ejs\u001b[39m","time":"2018-01-12T03:28:26.410Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Plugin loaded: \u001b[35mhexo-renderer-marked\u001b[39m","time":"2018-01-12T03:28:26.415Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Plugin loaded: \u001b[35mhexo-renderer-scss\u001b[39m","time":"2018-01-12T03:28:26.427Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Plugin loaded: \u001b[35mhexo-renderer-stylus\u001b[39m","time":"2018-01-12T03:28:26.428Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Plugin loaded: \u001b[35mhexo-server\u001b[39m","time":"2018-01-12T03:28:26.511Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Loading database.","time":"2018-01-12T03:28:26.513Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Start processing","time":"2018-01-12T03:28:26.752Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mCNAME\u001b[39m","time":"2018-01-12T03:28:26.790Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/avatar/godpan.png\u001b[39m","time":"2018-01-12T03:28:26.873Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/avatar/jilen.png\u001b[39m","time":"2018-01-12T03:28:26.873Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/avatar/scalacool-blind.png\u001b[39m","time":"2018-01-12T03:28:26.873Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/favicon.ico\u001b[39m","time":"2018-01-12T03:28:26.873Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/avatar/scalacool.png\u001b[39m","time":"2018-01-12T03:28:26.879Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/avatar/shaw.jpg\u001b[39m","time":"2018-01-12T03:28:26.879Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/avatar/yison.jpg\u001b[39m","time":"2018-01-12T03:28:26.880Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Theme config loaded.","time":"2018-01-12T03:28:26.885Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_config.yml\u001b[39m","time":"2018-01-12T03:28:26.886Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/css/style.scss\u001b[39m","time":"2018-01-12T03:28:26.894Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/03/hello-scala.md\u001b[39m","time":"2018-01-12T03:28:26.914Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/03/how-to-handle-collection-in-scala-1.md\u001b[39m","time":"2018-01-12T03:28:26.989Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/03/how-to-use-algebraic-data-type-in-scala-development.md\u001b[39m","time":"2018-01-12T03:28:26.989Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/03/learning-akka-1.md\u001b[39m","time":"2018-01-12T03:28:26.989Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/03/scala-news-beta-release.md\u001b[39m","time":"2018-01-12T03:28:26.989Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/03/scala-types-of-types-part-1.md\u001b[39m","time":"2018-01-12T03:28:26.989Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/04/learning-akka-2.md\u001b[39m","time":"2018-01-12T03:28:26.989Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/04/learning-akka-3.md\u001b[39m","time":"2018-01-12T03:28:26.989Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/04/mysql-async-1.md\u001b[39m","time":"2018-01-12T03:28:26.989Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/04/scala-types-of-types-part-2.md\u001b[39m","time":"2018-01-12T03:28:26.989Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/04/scala-weekly-1.md\u001b[39m","time":"2018-01-12T03:28:26.989Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/06/learning-akka-5.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/06/scala-weekly-10.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/06/scala-weekly-7.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/06/scala-weekly-8.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/06/scala-weekly-9.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/08/canbuildfrom.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/08/learning-akka-8.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/08/learning-akka-9.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/08/reactive-web-applications-1.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/08/scala-design-patterns-4-factory.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/08/scala-weekly-15.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/08/scala-weekly-16.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/08/scala-weekly-17.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/08/scala-weekly-18.md\u001b[39m","time":"2018-01-12T03:28:26.990Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/08/subtyping-vs-typeclasses.md\u001b[39m","time":"2018-01-12T03:28:26.991Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/05/how-to-handle-collection-in-scala-2.md\u001b[39m","time":"2018-01-12T03:28:26.991Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/05/learning-akka-4.md\u001b[39m","time":"2018-01-12T03:28:26.991Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/05/mysql-async-2.md\u001b[39m","time":"2018-01-12T03:28:26.991Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/05/scala-types-of-types-part-3.md\u001b[39m","time":"2018-01-12T03:28:26.991Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/05/scala-weekly-2.md\u001b[39m","time":"2018-01-12T03:28:26.991Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/05/scala-weekly-3.md\u001b[39m","time":"2018-01-12T03:28:26.991Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/05/scala-weekly-4.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/05/scala-weekly-5.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/05/scala-weekly-6.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/a-new-collection.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/learning-akka-6.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/learning-akka-7.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/mysql-async-3.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/play-1.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/scala-design-patterns-1.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/scala-design-patterns-2.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/scala-design-patterns-3.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/scala-types-of-types-part-4.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/scala-types-of-types-part-5.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/scala-types-of-types-part-6.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/scala-weekly-11.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/scala-weekly-12.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/scala-weekly-13.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/07/scala-weekly-14.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/10/asyncdb-1.md\u001b[39m","time":"2018-01-12T03:28:26.992Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/10/java-io.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/10/reactive-web-applications-3.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/10/scala-weekly-23.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/10/scala-weekly-24.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/10/scala-weekly-25.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/10/shapeless-2.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2018/01/mysql-parse-architecture.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2018/01/scala-design-patterns-6.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2018/01/swift-vue-like-2.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/09/learning-akka-10.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/09/play2.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/09/reactive-web-applications-2.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/09/scala-weekly-19.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/09/scala-weekly-20.md\u001b[39m","time":"2018-01-12T03:28:26.993Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/09/scala-weekly-21.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/09/scala-weekly-22.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/09/shapeless-1.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/09/subtyping-vs-typeclasses-2.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/09/subtyping-vs-typeclasses-3.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/12/be_2_fe.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/12/cats-2.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/12/scala-weekly-28.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/12/swift-vue-like-1.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/11/cats-1.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/11/java-nio.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/11/kotlin-0.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/11/kotlin-1.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/11/mysql-protocol.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/11/play-3.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/11/scala-design-patterns-5.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/11/scala-weekly-26.md\u001b[39m","time":"2018-01-12T03:28:26.994Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35m_posts/2017/11/scala-weekly-27.md\u001b[39m","time":"2018-01-12T03:28:26.995Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/03/actor-model.png\u001b[39m","time":"2018-01-12T03:28:26.995Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/03/collections.immutable.png\u001b[39m","time":"2018-01-12T03:28:26.995Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/03/collections.png\u001b[39m","time":"2018-01-12T03:28:26.996Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/03/scala-unified-types.png\u001b[39m","time":"2018-01-12T03:28:26.996Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/08/simple-is-not-easy.jpg\u001b[39m","time":"2018-01-12T03:28:26.996Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/04/hikaricp-select.png\u001b[39m","time":"2018-01-12T03:28:26.997Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/04/mysql-async-select.png\u001b[39m","time":"2018-01-12T03:28:26.997Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/04/postgres-async-pool.png\u001b[39m","time":"2018-01-12T03:28:26.997Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/05/hash-set.png\u001b[39m","time":"2018-01-12T03:28:26.998Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/05/java-memory.png\u001b[39m","time":"2018-01-12T03:28:26.998Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/05/list.png\u001b[39m","time":"2018-01-12T03:28:26.998Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/05/map.png\u001b[39m","time":"2018-01-12T03:28:26.998Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/05/red-black-tree.png\u001b[39m","time":"2018-01-12T03:28:26.998Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/05/seq.png\u001b[39m","time":"2018-01-12T03:28:26.998Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/05/set.png\u001b[39m","time":"2018-01-12T03:28:26.998Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/05/vector-trie.png\u001b[39m","time":"2018-01-12T03:28:26.999Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2018/01/bridge-old-java-design.png\u001b[39m","time":"2018-01-12T03:28:26.999Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2018/01/bridge-pattern-2.png\u001b[39m","time":"2018-01-12T03:28:26.999Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_layout.swig\u001b[39m","time":"2018-01-12T03:28:27.041Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/archive.swig\u001b[39m","time":"2018-01-12T03:28:27.041Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/categories.swig\u001b[39m","time":"2018-01-12T03:28:27.042Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/index.swig\u001b[39m","time":"2018-01-12T03:28:27.042Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/page.swig\u001b[39m","time":"2018-01-12T03:28:27.042Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/post.swig\u001b[39m","time":"2018-01-12T03:28:27.042Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlanguages/default.yml\u001b[39m","time":"2018-01-12T03:28:27.050Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlanguages/en.yml\u001b[39m","time":"2018-01-12T03:28:27.051Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlanguages/zh-cn.yml\u001b[39m","time":"2018-01-12T03:28:27.051Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2018/01/modern-tetromino.jpg\u001b[39m","time":"2018-01-12T03:28:27.051Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2018/01/mysql-connection.png\u001b[39m","time":"2018-01-12T03:28:27.051Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2018/01/traditional-tetromino.jpg\u001b[39m","time":"2018-01-12T03:28:27.051Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/actor-graph.png\u001b[39m","time":"2018-01-12T03:28:27.051Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/actor-tree-supervision.png\u001b[39m","time":"2018-01-12T03:28:27.052Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/architecture-of-the-play.png\u001b[39m","time":"2018-01-12T03:28:27.052Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/async-new-pool.png\u001b[39m","time":"2018-01-12T03:28:27.052Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/event-handle.png\u001b[39m","time":"2018-01-12T03:28:27.052Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/event.png\u001b[39m","time":"2018-01-12T03:28:27.052Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/exception-prop.png\u001b[39m","time":"2018-01-12T03:28:27.052Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/object-graph-snakes.png\u001b[39m","time":"2018-01-12T03:28:27.052Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/object-graph.png\u001b[39m","time":"2018-01-12T03:28:27.052Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/play-java-layer.png\u001b[39m","time":"2018-01-12T03:28:27.053Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/select-performance.png\u001b[39m","time":"2018-01-12T03:28:27.053Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/seq-chart-multi-thread.png\u001b[39m","time":"2018-01-12T03:28:27.053Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/seq-chart-thread.png\u001b[39m","time":"2018-01-12T03:28:27.053Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/seq-chart.png\u001b[39m","time":"2018-01-12T03:28:27.053Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/serialized-timeline-invariants.png\u001b[39m","time":"2018-01-12T03:28:27.053Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/state.png\u001b[39m","time":"2018-01-12T03:28:27.053Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/stateless.png\u001b[39m","time":"2018-01-12T03:28:27.053Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/thread-handle.png\u001b[39m","time":"2018-01-12T03:28:27.053Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/thread.png\u001b[39m","time":"2018-01-12T03:28:27.053Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/07/transaction-performance.png\u001b[39m","time":"2018-01-12T03:28:27.054Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/09/shapeless-infer.png\u001b[39m","time":"2018-01-12T03:28:27.054Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/box-module.jpeg\u001b[39m","time":"2018-01-12T03:28:27.054Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/box.png\u001b[39m","time":"2018-01-12T03:28:27.054Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/desk.jpg\u001b[39m","time":"2018-01-12T03:28:27.054Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-head-second.png\u001b[39m","time":"2018-01-12T03:28:27.055Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-head.png\u001b[39m","time":"2018-01-12T03:28:27.055Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-min-first.png\u001b[39m","time":"2018-01-12T03:28:27.055Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-min.png\u001b[39m","time":"2018-01-12T03:28:27.055Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-part-1.png\u001b[39m","time":"2018-01-12T03:28:27.055Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-part-2-first.png\u001b[39m","time":"2018-01-12T03:28:27.055Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-part-2.png\u001b[39m","time":"2018-01-12T03:28:27.055Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-part-3-first.png\u001b[39m","time":"2018-01-12T03:28:27.055Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-part-3.png\u001b[39m","time":"2018-01-12T03:28:27.055Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/emoj4.jpeg\u001b[39m","time":"2018-01-12T03:28:27.056Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/last-second.jpeg\u001b[39m","time":"2018-01-12T03:28:27.056Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/last.jpeg\u001b[39m","time":"2018-01-12T03:28:27.057Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/scalacool.png\u001b[39m","time":"2018-01-12T03:28:27.057Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/secene-sum.png\u001b[39m","time":"2018-01-12T03:28:27.057Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/serious.jpeg\u001b[39m","time":"2018-01-12T03:28:27.057Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/suprise.jpeg\u001b[39m","time":"2018-01-12T03:28:27.057Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/03/collections.mutable.png\u001b[39m","time":"2018-01-12T03:28:27.057Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/03/scala-news.png\u001b[39m","time":"2018-01-12T03:28:27.057Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/08/type-of-map-is-ugly.png\u001b[39m","time":"2018-01-12T03:28:27.057Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/04/actor-system-example.png\u001b[39m","time":"2018-01-12T03:28:27.058Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/04/actor-system-guardian.png\u001b[39m","time":"2018-01-12T03:28:27.058Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/04/company-system-example.png\u001b[39m","time":"2018-01-12T03:28:27.058Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/04/hikaricp-trans.png\u001b[39m","time":"2018-01-12T03:28:27.058Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/04/mysql-async-trans.png\u001b[39m","time":"2018-01-12T03:28:27.058Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/absolute-layout.png\u001b[39m","time":"2018-01-12T03:28:27.063Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-middle.png\u001b[39m","time":"2018-01-12T03:28:27.063Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-middle-first.png\u001b[39m","time":"2018-01-12T03:28:27.063Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/float-layout.png\u001b[39m","time":"2018-01-12T03:28:27.063Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/avatar/knewhow.png\u001b[39m","time":"2018-01-12T03:28:27.064Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/good.gif\u001b[39m","time":"2018-01-12T03:28:27.064Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/mobile-layout.png\u001b[39m","time":"2018-01-12T03:28:27.064Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/youyu.gif\u001b[39m","time":"2018-01-12T03:28:27.064Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/js/src/author.js\u001b[39m","time":"2018-01-12T03:28:27.064Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/js/src/bootstrap.js\u001b[39m","time":"2018-01-12T03:28:27.064Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/js/src/theme.js\u001b[39m","time":"2018-01-12T03:28:27.064Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/blank.gif\u001b[39m","time":"2018-01-12T03:28:27.065Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/fancybox_loading.gif\u001b[39m","time":"2018-01-12T03:28:27.065Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/fancybox_loading@2x.gif\u001b[39m","time":"2018-01-12T03:28:27.065Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/fancybox_overlay.png\u001b[39m","time":"2018-01-12T03:28:27.065Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/fancybox_sprite.png\u001b[39m","time":"2018-01-12T03:28:27.065Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/fancybox_sprite@2x.png\u001b[39m","time":"2018-01-12T03:28:27.065Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/jquery.fancybox.css\u001b[39m","time":"2018-01-12T03:28:27.065Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/jquery.fancybox.js\u001b[39m","time":"2018-01-12T03:28:27.066Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/jquery.fancybox.pack.js\u001b[39m","time":"2018-01-12T03:28:27.066Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_macro/archive.swig\u001b[39m","time":"2018-01-12T03:28:27.082Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_macro/post.swig\u001b[39m","time":"2018-01-12T03:28:27.082Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_partial/comments.swig\u001b[39m","time":"2018-01-12T03:28:27.082Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_partial/footer.swig\u001b[39m","time":"2018-01-12T03:28:27.082Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_partial/head.swig\u001b[39m","time":"2018-01-12T03:28:27.082Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_partial/header.swig\u001b[39m","time":"2018-01-12T03:28:27.082Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_partial/pagination.swig\u001b[39m","time":"2018-01-12T03:28:27.082Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_partial/widget.swig\u001b[39m","time":"2018-01-12T03:28:27.082Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_script/analytics.swig\u001b[39m","time":"2018-01-12T03:28:27.083Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_script/comments.swig\u001b[39m","time":"2018-01-12T03:28:27.083Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_script/config.swig\u001b[39m","time":"2018-01-12T03:28:27.083Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_script/libs.swig\u001b[39m","time":"2018-01-12T03:28:27.083Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_script/theme.swig\u001b[39m","time":"2018-01-12T03:28:27.083Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/05/actor-process.png\u001b[39m","time":"2018-01-12T03:28:27.083Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/layout-direction.png\u001b[39m","time":"2018-01-12T03:28:27.083Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/jquery/jquery-3.1.1.min.js\u001b[39m","time":"2018-01-12T03:28:27.083Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-box.png\u001b[39m","time":"2018-01-12T03:28:27.085Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/helpers/fancybox_buttons.png\u001b[39m","time":"2018-01-12T03:28:27.085Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/helpers/jquery.fancybox-buttons.css\u001b[39m","time":"2018-01-12T03:28:27.085Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/helpers/jquery.fancybox-buttons.js\u001b[39m","time":"2018-01-12T03:28:27.085Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/helpers/jquery.fancybox-media.js\u001b[39m","time":"2018-01-12T03:28:27.089Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/helpers/jquery.fancybox-thumbs.css\u001b[39m","time":"2018-01-12T03:28:27.089Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35msource/lib/fancybox/helpers/jquery.fancybox-thumbs.js\u001b[39m","time":"2018-01-12T03:28:27.089Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_partial/_head/meta.swig\u001b[39m","time":"2018-01-12T03:28:27.095Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_partial/_widget/categories.swig\u001b[39m","time":"2018-01-12T03:28:27.095Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_partial/_widget/custom.swig\u001b[39m","time":"2018-01-12T03:28:27.095Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_partial/_widget/joinus.swig\u001b[39m","time":"2018-01-12T03:28:27.095Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_partial/_widget/subscribe.swig\u001b[39m","time":"2018-01-12T03:28:27.095Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_script/_analytics/baidu-analytics.swig\u001b[39m","time":"2018-01-12T03:28:27.095Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_script/_analytics/google-analytics.swig\u001b[39m","time":"2018-01-12T03:28:27.095Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_script/_comments/disqus.swig\u001b[39m","time":"2018-01-12T03:28:27.095Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mlayout/_script/_comments/duoshou.swig\u001b[39m","time":"2018-01-12T03:28:27.095Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":50,"err":{"message":"Unexpected tag \"list_normal_tags({show_count: true, amount: 30, orderby: 'count'})\" on line 8 in file /Users/shaoziqi/Dev/scala.cool/themes/polarbear/layout/_partial/_widget/tags.swig.","name":"Error","stack":"Error: Unexpected tag \"list_normal_tags({show_count: true, amount: 30, orderby: 'count'})\" on line 8 in file /Users/shaoziqi/Dev/scala.cool/themes/polarbear/layout/_partial/_widget/tags.swig.\n    at Object.exports.throwError (/Users/shaoziqi/Dev/scala.cool/node_modules/swig/lib/utils.js:183:9)\n    at parseTag (/Users/shaoziqi/Dev/scala.cool/node_modules/swig/lib/parser.js:544:13)\n    at /Users/shaoziqi/Dev/scala.cool/node_modules/swig/lib/parser.js:640:15\n    at Object.exports.each (/Users/shaoziqi/Dev/scala.cool/node_modules/swig/lib/utils.js:45:11)\n    at Object.exports.parse (/Users/shaoziqi/Dev/scala.cool/node_modules/swig/lib/parser.js:624:9)\n    at parse (/Users/shaoziqi/Dev/scala.cool/node_modules/swig/lib/swig.js:354:19)\n    at Object.precompile (/Users/shaoziqi/Dev/scala.cool/node_modules/swig/lib/swig.js:486:23)\n    at Object.compile (/Users/shaoziqi/Dev/scala.cool/node_modules/swig/lib/swig.js:606:16)\n    at Function.swigRenderer.compile (/Users/shaoziqi/Dev/scala.cool/node_modules/hexo/lib/plugins/renderer/swig.js:42:15)\n    at View._precompile (/Users/shaoziqi/Dev/scala.cool/node_modules/hexo/lib/theme/view.js:119:29)\n    at View (/Users/shaoziqi/Dev/scala.cool/node_modules/hexo/lib/theme/view.js:13:8)\n    at new Theme._View.View (/Users/shaoziqi/Dev/scala.cool/node_modules/hexo/lib/theme/index.js:37:10)\n    at Theme.setView (/Users/shaoziqi/Dev/scala.cool/node_modules/hexo/lib/theme/index.js:71:20)\n    at /Users/shaoziqi/Dev/scala.cool/node_modules/hexo/lib/theme/processors/view.js:14:14\n    at tryCatcher (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/util.js:16:23)\n    at Promise._settlePromiseFromHandler (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:512:31)\n    at Promise._settlePromise (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:569:18)\n    at Promise._settlePromise0 (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:614:10)\n    at Promise._settlePromises (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:693:18)\n    at Promise._fulfill (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:638:18)\n    at Promise._resolveCallback (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:432:57)\n    at Promise._settlePromiseFromHandler (/Users/shaoziqi/Dev/scala.cool/node_modules/bluebird/js/release/promise.js:524:17)"},"msg":"Process failed: \u001b[35mlayout/_partial/_widget/tags.swig\u001b[39m","time":"2018-01-12T03:28:27.096Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-index.png\u001b[39m","time":"2018-01-12T03:28:27.097Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-index-first.png\u001b[39m","time":"2018-01-12T03:28:27.097Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-index-second.png\u001b[39m","time":"2018-01-12T03:28:27.097Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/douban-head-first.png\u001b[39m","time":"2018-01-12T03:28:27.099Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Processed: \u001b[35mimages/2017/12/desk.png\u001b[39m","time":"2018-01-12T03:28:27.101Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Generator: \u001b[35mpage\u001b[39m","time":"2018-01-12T03:28:27.194Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Generator: \u001b[35mpost\u001b[39m","time":"2018-01-12T03:28:27.194Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Generator: \u001b[35marchive\u001b[39m","time":"2018-01-12T03:28:27.194Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Generator: \u001b[35mcategory\u001b[39m","time":"2018-01-12T03:28:27.194Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Generator: \u001b[35mindex\u001b[39m","time":"2018-01-12T03:28:27.194Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Generator: \u001b[35mtag\u001b[39m","time":"2018-01-12T03:28:27.194Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Generator: \u001b[35masset\u001b[39m","time":"2018-01-12T03:28:27.194Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Files loaded in \u001b[36m695 ms\u001b[39m","time":"2018-01-12T03:28:27.208Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2018/01/swift-vue-like-2/index.html\u001b[39m","time":"2018-01-12T03:28:27.218Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/12/cats-2/index.html\u001b[39m","time":"2018-01-12T03:28:27.302Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2018/01/scala-design-patterns-6/index.html\u001b[39m","time":"2018-01-12T03:28:27.329Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2018/01/mysql-parse-architecture/index.html\u001b[39m","time":"2018-01-12T03:28:27.349Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/12/scala-weekly-28/index.html\u001b[39m","time":"2018-01-12T03:28:27.360Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/12/be_2_fe/index.html\u001b[39m","time":"2018-01-12T03:28:27.369Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/12/swift-vue-like-1/index.html\u001b[39m","time":"2018-01-12T03:28:27.387Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/11/kotlin-1/index.html\u001b[39m","time":"2018-01-12T03:28:27.399Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/11/cats-1/index.html\u001b[39m","time":"2018-01-12T03:28:27.420Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/11/mysql-protocol/index.html\u001b[39m","time":"2018-01-12T03:28:27.432Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/11/scala-weekly-27/index.html\u001b[39m","time":"2018-01-12T03:28:27.446Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/11/scala-design-patterns-5/index.html\u001b[39m","time":"2018-01-12T03:28:27.455Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/11/play-3/index.html\u001b[39m","time":"2018-01-12T03:28:27.466Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/11/scala-weekly-26/index.html\u001b[39m","time":"2018-01-12T03:28:27.477Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/11/java-nio/index.html\u001b[39m","time":"2018-01-12T03:28:27.486Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/11/kotlin-0/index.html\u001b[39m","time":"2018-01-12T03:28:27.506Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/10/scala-weekly-25/index.html\u001b[39m","time":"2018-01-12T03:28:27.518Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/10/java-io/index.html\u001b[39m","time":"2018-01-12T03:28:27.528Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/10/scala-weekly-24/index.html\u001b[39m","time":"2018-01-12T03:28:27.539Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/10/shapeless-2/index.html\u001b[39m","time":"2018-01-12T03:28:27.549Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/10/scala-weekly-23/index.html\u001b[39m","time":"2018-01-12T03:28:27.559Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/10/reactive-web-applications-3/index.html\u001b[39m","time":"2018-01-12T03:28:27.566Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/09/subtyping-vs-typeclasses-3/index.html\u001b[39m","time":"2018-01-12T03:28:27.581Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/10/asyncdb-1/index.html\u001b[39m","time":"2018-01-12T03:28:27.598Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/09/scala-weekly-22/index.html\u001b[39m","time":"2018-01-12T03:28:27.608Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/09/subtyping-vs-typeclasses-2/index.html\u001b[39m","time":"2018-01-12T03:28:27.615Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/09/scala-weekly-21/index.html\u001b[39m","time":"2018-01-12T03:28:27.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/09/shapeless-1/index.html\u001b[39m","time":"2018-01-12T03:28:27.635Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/09/reactive-web-applications-2/index.html\u001b[39m","time":"2018-01-12T03:28:27.648Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/09/learning-akka-10/index.html\u001b[39m","time":"2018-01-12T03:28:27.657Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/09/scala-weekly-20/index.html\u001b[39m","time":"2018-01-12T03:28:27.672Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/09/play2/index.html\u001b[39m","time":"2018-01-12T03:28:27.681Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/09/scala-weekly-19/index.html\u001b[39m","time":"2018-01-12T03:28:27.694Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/08/learning-akka-9/index.html\u001b[39m","time":"2018-01-12T03:28:27.704Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/08/subtyping-vs-typeclasses/index.html\u001b[39m","time":"2018-01-12T03:28:27.717Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/08/scala-weekly-18/index.html\u001b[39m","time":"2018-01-12T03:28:27.725Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/08/scala-design-patterns-4-factory/index.html\u001b[39m","time":"2018-01-12T03:28:27.733Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/08/scala-weekly-17/index.html\u001b[39m","time":"2018-01-12T03:28:27.754Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/08/learning-akka-8/index.html\u001b[39m","time":"2018-01-12T03:28:27.762Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/08/scala-weekly-16/index.html\u001b[39m","time":"2018-01-12T03:28:27.772Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/08/reactive-web-applications-1/index.html\u001b[39m","time":"2018-01-12T03:28:27.781Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/08/scala-weekly-15/index.html\u001b[39m","time":"2018-01-12T03:28:27.790Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/08/canbuildfrom/index.html\u001b[39m","time":"2018-01-12T03:28:27.799Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/scala-design-patterns-3/index.html\u001b[39m","time":"2018-01-12T03:28:27.809Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/a-new-collection/index.html\u001b[39m","time":"2018-01-12T03:28:27.819Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/scala-weekly-14/index.html\u001b[39m","time":"2018-01-12T03:28:27.836Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/play-1/index.html\u001b[39m","time":"2018-01-12T03:28:27.848Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/learning-akka-7/index.html\u001b[39m","time":"2018-01-12T03:28:27.859Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/scala-types-of-types-part-6/index.html\u001b[39m","time":"2018-01-12T03:28:27.872Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/scala-weekly-13/index.html\u001b[39m","time":"2018-01-12T03:28:27.882Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/scala-design-patterns-2/index.html\u001b[39m","time":"2018-01-12T03:28:27.891Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/mysql-async-3/index.html\u001b[39m","time":"2018-01-12T03:28:27.905Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/scala-types-of-types-part-5/index.html\u001b[39m","time":"2018-01-12T03:28:27.918Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/scala-weekly-12/index.html\u001b[39m","time":"2018-01-12T03:28:27.928Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/scala-design-patterns-1/index.html\u001b[39m","time":"2018-01-12T03:28:27.937Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/learning-akka-6/index.html\u001b[39m","time":"2018-01-12T03:28:27.948Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/scala-weekly-11/index.html\u001b[39m","time":"2018-01-12T03:28:27.957Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/07/scala-types-of-types-part-4/index.html\u001b[39m","time":"2018-01-12T03:28:27.964Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/06/scala-weekly-10/index.html\u001b[39m","time":"2018-01-12T03:28:27.976Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/06/learning-akka-5/index.html\u001b[39m","time":"2018-01-12T03:28:27.984Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/06/scala-weekly-9/index.html\u001b[39m","time":"2018-01-12T03:28:28.000Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/06/scala-weekly-8/index.html\u001b[39m","time":"2018-01-12T03:28:28.007Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/06/scala-weekly-7/index.html\u001b[39m","time":"2018-01-12T03:28:28.014Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/05/scala-weekly-6/index.html\u001b[39m","time":"2018-01-12T03:28:28.022Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/05/scala-weekly-5/index.html\u001b[39m","time":"2018-01-12T03:28:28.029Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/05/how-to-handle-collection-in-scala-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.037Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/05/mysql-async-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.054Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/05/scala-weekly-4/index.html\u001b[39m","time":"2018-01-12T03:28:28.061Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/05/scala-weekly-3/index.html\u001b[39m","time":"2018-01-12T03:28:28.072Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/05/scala-types-of-types-part-3/index.html\u001b[39m","time":"2018-01-12T03:28:28.080Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/05/scala-weekly-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.090Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/05/learning-akka-4/index.html\u001b[39m","time":"2018-01-12T03:28:28.098Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/04/scala-weekly-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.107Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/04/mysql-async-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.113Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/04/scala-types-of-types-part-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.121Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/04/learning-akka-3/index.html\u001b[39m","time":"2018-01-12T03:28:28.130Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/04/learning-akka-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.145Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/03/scala-types-of-types-part-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.154Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/03/scala-news-beta-release/index.html\u001b[39m","time":"2018-01-12T03:28:28.162Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/03/how-to-use-algebraic-data-type-in-scala-development/index.html\u001b[39m","time":"2018-01-12T03:28:28.169Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/03/learning-akka-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.180Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/03/how-to-handle-collection-in-scala-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.189Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering post: \u001b[35m2017/03/hello-scala/index.html\u001b[39m","time":"2018-01-12T03:28:28.199Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35marchives/index.html\u001b[39m","time":"2018-01-12T03:28:28.210Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering index: \u001b[35mindex.html\u001b[39m","time":"2018-01-12T03:28:28.227Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering index: \u001b[35mpage/2/index.html\u001b[39m","time":"2018-01-12T03:28:28.236Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering index: \u001b[35mpage/3/index.html\u001b[39m","time":"2018-01-12T03:28:28.244Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering index: \u001b[35mpage/4/index.html\u001b[39m","time":"2018-01-12T03:28:28.250Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering index: \u001b[35mpage/5/index.html\u001b[39m","time":"2018-01-12T03:28:28.256Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering index: \u001b[35mpage/6/index.html\u001b[39m","time":"2018-01-12T03:28:28.265Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering index: \u001b[35mpage/7/index.html\u001b[39m","time":"2018-01-12T03:28:28.271Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering index: \u001b[35mpage/8/index.html\u001b[39m","time":"2018-01-12T03:28:28.278Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering index: \u001b[35mpage/9/index.html\u001b[39m","time":"2018-01-12T03:28:28.290Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/ScalaCool/index.html\u001b[39m","time":"2018-01-12T03:28:28.296Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/模式匹配/index.html\u001b[39m","time":"2018-01-12T03:28:28.302Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/类型相关/index.html\u001b[39m","time":"2018-01-12T03:28:28.309Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/类型相关/page/2/index.html\u001b[39m","time":"2018-01-12T03:28:28.315Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/集合/index.html\u001b[39m","time":"2018-01-12T03:28:28.321Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/翻译/index.html\u001b[39m","time":"2018-01-12T03:28:28.327Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/翻译/page/2/index.html\u001b[39m","time":"2018-01-12T03:28:28.333Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Akka/index.html\u001b[39m","time":"2018-01-12T03:28:28.340Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/网络编程/index.html\u001b[39m","time":"2018-01-12T03:28:28.347Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/数据库/index.html\u001b[39m","time":"2018-01-12T03:28:28.358Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Weekly/index.html\u001b[39m","time":"2018-01-12T03:28:28.363Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Weekly/page/2/index.html\u001b[39m","time":"2018-01-12T03:28:28.369Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Weekly/page/3/index.html\u001b[39m","time":"2018-01-12T03:28:28.375Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Play/index.html\u001b[39m","time":"2018-01-12T03:28:28.381Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/响应式编程/index.html\u001b[39m","time":"2018-01-12T03:28:28.387Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/设计模式/index.html\u001b[39m","time":"2018-01-12T03:28:28.395Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Java/index.html\u001b[39m","time":"2018-01-12T03:28:28.401Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Typeclass/index.html\u001b[39m","time":"2018-01-12T03:28:28.406Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Shapeless/index.html\u001b[39m","time":"2018-01-12T03:28:28.416Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Asyncdb/index.html\u001b[39m","time":"2018-01-12T03:28:28.422Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Cats/index.html\u001b[39m","time":"2018-01-12T03:28:28.430Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/函数式编程/index.html\u001b[39m","time":"2018-01-12T03:28:28.435Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Kotlin/index.html\u001b[39m","time":"2018-01-12T03:28:28.442Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Android/index.html\u001b[39m","time":"2018-01-12T03:28:28.448Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/前端开发/index.html\u001b[39m","time":"2018-01-12T03:28:28.453Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/Swift/index.html\u001b[39m","time":"2018-01-12T03:28:28.459Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":20,"msg":"Rendering archive: \u001b[35mtags/iOS/index.html\u001b[39m","time":"2018-01-12T03:28:28.464Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2018/01/swift-vue-like-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.624Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/12/scala-weekly-28/index.html\u001b[39m","time":"2018-01-12T03:28:28.624Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/11/scala-weekly-27/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/10/scala-weekly-25/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/10/asyncdb-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/10/scala-weekly-24/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/09/scala-weekly-22/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/11/scala-weekly-26/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/09/scala-weekly-20/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/09/reactive-web-applications-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/09/scala-weekly-21/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/08/scala-weekly-17/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/10/scala-weekly-23/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/08/scala-weekly-16/index.html\u001b[39m","time":"2018-01-12T03:28:28.625Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/08/scala-weekly-18/index.html\u001b[39m","time":"2018-01-12T03:28:28.626Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/09/scala-weekly-19/index.html\u001b[39m","time":"2018-01-12T03:28:28.626Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/scala-weekly-14/index.html\u001b[39m","time":"2018-01-12T03:28:28.626Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/scala-weekly-13/index.html\u001b[39m","time":"2018-01-12T03:28:28.626Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/08/scala-weekly-15/index.html\u001b[39m","time":"2018-01-12T03:28:28.626Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/06/scala-weekly-10/index.html\u001b[39m","time":"2018-01-12T03:28:28.626Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/scala-weekly-11/index.html\u001b[39m","time":"2018-01-12T03:28:28.626Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/scala-weekly-12/index.html\u001b[39m","time":"2018-01-12T03:28:28.626Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/06/scala-weekly-8/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/06/scala-weekly-7/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/06/scala-weekly-9/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/05/scala-weekly-6/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/05/scala-weekly-3/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/05/scala-weekly-5/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/03/scala-news-beta-release/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/05/mysql-async-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/04/scala-weekly-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/05/scala-weekly-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/03/hello-scala/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/05/scala-weekly-4/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/模式匹配/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/类型相关/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/类型相关/page/2/index.html\u001b[39m","time":"2018-01-12T03:28:28.627Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/集合/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/翻译/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/ScalaCool/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Akka/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/数据库/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/翻译/page/2/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Weekly/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Weekly/page/2/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/网络编程/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Play/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Weekly/page/3/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/响应式编程/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/设计模式/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Java/index.html\u001b[39m","time":"2018-01-12T03:28:28.628Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Asyncdb/index.html\u001b[39m","time":"2018-01-12T03:28:28.629Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Shapeless/index.html\u001b[39m","time":"2018-01-12T03:28:28.629Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Typeclass/index.html\u001b[39m","time":"2018-01-12T03:28:28.629Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Cats/index.html\u001b[39m","time":"2018-01-12T03:28:28.629Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Android/index.html\u001b[39m","time":"2018-01-12T03:28:28.629Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/前端开发/index.html\u001b[39m","time":"2018-01-12T03:28:28.630Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/函数式编程/index.html\u001b[39m","time":"2018-01-12T03:28:28.630Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Swift/index.html\u001b[39m","time":"2018-01-12T03:28:28.630Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/iOS/index.html\u001b[39m","time":"2018-01-12T03:28:28.630Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/12/cats-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.630Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35mtags/Kotlin/index.html\u001b[39m","time":"2018-01-12T03:28:28.630Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/12/be_2_fe/index.html\u001b[39m","time":"2018-01-12T03:28:28.630Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2018/01/mysql-parse-architecture/index.html\u001b[39m","time":"2018-01-12T03:28:28.630Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/11/kotlin-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.630Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/11/mysql-protocol/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/12/swift-vue-like-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/11/cats-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/11/scala-design-patterns-5/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2018/01/scala-design-patterns-6/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/11/play-3/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/10/java-io/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/11/kotlin-0/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/10/shapeless-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/11/java-nio/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/10/reactive-web-applications-3/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/09/subtyping-vs-typeclasses-3/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/09/subtyping-vs-typeclasses-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/08/learning-akka-9/index.html\u001b[39m","time":"2018-01-12T03:28:28.631Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/08/subtyping-vs-typeclasses/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/09/learning-akka-10/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/08/learning-akka-8/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/08/scala-design-patterns-4-factory/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/09/shapeless-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/08/reactive-web-applications-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/scala-design-patterns-3/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/08/canbuildfrom/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/09/play2/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/a-new-collection/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/play-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/learning-akka-7/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/scala-types-of-types-part-6/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/scala-design-patterns-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/scala-types-of-types-part-5/index.html\u001b[39m","time":"2018-01-12T03:28:28.632Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/scala-design-patterns-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/scala-types-of-types-part-4/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/05/scala-types-of-types-part-3/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/05/how-to-handle-collection-in-scala-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/06/learning-akka-5/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/mysql-async-3/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/05/learning-akka-4/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/04/learning-akka-3/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/07/learning-akka-6/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/03/scala-types-of-types-part-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/03/how-to-use-algebraic-data-type-in-scala-development/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/04/mysql-async-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/04/learning-akka-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/04/scala-types-of-types-part-2/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/03/learning-akka-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35m2017/03/how-to-handle-collection-in-scala-1/index.html\u001b[39m","time":"2018-01-12T03:28:28.633Z","v":0}
+{"name":"hexo","hostname":"Ziqi.local","pid":4406,"level":30,"msg":"Generated: \u001b[35marchives/index.html\u001b[39m","time":"2018-01-12T03:28:28.634Z","v":0}

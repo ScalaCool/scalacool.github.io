@@ -38,5 +38,11 @@
     }
   };
 
+  Theme.helpers = {
+    register: function () {
+      
+    }
+  }
+
   this.Theme = Theme;
 }.call(this));

@@ -4,6 +4,7 @@ author: Yison
 tags:
 - 类型相关
 - 翻译
+- ~Scala 类型的类型
 description: 让我们开始来讨论这个类型，这次要借助下「集合论」，然后把我们已经学过的 A with B 当做一个「交集类型」。
 date: 2017-07-22
 ---

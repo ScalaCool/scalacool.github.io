@@ -3,6 +3,7 @@ title: Akka 系列（五）：Java 和 Scala 中的 Future
 author: Godpan
 tags: 
 - Akka
+- ~Akka 系列
 description: 随着CPU的核数的增加，异步编程模型在并发领域中的得到了越来越多的应用，由于Scala是一门函数式语言，天然的支持异步编程模型，今天主要来看一下Java和Scala中的Futrue，带你走入异步编程的大门。
 date: 2017-06-26
 ---

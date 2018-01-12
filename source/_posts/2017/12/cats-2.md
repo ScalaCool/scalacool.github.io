@@ -3,6 +3,7 @@ author: Yison
 tags: 
 - Cats
 - 函数式编程
+- ~Cats
 description: 上一篇文章我们介绍了函数式编程的思维，这一篇我们来了解下函数式编程的魅力。
 date: 2018-01-12
 ---

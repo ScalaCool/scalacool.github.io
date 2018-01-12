@@ -3,6 +3,7 @@ title: Akka 系列（三）：监管与容错
 author: Godpan
 tags: 
 - Akka
+- ~Akka系列
 description: Akka作为一种成熟的生产环境并发解决方案，必须拥有一套完善的错误异常处理机制，本文主要讲讲Akka中的监管和容错。
 date: 2017-04-16
 ---

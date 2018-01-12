@@ -3,6 +3,7 @@ author: Yison
 tags: 
 - Cats
 - 函数式编程
+- ~Cats
 description: 如果你看到一个开源类库，logo 是四只猫 + 五个箭头，可能会略感不适 — 这是工程代码里可以使用的玩意儿吗？
 date: 2017-11-30
 ---

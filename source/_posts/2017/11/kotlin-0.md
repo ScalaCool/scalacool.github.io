@@ -4,6 +4,7 @@ author: prefert
 tags:
 - Kotlin
 - Android
+- ~Dive Into Kotlin
 description: 在今年的 Google I/O 大会上，Google 宣布在 Android 上为 Kotlin 提供一等支持（转为正房），本系列文章将会对 Kotlin 进行较为系统的介绍。
 date: 2017-11-06
 ---

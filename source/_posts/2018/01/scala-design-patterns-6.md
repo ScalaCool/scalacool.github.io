@@ -4,6 +4,7 @@ author: prefert
 tags:
 - 设计模式
 - Java
+- ~Scala 与设计模式
 description: 桥接模式是一种对象结构型模式，又称为柄体(Handle and Body)模式或接口(Interface)模式。
 date: 2018-01-08
 ---

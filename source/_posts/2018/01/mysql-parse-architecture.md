@@ -5,6 +5,7 @@ tags:
 - Asyncdb
 - 数据库
 - 网络编程
+- ~Asyncdb
 date: 2018-01-05
 description: 上一篇文章我们讲了MySQL网络协议分析，包括如何与MySQL进行通信，数据包的格式等内容，今天我主要会讲讲如何设计一个MySQL解析包类库（类似mysql-connector-xxx山寨版)。
 ---

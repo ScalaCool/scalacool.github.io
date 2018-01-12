@@ -4,6 +4,7 @@ author: Yison
 tags:
 - 类型相关
 - 翻译
+- ~Scala 类型的类型
 description: 结构类型（Strucural Types）经常被描述为「类型安全的鸭子类型（duck typing）」，如果你想获得一个直观的理解，这是一个很好的比较。
 date: 2017-07-17
 ---
