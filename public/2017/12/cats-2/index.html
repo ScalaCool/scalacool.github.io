@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/12/cats-2/"/>
+
+
+<meta name="description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cats（二）：引用透明性和等式推理">
+<meta property="og:url" content="http://scala.cool/2017/12/cats-2/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
+<meta property="og:updated_time" content="2018-01-11T11:33:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cats（二）：引用透明性和等式推理">
+<meta name="twitter:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Cats（二）：引用透明性和等式推理 - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" ><div class="site-header-inner">
+      
+    <h1 class="site-title">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+      
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                News
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Cats（二）：引用透明性和等式推理
+        
+      </h1>
+
+      <time class="post-time">
+          1月12日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Yison"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="Yison"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p><a href="https://scala.cool/2017/11/cats-1/">上一篇文章</a> 介绍了函数式编程的思维，这一篇我们来了解下函数式编程的魅力。</p>
+<p>我们已经说过，函数式编程最关键的事情就是在做「组合」。然而，这种可被组合的「函数式组件」到底是怎样的？换句话说，它们必定符合某些规律和原则。</p>
+<p>当前我们已知晓的是，函数式编程是近似于数学中推理的过程。那么我们思考下，数学中的推理具备怎样的特点？</p>
+<p>很快，我们便可以发现数学推理最大的一个优点 —「<strong>只要推理逻辑正确，结果便千真万确</strong>」。</p>
+<p>其实，这也便是本篇文章要描述的函数式编程的一个很大的优势，所谓的「<a href="https://wiki.haskell.org/Equational_reasoning_examples" target="_blank" rel="external">等式推理</a>」。</p>
+<p>那么，我们再进一步探讨，「是所谓怎样的原则和方法，才能使函数式编程具备如此特点？」。</p>
+<h2 id="引用透明性"><a href="#引用透明性" class="headerlink" title="引用透明性"></a>引用透明性</h2><p>答案便是 <a href="https://en.wikipedia.org/wiki/Referential_transparency" target="_blank" rel="external">引用透明性</a>，它在数学和计算机中都有近似的定义。</p>
+<blockquote>
+<p>An expression is said to be referentially transparent if it can be replaced with its corresponding value without changing the program’s behavior. As a result, evaluating a referentially transparent function gives the same value for same arguments. Such functions are called pure functions.</p>
+</blockquote>
+<p>简单地，我们可以理解为「<strong>一个表达式在程序中可以被它等价的值替换，而不影响结果</strong>」。如果一个函数的输入相同，对应的计算结果也相同，那么它就具备「引用透明性」，它可被称为「纯函数」。</p>
+<p>举个例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>, y: <span class="type">Int</span>) = x + y</div><div class="line"></div><div class="line">println(f(<span class="number">2</span>, <span class="number">3</span>))</div></pre></td></tr></table></figure>
+<p>其实我们完全可以用 5 来直接替代 <code>f(2, 3)</code>，而对结果不会产生任何影响。</p>
+<p>这个非常容易理解，那么反过来怎样才算「非引用透明性」呢？</p>
+<p>再来举个例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">1</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">count</span></span>(x: <span class="type">Int</span>) = &#123;</div><div class="line">	a = a + <span class="number">1</span></div><div class="line">	x + a</div><div class="line">&#125;</div><div class="line"></div><div class="line">count(<span class="number">1</span>) <span class="comment">// 3</span></div><div class="line">count(<span class="number">1</span>) <span class="comment">// 4</span></div></pre></td></tr></table></figure>
+<p>在以上代码中，我们会发现多次调用 <code>count(1)</code> 得到的结果并不相同，显然这是受到了外部变量 <code>a</code> 的影响，我们把这个称为 <strong>副作用</strong>。</p>
+<h2 id="副作用"><a href="#副作用" class="headerlink" title="副作用"></a>副作用</h2><p>简单理解，「副作用」就是 <strong>changing something somewhere</strong>，例如：</p>
+<ul>
+<li>修改了外部变量的值</li>
+<li>IO 操作，如写数据到磁盘</li>
+<li>UI 操作，如修改了一个按钮的可操作状态</li>
+</ul>
+<p>因此，不难发现副作用的产生往往跟「<strong>可变数据</strong>」以及「<strong>共享状态</strong>」有关，常见的例子如我们在采用多线程处理高并发的场景，「锁竞争」就是一个明显的例子。然而，在函数式编程中，由于我们推崇「引用透明性」以及「数据不可变性」，我们甚至可以对「两个返回异步结果的函数」进行组合，从而提升了代码的推理能力，降低了系统的复杂程度。</p>
+<p><strong>总结而言，引用透明性确保了「函数式组件」的独立性，它与外界环境隔离，可被单独分析，因此易于组合和推理。</strong></p>
+<blockquote>
+<p>注：这里的异步操作函数，举个例子可以是数据库的读写操作，我们会在后面的文章中介绍如何实现。</p>
+</blockquote>
+<h2 id="不可变性"><a href="#不可变性" class="headerlink" title="不可变性"></a>不可变性</h2><p>以上我们已经提到「不可变性」是促进引用透明性一个很关键的特性。在 Haskell 中，任何变量都是不可变的，在 Scala 中我们可以使用 <code>val</code> （而不是 <code>var</code>）来声明不可变变量。</p>
+<p>显然，越来越多的编程语言都支持这一特性。如 Swift 中的 <code>let</code>，ES6 中的 <code>const</code>。以及一些有名的开源项目，如 Facebook 的 <a href="https://github.com/facebook/immutable-js/" target="_blank" rel="external">Immutable.js</a>。</p>
+<p>那么，关于「引用透明性」的部分我们是否已经讲完了呢？</p>
+<p>等等，前面提到「引用透明性」的关键点之一，就是返回相同的计算结果。这里，我们打算再深入一步，研究下什么才是所谓「相同的计算结果」，它仅仅指的就是返回相同的值吗？</p>
+<h2 id="代换模型"><a href="#代换模型" class="headerlink" title="代换模型"></a>代换模型</h2><p>我们来看下这段代码，它符合我们所说的引用透明性：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span></span>(x: <span class="type">Int</span>, y: <span class="type">Int</span>) = x</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = f2(x)</div><div class="line">f1(<span class="number">1</span>, f2(<span class="number">2</span>))</div></pre></td></tr></table></figure>
+<p>用 Scala 开发的小伙伴看了相当气愤，这是一段自杀式的代码，如果我们执行了它，那么 <code>f2</code> 必然被不断调用，从而导致死循环。</p>
+<blockquote>
+<p>似乎已经有了答案，所谓「相同的计算结果」，还可以是死循环。。。</p>
+</blockquote>
+<p>这时，一个会 Haskell 的程序员路过，迷之微笑，花了 10 秒钟翻译成了以下的版本：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="title">f1</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span></div><div class="line"><span class="title">f1</span> x y = x + y</div><div class="line"></div><div class="line"><span class="title">f2</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span></div><div class="line"><span class="title">f2</span> x = x</div></pre></td></tr></table></figure>
+<p>运行 <code>ghci</code> 载入函数后调用 <code>f1 1 (f2 2)</code>，你就会发现：纳尼！竟然成功返回了结果 1。这到底是怎么回事呢？</p>
+<h3 id="应用序-vs-正则序"><a href="#应用序-vs-正则序" class="headerlink" title="应用序 vs 正则序"></a>应用序 vs 正则序</h3><p>也许相当多开发的同学至今未曾思考过这个问题：<strong>编程语言中的表达式求值策略是怎样的？</strong></p>
+<p>其实，编程语言中存在两种不同的代换模型：<strong>应用序</strong> 和 <strong>正则序</strong>。</p>
+<p>大部分我们熟悉如 Scala、C、Java 是「应用序」语言，当要执行一个过程时，就会对过程参数进行求值，这也是上述 Scala 代码导致死循环的原因，当我们调用 <code>f1(1, f2(2))</code> 的时候，程序会先对 <code>f2(2)</code> 进行求值，从而不断地调用 <code>f2</code> 函数。</p>
+<p>然而，Haskell 采用了不一样的逻辑，它会延迟对过程参数的求值，直到确实需要用到它的时候，才进行计算，这就是所谓的「正则序」，也就是我们常说的 <a href="https://en.wikipedia.org/wiki/Lazy_evaluation" target="_blank" rel="external">惰性求值</a>。当我们调用 <code>f1 1 (f2 2)</code> 后，由于 <code>f1</code> 的过程中压根不需要用到 <code>y</code>，所以它就不会对 <code>f2 2</code> 进行求值，直接返回 <code>x</code> 值，也就是 1。</p>
+<blockquote>
+<p>注：对以上情况进行描述的角度，还有你可能知道的「传值调用」和「引用调用」。</p>
+</blockquote>
+<p>那么这样做到底有什么好处呢？</p>
+<h2 id="惰性求值"><a href="#惰性求值" class="headerlink" title="惰性求值"></a>惰性求值</h2><p>Haskell 是默认采用惰性求值的语言，在其它一些语言中（如 Scala 和 Swift），我们也可以利用 <code>lazy</code> 关键字来声明惰性的变量和函数。</p>
+<p>惰性求值可以带来很多优势，如部分人知晓的「无限长的列表结构」。当然，它也会制造一些麻烦，如使程序求值模型变得更加复杂，滥用惰性求值则会导致效率下降。</p>
+<p>这里，我们并不想深究惰性求值的利和弊，这并不是一个容易的问题。那么，我们为什么要介绍惰性求值呢？</p>
+<p>这是因为，它与我们一直在探讨的「组合」存在些许联系。</p>
+<h2 id="如何组合副作用"><a href="#如何组合副作用" class="headerlink" title="如何组合副作用"></a>如何组合副作用</h2><p><strong>函数式编程思维，就是抽象并组合一切，包括现实中的副作用。</strong></p>
+<p>常见的副作用，如 IO 操作，到底如何组合呢？</p>
+<p>来一段代码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">println(<span class="string">"I am a IO operation."</span>)</div></pre></td></tr></table></figure>
+<p>显然，这里的 <code>println</code> 不是个纯函数，它不利于组合。我们该如何解决这个问题？</p>
+<p>先看看 Haskell 中的惰性求值是如何实现的。</p>
+<h3 id="Thunk"><a href="#Thunk" class="headerlink" title="Thunk"></a>Thunk</h3><blockquote>
+<p>A <a href="https://wiki.haskell.org/Thunk" target="_blank" rel="external">thunk</a> is a value that is yet to be evaluated. It is used in Haskell systems, that implement non-strict semantics by lazy evaluation.</p>
+</blockquote>
+<p>Haskell 中的惰性求值是靠 Thunk 这种机制来实现的。我们也可以在其它编程语言中通过提供一个 thunk 函数来模拟类似的效果。</p>
+<p>要理解 Thunk 其实很容易，比如针对以上的非纯函数，我们就可以如此改造，让它变得 “lazy”：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Pure</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">println</span></span>(msg: <span class="type">String</span>) =</div><div class="line">    () =&gt; <span class="type">Predef</span>.println(msg)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如此，当我们的程序调用 <code>Pure.println(&quot;I am a IO operation.&quot;)</code> 的时候，它仅仅只是返回一个可以进行 <code>println</code> 的函数，它是惰性的，也是替代的。这样，我们就可以在程序中将这些 IO 操作进行组合，最后再执行它们。</p>
+<p>也许你还会思考，这里的 thunk 函数何时会被调用，以及如果要用以上的思路开发业务，我们该如何避免在业务过程中避免这些随机大量的 thunk 函数。</p>
+<p>关于这些，我们会在后续的文章中继续介绍，它跟所谓的 Free Monad 有关。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>第二篇文章进一步探索了函数式编程的几个特点和优势，似乎至此仍然没有提及 Cats。不着急，在下一篇中，我们将步入正题，我们计划先从「高阶类型」谈起。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Cats/">Cats</a>
+          
+            <a href="/tags/函数式编程/">函数式编程</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2018/01/scala-design-patterns-6/">
+        <span class="next-text nav-default">Scala 与设计模式（六）：Bridge 桥接模式</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yison-dripower'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2018
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>
