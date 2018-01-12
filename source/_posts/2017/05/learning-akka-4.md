@@ -4,6 +4,7 @@ author: Godpan
 tags: 
 - Akka
 - ~Akka 系列
+- ^Godpan
 description: 通过前几篇的学习，相信大家对 Akka 应该有所了解了，都说解决并发哪家强，JVM上面找 Akka，那么Akka到底在解决并发问题上帮我们做了什么呢？
 date: 2017-05-02
 ---

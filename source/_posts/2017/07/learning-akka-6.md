@@ -5,6 +5,7 @@ tags:
 - Akka
 - 翻译
 - ~Akka 系列
+- ^Godpan
 description: 看了 Akka 最新文档中写的 What problems does the actor model solve? ,阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。
 date: 2017-07-10
 ---

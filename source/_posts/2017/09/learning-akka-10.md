@@ -4,6 +4,7 @@ author: Godpan
 tags: 
 - Akka
 - ~Akka 系列
+- ^Godpan
 description: 上一篇文章我们讲了Akka Remote，理解了Akka中的远程通信，其实Akka Cluster可以看成Akka Remote的扩展，由原来的两点变成由多点组成的通信网络，这种模式相信大家都很了解，就是集群，它的优势主要有两点：系统伸缩性高，容错性更好。
 date: 2017-09-14 10:00
 ---

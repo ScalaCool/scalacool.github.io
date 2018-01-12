@@ -1,10 +1,11 @@
 ---
 title: Scala 与设计模式（五）：Adapter 适配器模式
-author: prefert
+author: Prefert
 tags:
 - 设计模式
 - Java
 - ~Scala 与设计模式
+- ^Prefert
 description: 在开发时，我们经常会遇上一些接口不兼容的问题。
 date: 2017-11-20
 ---

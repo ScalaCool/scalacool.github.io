@@ -4,6 +4,7 @@ author: Godpan
 tags: 
 - Akka
 - ~Akka 系列
+- ^Godpan
 description: 这一篇文章主要是讲解Akka persistence的核心设计理念，也是CQRS（Command Query Responsibility Segregation）架构设计的典型应用，就让我们来看看为什么Akka persistence会采用CQRS架构设计。
 date: 2017-08-15
 ---

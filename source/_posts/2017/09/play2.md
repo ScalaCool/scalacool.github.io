@@ -4,6 +4,7 @@ author: Shaw
 tags:
 - Play
 - ~Play! Framework 系列
+- ^Shaw
 description: 本文将介绍一下 Play! 的整体结构，然后通过一个非常简单的例子来阐述各个结构之间的关系以及如何利用 Play! 。
 date: 2017-09-06
 ---

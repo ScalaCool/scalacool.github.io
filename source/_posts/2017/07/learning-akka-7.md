@@ -4,6 +4,7 @@ author: Godpan
 tags: 
 - Akka
 - ~Akka 系列
+- ^Godpan
 description: 这次把这部分内容提到现在写，是因为这段时间开发的项目刚好在这一块遇到了一些难点，所以准备把经验分享给大家，我们在使用Akka时，会经常遇到一些存储Actor内部状态的场景…
 date: 2017-07-25
 ---

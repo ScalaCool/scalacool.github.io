@@ -4,6 +4,7 @@ author: Godpan
 tags: 
 - Akka
 - ~Akka 系列
+- ^Godpan
 description: Actor模型作为Akka中最核心的概念，所以Actor在Akka中的组织结构也至关重要，本文主要介绍Akka中Actor系统。
 date: 2017-04-04
 ---

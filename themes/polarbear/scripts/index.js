@@ -14,7 +14,7 @@ hexo.extend.helper.register('list_custom_tags', function (tags, options) {
   var order = options.order || 1;
   var transform = options.transform;
   var suffix = options.suffix || '';
-  var isSpecial = options.isSpecial || false
+  var type = options.type || 0
   var separator = options.hasOwnProperty('separator') ? options.separator : ', ';
   var result = '';
   var self = this;
@@ -27,11 +27,14 @@ hexo.extend.helper.register('list_custom_tags', function (tags, options) {
     if (!tag.length) {
       return false
     } else {
-      var kwd = '~';
-      if (isSpecial) {
-        return tag.name.indexOf(kwd) !== -1;
+      var specialPrefix = '~';
+      var authorPrefix = '^'
+      if (type == 2) {
+        return tag.name.indexOf(authorPrefix) !== -1;
+      } else if (type == 1) {
+        return tag.name.indexOf(specialPrefix) !== -1;
       } else {
-        return tag.name.indexOf(kwd) === -1;
+        return tag.name.indexOf(authorPrefix) === -1 && tag.name.indexOf(authorPrefix) === -1;
       }
     }
   });
@@ -46,7 +49,7 @@ hexo.extend.helper.register('list_custom_tags', function (tags, options) {
       result += '<li class="' + className + '-list-item">';
 
       result += '<a class="' + className + '-list-link" href="' + self.url_for(tag.path) + suffix + '">';
-      result += transform ? transform(tag.name.replace('~', '')) : tag.name.replace('~', '');
+      result += transform ? transform(tag.name.replace('~', '').replace('^', '')) : tag.name.replace('~', '').replace('^', '');
       result += '</a>';
 
       if (showCount) {

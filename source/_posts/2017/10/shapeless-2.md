@@ -1,10 +1,11 @@
 ---
 title: Shapeless 入门指南（二）：自然数类型 Nat
-author: jilen
+author: Jilen
 tags:
 - 类型相关
 - Shapeless
 - ~Shapeless 入门指南
+- ^Jilen
 description: 本文将介绍一下 shapeless Nat 类型
 date: 2017-10-16
 ---

@@ -1,11 +1,12 @@
 ---
 title: Shapeless 入门指南（一）：自动派生 typeclass 实例
-author: jilen
+author: Jilen
 tags:
 - 类型相关
 - Typeclass
 - Shapeless
 - ~Shapeless 入门指南
+- ^Jilen
 description: 本文将介绍一下 shapeless 中 HList 和 case class 的互操作，并在此基础上阐述自动派生 typeclass 实例的功能。
 date: 2017-09-15
 ---
