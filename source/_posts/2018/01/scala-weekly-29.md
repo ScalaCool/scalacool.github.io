@@ -5,7 +5,7 @@ tags:
 - Weekly
 - ~Scala 技术周刊
 description: 《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。
-date: 2018-01-12
+date: 2018-01-12 16:00
 ---
 
 > 这里有最新的 Scala 社区动态、技术博文。
