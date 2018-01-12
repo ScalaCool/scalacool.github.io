@@ -4,7 +4,7 @@ author: Jilen
 tags:
 - 网络编程
 - 数据库
-- ~Akka 系列
+- ~MySQL 异步驱动浅析
 description: Mysql Async 连接池改进方案
 date: 2017-07-20
 ---
