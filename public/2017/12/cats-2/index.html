@@ -41,7 +41,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-12T01:44:04.000Z">
+<meta property="og:updated_time" content="2018-01-12T01:45:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cats（二）：引用透明性和等式推理">
 <meta name="twitter:description" content="上一篇文章我们介绍了函数式编程的思维，本篇我们来探讨下函数式编程的魅力，所谓的引用透明性和等式推理。注意，这不是一个介绍概念的文章系列，所以笔者打算从 if 开始讲起。">
@@ -214,7 +214,7 @@
 <p>Haskell 中的惰性求值是靠 Thunk 这种机制来实现的。我们也可以在其它编程语言中通过提供一个 thunk 函数来模拟类似的效果。</p>
 <p>要理解 Thunk 其实很容易，比如针对以上的非纯函数，我们就可以如此改造，让它变得 “lazy”：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Pure</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">println</span></span>(msg: <span class="type">String</span>) =</div><div class="line">    () =&gt; <span class="type">Predef</span>.println(msg)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>如此，当我们的程序调用 <code>Pure.println(&quot;I am a IO operation.&quot;)</code> 的时候，它仅仅只是返回一个可以进行 <code>println</code> 的函数，它是惰性的，也是替代的。这样，我们就可以在程序中将这些 IO 操作进行组合，最后再执行它们。</p>
+<p>如此，当我们的程序调用 <code>Pure.println(&quot;I am a IO operation.&quot;)</code> 的时候，它仅仅只是返回一个可以进行 <code>println</code> 的函数，它是惰性的，也是可替代的。这样，我们就可以在程序中将这些 IO 操作进行组合，最后再执行它们。</p>
 <p>也许你还会思考，这里的 thunk 函数何时会被调用，以及如果要用以上的思路开发业务，我们该如何避免在业务过程中避免这些随机大量的 thunk 函数。</p>
 <p>关于这些，我们会在后续的文章中继续介绍，它跟所谓的 Free Monad 有关。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>第二篇文章进一步探索了函数式编程的几个特点和优势，似乎至此仍然没有提及 Cats。不着急，在下一篇中，我们将步入正题，我们计划先从「高阶类型」谈起。</p>
