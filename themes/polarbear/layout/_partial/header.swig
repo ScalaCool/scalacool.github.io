@@ -1,9 +1,7 @@
 <div class="site-header-inner">
-      {% if !is_home() %}
-    <h1 class="site-title">
+    <h1 class="site-title {% if is_home() %}home{% endif %}">
         <a href="{{ url_for('.') }}" class="logo">{{ config.title }}</a>
     </h1>
-      {% endif %}
     <nav id="nav-top">
         {% if theme.menu %}
             <ul id="menu-top" class="nav-top-items">
