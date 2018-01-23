@@ -33,18 +33,18 @@
 <link rel="canonical" href="http://scala.cool/2018/01/swift-vue-like-2/"/>
 
 
-<meta name="description" content="水滴技术团队 - Scala 中文博客">
+<meta name="description" content="Soroush Khanlou 写过一篇文章就八个方面来解救 Massive View Controller 的问题。我们今天要讨论的内容，也在这篇文章中有所提及，那就是如何对 Navigator 进行解耦。">
 <meta name="keywords" content="^Yison,前端开发,Swift,iOS,~用 Swift 模仿 Vue + Vuex 进行 iOS 开发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用 Swift 模仿 Vue + Vuex 进行 iOS 开发（二）：Coordinator">
 <meta property="og:url" content="http://scala.cool/2018/01/swift-vue-like-2/index.html">
 <meta property="og:site_name" content="Scala Cool">
-<meta property="og:description" content="水滴技术团队 - Scala 中文博客">
+<meta property="og:description" content="Soroush Khanlou 写过一篇文章就八个方面来解救 Massive View Controller 的问题。我们今天要讨论的内容，也在这篇文章中有所提及，那就是如何对 Navigator 进行解耦。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-17T11:02:37.000Z">
+<meta property="og:updated_time" content="2018-01-18T09:54:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用 Swift 模仿 Vue + Vuex 进行 iOS 开发（二）：Coordinator">
-<meta name="twitter:description" content="水滴技术团队 - Scala 中文博客">
+<meta name="twitter:description" content="Soroush Khanlou 写过一篇文章就八个方面来解救 Massive View Controller 的问题。我们今天要讨论的内容，也在这篇文章中有所提及，那就是如何对 Navigator 进行解耦。">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -148,7 +148,10 @@
 
     
             <div class="post-content">
-            
+            <p><a href="https://scala.cool/2017/12/swift-vue-like-1/">上一篇文章</a> 探讨了 ReSwift，它是一种基于单向数据流的架构方案，来帮助解决传统的 Massive View Controller 灾难。</p>
+<p>针对这个问题，Soroush Khanlou 写过一篇 <a href="http://khanlou.com/2014/09/8-patterns-to-help-you-destroy-massive-view-controller/" target="_blank" rel="external">8 Patterns to Help You Destroy Massive View Controller</a> 就各种方式和方面来解救工程维护性和可测试性的问题。</p>
+<p>我们今天要讨论的内容，也在这篇文章中有所提及，那就是如何在解决数据流问题之后，再对视图层面的 Navigator 进行解耦，也就是所谓的「Flow Coordinators」。</p>
+
             </div>
           
 
