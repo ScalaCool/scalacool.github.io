@@ -1,9 +1,18 @@
 <style>
 #subscribe {
-  margin-top: 70px;
+  border-top: 1px solid #eee;
+  margin-top: 30px;
+  padding-top: 30px;
+}
+#subscribe h3 {
+  padding-right: 10px;
+  font-weight: 400;
+}
+#subscribe .qrcode {
+  margin-top: -10px;
 }
 </style>
-<section id="subscribe" class="widget-area">
-  <h3 class="widget-title">Follow</h3>
-  <p><img src="http://open.weixin.qq.com/qr/code/?username=gh_6c824037e5fa" /></p>
+<section id="subscribe" class="widget-area widget_tags">
+  <h3 class="widget-title">订阅</h3>
+  <p class="qrcode"><img src="/images/avatar/qrcode.jpg" /></p>
 </section>
