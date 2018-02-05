@@ -72,11 +72,11 @@ def at[A](n: Int): A
 
 为了实现这个函数，我们先介绍一个套路:
 
-> 如果一个类型 O 由其他几个类型 I1, I2,.. In 决定
+> 如果一个类型 `O` 由其他几个类型 `I1`, `I2`,.. `In` 决定
 
-> 那么我们可以构造一个 X[I1, I2, .., In] { type Out = O} 这样的 typeclass 用来计算出 O 对应类型
+> 那么我们可以构造一个 `X[I1, I2, .., In] { type Out = O}` 这样的 typeclass 用来计算出 O 对应类型
 
-套用到上面的方法：HList 本身类型和元素所在位置 n，可以决定返回类型，我们可以得到以下定义
+套用到上面的方法：`HList` 本身类型和元素所在位置 n，可以决定返回类型，我们可以得到以下定义
 
 ```scala
 
@@ -92,7 +92,7 @@ implicit class HListSyntax[L <: HList](l: L) {
 
 ![at](/images/2018/02/shapeless-at.png)
 
-观察上图不难发现 T 的第 n 个元素类型就是 H :: T 的第 n + 1 个元素类型，即
+观察上图不难发现 `T` 的第 n 个元素类型就是 `H :: T` 的第 n + 1 个元素类型，即
 
 ```scala
 // At[T, N] => At[H :: T, Succ[N]]
@@ -102,7 +102,7 @@ implicit def atN[H, T <: HList, N <: Nat](implicit att: At[L, N]): At[H :: L, Su
 }
 ```
 
-而第 0 个元素类型则显而易见的就是 head 的类型 H
+而第 0 个元素类型则显而易见的就是 `head` 的类型 `H`
 
 ```scala
 implicit def atZero[H, T <: HList] = new At[H :: L, _0] {
@@ -115,8 +115,8 @@ implicit def atZero[H, T <: HList] = new At[H :: L, _0] {
 
 ## 用 Aux 解决编译期类型丢失问题
 
-然而，当我们尝试使用上述定义的 `at` 时会发生编译错误，告诉我们 `Out` 类型需要 `ClassTag`。
-这是因为编译器没法在编译时获得抽象类型成员 `Out` 的类型导致的。
+然而，当我们尝试使用上述定义的 `at` 时会发生编译错误，告诉我们 `Out` 类型需要 `ClassTag`
+这是因为编译器没法在编译时获得抽象类型成员 `Out` 的类型导致的
 
 这里需要再一次使用 [Aux](http://gigiigig.github.io/posts/2015/09/13/aux-pattern.html) 套路解决问题
 
@@ -154,9 +154,9 @@ implicit def atN[H, T <: HList, N <: Nat](implicit at: At[T, N]): At.Aux[H :: T,
 
 ## 从 Int 到 Nat
 
-Shapeless 除了支持根据 Nat 类型获得对应元素外，还直接支持根据 Int 作为元素位置获取元素。
-但 Scala 的 Int 目前不支持 [literal singleton type](http://docs.scala-lang.org/sips/pending/42.type.html)，并且不存在可以递归推导的后继关系。
-所以 shapeless 实际上是使用 macro 强行构造 Nat 实例来实现 Int -> Nat 的转换。由于实现较为简单，不再赘述。
+Shapeless 除了支持根据 `Nat` 类型获得对应元素外，还直接支持根据 `Int` 作为元素位置获取元素。
+但 Scala 的 `Int` 目前不支持 [literal singleton type](http://docs.scala-lang.org/sips/pending/42.type.html)，并且不存在可以递归推导的后继关系。
+所以 shapeless 实际上是使用 macro 强行构造 `Nat` 实例来实现 Int -> Nat 的转换。由于实现较为简单，不再赘述。
 
 ## 总结
 通过本文和前两篇文章，我们意识到 implicit 和递归推理的套路是 shapeless 实现泛型编程的基本调性。
