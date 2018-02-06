@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2018/02/shapeless-3/"/>
+
+
+<meta name="description" content="本文将介绍 shapeless 中 Nat 类型的应用">
+<meta name="keywords" content="类型相关,^Jilen,Shapeless,~Shapeless 入门指南">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shapeless 入门指南（三）： Nat 和 implicit 在 shapeless 中的应用">
+<meta property="og:url" content="http://scala.cool/2018/02/shapeless-3/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="本文将介绍 shapeless 中 Nat 类型的应用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2018/02/shapeless-at.png">
+<meta property="og:updated_time" content="2018-02-06T01:44:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shapeless 入门指南（三）： Nat 和 implicit 在 shapeless 中的应用">
+<meta name="twitter:description" content="本文将介绍 shapeless 中 Nat 类型的应用">
+<meta name="twitter:image" content="http://scala.cool/images/2018/02/shapeless-at.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Shapeless 入门指南（三）： Nat 和 implicit 在 shapeless 中的应用 - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" ><div class="site-header-inner">
+    <h1 class="site-title ">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                News
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Shapeless 入门指南（三）： Nat 和 implicit 在 shapeless 中的应用
+        
+      </h1>
+
+      <time class="post-time">
+          2月6日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Jilen"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="Jilen"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p><a href="/2017/10/shapeless-2">前面文章</a>中，我们提及了 peano 数类型：<code>Nat</code>，并且展示了<strong>隐式转换</strong>这项 Scala 黑科技的应用。</p>
+<p>本文我们通过 <code>HList</code> 的 <code>at</code> 方法来进一步说明 Nat 类型和以及隐式转换在 shapeless 中的广泛应用</p>
+<h2 id="HList-的-at-操作"><a href="#HList-的-at-操作" class="headerlink" title="HList 的 at 操作"></a>HList 的 at 操作</h2><p><a href="/2017/09/shapeless-1">前文</a>中提到： <code>HList</code> 可以看成是一个有各种类型连接而成的 <code>List</code>，如</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">type</span> <span class="title">Foo</span> </span>= <span class="type">Int</span> :: <span class="type">String</span> :: <span class="type">Boolean</span> :: <span class="type">HNil</span></div><div class="line"><span class="keyword">val</span> foo: <span class="type">Foo</span> = <span class="number">1</span> :: a :: <span class="literal">true</span> :: <span class="type">HNil</span></div></pre></td></tr></table></figure>
+<p><code>HList</code> 有一个 <code>at</code> 函数</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">scala&gt; foo.at(<span class="number">0</span>)</div><div class="line">res4: <span class="type">Int</span> = <span class="number">1</span></div><div class="line"></div><div class="line">scala&gt; foo.at(<span class="number">1</span>)</div><div class="line">res5: <span class="type">String</span> = a</div><div class="line"></div><div class="line">scala&gt; foo.at(<span class="number">2</span>)</div><div class="line">res6: <span class="type">Boolean</span> = <span class="literal">true</span></div><div class="line"></div><div class="line">scala&gt; foo.at(<span class="number">3</span>)</div><div class="line">&lt;console&gt;:<span class="number">16</span>: error: <span class="type">Implicit</span> not found: shapeless.<span class="type">Ops</span>.<span class="type">At</span>[shapeless.::[<span class="type">Int</span>,shapeless.::[<span class="type">String</span>,shapeless.::[<span class="type">Boolean</span>,shapeless.<span class="type">HNil</span>]]], shapeless.<span class="type">Succ</span>[shapeless.<span class="type">Succ</span>[shapeless.<span class="type">Succ</span>[shapeless._0]]]]. <span class="type">You</span> requested to access an element at the position shapeless.<span class="type">Succ</span>[shapeless.<span class="type">Succ</span>[shapeless.<span class="type">Succ</span>[shapeless._0]]], but the <span class="type">HList</span> shapeless.::[<span class="type">Int</span>,shapeless.::[<span class="type">String</span>,shapeless.::[<span class="type">Boolean</span>,shapeless.<span class="type">HNil</span>]]] is too short.</div><div class="line">       foo(<span class="number">3</span>)</div></pre></td></tr></table></figure>
+<p>可以看到这个方法，能返回正确的类型而不是 <code>Any</code>，并且能在编译时做越界检查。</p>
+<p>该如何实现这样的<code>at</code>方法？</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">at</span></span>(n: <span class="type">Int</span>): <span class="type">X</span></div></pre></td></tr></table></figure>
+<p>首先我们想到的是用类型参数实现</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">at</span></span>[<span class="type">A</span>](n: <span class="type">Int</span>): <span class="type">A</span></div></pre></td></tr></table></figure>
+<p>然而调用时，仍旧需要手工指定 <code>A</code> 的类型。<br>同时，不用类型参数的前提下，一个方法又只能返回一种类型</p>
+<p>下面我们介绍一种使用带抽象类型成员 typeclass 来解决返回不同类型的套路</p>
+<h2 id="实现基于-Nat-的-at-函数"><a href="#实现基于-Nat-的-at-函数" class="headerlink" title="实现基于 Nat 的 at 函数"></a>实现基于 <code>Nat</code> 的 <code>at</code> 函数</h2><p>为了简化问题，先用 <code>Nat</code> 代替 <code>Int</code> 表示元素所在的位置</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">at</span></span>(n: <span class="type">Nat</span>): <span class="type">X</span></div></pre></td></tr></table></figure>
+<p>为了实现这个函数，我们先介绍一个套路:</p>
+<blockquote>
+<p>如果一个类型 <code>O</code> 由其他几个类型 <code>I1</code>, <code>I2</code>,.. <code>In</code> 决定</p>
+<p>那么我们可以构造一个 <code>X[I1, I2, .., In] { type Out = O}</code> 这样的 typeclass 用来计算出 O 对应类型</p>
+</blockquote>
+<p>套用到上面的方法：<code>HList</code> 本身类型和元素所在位置 n，可以决定返回类型，我们可以得到以下定义</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">At</span>[<span class="type">L</span> &lt;: <span class="type">HList</span>, <span class="type">N</span> &lt;: <span class="type">Nat</span>] </span>&#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">Out</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(l: <span class="type">L</span>): <span class="type">Out</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">implicit</span> <span class="class"><span class="keyword">class</span> <span class="title">HListSyntax</span>[<span class="type">L</span> &lt;: <span class="type">HList</span>](<span class="params">l: <span class="type">L</span></span>) </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">at</span></span>(n: <span class="type">Nat</span>)(<span class="keyword">implicit</span> at: <span class="type">Nat</span>[<span class="type">L</span>, n.<span class="type">N</span>]): at.<span class="type">Out</span> = at.apply(l)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="/images/2018/02/shapeless-at.png" alt="at"></p>
+<p>观察上图不难发现 <code>T</code> 的第 n 个元素类型就是 <code>H :: T</code> 的第 n + 1 个元素类型，即</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// At[T, N] =&gt; At[H :: T, Succ[N]]</span></div><div class="line"><span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">atN</span></span>[<span class="type">H</span>, <span class="type">T</span> &lt;: <span class="type">HList</span>, <span class="type">N</span> &lt;: <span class="type">Nat</span>](<span class="keyword">implicit</span> att: <span class="type">At</span>[<span class="type">L</span>, <span class="type">N</span>]): <span class="type">At</span>[<span class="type">H</span> :: <span class="type">L</span>, <span class="type">Succ</span>[<span class="type">N</span>]] = <span class="keyword">new</span> <span class="type">At</span>[<span class="type">H</span> :: <span class="type">L</span>, <span class="type">Succ</span>[<span class="type">N</span>]]&#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">Out</span> </span>= att.<span class="type">Out</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(h: <span class="type">H</span> :: <span class="type">T</span>) = att.apply(h.tail)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>而第 0 个元素类型则显而易见的就是 <code>head</code> 的类型 <code>H</code></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">atZero</span></span>[<span class="type">H</span>, <span class="type">T</span> &lt;: <span class="type">HList</span>] = <span class="keyword">new</span> <span class="type">At</span>[<span class="type">H</span> :: <span class="type">L</span>, _0] &#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">Out</span> </span>= <span class="type">H</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(l: <span class="type">H</span> :: <span class="type">T</span>) = l.head</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由以上两条规则，则可以递归获得任意位置 n 上的元素类型</p>
+<h2 id="用-Aux-解决编译期类型丢失问题"><a href="#用-Aux-解决编译期类型丢失问题" class="headerlink" title="用 Aux 解决编译期类型丢失问题"></a>用 Aux 解决编译期类型丢失问题</h2><p>然而，当我们尝试使用上述定义的 <code>at</code> 时会发生编译错误，告诉我们 <code>Out</code> 类型需要 <code>ClassTag</code><br>这是因为编译器没法在编译时获得抽象类型成员 <code>Out</code> 的类型导致的</p>
+<p>这里需要再一次使用 <a href="http://gigiigig.github.io/posts/2015/09/13/aux-pattern.html" target="_blank" rel="external">Aux</a> 套路解决问题</p>
+<p>最终我们得到如下定义<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">At</span>[<span class="type">L</span> &lt;: <span class="type">HList</span>, <span class="type">N</span> &lt;: <span class="type">Nat</span>] </span>&#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">Out</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(l: <span class="type">L</span>): <span class="type">Out</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">At</span> </span>&#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">Aux</span>[<span class="type">L</span> &lt;: <span class="type">HList</span>, <span class="type">N</span> &lt;: <span class="type">Nat</span>, <span class="type">O</span>] </span>= <span class="type">At</span>[<span class="type">L</span>, <span class="type">N</span>] &#123;<span class="class"><span class="keyword">type</span> <span class="title">Out</span> </span>= <span class="type">O</span>&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">implicit</span> <span class="class"><span class="keyword">class</span> <span class="title">HListSyntax</span>[<span class="type">L</span> &lt;: <span class="type">HList</span>](<span class="params">l: <span class="type">L</span></span>) </span>&#123;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> </span>::[<span class="type">H</span>] (h: <span class="type">H</span>): (<span class="type">H</span> :: <span class="type">L</span>) = <span class="keyword">new</span> ::(h, l)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">at</span></span>(n: <span class="type">Nat</span>)(<span class="keyword">implicit</span> at: <span class="type">At</span>[<span class="type">L</span>, n.<span class="type">N</span>]): at.<span class="type">Out</span> = &#123;</div><div class="line">    at.apply(l)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">atZero</span></span>[<span class="type">H</span>, <span class="type">T</span> &lt;: <span class="type">HList</span>]: <span class="type">At</span>.<span class="type">Aux</span>[<span class="type">H</span> :: <span class="type">T</span>, _0, <span class="type">H</span>] = <span class="keyword">new</span> <span class="type">At</span>[<span class="type">H</span> :: <span class="type">T</span>, _0] &#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">Out</span> </span>= <span class="type">H</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(l : <span class="type">H</span> :: <span class="type">T</span>) = l.head</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">atN</span></span>[<span class="type">H</span>, <span class="type">T</span> &lt;: <span class="type">HList</span>, <span class="type">N</span> &lt;: <span class="type">Nat</span>](<span class="keyword">implicit</span> at: <span class="type">At</span>[<span class="type">T</span>, <span class="type">N</span>]): <span class="type">At</span>.<span class="type">Aux</span>[<span class="type">H</span> :: <span class="type">T</span>, <span class="type">Succ</span>[<span class="type">N</span>], at.<span class="type">Out</span>] = <span class="keyword">new</span> <span class="type">At</span>[<span class="type">H</span> :: <span class="type">T</span>, <span class="type">Succ</span>[<span class="type">N</span>]] &#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">Out</span> </span>= at.<span class="type">Out</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(l : <span class="type">H</span> :: <span class="type">T</span>) = at.apply(l.tail)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>完整可执行代码可以参考 <a href="https://scastie.scala-lang.org/jilen/D6iBBAPVTIu4vfqtXj3hXA" target="_blank" rel="external">scasite 链接</a></p>
+<h2 id="从-Int-到-Nat"><a href="#从-Int-到-Nat" class="headerlink" title="从 Int 到 Nat"></a>从 Int 到 Nat</h2><p>Shapeless 除了支持根据 <code>Nat</code> 类型获得对应元素外，还直接支持根据 <code>Int</code> 作为元素位置获取元素。<br>但 Scala 的 <code>Int</code> 目前不支持 <a href="http://docs.scala-lang.org/sips/pending/42.type.html" target="_blank" rel="external">literal singleton type</a>，并且不存在可以递归推导的后继关系。<br>所以 shapeless 实际上是使用 macro 强行构造 <code>Nat</code> 实例来实现 Int -&gt; Nat 的转换。由于实现较为简单，不再赘述。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过本文和前两篇文章，我们意识到 implicit 和递归推理的套路是 shapeless 实现泛型编程的基本调性。<br>后续文章不再重复阐述 shapless 的实现机制，转而着重介绍一些 shapeless 的实际应用</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/类型相关/">类型相关</a>
+          
+            <a href="/tags/Jilen/">^Jilen</a>
+          
+            <a href="/tags/Shapeless/">Shapeless</a>
+          
+            <a href="/tags/Shapeless-入门指南/">~Shapeless 入门指南</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2018/01/scala-weekly-29/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第 29 期</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yison-dripower'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2018
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

@@ -7,7 +7,7 @@ tags:
 - ~Shapeless 入门指南
 - ^Jilen
 description: 本文将介绍 shapeless 中 Nat 类型的应用
-date: 2018-01-18
+date: 2018-02-06
 ---
 
 [前面文章](/2017/10/shapeless-2)中，我们提及了 peano 数类型：`Nat`，并且展示了**隐式转换**这项 Scala 黑科技的应用。
