@@ -188,7 +188,7 @@ code,
 kbd,
 pre,
 samp {
-  font-family: monospace, monospace;
+  font-family: monospace;
   font-size: 1em; }
 
 /* Forms
@@ -710,7 +710,7 @@ hr {
     .post .post-content code, .post .post-content pre {
       padding: 7px;
       font-size: 13px;
-      font-family: "Open Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", "Microsoft Jhenghei", sans-serif;
+      font-family: "monospace";
       background: #F8F8F8; }
     .post .post-content code {
       padding: 3px 5px;
