@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2018/02/back-2-font-xinfa-1/"/>
+
+
+<meta name="description" content="上一篇博客是我们《后端工程师入门前端页面重构》系列的第一篇，那么在接下来的几篇文章中，我们就来聊聊页面布局的「心法」和一些具体的「招式」。">
+<meta name="keywords" content="前端开发,~后端工程师入门前端页面重构,^KnowHow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后端工程师入门前端页面重构（二）：心法 I">
+<meta property="og:url" content="http://scala.cool/2018/02/back-2-font-xinfa-1/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="上一篇博客是我们《后端工程师入门前端页面重构》系列的第一篇，那么在接下来的几篇文章中，我们就来聊聊页面布局的「心法」和一些具体的「招式」。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/douban-index.png">
+<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/html-css-show.png">
+<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/block-inline-elemet.png">
+<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/block-element.jpg">
+<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/inline-element-error.png">
+<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/float-layout-show-1.png">
+<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/first-child.png">
+<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/child1-float.png">
+<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/parent-child2.png">
+<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/clear-float-1.png">
+<meta property="og:updated_time" content="2018-02-07T05:17:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="后端工程师入门前端页面重构（二）：心法 I">
+<meta name="twitter:description" content="上一篇博客是我们《后端工程师入门前端页面重构》系列的第一篇，那么在接下来的几篇文章中，我们就来聊聊页面布局的「心法」和一些具体的「招式」。">
+<meta name="twitter:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/douban-index.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> 后端工程师入门前端页面重构（二）：心法 I - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" ><div class="site-header-inner">
+    <h1 class="site-title ">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                News
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          后端工程师入门前端页面重构（二）：心法 I
+        
+      </h1>
+
+      <time class="post-time">
+          2月7日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="KnowHow"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="KnowHow"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p><a href="https://scala.cool/2017/12/be_2_fe/">上一篇博客</a>是我们《后端工程师入门前端页面重构》系列的第一篇，我们介绍了页面布局的口诀：</p>
+<p><strong>从左到右，从上到下，化整为零。</strong></p>
+<p>那么在接下来的几篇文章中，我们就来聊聊页面布局的「心法」和一些具体的「招式」。</p>
+<p>那么什么是心法呢？</p>
+<p>如果说口诀是页面布局的原则，那么心法就是对页面布局中一些重要概念的认识。</p>
+<p>在上一篇文章，我们一直推荐使用高效的浮动布局，类似大家都玩过的磁铁，在磁铁的周围，所有的铁块会被磁铁所吸引。</p>
+<p>那么浮动就好比页面上的一块磁铁，它会吸引页面上的元素块，让它们朝一个方向进行组合、包含、交叠，进而完成整个页面的布局。</p>
+<p>下面就让我们来看看页面中元素有什么类型。</p>
+<h2 id="HTML-块状元素和行内元素"><a href="#HTML-块状元素和行内元素" class="headerlink" title="HTML 块状元素和行内元素"></a>HTML 块状元素和行内元素</h2><p>在我们熟知的页面布局中，网页的标题，logo等都是有高度和宽度的。我们来看下面的豆瓣首页的切图：</p>
+<center><br><img src="/images/2018/02/back-2-font-xinfa-1/douban-index.png" alt="豆瓣首页切图"><br></center>
+
+<p>在上面的图片中，我们使用红色的线条和文字标注豆瓣 logo 的高度和宽度。不仅仅是 logo 图有高度和宽度，搜索框，热搜主题等其它元素，几乎都有高度和宽度。</p>
+<p>那么在 HTML 语言中，我们如何指定元素的高度和宽度呢？</p>
+<p>我们先来写一段 HTML：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>这是 div 标签里面的内容<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>这是 span 标签的内容<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>然后给它们定义样式：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: red;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-tag">span</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: green;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</div></pre></td></tr></table></figure>
+<p>效果如下：</p>
+<center><br><img src="/images/2018/02/back-2-font-xinfa-1/html-css-show.png" alt="效果图"><br></center>
+
+<p>发现一个问题：</p>
+<p><strong>我们设置的高度和宽度只对 div 标签产生效果，对 span 标签没有产生效果。这是为什么呢？</strong></p>
+<p>其实在 HTML 中，我们可以把标签分为「块状元素」和「行内元素」，上面代码中的 div 标签就是块状元素，而 span 标签就是行内元素。</p>
+<p>那么这两类元素有什么区别呢？</p>
+<p>从我们的代码的效果图里面我们已经看出来一个区别了：<strong>块状元素可以设置它的高度和宽度，行内元素对的高度和宽度的设置是无效。</strong></p>
+<p>我们把上面元素的宽度和高度都删除，让 div 标签和 span 标签保持原始的高度和宽度来看看效果。</p>
+<center><br><img src="/images/2018/02/back-2-font-xinfa-1/block-inline-elemet.png" alt="效果图"><br></center>
+
+<p>是不是又看出来一个区别呢？</p>
+<p><strong>块状元素是独占一行的，而行内元素只占本身内容的大小。</strong></p>
+<p>看看我们之前设置高度和宽度的例子，我们用浏览器检查一下看看。</p>
+<center><br><img src="/images/2018/02/back-2-font-xinfa-1/block-element.jpg" alt="效果图"><br></center>
+
+<p><strong>即使我们设置了块状元素的高度和宽度，它还是独占一行的</strong>。真的是霸道啊！</p>
+<p>然而，现实中的网页（如豆瓣），很多内容块都是拼接的，如果我们使用块状元素来表示这些内容块，如果消除它独占一行的情况呢？</p>
+<p>关于这个问题，似乎有两种解决方案。</p>
+<h3 id="inline-block"><a href="#inline-block" class="headerlink" title="inline-block"></a>inline-block</h3><p>其实在 css 的 diplay 属性中，有一个属性值 <code>inline-block</code> 可以将标签呈现出「块状元素」和「行内元素」之间的中间态，即它可以拥有宽高度的同时，也可以具备行内元素的占位属性。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>123<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>123<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>然后给它们定义样式：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line">    <span class="attribute">background-color</span>: red;</div><div class="line">    <span class="attribute">display</span>: inline-block;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看效果：</p>
+<center><br><img src="/images/2018/02/back-2-font-xinfa-1/inline-element-error.png" alt="行内元素误差效果显示"><br></center>
+
+<p>我们发现<strong>虽然两个 div 可以变成行内元素在一行显示，但是它们之间还是存在空白，不能完美的相邻在一起。这点空白会让我们的布局很不美观！</strong></p>
+<h3 id="浮动"><a href="#浮动" class="headerlink" title="浮动"></a>浮动</h3><p>上面我们说了，浮动可以把页面上的元素往某一个方向吸引，那么如何吸引呢？<br>在 CSS 中，我们可以通过 <code>float:left</code> 把元素往左边吸引</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"background-color: red"</span>&gt;</span>这是第一个区块<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"background-color: green"</span>&gt;</span>这是第二个区块<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>使用浮动：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line">    <span class="attribute">width</span>: <span class="number">200px</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">200px</span>;</div><div class="line">    <span class="attribute">float</span>: left;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看效果：</p>
+<center><br><img src="/images/2018/02/back-2-font-xinfa-1/float-layout-show-1.png" alt="简单浮动效果图"><br></center>
+
+<p>我们发现，通过浮动，可以使两个原本很难相邻在一起的块状元素，<strong>完美</strong> 的相邻在一起。</p>
+<p>使用 <code>left</code> 是把元素往左边吸引，而 <code>right</code> 是把元素往右边吸引。</p>
+<p>那么当浮动和元素嵌套结合会发生什么呢？</p>
+<h2 id="父元素高度"><a href="#父元素高度" class="headerlink" title="父元素高度"></a>父元素高度</h2><p>在页面布局中，元素嵌套使用是非常常见的，如下面的代码。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"parent"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"child1"</span>&gt;</span></div><div class="line">    first child</div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.child1</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: red;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<center><br><img src="/images/2018/02/back-2-font-xinfa-1/first-child.png" alt=""><br></center>
+
+<p>此时，子元素的高度是<strong>自适应的</strong>，也就是当前浏览器显示的文字高度，如果对页面进行缩放，子元素高度就会变化。</p>
+<p>而父元素包含着子元素，而且父元素里面没有其它元素，因此父元素的高度等于子元素的高度。</p>
+<p>我们也可以使用 <code>height</code>来设置子元素的高度，让它不自适应。</p>
+<p>在实际开发中，经常需要使用一个父元素嵌套一些浮动元素，现在我们就来设置子元素为浮动元素。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.child1</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: red;</div><div class="line">  <span class="attribute">float</span>: left;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<center><br><img src="/images/2018/02/back-2-font-xinfa-1/child1-float.png" alt=""><br></center>
+
+<p>我们发现父元素的高度竟然变成了０。</p>
+<p>我们尝试再添加一个<strong>非浮动</strong>的子元素时，我们发现，父元素的高度等于第二个非浮动子元素的高度，完全忽视了第一个浮动子元素的存在。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"child2"</span>&gt;</span></div><div class="line">  second child</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.child2</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: green;</div><div class="line">  <span class="attribute">height</span>: <span class="number">50px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="/images/2018/02/back-2-font-xinfa-1/parent-child2.png" alt=""></p>
+<p>而当我们把第二个子元素设置为浮动的时候，父元素的高度又再度变成了０。</p>
+<p>按照上面的方法，添加第三个元素的时候，效果也是相同的。</p>
+<p>通过上面的例子，我们可以得出一个结论：<strong>父元素的高度由最后一个非浮动子元素的占位空间所决定。</strong></p>
+<p>但是在页面布局中，<strong>浮动布局的占位空间</strong>往往是我们理想的容器父元素的高度，那么我们如何解决这个问题呢？</p>
+<h2 id="清除浮动"><a href="#清除浮动" class="headerlink" title="清除浮动"></a>清除浮动</h2><p>使用<strong>清除浮动</strong>就可以解决上面的问题，具体的做法是在父元素的最后添加一个空的元素，并在设置它为清除浮动。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"child3"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.child3</span> &#123;</div><div class="line">  <span class="attribute">clear</span>: left;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<center><br><img src="/images/2018/02/back-2-font-xinfa-1/clear-float-1.png" alt=""><br></center>
+
+<p>我们发现父元素的高度等于浮动元素的占位空间。</p>
+<p> <code>clear: left;</code> 就是让左浮动元素持有占位空间</p>
+<p>让我们再来拓展一下，<code>clear</code> 除了可以设置为 <code>left</code>，还可以设置为 <code>right</code> 和 <code>both</code>。</p>
+<p><code>right</code> 就是让右浮动元素持有占位空间。</p>
+<p><code>both</code> 就是让两边的浮动元素都持有占位空间。</p>
+<h3 id="浮动布局–最佳实践"><a href="#浮动布局–最佳实践" class="headerlink" title="浮动布局–最佳实践"></a>浮动布局–最佳实践</h3><p>在上面的代码中，我们是直接手动的在父元素最后添加空元素。那么能不能有一种方法，可以自动的帮我们添加元素并在设置清除浮动呢？</p>
+<p>回答是肯定的！</p>
+<p>在 CSS 中，我们可以使用 「after 选择器」 来实现添加元素，并且设置属性，具体的用法可以参考:<a href="http://www.w3school.com.cn/cssref/selector_after.asp" target="_blank" rel="external">W3C after 选择器</a></p>
+<p>下面直接给出代码： </p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">  <span class="attribute">content</span>: <span class="string">" "</span>;</div><div class="line">  <span class="attribute">display</span>: block;</div><div class="line">  <span class="attribute">clear</span>: both;</div><div class="line">  <span class="attribute">height</span>: <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.clearfix</span> &#123;</div><div class="line">  <span class="attribute">zoom</span>: <span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>在IE6, 7下 <code>zoom: 1</code> 会触发 hasLayout，从而使元素闭合内部的浮动。</p>
+</li>
+<li><p>在标准浏览器下，<code>.clearfix:after</code> 这个伪类会在应用到 <code>.clearfix</code> 的元素后面插入一个 <code>clear: both</code> 的块级元素，从而达到清除浮动的作用。     </p>
+</li>
+</ul>
+<p>只要父元素引用了这个 class，就可以自动的实现清除浮动，再也不用担心高度和子元素的占位问题了。</p>
+<h2 id="心法小结"><a href="#心法小结" class="headerlink" title="心法小结"></a>心法小结</h2><p>最后，我们再来回顾一下文章介绍的一些心法：</p>
+<p><strong>1. HTML 分为块状元素和行内元素的，块状元素是独占一行的</strong></p>
+<p><strong>2. 浮动布局相对行内元素的布局，往往更利于精确计算间距</strong></p>
+<p><strong>3. 默认情况下，父元素的高度由最后一个非浮动子元素的占位空间所决定</strong></p>
+<p><strong>4. 浮动布局的占位空间往往是我们理想的容器父元素的高度</strong></p>
+<p><strong>5. 清除浮动可以解决浮动元素的占位空间问题</strong></p>
+<p>文章中的一些招式可能说的太粗糙，先不用捉急，我们先学心法，招式到后面再专门的学习。</p>
+<p>我会在下一篇博文继续介绍心法 II。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/前端开发/">前端开发</a>
+          
+            <a href="/tags/后端工程师入门前端页面重构/">~后端工程师入门前端页面重构</a>
+          
+            <a href="/tags/KnowHow/">^KnowHow</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2018/02/shapeless-3/">
+        <span class="next-text nav-default">Shapeless 入门指南（三）： Nat 和 implicit 在 shapeless 中的应用</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yison-dripower'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2018
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

@@ -188,7 +188,7 @@ code,
 kbd,
 pre,
 samp {
-  font-family: monospace;
+  font-family: monospace, monospace;
   font-size: 1em; }
 
 /* Forms
@@ -576,14 +576,11 @@ hr {
   color: rgba(0, 0, 0, 0.7); }
 
 .site-title.home {
-  display: none;
-}
+  display: none; }
 
-@media only screen and (max-width: 750px){
+@media only screen and (max-width: 750px) {
   .site-title.home {
-    display: inline-block;
-  }
-}
+    display: inline-block; } }
 
 #nav-top {
   float: right; }
