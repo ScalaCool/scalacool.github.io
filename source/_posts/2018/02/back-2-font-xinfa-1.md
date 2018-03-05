@@ -30,7 +30,7 @@ date: 2018-02-07
 在我们熟知的页面布局中，网页的标题，logo等都是有高度和宽度的。我们来看下面的豆瓣首页的切图：
 
 <center>
-![豆瓣首页切图](/images/2018/02/back-2-font-xinfa-1/douban-index.png)
+![豆瓣首页切图](https://scala.cool/images/2018/02/back-2-font-xinfa-1/douban-index.png)
 </center>
 
 在上面的图片中，我们使用红色的线条和文字标注豆瓣 logo 的高度和宽度。不仅仅是 logo 图有高度和宽度，搜索框，热搜主题等其它元素，几乎都有高度和宽度。
@@ -61,7 +61,7 @@ span {
 效果如下：
 
 <center>
-![效果图](/images/2018/02/back-2-font-xinfa-1/html-css-show.png)
+![效果图](https://scala.cool/images/2018/02/back-2-font-xinfa-1/html-css-show.png)
 </center>
 
 发现一个问题：
@@ -78,7 +78,7 @@ span {
 我们把上面元素的宽度和高度都删除，让 div 标签和 span 标签保持原始的高度和宽度来看看效果。
 
 <center>
-![效果图](/images/2018/02/back-2-font-xinfa-1/block-inline-elemet.png)
+![效果图](https://scala.cool/images/2018/02/back-2-font-xinfa-1/block-inline-elemet.png)
 </center>
 
 是不是又看出来一个区别呢？
@@ -88,7 +88,7 @@ span {
 看看我们之前设置高度和宽度的例子，我们用浏览器检查一下看看。
 
 <center>
-![效果图](/images/2018/02/back-2-font-xinfa-1/block-element.jpg)
+![效果图](https://scala.cool/images/2018/02/back-2-font-xinfa-1/block-element.jpg)
 </center>
 
 **即使我们设置了块状元素的高度和宽度，它还是独占一行的**。真的是霸道啊！
@@ -119,7 +119,7 @@ div {
 
 看效果：
 <center>
-![行内元素误差效果显示](/images/2018/02/back-2-font-xinfa-1/inline-element-error.png)
+![行内元素误差效果显示](https://scala.cool/images/2018/02/back-2-font-xinfa-1/inline-element-error.png)
 </center>
 
 我们发现**虽然两个 div 可以变成行内元素在一行显示，但是它们之间还是存在空白，不能完美的相邻在一起。这点空白会让我们的布局很不美观！**
@@ -145,7 +145,7 @@ div {
 看效果：
 
 <center>
-![简单浮动效果图](/images/2018/02/back-2-font-xinfa-1/float-layout-show-1.png)
+![简单浮动效果图](https://scala.cool/images/2018/02/back-2-font-xinfa-1/float-layout-show-1.png)
 </center>
 
 我们发现，通过浮动，可以使两个原本很难相邻在一起的块状元素，**完美** 的相邻在一起。
@@ -172,7 +172,7 @@ div {
 ```
 
 <center>
-![](/images/2018/02/back-2-font-xinfa-1/first-child.png)
+![](https://scala.cool/images/2018/02/back-2-font-xinfa-1/first-child.png)
 </center>
 
 此时，子元素的高度是**自适应的**，也就是当前浏览器显示的文字高度，如果对页面进行缩放，子元素高度就会变化。
@@ -192,7 +192,7 @@ div {
 ```
 
 <center>
-![](/images/2018/02/back-2-font-xinfa-1/child1-float.png)
+![](https://scala.cool/images/2018/02/back-2-font-xinfa-1/child1-float.png)
 </center>
 
 我们发现父元素的高度竟然变成了０。
@@ -211,7 +211,7 @@ div {
   height: 50px;
 }
 ```
-![](/images/2018/02/back-2-font-xinfa-1/parent-child2.png)
+![](https://scala.cool/images/2018/02/back-2-font-xinfa-1/parent-child2.png)
 
 而当我们把第二个子元素设置为浮动的时候，父元素的高度又再度变成了０。
 
@@ -235,7 +235,7 @@ div {
 ```
 
 <center>
-![](/images/2018/02/back-2-font-xinfa-1/clear-float-1.png)
+![](https://scala.cool/images/2018/02/back-2-font-xinfa-1/clear-float-1.png)
 </center>
 
 我们发现父元素的高度等于浮动元素的占位空间。

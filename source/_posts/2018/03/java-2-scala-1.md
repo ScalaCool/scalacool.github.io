@@ -1,12 +1,13 @@
 ---
 title: 从 Java 到 Scala（一）：面向对象谈起
-author: KnewHow
+author: KnowHow
 tags:
 - Java2Scala
 - 编程语言
 - ^KnewHow
-description: 本文将介绍 shapeless 中 Nat 类型的应用
-date: 2018-02-06
+- ~从 Java 到 Scala
+description: Scala 是一门优秀的编程语言，它不仅仅在工业界被广泛使用，在学术界也占用很高的研究地位。
+date: 2018-03-05
 ---
 去年我加入[水滴团队](https://scala.cool/2017/03/hello-scala/)，面试中，面试官问：“你了解 Scala 吗？”
 
@@ -94,7 +95,7 @@ SharedBicycle.prototype.关锁 = function(){...};
 但是在 Scala 中，存在一个通用的「顶类型」－　Any。
 
 <center>
-  ![](/images/2018/03/java2Scala-1-oop/scala-unified-types.png)
+  ![](/images/2018/03/scala-unified-types.png)
 </center>
 
 

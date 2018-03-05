@@ -41,21 +41,21 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="上一篇博客是我们《后端工程师入门前端页面重构》系列的第一篇，那么在接下来的几篇文章中，我们就来聊聊页面布局的「心法」和一些具体的「招式」。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/douban-index.png">
-<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/html-css-show.png">
-<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/block-inline-elemet.png">
-<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/block-element.jpg">
-<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/inline-element-error.png">
-<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/float-layout-show-1.png">
-<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/first-child.png">
-<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/child1-float.png">
-<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/parent-child2.png">
-<meta property="og:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/clear-float-1.png">
-<meta property="og:updated_time" content="2018-02-07T05:17:02.000Z">
+<meta property="og:image" content="https://scala.cool/images/2018/02/back-2-font-xinfa-1/douban-index.png">
+<meta property="og:image" content="https://scala.cool/images/2018/02/back-2-font-xinfa-1/html-css-show.png">
+<meta property="og:image" content="https://scala.cool/images/2018/02/back-2-font-xinfa-1/block-inline-elemet.png">
+<meta property="og:image" content="https://scala.cool/images/2018/02/back-2-font-xinfa-1/block-element.jpg">
+<meta property="og:image" content="https://scala.cool/images/2018/02/back-2-font-xinfa-1/inline-element-error.png">
+<meta property="og:image" content="https://scala.cool/images/2018/02/back-2-font-xinfa-1/float-layout-show-1.png">
+<meta property="og:image" content="https://scala.cool/images/2018/02/back-2-font-xinfa-1/first-child.png">
+<meta property="og:image" content="https://scala.cool/images/2018/02/back-2-font-xinfa-1/child1-float.png">
+<meta property="og:image" content="https://scala.cool/images/2018/02/back-2-font-xinfa-1/parent-child2.png">
+<meta property="og:image" content="https://scala.cool/images/2018/02/back-2-font-xinfa-1/clear-float-1.png">
+<meta property="og:updated_time" content="2018-03-05T05:30:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="后端工程师入门前端页面重构（二）：心法 I">
 <meta name="twitter:description" content="上一篇博客是我们《后端工程师入门前端页面重构》系列的第一篇，那么在接下来的几篇文章中，我们就来聊聊页面布局的「心法」和一些具体的「招式」。">
-<meta name="twitter:image" content="http://scala.cool/images/2018/02/back-2-font-xinfa-1/douban-index.png">
+<meta name="twitter:image" content="https://scala.cool/images/2018/02/back-2-font-xinfa-1/douban-index.png">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -166,7 +166,7 @@
 <p>那么浮动就好比页面上的一块磁铁，它会吸引页面上的元素块，让它们朝一个方向进行组合、包含、交叠，进而完成整个页面的布局。</p>
 <p>下面就让我们来看看页面中元素有什么类型。</p>
 <h2 id="HTML-块状元素和行内元素"><a href="#HTML-块状元素和行内元素" class="headerlink" title="HTML 块状元素和行内元素"></a>HTML 块状元素和行内元素</h2><p>在我们熟知的页面布局中，网页的标题，logo等都是有高度和宽度的。我们来看下面的豆瓣首页的切图：</p>
-<center><br><img src="/images/2018/02/back-2-font-xinfa-1/douban-index.png" alt="豆瓣首页切图"><br></center>
+<center><br><img src="https://scala.cool/images/2018/02/back-2-font-xinfa-1/douban-index.png" alt="豆瓣首页切图"><br></center>
 
 <p>在上面的图片中，我们使用红色的线条和文字标注豆瓣 logo 的高度和宽度。不仅仅是 logo 图有高度和宽度，搜索框，热搜主题等其它元素，几乎都有高度和宽度。</p>
 <p>那么在 HTML 语言中，我们如何指定元素的高度和宽度呢？</p>
@@ -175,7 +175,7 @@
 <p>然后给它们定义样式：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: red;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-tag">span</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: green;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</div></pre></td></tr></table></figure>
 <p>效果如下：</p>
-<center><br><img src="/images/2018/02/back-2-font-xinfa-1/html-css-show.png" alt="效果图"><br></center>
+<center><br><img src="https://scala.cool/images/2018/02/back-2-font-xinfa-1/html-css-show.png" alt="效果图"><br></center>
 
 <p>发现一个问题：</p>
 <p><strong>我们设置的高度和宽度只对 div 标签产生效果，对 span 标签没有产生效果。这是为什么呢？</strong></p>
@@ -183,12 +183,12 @@
 <p>那么这两类元素有什么区别呢？</p>
 <p>从我们的代码的效果图里面我们已经看出来一个区别了：<strong>块状元素可以设置它的高度和宽度，行内元素对的高度和宽度的设置是无效。</strong></p>
 <p>我们把上面元素的宽度和高度都删除，让 div 标签和 span 标签保持原始的高度和宽度来看看效果。</p>
-<center><br><img src="/images/2018/02/back-2-font-xinfa-1/block-inline-elemet.png" alt="效果图"><br></center>
+<center><br><img src="https://scala.cool/images/2018/02/back-2-font-xinfa-1/block-inline-elemet.png" alt="效果图"><br></center>
 
 <p>是不是又看出来一个区别呢？</p>
 <p><strong>块状元素是独占一行的，而行内元素只占本身内容的大小。</strong></p>
 <p>看看我们之前设置高度和宽度的例子，我们用浏览器检查一下看看。</p>
-<center><br><img src="/images/2018/02/back-2-font-xinfa-1/block-element.jpg" alt="效果图"><br></center>
+<center><br><img src="https://scala.cool/images/2018/02/back-2-font-xinfa-1/block-element.jpg" alt="效果图"><br></center>
 
 <p><strong>即使我们设置了块状元素的高度和宽度，它还是独占一行的</strong>。真的是霸道啊！</p>
 <p>然而，现实中的网页（如豆瓣），很多内容块都是拼接的，如果我们使用块状元素来表示这些内容块，如果消除它独占一行的情况呢？</p>
@@ -198,7 +198,7 @@
 <p>然后给它们定义样式：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line">    <span class="attribute">background-color</span>: red;</div><div class="line">    <span class="attribute">display</span>: inline-block;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>看效果：</p>
-<center><br><img src="/images/2018/02/back-2-font-xinfa-1/inline-element-error.png" alt="行内元素误差效果显示"><br></center>
+<center><br><img src="https://scala.cool/images/2018/02/back-2-font-xinfa-1/inline-element-error.png" alt="行内元素误差效果显示"><br></center>
 
 <p>我们发现<strong>虽然两个 div 可以变成行内元素在一行显示，但是它们之间还是存在空白，不能完美的相邻在一起。这点空白会让我们的布局很不美观！</strong></p>
 <h3 id="浮动"><a href="#浮动" class="headerlink" title="浮动"></a>浮动</h3><p>上面我们说了，浮动可以把页面上的元素往某一个方向吸引，那么如何吸引呢？<br>在 CSS 中，我们可以通过 <code>float:left</code> 把元素往左边吸引</p>
@@ -206,7 +206,7 @@
 <p>使用浮动：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line">    <span class="attribute">width</span>: <span class="number">200px</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">200px</span>;</div><div class="line">    <span class="attribute">float</span>: left;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>看效果：</p>
-<center><br><img src="/images/2018/02/back-2-font-xinfa-1/float-layout-show-1.png" alt="简单浮动效果图"><br></center>
+<center><br><img src="https://scala.cool/images/2018/02/back-2-font-xinfa-1/float-layout-show-1.png" alt="简单浮动效果图"><br></center>
 
 <p>我们发现，通过浮动，可以使两个原本很难相邻在一起的块状元素，<strong>完美</strong> 的相邻在一起。</p>
 <p>使用 <code>left</code> 是把元素往左边吸引，而 <code>right</code> 是把元素往右边吸引。</p>
@@ -214,20 +214,20 @@
 <h2 id="父元素高度"><a href="#父元素高度" class="headerlink" title="父元素高度"></a>父元素高度</h2><p>在页面布局中，元素嵌套使用是非常常见的，如下面的代码。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"parent"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"child1"</span>&gt;</span></div><div class="line">    first child</div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.child1</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: red;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<center><br><img src="/images/2018/02/back-2-font-xinfa-1/first-child.png" alt=""><br></center>
+<center><br><img src="https://scala.cool/images/2018/02/back-2-font-xinfa-1/first-child.png" alt=""><br></center>
 
 <p>此时，子元素的高度是<strong>自适应的</strong>，也就是当前浏览器显示的文字高度，如果对页面进行缩放，子元素高度就会变化。</p>
 <p>而父元素包含着子元素，而且父元素里面没有其它元素，因此父元素的高度等于子元素的高度。</p>
 <p>我们也可以使用 <code>height</code>来设置子元素的高度，让它不自适应。</p>
 <p>在实际开发中，经常需要使用一个父元素嵌套一些浮动元素，现在我们就来设置子元素为浮动元素。</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.child1</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: red;</div><div class="line">  <span class="attribute">float</span>: left;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<center><br><img src="/images/2018/02/back-2-font-xinfa-1/child1-float.png" alt=""><br></center>
+<center><br><img src="https://scala.cool/images/2018/02/back-2-font-xinfa-1/child1-float.png" alt=""><br></center>
 
 <p>我们发现父元素的高度竟然变成了０。</p>
 <p>我们尝试再添加一个<strong>非浮动</strong>的子元素时，我们发现，父元素的高度等于第二个非浮动子元素的高度，完全忽视了第一个浮动子元素的存在。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"child2"</span>&gt;</span></div><div class="line">  second child</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.child2</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: green;</div><div class="line">  <span class="attribute">height</span>: <span class="number">50px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><img src="/images/2018/02/back-2-font-xinfa-1/parent-child2.png" alt=""></p>
+<p><img src="https://scala.cool/images/2018/02/back-2-font-xinfa-1/parent-child2.png" alt=""></p>
 <p>而当我们把第二个子元素设置为浮动的时候，父元素的高度又再度变成了０。</p>
 <p>按照上面的方法，添加第三个元素的时候，效果也是相同的。</p>
 <p>通过上面的例子，我们可以得出一个结论：<strong>父元素的高度由最后一个非浮动子元素的占位空间所决定。</strong></p>
@@ -235,7 +235,7 @@
 <h2 id="清除浮动"><a href="#清除浮动" class="headerlink" title="清除浮动"></a>清除浮动</h2><p>使用<strong>清除浮动</strong>就可以解决上面的问题，具体的做法是在父元素的最后添加一个空的元素，并在设置它为清除浮动。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"child3"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.child3</span> &#123;</div><div class="line">  <span class="attribute">clear</span>: left;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<center><br><img src="/images/2018/02/back-2-font-xinfa-1/clear-float-1.png" alt=""><br></center>
+<center><br><img src="https://scala.cool/images/2018/02/back-2-font-xinfa-1/clear-float-1.png" alt=""><br></center>
 
 <p>我们发现父元素的高度等于浮动元素的占位空间。</p>
 <p> <code>clear: left;</code> 就是让左浮动元素持有占位空间</p>
@@ -281,6 +281,12 @@
         
         
   <nav class="post-nav">
+    
+      <a class="prev" href="/2018/03/java-2-scala-1/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">从 Java 到 Scala（一）：面向对象谈起</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
     
     
       <a class="next" href="/2018/02/shapeless-3/">
