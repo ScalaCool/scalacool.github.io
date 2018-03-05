@@ -1,6 +1,6 @@
 ---
 title: 后端工程师入门前端页面重构（二）：心法 I
-author: KnowHow
+author: KnewHow
 tags: 
 - 前端开发
 - ~后端工程师入门前端页面重构

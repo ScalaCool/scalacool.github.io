@@ -22,7 +22,7 @@ var authors = {
     blog: 'http://zpkoon.xyz',
     avatar: '/images/avatar/zpkoon.png'
   },
-  knowhow: {
+  knewhow: {
     blog: 'http://knewhow.me',
     avatar: '/images/avatar/knewhow.png'
   },
