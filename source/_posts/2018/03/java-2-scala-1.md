@@ -5,6 +5,7 @@ tags:
 - Java2Scala
 - 编程语言
 - ^KnewHow
+- 类型相关
 - ~从 Java 到 Scala
 description: Scala 是一门优秀的编程语言，它不仅仅在工业界被广泛使用，在学术界也占用很高的研究地位。
 date: 2018-03-05
