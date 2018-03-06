@@ -2,8 +2,7 @@
 title: 从 Java 到 Scala（一）：面向对象谈起
 author: KnewHow
 tags:
-- Java2Scala
-- 编程语言
+- Java
 - ^KnewHow
 - 类型相关
 - ~从 Java 到 Scala
