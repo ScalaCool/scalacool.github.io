@@ -1,5 +1,5 @@
 ---
-title: Kafka学习笔记（一） ：为什么需要Kafka？
+title: Kafka学习笔记（一） ：为什么需要 Kafka？
 author: Godpan
 tags: 
 - Kafka

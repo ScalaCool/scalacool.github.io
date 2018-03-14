@@ -537,6 +537,10 @@ hr {
   #primary.home .js-author img {
     display: none; } }
 
+.post-content img {
+  margin: 0 auto;
+  display: block !important; }
+
 .header {
   padding: 20px 20px; }
   .header:before, .header:after {
