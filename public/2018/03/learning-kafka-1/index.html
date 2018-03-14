@@ -41,18 +41,18 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="我们在学习一个东西的时候，往往只有真正了解它背后的含义，才能一步一步的掌握它，直到运筹帷幄。对于 Kafka 来说，本文就基于官方文档来初探一下 Kafka，正如官方文档而言，且读且珍惜。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://scala.cool/images/2018/03/simple-message-system.png">
-<meta property="og:image" content="http://scala.cool/images/2018/03/simple-message-queue-system.png">
-<meta property="og:image" content="http://scala.cool/images/2018/03/message-system.png">
-<meta property="og:image" content="http://scala.cool/images/2018/03/kafka-apis.png">
-<meta property="og:image" content="http://scala.cool/images/2018/03/log-anatomy.png">
-<meta property="og:image" content="http://scala.cool/images/2018/03/log-consumer.png">
-<meta property="og:image" content="http://scala.cool/images/2018/03/consumer-groups.png">
-<meta property="og:updated_time" content="2018-03-14T01:56:36.000Z">
+<meta property="og:image" content="https://scala.cool/images/2018/03/simple-message-system.png">
+<meta property="og:image" content="https://scala.cool/images/2018/03/simple-message-queue-system.png">
+<meta property="og:image" content="https://scala.cool/images/2018/03/message-system.png">
+<meta property="og:image" content="https://scala.cool/images/2018/03/kafka-apis.png">
+<meta property="og:image" content="https://scala.cool/images/2018/03/log-anatomy.png">
+<meta property="og:image" content="https://scala.cool/images/2018/03/log-consumer.png">
+<meta property="og:image" content="https://scala.cool/images/2018/03/consumer-groups.png">
+<meta property="og:updated_time" content="2018-03-14T01:58:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka 学习笔记（一） ：为什么需要 Kafka？">
 <meta name="twitter:description" content="我们在学习一个东西的时候，往往只有真正了解它背后的含义，才能一步一步的掌握它，直到运筹帷幄。对于 Kafka 来说，本文就基于官方文档来初探一下 Kafka，正如官方文档而言，且读且珍惜。">
-<meta name="twitter:image" content="http://scala.cool/images/2018/03/simple-message-system.png">
+<meta name="twitter:image" content="https://scala.cool/images/2018/03/simple-message-system.png">
 
 
 <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
@@ -104,7 +104,7 @@
                         <a href="https://jianshiapp.com/circles/108511">
                             
                             
-                                技术圈
+                                圈子
                             
                         </a>
                     </li>
@@ -113,7 +113,7 @@
                         <a href="http://news.scala.cool">
                             
                             
-                                社区动态
+                                动态
                             
                         </a>
                     </li>
@@ -174,17 +174,17 @@
 <p>以上3点是作为一个好的消息系统的最基本的能力。</p>
 <p>那么Kafka为什么会诞生呢？</p>
 <p>其实在我们工作中，相信有很多也接触过消息队列，甚至自己也写过简单的消息系统，它最基本应该拥有发布/订阅的功能，如下图所示：</p>
-<p><img src="/images/2018/03/simple-message-system.png" alt="simple-message-system"></p>
+<p><img src="https://scala.cool/images/2018/03/simple-message-system.png" alt="simple-message-system"></p>
 <p>其中消费者A与消费者B都订阅了消息源A和消息源B，这种模式很简单，但是相对来说也有弊端，比如以下两点：</p>
 <ul>
 <li>该模式下消费者需要实时去处理消息，因为这里消息源和消费者都不会维护一个消息队列（维护代价太大），这将会导致消费者若是暂时没有能力消费，则消息会丢失，当然也就不能获得历史的消息；</li>
 <li>消息源需要维护原本不属于它的工作，比如维护订阅者（消费者）的信息，向多个消费者发送消息，亦或者有些还需要处理消息反馈，这是原本纯粹的消息源就会变得越来越复杂；</li>
 </ul>
 <p>当然这些问题都是可以改进的，比如我们可以在消息源和消费者中间增加一个消息队列，如下图所示：</p>
-<p><img src="/images/2018/03/simple-message-queue-system.png" alt="simple-message-queue-system"></p>
+<p><img src="https://scala.cool/images/2018/03/simple-message-queue-system.png" alt="simple-message-queue-system"></p>
 <p>从图中我们可以看出，现在消息源只需要将消息发送到消息队列中就行，至于其他就将给消息队列去完成，我们可以在消息队列持久化消息，主动推消息给已经订阅了该消息队列的消费者，那么这种模式还有什么缺点吗？</p>
 <p>答案是有，上图只是两个消息队列，我们维护起来并不困难，但是如果有成百上千个呢？那不得gg，其实我们可以发现，消息队列的功能都很类似，无非就是持久化消息，推送消息，给出反馈等功能，结构也非常类似，主要是消息内容，当然如果要通用化，消息结构也要尽可能通用化，与具体平台具体语言无关，比如用JSON格式等，所有我们可以演变出以下的消息系统：</p>
-<p><img src="/images/2018/03/message-system.png" alt="message-system"></p>
+<p><img src="https://scala.cool/images/2018/03/message-system.png" alt="message-system"></p>
 <p>这个方式看起来只是把上面的队列合并到了一起，其实并不那么简单，因为这个消息队列集合要具备以下几个功能：</p>
 <ul>
 <li>能统一管理所有的消息队列，不是特殊需求不需要开发者自己去维护；</li>
@@ -207,12 +207,12 @@
 <li>Connector API提供Kafka与现有的应用或系统适配功能，比如与数据库连接器可以捕获表结构的变化；</li>
 </ul>
 <p>它们与Kafka集群的关系可以用下图表示：</p>
-<p><img src="/images/2018/03/kafka-apis.png" alt="kafka-apis"></p>
+<p><img src="https://scala.cool/images/2018/03/kafka-apis.png" alt="kafka-apis"></p>
 <p>在了解了Kafka的一些基本概念后，我们具体来看看它的一些组成部分。</p>
 <h4 id="Topics"><a href="#Topics" class="headerlink" title="Topics"></a>Topics</h4><p>顾名思义Topics是一些主题的集合，更通俗的说Topic就像一个消息队列，生产者可以向其写入消息，消费者可以从中读取消息，一个Topic支持多个生产者或消费者同时订阅它，所以其扩展性很好。Topic又可以由一个或多个partition（分区）组成，比如下图：</p>
-<p><img src="/images/2018/03/log-anatomy.png" alt="log-anatomy"></p>
+<p><img src="https://scala.cool/images/2018/03/log-anatomy.png" alt="log-anatomy"></p>
 <p>其中每个partition中的消息是有序的，但相互之间的顺序就不能保证了，若Topic有多个partition，生产者的消息可以指定或者由系统根据算法分配到指定分区，若你需要所有消息都是有序的，那么你最好只用一个分区。另外partition支持消息位移读取，消息位移有消费者自身管理，比如下图：</p>
-<p><img src="/images/2018/03/log-consumer.png" alt="log-consumer"></p>
+<p><img src="https://scala.cool/images/2018/03/log-consumer.png" alt="log-consumer"></p>
 <p>由上图可以看出，不同消费者对同一分区的消息读取互不干扰，消费者可以通过设置消息位移（offset）来控制自己想要获取的数据，比如可以从头读取，最新数据读取，重读读取等功能。</p>
 <p>关于Topic的分区策略以及与消费者间平衡后续文章会继续深入讲解。</p>
 <h4 id="Distribution"><a href="#Distribution" class="headerlink" title="Distribution"></a>Distribution</h4><p>上文说到过，Kafka是一个分布式的消息系统，所以当我们配置了多个Kafka Server节点后，它就拥有分布式的能力，比如容错等，partition会被分布在各个Server节点上，同时它们中间又有一个leader，它会处理所有的读写请求，其他followers会复制leader上的数据信息，一旦当leader因为某些故障而无法提供服务后，就会有一个follower被推举出来成为新的leader来处理这些请求。</p>
@@ -224,7 +224,7 @@
 <li>假如所有消费者都在不同的消费者组中，并且订阅了同个Topic，那么它们将可以消费Topic的所有消息；</li>
 </ul>
 <p>下面是一个简单的例子，帮助大家理解：</p>
-<p><img src="/images/2018/03/consumer-groups.png" alt="consumer-groups"></p>
+<p><img src="https://scala.cool/images/2018/03/consumer-groups.png" alt="consumer-groups"></p>
 <p>上图中有两个Server节点，有一个Topic被分为四个分区（P0-P4)分别被分配在两个节点上，另外还有两个消费者组（GA，GB），其中GA有两个消费者实例，GB有四个消费者实例。</p>
 <p>从图中我们可以看出，首先订阅Topic的单位是消费者组，另外我们发现Topic中的消息根据一定规则将消息推送给具体消费者，主要原则如下：</p>
 <ul>

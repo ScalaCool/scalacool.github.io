@@ -30,7 +30,7 @@ Kafka最早是由LinkedIn公司开发的，作为其自身业务消息处理的�
 
 其实在我们工作中，相信有很多也接触过消息队列，甚至自己也写过简单的消息系统，它最基本应该拥有发布/订阅的功能，如下图所示：
 
-![simple-message-system](/images/2018/03/simple-message-system.png)
+![simple-message-system](https://scala.cool/images/2018/03/simple-message-system.png)
 
 其中消费者A与消费者B都订阅了消息源A和消息源B，这种模式很简单，但是相对来说也有弊端，比如以下两点：
 
@@ -39,13 +39,13 @@ Kafka最早是由LinkedIn公司开发的，作为其自身业务消息处理的�
 
 当然这些问题都是可以改进的，比如我们可以在消息源和消费者中间增加一个消息队列，如下图所示：
 
-![simple-message-queue-system](/images/2018/03/simple-message-queue-system.png)
+![simple-message-queue-system](https://scala.cool/images/2018/03/simple-message-queue-system.png)
 
 从图中我们可以看出，现在消息源只需要将消息发送到消息队列中就行，至于其他就将给消息队列去完成，我们可以在消息队列持久化消息，主动推消息给已经订阅了该消息队列的消费者，那么这种模式还有什么缺点吗？
 
 答案是有，上图只是两个消息队列，我们维护起来并不困难，但是如果有成百上千个呢？那不得gg，其实我们可以发现，消息队列的功能都很类似，无非就是持久化消息，推送消息，给出反馈等功能，结构也非常类似，主要是消息内容，当然如果要通用化，消息结构也要尽可能通用化，与具体平台具体语言无关，比如用JSON格式等，所有我们可以演变出以下的消息系统：
 
-![message-system](/images/2018/03/message-system.png)
+![message-system](https://scala.cool/images/2018/03/message-system.png)
 
 这个方式看起来只是把上面的队列合并到了一起，其实并不那么简单，因为这个消息队列集合要具备以下几个功能：
 
@@ -74,7 +74,7 @@ Kafka为了拥有更强大的功能，提供了四大核心接口：
 
 它们与Kafka集群的关系可以用下图表示：
 
-![kafka-apis](/images/2018/03/kafka-apis.png)
+![kafka-apis](https://scala.cool/images/2018/03/kafka-apis.png)
 
 在了解了Kafka的一些基本概念后，我们具体来看看它的一些组成部分。
 
@@ -82,11 +82,11 @@ Kafka为了拥有更强大的功能，提供了四大核心接口：
 
 顾名思义Topics是一些主题的集合，更通俗的说Topic就像一个消息队列，生产者可以向其写入消息，消费者可以从中读取消息，一个Topic支持多个生产者或消费者同时订阅它，所以其扩展性很好。Topic又可以由一个或多个partition（分区）组成，比如下图：
 
-![log-anatomy](/images/2018/03/log-anatomy.png)
+![log-anatomy](https://scala.cool/images/2018/03/log-anatomy.png)
 
 其中每个partition中的消息是有序的，但相互之间的顺序就不能保证了，若Topic有多个partition，生产者的消息可以指定或者由系统根据算法分配到指定分区，若你需要所有消息都是有序的，那么你最好只用一个分区。另外partition支持消息位移读取，消息位移有消费者自身管理，比如下图：
 
-![log-consumer](/images/2018/03/log-consumer.png)
+![log-consumer](https://scala.cool/images/2018/03/log-consumer.png)
 
 由上图可以看出，不同消费者对同一分区的消息读取互不干扰，消费者可以通过设置消息位移（offset）来控制自己想要获取的数据，比如可以从头读取，最新数据读取，重读读取等功能。
 
@@ -113,7 +113,7 @@ Consumers是一群消费者的集合，可以称之为消费者组，是一种�
 
 下面是一个简单的例子，帮助大家理解：
 
-![consumer-groups](/images/2018/03/consumer-groups.png)
+![consumer-groups](https://scala.cool/images/2018/03/consumer-groups.png)
 
 上图中有两个Server节点，有一个Topic被分为四个分区（P0-P4)分别被分配在两个节点上，另外还有两个消费者组（GA，GB），其中GA有两个消费者实例，GB有四个消费者实例。
 

@@ -17,8 +17,8 @@ rss: default
 # Menu Settings
 # ===========================================
 menu:
-  技术圈: https://jianshiapp.com/circles/108511
-  社区动态: http://news.scala.cool
+  圈子: https://jianshiapp.com/circles/108511
+  动态: http://news.scala.cool
   关于: https://scala.cool/2017/03/hello-scala/
 #  Archives: /archives
 
