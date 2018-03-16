@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2018/03/reactive-web-applications-5/"/>
+
+
+<meta name="description" content="在开发 Web 应用的时候，一些必须要考虑到的基本因素将会对程序的操作方式才生深远的影响，本文将会介绍一些部署模式，以便我们在程序设计之初就能充分考虑程序所需要的架构体系。">
+<meta name="keywords" content="^Shaw,翻译,Play,响应式编程,~响应式 Web 应用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&lt;译&gt; 响应式 Web 应用（五）">
+<meta property="og:url" content="http://scala.cool/2018/03/reactive-web-applications-5/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="在开发 Web 应用的时候，一些必须要考虑到的基本因素将会对程序的操作方式才生深远的影响，本文将会介绍一些部署模式，以便我们在程序设计之初就能充分考虑程序所需要的架构体系。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2018/03/SINGLE-SERVER-DEPLOYMENTS.png">
+<meta property="og:image" content="http://scala.cool/images/2018/03/REPLICATED-DEPLOYMENTS.png">
+<meta property="og:image" content="http://scala.cool/images/2018/03/HORIZONTAL-DEPLOYMENTS.png">
+<meta property="og:updated_time" content="2018-03-16T04:55:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&lt;译&gt; 响应式 Web 应用（五）">
+<meta name="twitter:description" content="在开发 Web 应用的时候，一些必须要考虑到的基本因素将会对程序的操作方式才生深远的影响，本文将会介绍一些部署模式，以便我们在程序设计之初就能充分考虑程序所需要的架构体系。">
+<meta name="twitter:image" content="http://scala.cool/images/2018/03/SINGLE-SERVER-DEPLOYMENTS.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> <译> 响应式 Web 应用（五） - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" ><div class="site-header-inner">
+    <h1 class="site-title ">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="https://jianshiapp.com/circles/108511">
+                            
+                            
+                                圈子
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <译> 响应式 Web 应用（五）
+        
+      </h1>
+
+      <time class="post-time">
+          3月16日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Shaw"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="Shaw"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h2 id="上一篇"><a href="#上一篇" class="headerlink" title="上一篇"></a>上一篇</h2><p><a href="http://shawdubie.com/notes/reactive-web-application-4" target="_blank" rel="external">响应式 Web 应用（四）</a></p>
+<h2 id="1-2-3-水平架构"><a href="#1-2-3-水平架构" class="headerlink" title="1.2.3 水平架构"></a>1.2.3 水平架构</h2><p>在开发 Web 应用的时候，一些必须要考虑到的基本因素将会对程序的操作方式产生深远的影响。但不幸的是，大多数应用程序在开发之前都不会去考虑代码在生产环境发布和部署之后会发生什么。这可能会给程序造成很大的局限性，比如我们现在需要在多台服务器上运行这个程序，但如果该应用程序在设计之初就没有考虑到这种情况，那么让她在此种操作模式下运行是不太实际的，除非我们对代码进行大面积的改动。</p>
+<p>在接下来的讨论中，我们将会认识一些部署模型并且会思考她们的优缺点。我们还将看到一种被称作为「水平部署模型」的优势，这一模型已经被响应式应用支持并使用了。</p>
+<h3 id="单点部署"><a href="#单点部署" class="headerlink" title="单点部署"></a>单点部署</h3><p>单点部署是一种非常常见的部署模型，应用程序通常被部署在一台计算机上面，通常数据库也部署在这台计算机上面，如下图所示：</p>
+<p><img src="/images/2018/03/SINGLE-SERVER-DEPLOYMENTS.png" alt="SINGLE-SERVER-DEPLOYMENTS"></p>
+<p>此部署模型由于其相对简单而被广泛使用，但是她有很严重的局限性。当服务器上的负载超过其阈值时，或者当机器挂了，或者应用程序升级需要安装的时候，将会导致一个无法避免的结果——应用程序不可用。这种模型所能处理的负载很大程度上取决于硬件——当需要更好的性能时，就需要更强大的计算机，更大的内存以及更快的 CPU。这种通过切换更高性能的硬件来达到增加单个服务器负载的过程称为「垂直扩展」。</p>
+<h3 id="克隆式部署"><a href="#克隆式部署" class="headerlink" title="克隆式部署"></a>克隆式部署</h3><p>对于那些需要更好的性能以及可用性的程序，这里提供了一个如图所示的比较流行的设置，这种设置涉及到了跨两台计算机的数据备份。</p>
+<p><img src="/images/2018/03/REPLICATED-DEPLOYMENTS.png" alt="REPLICATED-DEPLOYMENTS"></p>
+<p>在这种设置下，数据库和服务端的状态都需要进行备份，对于服务端的状态，比如，服务端用户 session 或者缓存，就可以使用 Tomcat 的集群功能 或者其他类似的功能来进行备份。在数据库层面，可以采用「主主同步」的方式进行备份。</p>
+<p>这种方式使得我们可以去逐个更新部署，当程序升级的时候我们也能保证服务能正常进行。但是，当需要备份多个数据的时候，正确配置这种设置的复杂性将会大大提高。</p>
+<p>在开发这种模式下的应用程序时，如果从开发人员的角度来看，程序仍然好像是在单个计算机上运行一样，并且由底层框架或应用程序服务器负责备份服务器端的状态。</p>
+<p>尽管这种模式有一些优点，但是我们看到，多机设置的固有复杂性并没有被消除，反而又增加了程序服务端的复杂性。与处理程序本身的错误相比较，要优雅地（为了不给客户带来困扰）去处理服务端的错误状态更加困难，因为错误发生在不同的层级上面，并且服务端的状态也并不是应用程序最需要关注的点。</p>
+<h3 id="水平部署"><a href="#水平部署" class="headerlink" title="水平部署"></a>水平部署</h3><p>在水平架构中，如下图所示，同一个 Web 应用程序被部署到了多个节点上面。</p>
+<p><img src="/images/2018/03/HORIZONTAL-DEPLOYMENTS.png" alt="HORIZONTAL-DEPLOYMENTS"></p>
+<p>这些节点可能是计算机或者虚拟机，但都有一个重要的特点就是彼此互不了解，并且也不共享任何状态。这种“非共享”的原则就是「无状态」架构的核心。</p>
+<p>这些节点都是独立的，其中某一个的缺失或者存在都不会以任何方式影响其他节点（除了负载增加或减少时可能会有影响，当然这取决于流量的大小）。这种架构的优点是，只需要通过向前端路由器添加新节点，可以很容易地扩展应用程序。</p>
+<p>在这种模式下，我们也能实现滚动更新节点，首先将带有新版本应用程序的新节点引入进来，然后将路由层切换一下使其指向新的节点，这样就完成了更新。这种被称作为「热部署」的机制很很受“平台即服务”（PaaS）供应商们的欢迎，比如 Heroku。</p>
+<p>在存储方面，与无共享的 web 应用程序相对应的是一种支持某种集群形式的存储技术。如 MongoDB、Cassandra、Couchbase 以及新版本的关系型数据库（如 <a href="http://webscalesql.org" target="_blank" rel="external">WebScaleSQL</a>），这些 NoSQL 型的数据库非常适合这种可扩展的前端层。</p>
+<p>使用水平架构的一个结果是用户可以通过路由层随机连接到其中一个前端节点，而不是总是在同一个节点上。由于节点之间不存在共享状态，因此无法使用服务器端 session （Servlet 标准以及基于 Servlet 标准而构建的框架中默认存在的）。 Play 框架的核心是「无共享」，并提供了基于 cookie 的客户端用户 session，这点我们将在第 8 章中讨论。</p>
+<p>由于 Play! 所占用的内存很小，所以在通过 PaaS 或其他云平台进行多点部署时，Play! 将会是一个理想的选择，因为这些部署平台中单个节点的可用内存要远远低于一台专用服务器。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Shaw/">^Shaw</a>
+          
+            <a href="/tags/翻译/">翻译</a>
+          
+            <a href="/tags/Play/">Play</a>
+          
+            <a href="/tags/响应式编程/">响应式编程</a>
+          
+            <a href="/tags/响应式-Web-应用/">~响应式 Web 应用</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2018/03/learning-kafka-1/">
+        <span class="next-text nav-default">Kafka 学习笔记（一） ：为什么需要 Kafka？</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1521176400000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yison-dripower'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2018
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>
