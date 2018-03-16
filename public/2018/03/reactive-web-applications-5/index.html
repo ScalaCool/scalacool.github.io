@@ -44,7 +44,7 @@
 <meta property="og:image" content="http://scala.cool/images/2018/03/SINGLE-SERVER-DEPLOYMENTS.png">
 <meta property="og:image" content="http://scala.cool/images/2018/03/REPLICATED-DEPLOYMENTS.png">
 <meta property="og:image" content="http://scala.cool/images/2018/03/HORIZONTAL-DEPLOYMENTS.png">
-<meta property="og:updated_time" content="2018-03-16T04:55:25.000Z">
+<meta property="og:updated_time" content="2018-03-16T05:05:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;译&gt; 响应式 Web 应用（五）">
 <meta name="twitter:description" content="在开发 Web 应用的时候，一些必须要考虑到的基本因素将会对程序的操作方式才生深远的影响，本文将会介绍一些部署模式，以便我们在程序设计之初就能充分考虑程序所需要的架构体系。">
@@ -159,7 +159,7 @@
 
     
             <div class="post-content">
-            <h2 id="上一篇"><a href="#上一篇" class="headerlink" title="上一篇"></a>上一篇</h2><p><a href="http://shawdubie.com/notes/reactive-web-application-4" target="_blank" rel="external">响应式 Web 应用（四）</a></p>
+            <h2 id="上一篇"><a href="#上一篇" class="headerlink" title="上一篇"></a>上一篇</h2><p><a href="https://scala.cool/2018/03/reactive-web-applications-4/">响应式 Web 应用（四）</a></p>
 <h2 id="1-2-3-水平架构"><a href="#1-2-3-水平架构" class="headerlink" title="1.2.3 水平架构"></a>1.2.3 水平架构</h2><p>在开发 Web 应用的时候，一些必须要考虑到的基本因素将会对程序的操作方式产生深远的影响。但不幸的是，大多数应用程序在开发之前都不会去考虑代码在生产环境发布和部署之后会发生什么。这可能会给程序造成很大的局限性，比如我们现在需要在多台服务器上运行这个程序，但如果该应用程序在设计之初就没有考虑到这种情况，那么让她在此种操作模式下运行是不太实际的，除非我们对代码进行大面积的改动。</p>
 <p>在接下来的讨论中，我们将会认识一些部署模型并且会思考她们的优缺点。我们还将看到一种被称作为「水平部署模型」的优势，这一模型已经被响应式应用支持并使用了。</p>
 <h3 id="单点部署"><a href="#单点部署" class="headerlink" title="单点部署"></a>单点部署</h3><p>单点部署是一种非常常见的部署模型，应用程序通常被部署在一台计算机上面，通常数据库也部署在这台计算机上面，如下图所示：</p>

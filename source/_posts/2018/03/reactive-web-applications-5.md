@@ -13,7 +13,7 @@ date: 2018-03-16 13:00
 
 ## 上一篇
 
-[响应式 Web 应用（四）](http://shawdubie.com/notes/reactive-web-application-4)
+[响应式 Web 应用（四）](https://scala.cool/2018/03/reactive-web-applications-4/)
 
 ## 1.2.3 水平架构
 
