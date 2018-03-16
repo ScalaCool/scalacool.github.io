@@ -537,6 +537,10 @@ hr {
   #primary.home .js-author img {
     display: none; } }
 
+.post-content img {
+  margin: 0 auto;
+  display: block !important; }
+
 .header {
   padding: 20px 20px; }
   .header:before, .header:after {
@@ -574,6 +578,13 @@ hr {
   font-weight: 400;
   font-size: 24px;
   color: rgba(0, 0, 0, 0.7); }
+
+.site-title.home {
+  display: none; }
+
+@media only screen and (max-width: 750px) {
+  .site-title.home {
+    display: inline-block; } }
 
 #nav-top {
   float: right; }
@@ -700,7 +711,7 @@ hr {
     .post .post-content code, .post .post-content pre {
       padding: 7px;
       font-size: 13px;
-      font-family: "Open Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", "Microsoft Jhenghei", sans-serif;
+      font-family: "monospace";
       background: #F8F8F8; }
     .post .post-content code {
       padding: 3px 5px;

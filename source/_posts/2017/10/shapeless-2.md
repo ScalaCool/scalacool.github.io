@@ -71,7 +71,7 @@ Nat 与上述公理对应关系
 有了上述公理之后，可以建皮亚诺算术系统，我们以加法为例
 加法定义为满足以下关系的映射
 
-> 1. a + 0 = 0
+> 1. a + 0 = a
 > 2. a + Succ(b) = Succ(a + b)
 
 在 shapeless 里，加法定义如下(Aux 类型的作用参考[此处](http://gigiigig.github.io/posts/2015/09/13/aux-pattern.html))
