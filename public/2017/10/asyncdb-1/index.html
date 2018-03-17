@@ -41,7 +41,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="之前的Akka系列博客接下去可能并不会经常更新了，但是后续看到一些好的点或者大家对哪些还是比较感兴趣还会继续写几篇，这里先跟大家说明一下。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta property="og:updated_time" content="2018-03-17T02:36:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Asyncdb（一）：写一个纯函数式的Mysql异步驱动">
 <meta name="twitter:description" content="之前的Akka系列博客接下去可能并不会经常更新了，但是后续看到一些好的点或者大家对哪些还是比较感兴趣还会继续写几篇，这里先跟大家说明一下。">
@@ -202,7 +202,7 @@
 </table>
 <p>具体相关测试及说明可以看我们写的相关系列文章<a href="https://scala.cool/2017/04/mysql-async-1/">MySQL 异步驱动浅析 （一）：性能分析</a>。</p>
 <p>相信写过Java工程的同学都应该知道mysql-connector-java，但应该很多人对其的实现和相关架构设计应该不是很了解，正如我们上面对其相关功能测试，发现它的某些方面表现并不是很好，比如使用了BIO，请求时需要大量的线程等等。</p>
-<p>相信你们也注意到了mysql-async，但是应该大多数人都不是很熟悉，它也是一个基于Netty，使用Scala编写的，完全异步的数据库驱动，同时支持PostgreSQL和MySQL，其项目地址<a href="https://github.com/mauricio/postgresql-async" target="_blank" rel="external">postgresql-async</a>。</p>
+<p>相信你们也注意到了mysql-async，但是应该大多数人都不是很熟悉，它也是一个基于Netty，使用Scala编写的，完全异步的数据库驱动，同时支持PostgreSQL和MySQL，其项目地址<a href="https://github.com/mauricio/postgresql-async" target="_blank" rel="noopener">postgresql-async</a>。</p>
 <p>其实我们公司项目底层用的数据库驱动也是基于mysql-async的，不过因为实际使用中遇到了一些问题，，具体相关问题分析可以看我们写的相关系列文章<a href="https://scala.cool/2017/05/mysql-async-2/">MySQL 异步驱动浅析 （二）：缺点分析</a>。</p>
 <p>虽然我们使用的mysql-async内部版本对上述的许多问题都进行了修复，具体信息可以看我们写的相关系列文章<a href="https://scala.cool/2017/07/mysql-async-3/">MySQL 异步驱动浅析 （三）：连接池改进方案</a>，但是整个项目变得混乱，架构设计也不是很完美，所以我们最终决定自己实现一个纯函数式的Mysql异步驱动，我们叫它：<strong>asyncdb</strong></p>
 <h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>那么我们到底要做一个怎样的驱动呢？我们提了以下几个主要方面：</p>
@@ -213,14 +213,14 @@
 <li>4.基于Java NIO2，绝不阻塞</li>
 <li>5.提供对应Java8的接口</li>
 </ul>
-<p>总的来说，除了第一点大家可能比较陌生，其他几点大家都应该能大致了解,但是第一点才是我们这个项目最重要的一点，也是用来解决我们之前遇到问题的关键，后续我会写几篇文章对于这一点进行的相关介绍，如果有兴趣的同学可以自己了解一下：<a href="https://github.com/typelevel/cats-effect" target="_blank" rel="external">cats-effect</a></p>
-<h3 id="关注-Asyncdb"><a href="#关注-Asyncdb" class="headerlink" title="关注 Asyncdb"></a>关注 Asyncdb</h3><p>如果你对我们的项目也有兴趣，欢迎你们star我们的项目，项目地址:<a href="https://github.com/asyncdb/asyncdb" target="_blank" rel="external">asyncdb</a>,我们将会从头开始，你可以一步一步了解我们的架构设计和具体的实现方法，当然你有好的想法或者相关问题，也欢迎给我们提issue。</p>
+<p>总的来说，除了第一点大家可能比较陌生，其他几点大家都应该能大致了解,但是第一点才是我们这个项目最重要的一点，也是用来解决我们之前遇到问题的关键，后续我会写几篇文章对于这一点进行的相关介绍，如果有兴趣的同学可以自己了解一下：<a href="https://github.com/typelevel/cats-effect" target="_blank" rel="noopener">cats-effect</a></p>
+<h3 id="关注-Asyncdb"><a href="#关注-Asyncdb" class="headerlink" title="关注 Asyncdb"></a>关注 Asyncdb</h3><p>如果你对我们的项目也有兴趣，欢迎你们star我们的项目，项目地址:<a href="https://github.com/asyncdb/asyncdb" target="_blank" rel="noopener">asyncdb</a>,我们将会从头开始，你可以一步一步了解我们的架构设计和具体的实现方法，当然你有好的想法或者相关问题，也欢迎给我们提issue。</p>
 <h3 id="进阶学习"><a href="#进阶学习" class="headerlink" title="进阶学习"></a>进阶学习</h3><p>若是你对数据库驱动非常有兴趣，也想探究里面的奥秘，这里我提一些相应的建议：</p>
 <ul>
 <li>1.熟悉了解Java NIO，并熟练使用它</li>
 <li>2.学习MySQL数据库网络传输包协议</li>
 <li>3.掌握函数式语言中的Monad表达式，理解其的含义和使用场景</li>
-<li>4.学习Scala相关的函数库比如：<a href="https://github.com/typelevel/cats" target="_blank" rel="external">cats</a>,<a href="https://github.com/milessabin/shapeless" target="_blank" rel="external">shapeless</a></li>
+<li>4.学习Scala相关的函数库比如：<a href="https://github.com/typelevel/cats" target="_blank" rel="noopener">cats</a>,<a href="https://github.com/milessabin/shapeless" target="_blank" rel="noopener">shapeless</a></li>
 <li>5.学习IO-Monad(cats-effect)</li>
 </ul>
 <p>最后也希望大家能参与其中，帮助我们不断的完善它，共同成长！</p>
