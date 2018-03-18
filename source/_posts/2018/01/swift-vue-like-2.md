@@ -46,8 +46,8 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 ```swift
 func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 	let item = self.dataSource[indexPath.row]
+	let vc = DetailViewController(item.id)
 	if (! Device.isIPad()) {
-		let vc = DetailViewController(item.id)
 		self.navigationController.pushViewController(vc, animated: true, completion: nil)
 	} else {
 		var nc = UINavigationController(rootViewController: vc)
