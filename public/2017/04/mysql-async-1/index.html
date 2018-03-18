@@ -46,7 +46,7 @@
 <meta property="og:image" content="http://scala.cool/images/2017/04/hikaricp-select.png">
 <meta property="og:image" content="http://scala.cool/images/2017/04/mysql-async-trans.png">
 <meta property="og:image" content="http://scala.cool/images/2017/04/hikaricp-trans.png">
-<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta property="og:updated_time" content="2018-03-17T02:36:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL 异步驱动浅析 （一）：性能分析">
 <meta name="twitter:description" content="异步数据库驱动与传统 JDBC 驱动对比">
@@ -161,7 +161,7 @@
 
     
             <div class="post-content">
-            <p><a href="https://github.com/mauricio/postgresql-async" target="_blank" rel="external">Mysql Async</a> 是一个 Scala 编写的，基于 <a href="https://netty.io" target="_blank" rel="external">Netty</a> 实现的非阻塞异步数据库驱动。在本系列文章中我们将逐步分析：</p>
+            <p><a href="https://github.com/mauricio/postgresql-async" target="_blank" rel="noopener">Mysql Async</a> 是一个 Scala 编写的，基于 <a href="https://netty.io" target="_blank" rel="noopener">Netty</a> 实现的非阻塞异步数据库驱动。在本系列文章中我们将逐步分析：</p>
 <ul>
 <li>与传统的 JDBC 驱动相比有何优势</li>
 <li>Mysql Async 异步驱动存在什么问题，该如何优化</li>
@@ -188,16 +188,16 @@
 <p>项目还提供一个连接池，采用分区设计，一个 <code>PartitionedAsyncObjectPool</code> 包含多个 <code>SingleThreadedAsyncObjectPool</code> 。</p>
 <h4 id="PartitionedAsyncObjectPool"><a href="#PartitionedAsyncObjectPool" class="headerlink" title="PartitionedAsyncObjectPool"></a>PartitionedAsyncObjectPool</h4><p>流程十分简单，根据线程的 id 选择 <code>SingleThreadedAsyncObjectPool</code>，然后从中获取数据库链接。不存在<strong>阻塞</strong>的可能</p>
 <h4 id="SingleThreadedAsyncObjectPool"><a href="#SingleThreadedAsyncObjectPool" class="headerlink" title="SingleThreadedAsyncObjectPool"></a>SingleThreadedAsyncObjectPool</h4><p>顾名思义，这是一个单线程的对象池。当请求获取链接时，如果有多余链接则直接返回，如果没有则加入队列，等待有链接通过 <code>giveBack</code> 方法释放时返回给队列里的某个请求。<br>这里用了 Scala 的 <code>Future</code> 和 <code>Promise</code> 实现，也不存在阻塞的情况。</p>
-<p><a href="https://github.com/mauricio/postgresql-async/blob/master/db-async-common/src/main/scala/com/github/mauricio/async/db/pool/SingleThreadedAsyncObjectPool.scala#L202" target="_blank" rel="external">分析源代码后</a>发现此处使用只有一个线程的 <code>ThreadPoolExecutor</code> 来确保同一时间只有一个线程请求链接。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// Worker.scala</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span></span>(f: =&gt; <span class="type">Unit</span>) &#123;</div><div class="line">  <span class="keyword">this</span>.executionContext.execute(<span class="keyword">new</span> <span class="type">Runnable</span> &#123;</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span></span>() &#123;</div><div class="line">      ...</div><div class="line">    &#125;</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><a href="https://github.com/mauricio/postgresql-async/blob/master/db-async-common/src/main/scala/com/github/mauricio/async/db/pool/SingleThreadedAsyncObjectPool.scala#L202" target="_blank" rel="noopener">分析源代码后</a>发现此处使用只有一个线程的 <code>ThreadPoolExecutor</code> 来确保同一时间只有一个线程请求链接。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// Worker.scala</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span></span>(f: =&gt; <span class="type">Unit</span>) &#123;</span><br><span class="line">  <span class="keyword">this</span>.executionContext.execute(<span class="keyword">new</span> <span class="type">Runnable</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span></span>() &#123;</span><br><span class="line">      ...</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上述代码中<code>this.executionContext.execute</code> 最终会执行 <code>TreadPoolExecutor.execute</code><br>而 <code>TreadPoolExecutor.execute</code> 并不是完全非阻塞的。</p>
 <p>这带来了一个问题：当多个线程同时要获取链接时，只有一个线程可以获得链接，其他线程全部处于 <code>blocked</code> 状态。</p>
-<p>由于是分区设计，并且 <a href="http://www.playframework.com" target="_blank" rel="external">Play</a> 这样的全异步框架主线程数默认非常少，所以这个问题在某些场合下并不严重。</p>
-<h3 id="Hikaricp"><a href="#Hikaricp" class="headerlink" title="Hikaricp"></a>Hikaricp</h3><p><a href="https://github.com/brettwooldridge/HikariCP" target="_blank" rel="external">HikariCP</a> 也许是目前优化得最好 JDBC 连接池。<br>该项目 <a href="https://github.com/brettwooldridge/HikariCP/wiki" target="_blank" rel="external">Wiki</a> 中的几篇文章也值得一看。</p>
+<p>由于是分区设计，并且 <a href="http://www.playframework.com" target="_blank" rel="noopener">Play</a> 这样的全异步框架主线程数默认非常少，所以这个问题在某些场合下并不严重。</p>
+<h3 id="Hikaricp"><a href="#Hikaricp" class="headerlink" title="Hikaricp"></a>Hikaricp</h3><p><a href="https://github.com/brettwooldridge/HikariCP" target="_blank" rel="noopener">HikariCP</a> 也许是目前优化得最好 JDBC 连接池。<br>该项目 <a href="https://github.com/brettwooldridge/HikariCP/wiki" target="_blank" rel="noopener">Wiki</a> 中的几篇文章也值得一看。</p>
 <p>我们无法从理论上直接得出何者性能更优的答案，后续将通过具体测试来估计何者更优。</p>
 <h2 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h2><p>为了验证上述观点，我进行了简单的性能测试，主要测试了简单查询和事务两个方面。</p>
-<h4 id="简单查询"><a href="#简单查询" class="headerlink" title="简单查询"></a>简单查询</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="number">1</span></div></pre></td></tr></table></figure>
-<h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> remain = remain + ? <span class="keyword">where</span> <span class="keyword">id</span> = ?</div><div class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> remain = remain - ? <span class="keyword">where</span> <span class="keyword">id</span> = ?</div></pre></td></tr></table></figure>
+<h4 id="简单查询"><a href="#简单查询" class="headerlink" title="简单查询"></a>简单查询</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> remain = remain + ? <span class="keyword">where</span> <span class="keyword">id</span> = ?</span><br><span class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> remain = remain - ? <span class="keyword">where</span> <span class="keyword">id</span> = ?</span><br></pre></td></tr></table></figure>
 <h3 id="简单查询-1000qps"><a href="#简单查询-1000qps" class="headerlink" title="简单查询(1000qps)"></a>简单查询(1000qps)</h3><h4 id="MysqlAsync-64链接，默认16线程"><a href="#MysqlAsync-64链接，默认16线程" class="headerlink" title="MysqlAsync (64链接，默认16线程)"></a>MysqlAsync (64链接，默认16线程)</h4><p><img src="/images/2017/04/mysql-async-select.png" alt="MysqlAsync-select"></p>
 <h4 id="JDBC-64链接，64线程"><a href="#JDBC-64链接，64线程" class="headerlink" title="JDBC  (64链接，64线程)"></a>JDBC  (64链接，64线程)</h4><p><img src="/images/2017/04/hikaricp-select.png" alt="Hikaricp-select"></p>
 <h4 id="事务-1000tps，针对100条-user-记录"><a href="#事务-1000tps，针对100条-user-记录" class="headerlink" title="事务(1000tps，针对100条 user 记录)"></a>事务(1000tps，针对100条 user 记录)</h4><h4 id="MysqlAsync-64链接，默认16线程-1"><a href="#MysqlAsync-64链接，默认16线程-1" class="headerlink" title="MysqlAsync (64链接，默认16线程)"></a>MysqlAsync (64链接，默认16线程)</h4><p><img src="/images/2017/04/mysql-async-trans.png" alt="MysqlAsync-trans"></p>
@@ -286,13 +286,13 @@
       <a class="prev" href="/2017/04/scala-weekly-1/">
         <i class="iconfont icon-left"></i>
         <span class="prev-text nav-default">Scala 技术周刊 | 第 1 期</span>
-        <span class="prev-text nav-mobile">Prev</span>
+        <span class="prev-text nav-mobile">上一篇</span>
       </a>
     
     
       <a class="next" href="/2017/04/scala-types-of-types-part-2/">
         <span class="next-text nav-default"><译> Scala 类型的类型（二）</span>
-        <span class="prev-text nav-mobile">Next</span>
+        <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>
     
@@ -340,7 +340,7 @@
     2018
     <span class="footer-author">ScalaCool.</span>
     <span class="power-by">
-        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+        由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a> 强力驱动
     </span>
 </span>
 

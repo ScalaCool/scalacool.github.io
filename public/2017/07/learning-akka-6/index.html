@@ -50,7 +50,7 @@
 <meta property="og:image" content="http://scala.cool/images/2017/07/actor-graph.png">
 <meta property="og:image" content="http://scala.cool/images/2017/07/serialized-timeline-invariants.png">
 <meta property="og:image" content="http://scala.cool/images/2017/07/actor-tree-supervision.png">
-<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta property="og:updated_time" content="2018-03-17T02:36:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Akka 系列（六）：Actor 解决了什么问题？">
 <meta name="twitter:description" content="看了 Akka 最新文档中写的 What problems does the actor model solve? ,阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。">
@@ -165,7 +165,7 @@
 
     
             <div class="post-content">
-            <p>这段时间由于忙毕业前前后后的事情，拖更了很久，表示非常抱歉，回归后的第一篇文章主要是看到了Akka最新文档中写的 <a href="http://doc.akka.io/docs/akka/current/scala/guide/actors-intro.html" target="_blank" rel="external">What problems does the actor model solve?</a> ,阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。</p>
+            <p>这段时间由于忙毕业前前后后的事情，拖更了很久，表示非常抱歉，回归后的第一篇文章主要是看到了Akka最新文档中写的 <a href="http://doc.akka.io/docs/akka/current/scala/guide/actors-intro.html" target="_blank" rel="noopener">What problems does the actor model solve?</a> ,阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。</p>
 <h2 id="Actor解决了什么问题？"><a href="#Actor解决了什么问题？" class="headerlink" title="Actor解决了什么问题？"></a>Actor解决了什么问题？</h2><p>Akka 使用 Actor 模型来克服传统面向对象编程模型的局限性，并应对高并发分布式系统所带来的挑战。 充分理解 Actor 模型是必需的，它有助于我们认识到传统的编程方法在并发和分布式计算的领域上的不足之处。</p>
 <h3 id="封装的弊端"><a href="#封装的弊端" class="headerlink" title="封装的弊端"></a>封装的弊端</h3><p>面向对象编程（OOP）是一种广泛采用的，熟悉的编程模型，它的一个核心理念就是封装，并规定对象封装的内部数据不能从外部直接访问，只允许相关的属性方法进行数据操作，比如我们熟悉的Javabean中的getX，setX等方法，对象为封装的内部数据提供安全的数据操作。</p>
 <p>举个例子，有序二叉树必须保证树节点数据的分布规则，若你想利用有序二叉树进行查询相关数据，就必须要依赖这个约束。</p>
@@ -311,13 +311,13 @@
       <a class="prev" href="/2017/07/scala-design-patterns-1/">
         <i class="iconfont icon-left"></i>
         <span class="prev-text nav-default">Scala 与设计模式（一）：Singleton 单例模式</span>
-        <span class="prev-text nav-mobile">Prev</span>
+        <span class="prev-text nav-mobile">上一篇</span>
       </a>
     
     
       <a class="next" href="/2017/07/scala-weekly-11/">
         <span class="next-text nav-default">Scala 技术周刊 | 第 11 期</span>
-        <span class="prev-text nav-mobile">Next</span>
+        <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>
     
@@ -365,7 +365,7 @@
     2018
     <span class="footer-author">ScalaCool.</span>
     <span class="power-by">
-        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+        由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a> 强力驱动
     </span>
 </span>
 

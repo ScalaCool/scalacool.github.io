@@ -42,7 +42,7 @@
 <meta property="og:description" content="Java IO 对大多数Java程序员来说是熟悉又陌生，熟悉的是感觉到处都有它的身影，小到简单的读取文件，大到各种服务器的应用，陌生的是 Java IO 背后到底是一个怎样的机制，今天就让我们去了解一下这位老朋友吧。本文不讲解 Java IO 如何具体使用，有这方面需求的同学可以自己查下。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2017/10/java-io.jpg">
-<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta property="og:updated_time" content="2018-03-17T02:36:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Asyncdb（二）：Java IO 初探">
 <meta name="twitter:description" content="Java IO 对大多数Java程序员来说是熟悉又陌生，熟悉的是感觉到处都有它的身影，小到简单的读取文件，大到各种服务器的应用，陌生的是 Java IO 背后到底是一个怎样的机制，今天就让我们去了解一下这位老朋友吧。本文不讲解 Java IO 如何具体使用，有这方面需求的同学可以自己查下。">
@@ -186,7 +186,7 @@
 </ul>
 <p>总的来说非阻塞IO的非阻塞主要体现在不需要一直等待到有数据，当然读数据那部分操作还是阻塞的，另外这种非阻塞模式需要用户线程自己不断询问检查，其实效率也不是太高，实际编程中运用的也不多。</p>
 <h4 id="3-多路复用-IO"><a href="#3-多路复用-IO" class="headerlink" title="3.多路复用 IO"></a>3.多路复用 IO</h4><p>既然上面我们说到非阻塞IO的缺点，那么有没有什么方式改进呢？答案是当然有，那就是多路复用IO，我理解的它的特点就是复用，首先它也是一种非阻塞IO的模型，只不过上面说到轮询的方式用了不同的方式处理了，当一个线程发起IO请求，系统会将它注册到一个单独管理IO请求的一个线程，之后该IO的相关操作的通知状态都有这个管理IO请求的线程处理，Java 1.4发布的NIO就是这种模式，我们可以大致来看一下它的流程：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 打开服务器套接字通道</span></div><div class="line">ServerSocketChannel ssc = ServerSocketChannel.open();</div><div class="line"><span class="comment">// 服务器配置为非阻塞</span></div><div class="line">ssc.configureBlocking(<span class="keyword">false</span>);</div><div class="line"><span class="comment">// 进行服务的绑定</span></div><div class="line">ssc.bind(<span class="keyword">new</span> InetSocketAddress(<span class="string">"localhost"</span>, <span class="number">8008</span>));</div><div class="line"><span class="comment">// 这里的selector就相当于单独管理IO请求的线程</span></div><div class="line">Selector selector = Selector.open();</div><div class="line"><span class="comment">// 注册到selector，等待连接</span></div><div class="line">ssc.register(selector, SelectionKey.OP_ACCEPT);</div><div class="line"></div><div class="line"><span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">    selector.select();  <span class="comment">//为IO请求去轮询状态</span></div><div class="line">    Set&lt;SelectionKey&gt; keys = selector.selectedKeys(); <span class="comment">//多个IO请求的状态</span></div><div class="line">    Iterator&lt;SelectionKey&gt; keyIterator = keys.iterator();</div><div class="line">    <span class="keyword">while</span> (keyIterator.hasNext()) &#123; <span class="comment">//依次处理IO请求</span></div><div class="line">        SelectionKey key = keyIterator.next();</div><div class="line">        doThing(key)</div><div class="line">        ...</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 打开服务器套接字通道</span></span><br><span class="line">ServerSocketChannel ssc = ServerSocketChannel.open();</span><br><span class="line"><span class="comment">// 服务器配置为非阻塞</span></span><br><span class="line">ssc.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line"><span class="comment">// 进行服务的绑定</span></span><br><span class="line">ssc.bind(<span class="keyword">new</span> InetSocketAddress(<span class="string">"localhost"</span>, <span class="number">8008</span>));</span><br><span class="line"><span class="comment">// 这里的selector就相当于单独管理IO请求的线程</span></span><br><span class="line">Selector selector = Selector.open();</span><br><span class="line"><span class="comment">// 注册到selector，等待连接</span></span><br><span class="line">ssc.register(selector, SelectionKey.OP_ACCEPT);</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">    selector.select();  <span class="comment">//为IO请求去轮询状态</span></span><br><span class="line">    Set&lt;SelectionKey&gt; keys = selector.selectedKeys(); <span class="comment">//多个IO请求的状态</span></span><br><span class="line">    Iterator&lt;SelectionKey&gt; keyIterator = keys.iterator();</span><br><span class="line">    <span class="keyword">while</span> (keyIterator.hasNext()) &#123; <span class="comment">//依次处理IO请求</span></span><br><span class="line">        SelectionKey key = keyIterator.next();</span><br><span class="line">        doThing(key)</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看出Java NIO的模式就是多路复用IO模型的应用。</p>
 <p>小明多路复用IO吃饭：</p>
 <p>随着生意越来越好，外婆家发现好多顾客都堵在门口等待吃饭，等待区都站不下来人了，，思来想去，外婆家准备请一个人专门来维护顾客的排队请求，这样顾客取号后，就不用堵在门口了，我们叫他小A，小明这次取号后，将自己的相关信息告诉小A，并从小A那里获得了一个GPS（用于小A能快速找到小明，假设有了GPS后，小A能秒速找到小明），然后小明就跟朋友们开心的去逛商场，看看MM，买买衣服，而小A则不断的观察店里的情况，当有空座位出现的时候，他便会按照相关信息找到具体的顾客，将其带回进行用餐，但他们进店点菜，还得等待上菜，最后他们吃饭总共花了两个小时，但是他们不再需要排队等位，而是去做一些其他的事。</p>
@@ -224,9 +224,9 @@
 <p><img src="/images/2017/10/java-io.jpg" alt="java-io"></p>
 <h3 id="多路复用-IO-在-Linux-中的实现"><a href="#多路复用-IO-在-Linux-中的实现" class="headerlink" title="多路复用 IO 在 Linux 中的实现"></a>多路复用 IO 在 Linux 中的实现</h3><p>因为后续会讲到Java NIO，所以我们需要了解操作系统是如何支持多路复用IO的，Linux中支持支持三种多路IO复用机制，分别是select、poll和epoll，本来这里我想自己写的，但查阅了相应的一些资料后，发现自己的水平还是不够，这里我不准备班门弄斧了，因为我找到了很多写的比较好的文章，这里就给大家列一下，仅供参考：</p>
 <ul>
-<li><a href="http://blog.csdn.net/tennysonsky/article/details/45745887" target="_blank" rel="external">Linux系统编程——I/O多路复用select、poll、epoll的区别使用</a></li>
-<li><a href="http://www.jianshu.com/p/dfd940e7fca2" target="_blank" rel="external">聊聊IO多路复用之select、poll、epoll详解</a></li>
-<li><a href="https://www.zhihu.com/question/32163005" target="_blank" rel="external">IO 多路复用是什么意思？</a></li>
+<li><a href="http://blog.csdn.net/tennysonsky/article/details/45745887" target="_blank" rel="noopener">Linux系统编程——I/O多路复用select、poll、epoll的区别使用</a></li>
+<li><a href="http://www.jianshu.com/p/dfd940e7fca2" target="_blank" rel="noopener">聊聊IO多路复用之select、poll、epoll详解</a></li>
+<li><a href="https://www.zhihu.com/question/32163005" target="_blank" rel="noopener">IO 多路复用是什么意思？</a></li>
 </ul>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这篇文章主要讲了最基础的IO模型，不过我认为最基础的往往是最重要的，只有理解了基础的原理，才能对基于它们实现的类库或者工具有更加深刻的认识，下一篇文章将会主要讲一下基于多路复用IO的Java NIO，敬请期待。</p>
 
@@ -256,13 +256,13 @@
       <a class="prev" href="/2017/10/scala-weekly-25/">
         <i class="iconfont icon-left"></i>
         <span class="prev-text nav-default">Scala 技术周刊 | 第 25 期</span>
-        <span class="prev-text nav-mobile">Prev</span>
+        <span class="prev-text nav-mobile">上一篇</span>
       </a>
     
     
       <a class="next" href="/2017/10/scala-weekly-24/">
         <span class="next-text nav-default">Scala 技术周刊 | 第 24 期</span>
-        <span class="prev-text nav-mobile">Next</span>
+        <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>
     
@@ -310,7 +310,7 @@
     2018
     <span class="footer-author">ScalaCool.</span>
     <span class="power-by">
-        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+        由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a> 强力驱动
     </span>
 </span>
 

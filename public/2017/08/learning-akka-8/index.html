@@ -46,7 +46,7 @@
 <meta property="og:image" content="http://scala.cool/images/2017/08/common-action.png">
 <meta property="og:image" content="http://scala.cool/images/2017/08/cqrs-action.png">
 <meta property="og:image" content="http://scala.cool/images/2017/08/cqrs-example.png">
-<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta property="og:updated_time" content="2018-03-17T02:36:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Akka 系列（八）：Akka persistence 设计理念之 CQRS">
 <meta name="twitter:description" content="这一篇文章主要是讲解Akka persistence的核心设计理念，也是CQRS（Command Query Responsibility Segregation）架构设计的典型应用，就让我们来看看为什么Akka persistence会采用CQRS架构设计。">
@@ -208,7 +208,7 @@
 
 <p>可以看出，Akka Persistence的原理完全是基于CQRS的架构设计的，另外Persistence Actor还会保存一个内存状态，相当于一个in memory数据库，可以用来提供关键数据的存储和查询，比如前面说到的库存，余额等数据，这部分的设计取决于具体的业务场景。</p>
 <p>阅读Akka Persistence相关源码，其的核心就在于PersistentActor接口中的几个持久方法，比如其中的</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">persist</span></span>[<span class="type">A</span>](event: <span class="type">A</span>)(handler: <span class="type">A</span> ⇒ <span class="type">Unit</span>): <span class="type">Unit</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">persistAll</span></span>[<span class="type">A</span>](events: immutable.<span class="type">Seq</span>[<span class="type">A</span>])(handler: <span class="type">A</span> ⇒ <span class="type">Unit</span>): <span class="type">Unit</span></div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">persist</span></span>[<span class="type">A</span>](event: <span class="type">A</span>)(handler: <span class="type">A</span> ⇒ <span class="type">Unit</span>): <span class="type">Unit</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">persistAll</span></span>[<span class="type">A</span>](events: immutable.<span class="type">Seq</span>[<span class="type">A</span>])(handler: <span class="type">A</span> ⇒ <span class="type">Unit</span>): <span class="type">Unit</span></span><br></pre></td></tr></table></figure>
 <p>等方法，它们都有两个参数，一个是持久化的事件，一个是持久化后的后续处理逻辑，我们可以在后续handler中修改Actor内部状态，向外部发送消息等操作,这里的模式就是基于CQRS架构的，修改状态有事件驱动，另外Akka还可以在系统出错时，利用相应的事件恢复Actor的状态。</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总的来说，CQRS架构是一种不同于以往的CRUD的架构，所以你在享受它带来的高性能的同时可能会遇到一些奇怪的问题，当然这些都是可以解决的，重要的是思维上的改变，比如事件驱动，领域模型等概念，不过相信当你理解并掌握它之后，你便会爱上它的。</p>
 
@@ -234,13 +234,13 @@
       <a class="prev" href="/2017/08/scala-weekly-17/">
         <i class="iconfont icon-left"></i>
         <span class="prev-text nav-default">Scala 技术周刊 | 第 17 期</span>
-        <span class="prev-text nav-mobile">Prev</span>
+        <span class="prev-text nav-mobile">上一篇</span>
       </a>
     
     
       <a class="next" href="/2017/08/scala-weekly-16/">
         <span class="next-text nav-default">Scala 技术周刊 | 第 16 期</span>
-        <span class="prev-text nav-mobile">Next</span>
+        <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>
     
@@ -288,7 +288,7 @@
     2018
     <span class="footer-author">ScalaCool.</span>
     <span class="power-by">
-        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+        由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a> 强力驱动
     </span>
 </span>
 
