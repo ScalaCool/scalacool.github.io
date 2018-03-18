@@ -7,7 +7,7 @@ tags:
 - ~用 Swift 模仿 Vue + Vuex 进行 iOS 开发
 - ^Yison
 description: Soroush Khanlou 写过一篇文章就八个方面来解救 Massive View Controller 的问题。我们今天要讨论的内容，也在这篇文章中有所提及，那就是如何对 Navigator 进行解耦。
-date: 2018-03-20
+date: 2018-03-18
 ---
 
 [前文](https://scala.cool/2017/12/swift-vue-like-1/) 探讨了 ReSwift，它是基于「单向数据流」的架构方案，来解决 Massive View Controller 灾难。
