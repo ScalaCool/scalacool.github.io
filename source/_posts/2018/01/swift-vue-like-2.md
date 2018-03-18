@@ -304,4 +304,4 @@ override func start(with option: DeepLinkOption?) {
 
 本文专门介绍了 Coordinator 模式来对 iOS 开发中的 navigator 进行了深度的解耦。然而当今仍没有权威标准的解决方案，感兴趣的同学建议去 github 参考下其他更优秀的实践方案。
 
-接下来的第三篇文章计划就 Swift 语言的 extension 语法进行深入的介绍和分析，它是构建「类 Vuex」打法的核心。
+接下来的第三篇文章计划就 Swift 语言的 extension 语法进行深入的介绍和分析，它是构建「类 Vue + Vuex」打法的核心之一。
