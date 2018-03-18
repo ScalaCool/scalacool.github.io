@@ -84,7 +84,7 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
 但主流的方式，最多是这两种：
 - 通过抽象一个 BaseViewController 来内置 Coordinator 对象
-- 通过 protocal 和 delegate 来建立 Coordinator 和 ViewController 之间的联系，前者对后者的「事件方法」进行实现
+- 通过 protocol 和 delegate 来建立 Coordinator 和 ViewController 之间的联系，前者对后者的「事件方法」进行实现
 
 由于个人更倾向于低耦合的方案，所以接下来我们会采用第二种方案。
 

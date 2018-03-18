@@ -41,7 +41,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="Soroush Khanlou 写过一篇文章就八个方面来解救 Massive View Controller 的问题。我们今天要讨论的内容，也在这篇文章中有所提及，那就是如何对 Navigator 进行解耦。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-18T08:16:19.000Z">
+<meta property="og:updated_time" content="2018-03-18T08:24:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用 Swift 模仿 Vue + Vuex 进行 iOS 开发（二）：Coordinator">
 <meta name="twitter:description" content="Soroush Khanlou 写过一篇文章就八个方面来解救 Massive View Controller 的问题。我们今天要讨论的内容，也在这篇文章中有所提及，那就是如何对 Navigator 进行解耦。">
@@ -186,7 +186,7 @@
 <p>但主流的方式，最多是这两种：</p>
 <ul>
 <li>通过抽象一个 BaseViewController 来内置 Coordinator 对象</li>
-<li>通过 protocal 和 delegate 来建立 Coordinator 和 ViewController 之间的联系，前者对后者的「事件方法」进行实现</li>
+<li>通过 protocol 和 delegate 来建立 Coordinator 和 ViewController 之间的联系，前者对后者的「事件方法」进行实现</li>
 </ul>
 <p>由于个人更倾向于低耦合的方案，所以接下来我们会采用第二种方案。</p>
 <blockquote>
