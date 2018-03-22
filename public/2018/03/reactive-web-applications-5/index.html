@@ -44,7 +44,7 @@
 <meta property="og:image" content="http://scala.cool/images/2018/03/SINGLE-SERVER-DEPLOYMENTS.png">
 <meta property="og:image" content="http://scala.cool/images/2018/03/REPLICATED-DEPLOYMENTS.png">
 <meta property="og:image" content="http://scala.cool/images/2018/03/HORIZONTAL-DEPLOYMENTS.png">
-<meta property="og:updated_time" content="2018-03-17T02:36:00.000Z">
+<meta property="og:updated_time" content="2018-03-16T10:04:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;译&gt; 响应式 Web 应用（五）">
 <meta name="twitter:description" content="在开发 Web 应用的时候，一些必须要考虑到的基本因素将会对程序的操作方式才生深远的影响，本文将会介绍一些部署模式，以便我们在程序设计之初就能充分考虑程序所需要的架构体系。">
@@ -176,7 +176,7 @@
 <p>这些节点可能是计算机或者虚拟机，但都有一个重要的特点就是彼此互不了解，并且也不共享任何状态。这种“非共享”的原则就是「无状态」架构的核心。</p>
 <p>这些节点都是独立的，其中某一个的缺失或者存在都不会以任何方式影响其他节点（除了负载增加或减少时可能会有影响，当然这取决于流量的大小）。这种架构的优点是，只需要通过向前端路由器添加新节点，可以很容易地扩展应用程序。</p>
 <p>在这种模式下，我们也能实现滚动更新节点，首先将带有新版本应用程序的新节点引入进来，然后将路由层切换一下使其指向新的节点，这样就完成了更新。这种被称作为「热部署」的机制很很受“平台即服务”（PaaS）供应商们的欢迎，比如 Heroku。</p>
-<p>在存储方面，与无共享的 web 应用程序相对应的是一种支持某种集群形式的存储技术。如 MongoDB、Cassandra、Couchbase 以及新版本的关系型数据库（如 <a href="http://webscalesql.org" target="_blank" rel="noopener">WebScaleSQL</a>），这些 NoSQL 型的数据库非常适合这种可扩展的前端层。</p>
+<p>在存储方面，与无共享的 web 应用程序相对应的是一种支持某种集群形式的存储技术。如 MongoDB、Cassandra、Couchbase 以及新版本的关系型数据库（如 <a href="http://webscalesql.org" target="_blank" rel="external">WebScaleSQL</a>），这些 NoSQL 型的数据库非常适合这种可扩展的前端层。</p>
 <p>使用水平架构的一个结果是用户可以通过路由层随机连接到其中一个前端节点，而不是总是在同一个节点上。由于节点之间不存在共享状态，因此无法使用服务器端 session （Servlet 标准以及基于 Servlet 标准而构建的框架中默认存在的）。 Play 框架的核心是「无共享」，并提供了基于 cookie 的客户端用户 session，这点我们将在第 8 章中讨论。</p>
 <p>由于 Play! 所占用的内存很小，所以在通过 PaaS 或其他云平台进行多点部署时，Play! 将会是一个理想的选择，因为这些部署平台中单个节点的可用内存要远远低于一台专用服务器。</p>
 
