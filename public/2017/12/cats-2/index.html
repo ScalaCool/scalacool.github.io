@@ -41,7 +41,7 @@
 <meta property="og:site_name" content="Scala Cool">
 <meta property="og:description" content="上一篇文章我们介绍了函数式编程的思维，这一篇我们来了解下函数式编程的魅力。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-17T02:36:00.000Z">
+<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cats（二）：引用透明性和等式推理">
 <meta name="twitter:description" content="上一篇文章我们介绍了函数式编程的思维，这一篇我们来了解下函数式编程的魅力。">
@@ -159,19 +159,19 @@
 <p>我们已经说过，函数式编程最关键的事情就是在做「组合」。然而，这种可被组合的「函数式组件」到底是怎样的？换句话说，它们必定符合某些规律和原则。</p>
 <p>当前我们已知晓的是，函数式编程是近似于数学中推理的过程。那么我们思考下，数学中的推理具备怎样的特点？</p>
 <p>很快，我们便可以发现数学推理最大的一个优点 —「<strong>只要推理逻辑正确，结果便千真万确</strong>」。</p>
-<p>其实，这也便是本篇文章要描述的函数式编程的一个很大的优势，所谓的「<a href="https://wiki.haskell.org/Equational_reasoning_examples" target="_blank" rel="noopener">等式推理</a>」。</p>
+<p>其实，这也便是本篇文章要描述的函数式编程的一个很大的优势，所谓的「<a href="https://wiki.haskell.org/Equational_reasoning_examples" target="_blank" rel="external">等式推理</a>」。</p>
 <p>那么，我们再进一步探讨，「是所谓怎样的原则和方法，才能使函数式编程具备如此特点？」。</p>
-<h2 id="引用透明性"><a href="#引用透明性" class="headerlink" title="引用透明性"></a>引用透明性</h2><p>答案便是 <a href="https://en.wikipedia.org/wiki/Referential_transparency" target="_blank" rel="noopener">引用透明性</a>，它在数学和计算机中都有近似的定义。</p>
+<h2 id="引用透明性"><a href="#引用透明性" class="headerlink" title="引用透明性"></a>引用透明性</h2><p>答案便是 <a href="https://en.wikipedia.org/wiki/Referential_transparency" target="_blank" rel="external">引用透明性</a>，它在数学和计算机中都有近似的定义。</p>
 <blockquote>
 <p>An expression is said to be referentially transparent if it can be replaced with its corresponding value without changing the program’s behavior. As a result, evaluating a referentially transparent function gives the same value for same arguments. Such functions are called pure functions.</p>
 </blockquote>
 <p>简单地，我们可以理解为「<strong>一个表达式在程序中可以被它等价的值替换，而不影响结果</strong>」。如果一个函数的输入相同，对应的计算结果也相同，那么它就具备「引用透明性」，它可被称为「纯函数」。</p>
 <p>举个例子：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>, y: <span class="type">Int</span>) = x + y</span><br><span class="line"></span><br><span class="line">println(f(<span class="number">2</span>, <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>, y: <span class="type">Int</span>) = x + y</div><div class="line"></div><div class="line">println(f(<span class="number">2</span>, <span class="number">3</span>))</div></pre></td></tr></table></figure>
 <p>其实我们完全可以用 5 来直接替代 <code>f(2, 3)</code>，而对结果不会产生任何影响。</p>
 <p>这个非常容易理解，那么反过来怎样才算「非引用透明性」呢？</p>
 <p>再来举个例子：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">count</span></span>(x: <span class="type">Int</span>) = &#123;</span><br><span class="line">	a = a + <span class="number">1</span></span><br><span class="line">	x + a</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">count(<span class="number">1</span>) <span class="comment">// 3</span></span><br><span class="line">count(<span class="number">1</span>) <span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">1</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">count</span></span>(x: <span class="type">Int</span>) = &#123;</div><div class="line">	a = a + <span class="number">1</span></div><div class="line">	x + a</div><div class="line">&#125;</div><div class="line"></div><div class="line">count(<span class="number">1</span>) <span class="comment">// 3</span></div><div class="line">count(<span class="number">1</span>) <span class="comment">// 4</span></div></pre></td></tr></table></figure>
 <p>在以上代码中，我们会发现多次调用 <code>count(1)</code> 得到的结果并不相同，显然这是受到了外部变量 <code>a</code> 的影响，我们把这个称为 <strong>副作用</strong>。</p>
 <h2 id="副作用"><a href="#副作用" class="headerlink" title="副作用"></a>副作用</h2><p>简单理解，「副作用」就是 <strong>changing something somewhere</strong>，例如：</p>
 <ul>
@@ -185,22 +185,22 @@
 <p>注：这里的异步操作函数，举个例子可以是数据库的读写操作，我们会在后面的文章中介绍如何实现。</p>
 </blockquote>
 <h2 id="不可变性"><a href="#不可变性" class="headerlink" title="不可变性"></a>不可变性</h2><p>以上我们已经提到「不可变性」是促进引用透明性一个很关键的特性。在 Haskell 中，任何变量都是不可变的，在 Scala 中我们可以使用 <code>val</code> （而不是 <code>var</code>）来声明不可变变量。</p>
-<p>显然，越来越多的编程语言都支持这一特性。如 Swift 中的 <code>let</code>，ES6 中的 <code>const</code>。以及一些有名的开源项目，如 Facebook 的 <a href="https://github.com/facebook/immutable-js/" target="_blank" rel="noopener">Immutable.js</a>。</p>
+<p>显然，越来越多的编程语言都支持这一特性。如 Swift 中的 <code>let</code>，ES6 中的 <code>const</code>。以及一些有名的开源项目，如 Facebook 的 <a href="https://github.com/facebook/immutable-js/" target="_blank" rel="external">Immutable.js</a>。</p>
 <p>那么，关于「引用透明性」的部分我们是否已经讲完了呢？</p>
 <p>等等，前面提到「引用透明性」的关键点之一，就是返回相同的计算结果。这里，我们打算再深入一步，研究下什么才是所谓「相同的计算结果」，它仅仅指的就是返回相同的值吗？</p>
 <h2 id="代换模型"><a href="#代换模型" class="headerlink" title="代换模型"></a>代换模型</h2><p>我们来看下这段代码，它符合我们所说的引用透明性：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span></span>(x: <span class="type">Int</span>, y: <span class="type">Int</span>) = x</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = f2(x)</span><br><span class="line">f1(<span class="number">1</span>, f2(<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span></span>(x: <span class="type">Int</span>, y: <span class="type">Int</span>) = x</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = f2(x)</div><div class="line">f1(<span class="number">1</span>, f2(<span class="number">2</span>))</div></pre></td></tr></table></figure>
 <p>用 Scala 开发的小伙伴看了相当气愤，这是一段自杀式的代码，如果我们执行了它，那么 <code>f2</code> 必然被不断调用，从而导致死循环。</p>
 <blockquote>
 <p>似乎已经有了答案，所谓「相同的计算结果」，还可以是死循环。。。</p>
 </blockquote>
 <p>这时，一个会 Haskell 的程序员路过，迷之微笑，花了 10 秒钟翻译成了以下的版本：</p>
-<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">f1</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span></span><br><span class="line"><span class="title">f1</span> x y = x + y</span><br><span class="line"></span><br><span class="line"><span class="title">f2</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span></span><br><span class="line"><span class="title">f2</span> x = x</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="title">f1</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span></div><div class="line"><span class="title">f1</span> x y = x + y</div><div class="line"></div><div class="line"><span class="title">f2</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span></div><div class="line"><span class="title">f2</span> x = x</div></pre></td></tr></table></figure>
 <p>运行 <code>ghci</code> 载入函数后调用 <code>f1 1 (f2 2)</code>，你就会发现：纳尼！竟然成功返回了结果 1。这到底是怎么回事呢？</p>
 <h3 id="应用序-vs-正则序"><a href="#应用序-vs-正则序" class="headerlink" title="应用序 vs 正则序"></a>应用序 vs 正则序</h3><p>也许相当多开发的同学至今未曾思考过这个问题：<strong>编程语言中的表达式求值策略是怎样的？</strong></p>
 <p>其实，编程语言中存在两种不同的代换模型：<strong>应用序</strong> 和 <strong>正则序</strong>。</p>
 <p>大部分我们熟悉如 Scala、C、Java 是「应用序」语言，当要执行一个过程时，就会对过程参数进行求值，这也是上述 Scala 代码导致死循环的原因，当我们调用 <code>f1(1, f2(2))</code> 的时候，程序会先对 <code>f2(2)</code> 进行求值，从而不断地调用 <code>f2</code> 函数。</p>
-<p>然而，Haskell 采用了不一样的逻辑，它会延迟对过程参数的求值，直到确实需要用到它的时候，才进行计算，这就是所谓的「正则序」，也就是我们常说的 <a href="https://en.wikipedia.org/wiki/Lazy_evaluation" target="_blank" rel="noopener">惰性求值</a>。当我们调用 <code>f1 1 (f2 2)</code> 后，由于 <code>f1</code> 的过程中压根不需要用到 <code>y</code>，所以它就不会对 <code>f2 2</code> 进行求值，直接返回 <code>x</code> 值，也就是 1。</p>
+<p>然而，Haskell 采用了不一样的逻辑，它会延迟对过程参数的求值，直到确实需要用到它的时候，才进行计算，这就是所谓的「正则序」，也就是我们常说的 <a href="https://en.wikipedia.org/wiki/Lazy_evaluation" target="_blank" rel="external">惰性求值</a>。当我们调用 <code>f1 1 (f2 2)</code> 后，由于 <code>f1</code> 的过程中压根不需要用到 <code>y</code>，所以它就不会对 <code>f2 2</code> 进行求值，直接返回 <code>x</code> 值，也就是 1。</p>
 <blockquote>
 <p>注：对以上情况进行描述的角度，还有你可能知道的「传值调用」和「引用调用」。</p>
 </blockquote>
@@ -212,15 +212,15 @@
 <h2 id="如何组合副作用"><a href="#如何组合副作用" class="headerlink" title="如何组合副作用"></a>如何组合副作用</h2><p><strong>函数式编程思维，就是抽象并组合一切，包括现实中的副作用。</strong></p>
 <p>常见的副作用，如 IO 操作，到底如何组合呢？</p>
 <p>来一段代码：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">println(<span class="string">"I am a IO operation."</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">println(<span class="string">"I am a IO operation."</span>)</div></pre></td></tr></table></figure>
 <p>显然，这里的 <code>println</code> 不是个纯函数，它不利于组合。我们该如何解决这个问题？</p>
 <p>先看看 Haskell 中的惰性求值是如何实现的。</p>
 <h3 id="Thunk"><a href="#Thunk" class="headerlink" title="Thunk"></a>Thunk</h3><blockquote>
-<p>A <a href="https://wiki.haskell.org/Thunk" target="_blank" rel="noopener">thunk</a> is a value that is yet to be evaluated. It is used in Haskell systems, that implement non-strict semantics by lazy evaluation.</p>
+<p>A <a href="https://wiki.haskell.org/Thunk" target="_blank" rel="external">thunk</a> is a value that is yet to be evaluated. It is used in Haskell systems, that implement non-strict semantics by lazy evaluation.</p>
 </blockquote>
 <p>Haskell 中的惰性求值是靠 Thunk 这种机制来实现的。我们也可以在其它编程语言中通过提供一个 thunk 函数来模拟类似的效果。</p>
 <p>要理解 Thunk 其实很容易，比如针对以上的非纯函数，我们就可以如此改造，让它变得 “lazy”：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Pure</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">println</span></span>(msg: <span class="type">String</span>) =</span><br><span class="line">    () =&gt; <span class="type">Predef</span>.println(msg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Pure</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">println</span></span>(msg: <span class="type">String</span>) =</div><div class="line">    () =&gt; <span class="type">Predef</span>.println(msg)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>如此，当我们的程序调用 <code>Pure.println(&quot;I am a IO operation.&quot;)</code> 的时候，它仅仅只是返回一个可以进行 <code>println</code> 的函数，它是惰性的，也是可替代的。这样，我们就可以在程序中将这些 IO 操作进行组合，最后再执行它们。</p>
 <p>也许你还会思考，这里的 thunk 函数何时会被调用，以及如果要用以上的思路开发业务，我们该如何避免在业务过程中避免这些随机大量的 thunk 函数。</p>
 <p>关于这些，我们会在后续的文章中继续介绍，它跟所谓的 Free Monad 有关。</p>

@@ -47,7 +47,7 @@
 <meta property="og:image" content="https://scala.cool/images/2017/11/write-buffer-2.png">
 <meta property="og:image" content="https://scala.cool/images/2017/11/read-buffer.png">
 <meta property="og:image" content="https://scala.cool/images/2017/11/read-buffer-2.png">
-<meta property="og:updated_time" content="2018-03-17T02:36:00.000Z">
+<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Asyncdb（三）：Java NIO">
 <meta name="twitter:description" content="上篇说了最基础的五种IO模型，相信大家对IO相关的概念应该有了一定的了解，这篇文章主要讲讲基于多路复用IO的Java NIO。">
@@ -168,7 +168,7 @@
 <p><img src="https://scala.cool/images/2017/11/java-nio.png" alt="java-nio"></p>
 <p>它们之间的关系很清晰，一个线程对应着一个Selector，一个 Selector 对应着多个Channel，一个Channel对应着一个Buffer，当然这只是通常的做法，一个Channel也可以对应多个Selector，一个Channel对应着多个Buffer。</p>
 <h4 id="Selector"><a href="#Selector" class="headerlink" title="Selector"></a>Selector</h4><p>个人认为Selector是Java NIO的最大特点，之前我们说过，传统的Java IO在面对大量IO请求的时候有心无力，因为每个维护每一个IO请求都需要一个线程，这带来的问题就是，系统资源被极度消耗，吞吐量直线下降，引起系统相关问题，那么Java NIO是如何解决这个问题的呢？答案就是Selector，简单来说它对应着多路IO复用中的监管角色，它负责统一管理IO请求，监听相应的IO事件，并通知对应的线程进行处理，这种模式下就无需为每个IO请求单独分配一个线程，另外也减少线程大量阻塞，资源利用率下降的情况，所以说Selector是Java NIO的精髓，在Java中我们可以这么写：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 打开服务器套接字通道</span></span><br><span class="line">ServerSocketChannel ssc = ServerSocketChannel.open();</span><br><span class="line"><span class="comment">// 服务器配置为非阻塞</span></span><br><span class="line">ssc.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line"><span class="comment">// 进行服务的绑定</span></span><br><span class="line">ssc.bind(<span class="keyword">new</span> InetSocketAddress(<span class="string">"localhost"</span>, <span class="number">8001</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过open()方法找到Selector</span></span><br><span class="line">Selector selector = Selector.open();</span><br><span class="line"><span class="comment">// 注册到selector，等待连接</span></span><br><span class="line">ssc.register(selector, SelectionKey.OP_ACCEPT);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 打开服务器套接字通道</span></div><div class="line">ServerSocketChannel ssc = ServerSocketChannel.open();</div><div class="line"><span class="comment">// 服务器配置为非阻塞</span></div><div class="line">ssc.configureBlocking(<span class="keyword">false</span>);</div><div class="line"><span class="comment">// 进行服务的绑定</span></div><div class="line">ssc.bind(<span class="keyword">new</span> InetSocketAddress(<span class="string">"localhost"</span>, <span class="number">8001</span>));</div><div class="line"></div><div class="line"><span class="comment">// 通过open()方法找到Selector</span></div><div class="line">Selector selector = Selector.open();</div><div class="line"><span class="comment">// 注册到selector，等待连接</span></div><div class="line">ssc.register(selector, SelectionKey.OP_ACCEPT);</div><div class="line">...</div></pre></td></tr></table></figure>
 <h4 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h4><p>Channel本意是通道的意思，简单来说，它在Java NIO中表现的就是一个数据通道，但是这个通道有一个特点，那就是它是双向的，也就是说，我们可以从通道里接收数据，也可以向通道里写数据，不用像Java BIO那样，读数据和写数据需要不同的数据通道，比如最常见的Inputstream和Outputstream，但是它们都是单向的，Channel作为一种全新的设计，它帮助系统以相对小的代价来保持IO请求数据传输的处理，但是它并不真正存放数据，它总是结合着缓存区（Buffer）一起使用，另外Channel主要有以下四种：</p>
 <ul>
 <li>FileChannel：读写文件时使用的通道</li>
@@ -194,7 +194,7 @@
 </ul>
 <p>根据它们的特性，我们可以大致总结出它们的适用场景：</p>
 <p>如果这个Buffer可以重复利用，而且你也想多个字节操作，亦或者你对性能要求很高，可以选择使用Direct Buffer，但其编码相对来说会比较复杂，需要注意的点也更多，反之则用Heap Buffer，Buffer的相应创建方法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建Heap Buffer</span></span><br><span class="line">ByteBuffer heapBuffer = ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建Direct Buffer</span></span><br><span class="line">ByteBuffer directBuffer = ByteBuffer.allocateDirect(<span class="number">1024</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//创建Heap Buffer</span></div><div class="line">ByteBuffer heapBuffer = ByteBuffer.allocate(<span class="number">1024</span>);</div><div class="line"></div><div class="line"><span class="comment">//创建Direct Buffer</span></div><div class="line">ByteBuffer directBuffer = ByteBuffer.allocateDirect(<span class="number">1024</span>);</div></pre></td></tr></table></figure>
 <p>下面我们来看看它的三个属性：</p>
 <ul>
 <li>Capacity：顾名思义它的含义是容量，代表着Buffer的最大容量，与数组的Size很类似，初始化不可更改，除非你改变的Buffer的结构；</li>
@@ -203,23 +203,23 @@
 </ul>
 <p>接下来我会用一个图解的列子帮助大家理解,现在我们假设有一个容量为10的Buffer，我们先往里面写入一定字节的数据，然后再根据编码规则从其中读取我们需要的数据：</p>
 <p>1.初始Buffer：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ByteBuffer buffer = ByteBuffer.allocate(<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ByteBuffer buffer = ByteBuffer.allocate(<span class="number">10</span>);</div></pre></td></tr></table></figure>
 <p><img src="https://scala.cool/images/2017/11/init-buffer.png" alt="init-buffer"></p>
 <p>2.向Buffer中写入两个字节：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buffer.put(<span class="string">"my"</span>.getBytes());</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">buffer.put(<span class="string">"my"</span>.getBytes());</div></pre></td></tr></table></figure>
 <p><img src="https://scala.cool/images/2017/11/write-buffer-1.png" alt="write-buffer-1"></p>
 <p>3.再Buffer中写入四个字节：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buffer.put(<span class="string">"blog"</span>.getBytes());</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">buffer.put(<span class="string">"blog"</span>.getBytes());</div></pre></td></tr></table></figure>
 <p><img src="https://scala.cool/images/2017/11/write-buffer-2.png" alt="write-buffer-2"></p>
 <p>4.现在我们需要从Buffer中获取数据，首先我们先将写模式转换为读模式：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buffer.flip();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">buffer.flip();</div></pre></td></tr></table></figure>
 <p>我们来看看flip()方法到底做了什么事？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">flip</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    limit = position;</span><br><span class="line">    position = <span class="number">0</span>;</span><br><span class="line">    mark = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">flip</span><span class="params">()</span> </span>&#123;</div><div class="line">    limit = position;</div><div class="line">    position = <span class="number">0</span>;</div><div class="line">    mark = -<span class="number">1</span>;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>从源码中可以看出，flip方法根据Buffer目前的相应属性来修改对应的属性，所以flip()方法之后，Buffer目前的状态：</p>
 <p><img src="https://scala.cool/images/2017/11/read-buffer.png" alt="read-buffer"></p>
 <p>5.接着我们从Buffer中读取数据</p>
 <p>从Buffer中读取数据有多种方式，比如get(),get(byte [])等，相关的具体方法使用可以参考Buffer的官方API文档，这里我们用最简单的get()来获取数据:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span> a = buffer.get();</span><br><span class="line"><span class="keyword">byte</span> b = buffer.get();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">byte</span> a = buffer.get();</div><div class="line"><span class="keyword">byte</span> b = buffer.get();</div></pre></td></tr></table></figure>
 <p>此时Buffer的状态如下图所示：</p>
 <p><img src="https://scala.cool/images/2017/11/read-buffer-2.png" alt="read-buffer-2"></p>
 <p>我们可以按照这种方式读取完我们所需数据，最终调用clear()方法将Buffer置为初始状态。</p>

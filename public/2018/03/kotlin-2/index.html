@@ -46,7 +46,7 @@
 <meta property="og:image" content="http://scala.cool/images/2018/03/kotlin-filter.png">
 <meta property="og:image" content="http://scala.cool/images/2018/03/kotlin-map.png">
 <meta property="og:image" content="http://scala.cool/images/2018/03/kotlin-flatMap.png">
-<meta property="og:updated_time" content="2018-03-22T05:35:54.000Z">
+<meta property="og:updated_time" content="2018-03-23T04:18:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dive Into Kotlin（三）：集合">
 <meta name="twitter:description" content="在 Java/Android 开发中，我们经常用集合来处理数据。Java 中的集合相对而言是比较简单的，但是在很多时候，语法显得冗长。本文将带你感受 Kotlin 集合的魅力。">
@@ -176,7 +176,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String, List&lt;Article&gt;&gt; groupByAuthorStream(List&lt;Article&gt; articles) &#123;</div><div class="line">    <span class="keyword">return</span> articles.stream()</div><div class="line">            .collect(Collectors.groupingBy(Article::getAuthor));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>除了代码量上的优势，语法上也更能体现业务需求，便于维护。这也是越来越多的开发者喜欢函数式的原因之一。（关于 Stream 与 Kotlin 的对决将呈现在文章后半部分）  </p>
 <p>以上，相信你已经对 Kotlin 集合产生兴趣了，接下去让我们一起来看看 Kotlin 集合的结构。</p>
-<h2 id="一-Kotlin-集合的结构"><a href="#一-Kotlin-集合的结构" class="headerlink" title="一. Kotlin 集合的结构"></a><strong>一. Kotlin 集合的结构</strong></h2><p>我们都知道 Kotlin 集合基于 (Java 集合框架)[<a href="https://www.tutorialspoint.com/java/java_collections.htm]。" target="_blank" rel="external">https://www.tutorialspoint.com/java/java_collections.htm]。</a></p>
+<h2 id="一-Kotlin-集合的结构"><a href="#一-Kotlin-集合的结构" class="headerlink" title="一. Kotlin 集合的结构"></a><strong>一. Kotlin 集合的结构</strong></h2><p>我们都知道 Kotlin 集合基于 <a href="https://www.tutorialspoint.com/java/java_collections.htm" target="_blank" rel="external">Java 集合框架</a>。</p>
 <p>理所应当，它的核心也是 <code>Iterator</code> 。  </p>
 <h3 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a><strong>Iterator</strong></h3><p>作为一个 Java 开发者，我们都知道 <code>Iterator</code> 主要的作用就是提供遍历的能力。  </p>
 <p>但是，<strong>Kotlin 将集合分成了两类： 「可变集合」 与  「不可变集合」</strong>。造成<code>Iterator</code> 层级核心变动如下：</p>

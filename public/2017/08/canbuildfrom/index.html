@@ -43,7 +43,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2017/08/type-of-map-is-ugly.png">
 <meta property="og:image" content="http://scala.cool/images/2017/08/simple-is-not-easy.jpg">
-<meta property="og:updated_time" content="2018-03-17T02:36:00.000Z">
+<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala 中的集合（四）：CanBuildFrom">
 <meta name="twitter:description" content="从上一篇文章看出， CanBuildFrom 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的语法。">
@@ -163,15 +163,15 @@
 </blockquote>
 <p>从 <a href="http://scala.cool/2017/07/a-new-collection/">上一篇文章</a> 看出， <code>CanBuildFrom</code> 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的设计。</p>
 <p>本文将详细介绍 <code>CanBuildFrom</code> 的特性，它为何饱受诟病，而又解决了哪些问题。</p>
-<h2 id="map-的定义"><a href="#map-的定义" class="headerlink" title="map 的定义"></a>map 的定义</h2><p>以下是马丁在 <a href="https://www.youtube.com/watch?v=ecekSCX3B4Q" target="_blank" rel="noopener">Scala – the Simple Parts</a> talk 中 PPT 的一页：</p>
+<h2 id="map-的定义"><a href="#map-的定义" class="headerlink" title="map 的定义"></a>map 的定义</h2><p>以下是马丁在 <a href="https://www.youtube.com/watch?v=ecekSCX3B4Q" target="_blank" rel="external">Scala – the Simple Parts</a> talk 中 PPT 的一页：</p>
 <center><br><img src="/images/2017/08/type-of-map-is-ugly.png" alt="type of map is ugly"><br></center>
 
 <p>我们来看下 <code>map</code> 的类型到底有多丑？</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">map</span></span>[<span class="type">B</span>, <span class="type">That</span>](f: <span class="type">Elem</span> =&gt; <span class="type">B</span>)(<span class="keyword">implicit</span> bf: <span class="type">CanBuildFrom</span>[<span class="type">Repr</span>, <span class="type">B</span>, <span class="type">That</span>]): <span class="type">That</span></span><br></pre></td></tr></table></figure>
-<p>如果你接触 Scala 不深，以上的 <code>implicit</code> 的确费解。其实它无非是在 Scala 中实现 <a href="https://en.wikipedia.org/wiki/Type_class" target="_blank" rel="noopener">Type class</a> 的一种方式，这里你可以简单理解为：<strong>如此 <code>map</code> 就会在隐式范围中自动寻找关于 <code>bf</code> 对象的实现</strong>。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">map</span></span>[<span class="type">B</span>, <span class="type">That</span>](f: <span class="type">Elem</span> =&gt; <span class="type">B</span>)(<span class="keyword">implicit</span> bf: <span class="type">CanBuildFrom</span>[<span class="type">Repr</span>, <span class="type">B</span>, <span class="type">That</span>]): <span class="type">That</span></div></pre></td></tr></table></figure>
+<p>如果你接触 Scala 不深，以上的 <code>implicit</code> 的确费解。其实它无非是在 Scala 中实现 <a href="https://en.wikipedia.org/wiki/Type_class" target="_blank" rel="external">Type class</a> 的一种方式，这里你可以简单理解为：<strong>如此 <code>map</code> 就会在隐式范围中自动寻找关于 <code>bf</code> 对象的实现</strong>。</p>
 <p>为什么要采用这种方式呢？我们说过，<code>CanBuildFrom</code> 是极其强大的，以下是它解决的三大问题。</p>
 <h2 id="一、集合类型变换"><a href="#一、集合类型变换" class="headerlink" title="一、集合类型变换"></a>一、集合类型变换</h2><p><code>map</code> 最常见的操作，就是对集合中的元素进行转化，例如：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).map(_.toString) <span class="comment">// List[String] = List(1, 2, 3)</span></span><br><span class="line"><span class="string">"foo"</span>.map(c =&gt; c.toUpper) <span class="comment">// String = FOO</span></span><br><span class="line"><span class="string">"foo"</span>.map(c =&gt; c.toInt) <span class="comment">// scala.collection.immutable.IndexedSeq[Int] = Vector(102, 111, 111)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).map(_.toString) <span class="comment">// List[String] = List(1, 2, 3)</span></div><div class="line"><span class="string">"foo"</span>.map(c =&gt; c.toUpper) <span class="comment">// String = FOO</span></div><div class="line"><span class="string">"foo"</span>.map(c =&gt; c.toInt) <span class="comment">// scala.collection.immutable.IndexedSeq[Int] = Vector(102, 111, 111)</span></div></pre></td></tr></table></figure>
 <p>这里，一个 <code>String</code> 可被视为 <code>Char</code> 元素的集合，它如同其它集合一样，在被 <code>map</code> 之后，有两种情况：</p>
 <ul>
 <li>类型不变，还是返回一个 <code>String</code></li>
@@ -179,9 +179,9 @@
 </ul>
 <p>这是 <code>CanBuildFrom</code> 要解决的第一个问题 — <strong>对要 <code>map</code> 的集合进行「类型修改」</strong>。</p>
 <p>还记得 <code>CanBuildFrom</code> 的定义吗？</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">CanBuildFrom</span>[-<span class="type">From</span>, -<span class="type">Elem</span>, +<span class="type">To</span>] </span>&#123;</span><br><span class="line">  <span class="comment">// 创建一个新的构造器(builder)</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(from: <span class="type">From</span>): <span class="type">Builder</span>[<span class="type">Elem</span>, <span class="type">To</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">CanBuildFrom</span>[-<span class="type">From</span>, -<span class="type">Elem</span>, +<span class="type">To</span>] </span>&#123;</div><div class="line">  <span class="comment">// 创建一个新的构造器(builder)</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(from: <span class="type">From</span>): <span class="type">Builder</span>[<span class="type">Elem</span>, <span class="type">To</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>复习下：<strong>「有这么一个方法，由给定的 From 类型的集合，使用 Elem 类型，建立 To 类型的集合」</strong>。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">map</span></span>[<span class="type">B</span>, <span class="type">That</span>](f: <span class="type">Char</span> =&gt; <span class="type">B</span>)(<span class="keyword">implicit</span> bf: <span class="type">CanBuildFrom</span>[<span class="type">String</span>, <span class="type">B</span>, <span class="type">That</span>]): <span class="type">That</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">map</span></span>[<span class="type">B</span>, <span class="type">That</span>](f: <span class="type">Char</span> =&gt; <span class="type">B</span>)(<span class="keyword">implicit</span> bf: <span class="type">CanBuildFrom</span>[<span class="type">String</span>, <span class="type">B</span>, <span class="type">That</span>]): <span class="type">That</span></div></pre></td></tr></table></figure>
 <p>我们把类型参数 <code>Elem</code> 替换成 <code>Char</code>，<code>From</code> 替换为 <code>String</code>，如此便实现了 <code>String</code> 类型的 <code>map</code> 操作。</p>
 <h2 id="二、不同的集合类型参数"><a href="#二、不同的集合类型参数" class="headerlink" title="二、不同的集合类型参数"></a>二、不同的集合类型参数</h2><p>我们知道，<code>Seq[A]</code>、<code>Set[A]</code> 继承了 <code>Iterable[A]</code>，三者有个相同点 — 都有一个类型参数。然而 <code>Map[K, V]</code> 是个特例，它也继承了 <code>Iterable[A]</code>，但却拥有两个。</p>
 <p>这就带来了一个问题。如果 <code>List[A]</code> 继承了 <code>Iterable[A]</code> 中的 <code>map</code> ，需要一个返回类型 <code>List[B]</code>，然而对 <code>HashMap[K, V]</code> 操作，却期望返回 <code>HashMap[L, W]</code>，<strong>这里的类型参数数量出现了不一致的情况</strong>。 </p>
@@ -196,8 +196,8 @@
 <center><br><img src="/images/2017/08/simple-is-not-easy.jpg" alt="simple is not easy"><br></center>
 
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://www.youtube.com/watch?v=ecekSCX3B4Q" target="_blank" rel="noopener">SF Scala: Martin Odersky, Scala – the Simple Parts</a></li>
-<li><a href="https://www.scala-lang.org/blog/2017/05/30/tribulations-canbuildfrom.html" target="_blank" rel="noopener">Trinulations of CanBuildFrom</a></li>
+<li><a href="https://www.youtube.com/watch?v=ecekSCX3B4Q" target="_blank" rel="external">SF Scala: Martin Odersky, Scala – the Simple Parts</a></li>
+<li><a href="https://www.scala-lang.org/blog/2017/05/30/tribulations-canbuildfrom.html" target="_blank" rel="external">Trinulations of CanBuildFrom</a></li>
 </ul>
 
             </div>
