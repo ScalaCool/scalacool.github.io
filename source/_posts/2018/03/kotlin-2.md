@@ -76,7 +76,7 @@ private static Map<String, List<Article>> groupByAuthorStream(List<Article> arti
 
 ## **一. Kotlin 集合的结构**
 
-我们都知道 Kotlin 集合基于 (Java 集合框架)[https://www.tutorialspoint.com/java/java_collections.htm]。
+我们都知道 Kotlin 集合基于 [Java 集合框架](https://www.tutorialspoint.com/java/java_collections.htm)。
 
 理所应当，它的核心也是 `Iterator` 。  
 
