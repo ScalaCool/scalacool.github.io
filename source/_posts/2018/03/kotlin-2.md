@@ -4,6 +4,8 @@ author: prefert
 tags:
 - Kotlin
 - Android
+- ~Dive Into Kotlin
+- ^Prefert
 description: 在 Java/Android 开发中，我们经常用集合来处理数据。Java 中的集合相对而言是比较简单的，但是在很多时候，语法显得冗长。本文将带你感受 Kotlin 集合的魅力。
 date: 2018-03-22
 ---
@@ -74,7 +76,7 @@ private static Map<String, List<Article>> groupByAuthorStream(List<Article> arti
 
 ## **一. Kotlin 集合的结构**
 
-我们都知道 Kotlin 集合基于 (Java 集合框架)[https://www.tutorialspoint.com/java/java_collections.htm]。
+我们都知道 Kotlin 集合基于 [Java 集合框架](https://www.tutorialspoint.com/java/java_collections.htm)。
 
 理所应当，它的核心也是 `Iterator` 。  
 
@@ -90,7 +92,7 @@ private static Map<String, List<Article>> groupByAuthorStream(List<Article> arti
 
 即：
 
-![iterator](https://scala.cool/images/2018/03/kotlin-iterator.svg)
+![iterator](/images/2018/03/kotlin-iterator.svg)
 
 > Hint： Kotlin 中 `out` 关键字代表这个类的对象为只读。
 
@@ -100,7 +102,7 @@ private static Map<String, List<Article>> groupByAuthorStream(List<Article> arti
 
 整体结构可以参考下图：
 
-![kotlin collection hierarchy](https://scala.cool/images/2018/03/kotlin-collection.svg)
+![kotlin collection hierarchy](/images/2018/03/kotlin-collection.svg)
 
 与 Java 相比，Kotlin 集合的层次结构更加详细——这也是 Java 摸爬滚打产生的更好的实践。
 
@@ -139,11 +141,11 @@ println(list.map { it * it })
 
 `filter` 函数遍历集合并返回了符合条件元素的集合。  
 
-![kotlin-filter](https://scala.cool/images/2018/03/kotlin-filter.svg)
+![kotlin-filter](/images/2018/03/kotlin-filter.png)
 
 `map` 函数遍历集合并对每个元素做出了相同的处理。  
 
-![kotlin-map](/images/2018/03/kotlin-map)
+![kotlin-map](/images/2018/03/kotlin-map.png)
 
 ### **平铺 `flatten`  与变换平铺 `flatMap`**
 
@@ -161,7 +163,7 @@ println(words.flatMap { it.map(String::toUpperCase) })
 
 `flatMap` 函数可是说是 flatten 的加强版，可以先将子列表进行变换后再平铺，再将他们包在一起。  
 
-![kotlin-flatMap](https://scala.cool/images/2018/03/kotlin-flatMap)
+![kotlin-flatMap](/images/2018/03/kotlin-flatMap.png)
 
 ### **操作符的实现**
 
