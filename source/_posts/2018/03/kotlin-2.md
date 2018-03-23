@@ -139,11 +139,11 @@ println(list.map { it * it })
 
 `filter` 函数遍历集合并返回了符合条件元素的集合。  
 
-![kotlin-filter](https://scala.cool/images/2018/03/kotlin-filter)
+![kotlin-filter](https://scala.cool/images/2018/03/kotlin-filter.svg)
 
 `map` 函数遍历集合并对每个元素做出了相同的处理。  
 
-![kotlin-map](https://scala.cool/images/2018/03/kotlin-map)
+![kotlin-map](/images/2018/03/kotlin-map)
 
 ### **平铺 `flatten`  与变换平铺 `flatMap`**
 
