@@ -19,7 +19,9 @@
         </span>
       {% endif %}
       {% if post.author %}
-        <span class="_author-avatar-holder" data-author="{{ post.author }}"></span>
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="{{ post.author }}"></span>
+        </div>
       {% endif %}
     </header>
 

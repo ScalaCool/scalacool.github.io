@@ -14,15 +14,25 @@
     margin: $global-content-margin;
 }
 
-#primary.home .js-author {
+#primary.home .avatar-holder {
   position: absolute;
   right: 10px;
   top: 0;
   opacity: 0; }
 
-#primary.home .post:hover .js-author {
+#primary.home .post:hover .avatar-holder {
   opacity: 1;
-  transition: all 1s;}
+  transition: all 1s; }
+
+#primary.home .js-author {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+}
+
+#primary.home .avatar-holder .js-author:last-child {
+  margin-right: 0;
+}
 
 #primary.home .js-author img {
   width: 30px;

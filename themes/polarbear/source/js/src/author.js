@@ -29,6 +29,13 @@ var authors = {
   scalacool: {
     blog: 'http://twitter.com/scala_cool',
     avatar: '/images/avatar/scalacool.png'
+  },
+  rhyme: {
+    blog: 'http://www.rhyme.ink/',
+    avatar: '/images/avatar/rhyme.png'
+  },
+  captain: {
+    avatar: '/images/avatar/captain.png',
   }
 }
 function generateAvatarAuthorHtml (nick) {
@@ -60,16 +67,25 @@ $(document).ready(function () {
   if (isHome) {
     var $authorAvatarHolders = $('._author-avatar-holder')
     $authorAvatarHolders.each(function () {
-      var author = $(this).data('author')
-      var html = generateAvatarAuthorHtml(author)
+      var html = '';
+      var authors = $(this).data('author').split('/')
+      for (var i=0; i < authors.length; i++) {
+        html += generateAvatarAuthorHtml(authors[i])
+      }
       $(this).replaceWith(html)
     })
   }
   if (isPost) {
     var $authorTextHolders = $('._author-text-holder')
     $authorTextHolders.each(function () {
-      var author = $(this).data('author')
-      var html = generateTextAuthorHtml(author)
+      var html = ''
+      var authors = $(this).data('author').split('/')
+      for (var i=0; i < authors.length; i++) {
+        html += generateTextAuthorHtml(authors[i])
+        if (i < authors.length - 1) {
+          html += ' / ';
+        }
+      }
       $(this).replaceWith(html)
     })
   }
