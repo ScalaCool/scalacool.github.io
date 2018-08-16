@@ -113,7 +113,8 @@ try {
 } catch (TimeoutException e) {
     e.printStackTrace();
 }
-``` 
+```
+
 上面的代码使用了lambda表达式，有兴趣的同学可以自己去了解下，这里我们首先构建了一个ExecutorService，然后利用submit提交执行Callable接口的任务。
 
 **为什么是Callable接口呢？** 其实这里我们并没有显示声明Callable接口，这里lambda会帮我们自动进行类型推导，首先submit接受Callable接口或Runnble接口类型作为参数，而这里我们又给定了返回值，所以lambda能自动帮我们推导出内部是一个Callable接口参数。
