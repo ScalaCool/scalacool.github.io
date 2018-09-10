@@ -1,5 +1,5 @@
 ---
-title: 从 Java 到 Scala（二）：object 的应用
+title: 从 Java 到 Scala（三）：object 的应用
 author: Captain
 tags:
 - Java
