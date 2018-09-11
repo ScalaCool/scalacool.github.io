@@ -40,7 +40,7 @@ public class UniqueSingleton {
 
 ```java
 public class UniqueSingleton {
-  //类加载时就初始化
+  //类加载时并未初始化
   private static uniqueSingleton instance;
   private UniqueSingleton() {
     System.out.println(("UniqueSingleton is created"));
