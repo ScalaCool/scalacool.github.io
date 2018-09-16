@@ -3,7 +3,7 @@ title: 从 Java 到 Scala（三）：object 的应用
 author: Captain
 tags:
 - Java
-- ^Captian
+- ^Captain
 - 类型相关
 - ~从 Java 到 Scala
 description: 本文主要介绍object 的应用场景，让模式实现更简洁高效，希望对你有些许帮助。
