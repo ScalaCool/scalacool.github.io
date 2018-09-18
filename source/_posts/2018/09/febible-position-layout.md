@@ -6,7 +6,7 @@ tags:
 - ~前端重构范式
 - ^Rhyme
 - ^Captain
-description: 本文旨在让你更深入地了解`position`,并为你提供一套使用`position`的范式，为你使用`position`提供一点建议和参考。
+description: 本文旨在让你更深入地了解 position ,并为你提供一套使用 position 的范式，为你使用 position 提供一点建议和参考。
 date: 2018-09-18
 ---
 
