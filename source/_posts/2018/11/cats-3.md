@@ -23,7 +23,7 @@ date: 2018-11-26
     }
 ```
 
-当我们用List去实现`Iterable`时，由于`filter`、`remove`方法需要返回具体的容器类型，你需要重新实现这些方法：
+当我们用`List`去实现`Iterable`时，由于`filter`、`remove`方法需要返回具体的容器类型，你需要重新实现这些方法：
 
 ```scala
     trait List[T] extends Iterable[T] {
