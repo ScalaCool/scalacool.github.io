@@ -4,6 +4,7 @@ tags:
 - Cats
 - 函数式编程
 - Kotlin
+- Typeclass
 - ~Cats
 - ^Yison
 description: 本篇文章会介绍 Scala 中的高阶类型，以及用它来简单介绍 Functor，并在 Kotlin 中模拟实现类似的效果。
