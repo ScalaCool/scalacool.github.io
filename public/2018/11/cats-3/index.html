@@ -41,7 +41,7 @@
 <meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="本篇文章会介绍 Scala 中的高阶类型，以及用它来简单介绍 Functor，并在 Kotlin 中模拟实现类似的效果。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-26T03:40:49.000Z">
+<meta property="og:updated_time" content="2018-11-26T03:52:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cats（三）：高阶类型">
 <meta name="twitter:description" content="本篇文章会介绍 Scala 中的高阶类型，以及用它来简单介绍 Functor，并在 Kotlin 中模拟实现类似的效果。">
@@ -163,8 +163,8 @@
 <p>在上述例子中，值构造函数的返回结果x是具体的值，<code>List[T]</code>传入类型变量后，也是具体的类型（如<code>List[Int]</code>）。当我们讨论「一阶」概念的时候，具体的值或信息就是构造的结果。</p>
 <p>因此，我们可以进一步推导：</p>
 <ul>
-<li><strong>阶值构造器</strong>：通过传入一个具体的值，然后构造出另一个具体的值；</li>
-<li><strong>阶类型构造器</strong>：通过传入一个具体的类型变量，然而构造出另一个具体的类型。</li>
+<li><strong>一阶值构造器</strong>：通过传入一个具体的值，然后构造出另一个具体的值；</li>
+<li><strong>一阶类型构造器</strong>：通过传入一个具体的类型变量，然而构造出另一个具体的类型。</li>
 </ul>
 <p>在理解了上述的概念之后，我们就更好地理解高阶函数了。它突破了一阶值构造器，可以支持传入一个值构造器，或者返回另一个值构造器。如：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&#123; (x: <span class="type">Int</span> =&gt; <span class="type">Int</span>) =&gt; x(<span class="number">1</span>) &#125;</div><div class="line">&#123; x: <span class="type">Int</span> =&gt; &#123;y: <span class="type">Int</span> =&gt; x + y&#125; &#125;</div></pre></td></tr></table></figure>
