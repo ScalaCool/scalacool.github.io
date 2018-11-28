@@ -1,5 +1,5 @@
 ---
-title: 从 Java 到 Scala（四）：Traits vs Java interface
+title: 从 Java 到 Scala（四）：Traits
 author: Rhyme
 tags:
 - Java
