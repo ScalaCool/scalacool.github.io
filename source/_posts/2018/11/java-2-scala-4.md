@@ -44,6 +44,7 @@ public interface Animal {
 ```
 
 在Scala中使用关键字`trait`而不`interface`,和Java接口一样，`trait`也可以有默认方法的实现。也就是说Java接口有的，`trait`基本上也都有，而且实现起来要优雅许多。 
+
 之所以要说类似于以上的Java代码，原因在于`trait`拥有的是字段`typeOf`,而`interface`拥有的是静态属性`typeOf`。这是`interface`和`trait`的一点区别。但是再仔细观察思考这一点区别，**更好更灵活的字段设计，是否使得`trait`更好地组织了抽象，使得它们成为了一个更好的整体。**
 
 
