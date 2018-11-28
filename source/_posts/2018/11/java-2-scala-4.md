@@ -10,11 +10,11 @@ tags:
 description: Traits在尝试着将抽象更好地融为一个整体。
 date: 2018-11-28
 ---
-`Traits`特质，一个我们既熟悉又陌生的特性。熟悉是因为你会发现它和你平时在Java中使用的interface接口有着很大的相似之处，而陌生又是因为`Traits`的新玩法会让你打破对原有接口的认知，进入一个更具有挑战性，玩法更高级的领域。所以，在一开始，我们可以对`Traits`有一个初步的认识：它是一个加强版的`interface`。之后，随着你对它了解的深入，你就会发现相比Java接口,`Traits`跟类更为相似。再之后，你或许会觉察到，**`Traits`在尝试着将抽象更好地融为了一个整体。**
+Traits特质，一个我们既熟悉又陌生的特性。熟悉是因为你会发现它和你平时在 Java 中使用的 interface 接口有着很大的相似之处，而陌生又是因为Traits的新玩法会让你打破对原有接口的认知，进入一个更具有挑战性，玩法更高级的领域。所以，在一开始，我们可以对 Traits 有一个初步的认识：它是一个加强版的`interface`。之后，随着你对它了解的深入，你就会发现相比 Java 接口,Traits 跟类更为相似。再之后，你或许会觉察到，**Traits在尝试着将抽象更好地融为一个整体。**
 
 ## Traits 入门
 
-在Java中为了避免多重继承所带来的昂贵代价(方法或字段冲突、菱形继承等问题)，Java的设计者们使用了`interface接口`。而为了解决Java接口无法进行`stackable modifications`(即无法使用对象状态进行迭代)、无法提供字段等局限，在Scala中，我们使用`Traits`特质而非接口。
+在 Java 中为了避免多重继承所带来的昂贵代价(方法或字段冲突、菱形继承等问题)，Java 的设计者们使用了 interface 接口。而为了解决 Java 接口无法进行`stackable modifications`(即无法使用对象状态进行迭代)、无法提供字段等局限，在 Scala 中，我们使用 Traits 特质而非接口。
 
 ### 定义一个trait
 
@@ -43,14 +43,14 @@ public interface Animal {
 }
 ```
 
-在Scala中使用关键字`trait`而不`interface`,和Java接口一样，`trait`也可以有默认方法的实现。也就是说Java接口有的，`trait`基本上也都有，而且实现起来要优雅许多。 
+在 Scala 中使用关键字`trait`而不`interface`,和 Java 接口一样，`trait`也可以有默认方法的实现。也就是说 Java 接口有的，`trait`基本上也都有，而且实现起来要优雅许多。 
 
-之所以要说类似于以上的Java代码，原因在于`trait`拥有的是字段`typeOf`,而`interface`拥有的是静态属性`typeOf`。这是`interface`和`trait`的一点区别。但是再仔细观察思考这一点区别，**更好更灵活的字段设计，是否使得`trait`更好地组织了抽象，使得它们成为了一个更好的整体。**
+之所以要说类似于以上的 Java 代码，原因在于`trait`拥有的是字段`typeOf`,而`interface`拥有的是静态属性`typeOf`。这是`interface`和`trait`的一点区别。但是再仔细观察思考这一点区别，**更好更灵活的字段设计，是否使得`trait`更好地组织了抽象，使得它们成为了一个更好的整体。**
 
 
 ### mix in trait
 
-和Java一样，Scala只支持单继承，但却可以有任意数量的特质。在Scala中，我们不称接口被`implements`实现了，而是`traits`被mix in混入了类中。
+和 Java 一样，Scala 只支持单继承，但却可以有任意数量的特质。在 Scala 中，我们不称接口被`implements`实现了，而是`traits`被 mix in 混入了类中。
 
 ```scala
 class Bird extends Animal {
@@ -65,7 +65,7 @@ class Bird extends Animal {
   }
 }
 ```
-以上代码中，`Bird`类混入了特质`Animal`。当类混入了多个特质时，需要使用`with`关键字
+以上代码中，`Bird`类混入了特质`Animal`。当类混入了多个特质时，需要使用`with`关键字。
 
 ```scala
 trait Egg
@@ -83,9 +83,9 @@ class Bird extends Animal with Egg{
 }
 ```
 
-在Scala中，我们将`extends with`的这种语法解读为一个整体，例如在以上代码中，我们将`extends Animal with Egg`看做一个整体，然后被`Bird`类混入。从这里你是否也能够感受到 **`trait`在尝试着将抽象更好地融为一个整体。** 
+在 Scala 中，我们将`extends with`的这种语法解读为一个整体，例如在以上代码中，我们将`extends Animal with Egg`看做一个整体，然后被`Bird`类混入。从这里你是否也能够感受到 **`trait`在尝试着将抽象更好地融为一个整体。** 
 
-到这里，你或许能够发现，相比`Java interface`,`trait`和类更加相似。而事实也确实如此，`trait`可以具备类的所有特性，除了缺少构造器参数。这一点`trait`可以使用构造器字段来达到同样的效果。也就是说你不能想给类传入构造器参数那样给特质传入参数。具体代码这里就不再演示。
+到这里，你或许能够发现，相比 Java `interface`,`trait`和类更加相似。而事实也确实如此，`trait`可以具备类的所有特性，除了缺少构造器参数。这一点`trait`可以使用构造器字段来达到同样的效果。也就是说你不能想给类传入构造器参数那样给特质传入参数。具体代码这里就不再演示。
 
 其实在这里我们可以简单地思考一番，为什么要把`trait`设计得这么像一个`class`,是设计者们有意为之，还是无意间的巧合。其实，不管怎么样，**个人认为，但从设计层面来讲，`class`类的设计就比`trait`更加具备一致性，class产生的对象就可以被很好的管理，为什么我们不像管理对象一样来管理我们的抽象呢？**
 
@@ -93,7 +93,7 @@ class Bird extends Animal with Egg{
 
 ## Traits的两大基本应用
 
-`Traits`最常见的两种使用方式:一种是和Java接口类似，用于设计富接口，另一种是`Traits`独有的`stackable modifications`。这里就说到了`interface`和`trait`的第二个区别，`Traits`支持`stackable modificatio`，使它能够使用对象状态，可以对对象状态进行灵活地迭代。
+Traits 最常见的两种使用方式:一种是和 Java 接口类似，用于设计富接口，另一种是 Traits 独有的`stackable modifications`。这里就说到了`interface`和`trait`的第二个区别，Traits 支持`stackable modifications`，使它能够使用对象状态，可以对对象状态进行灵活地迭代。
 
 ### rich interface
 
@@ -308,4 +308,4 @@ trait Hello {
 ```
 懒值在每次使用前都回去检查字段是否已经初始化，存在一定的使用开销，使用前需要仔细考虑。
 
-由于篇幅限制，关于`trait`的探索，我们就到此为止。希望本文能够对你学习和了解`trait`提供一点帮助。在下一章我们将介绍`trait`稍微高级一点的用法，自身类型和结构类型。
+由于篇幅限制，关于 Traits 的探索，我们就到此为止。希望本文能够对你学习和了解 Traits 提供一点帮助。在下一章我们将介绍 Traits 稍微高级一点的用法，自身类型和结构类型。
