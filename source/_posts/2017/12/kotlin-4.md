@@ -4,7 +4,7 @@ author: Prefert
 tags:
 - Kotlin
 - ~Dive Into Kotlin
-- ~类型相关
+- 类型相关
 - ^Prefert
 description: 在 Kotlin 中，如果说 Any 是所有非空类型的根类型，那么 Any? 才是所有类型的根类型。
 date: 2018-12-19
