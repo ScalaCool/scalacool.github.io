@@ -28,11 +28,7 @@ date: 2018-12-19
 
 ## 继承和子类型化的区别
 
-这是一个看似容易实则不简单的问题：到底什么才是子类型化( `Subtyping` )？
-> **扩展阅读**   
-我们在[Subtyping vs Typeclasses（一）](https://scala.cool/2017/08/subtyping-vs-typeclasses/)中已经对其进行过介绍。
-
-如果你只有 Java 这门编程语言的开发经验，很容易陷入一个误区——继承关系决定父子类型关系。因为在 Java 中， 类与类型大部分情况下都是「等价」的（在 Java 泛型出现前）。
+这是一个看似容易实则不简单的问题：到底什么才是子类型化( `Subtyping` )？我们曾在[Subtyping vs Typeclasses（一）](https://scala.cool/2017/08/subtyping-vs-typeclasses/)这篇博客讨论过这个问题。如果你只有 Java 这门编程语言的开发经验，很容易陷入一个误区——继承关系决定父子类型关系。因为在 Java 中， 类与类型大部分情况下都是「等价」的（在 Java 泛型出现前）。
 
 事实上，「继承」和「子类型化」是两个完全不同的概念。
 

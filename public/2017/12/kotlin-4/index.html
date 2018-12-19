@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/12/kotlin-4/"/>
+
+
+<meta name="description" content="在 Kotlin 中，如果说 Any 是所有非空类型的根类型，那么 Any? 才是所有类型的根类型。">
+<meta name="keywords" content="Kotlin,Android,~Dive Into Kotlin,^Prefert">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dive Into Kotlin（四）：为什么 Kotlin 的根类型是「Any?」">
+<meta property="og:url" content="http://scala.cool/2017/12/kotlin-4/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="在 Kotlin 中，如果说 Any 是所有非空类型的根类型，那么 Any? 才是所有类型的根类型。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-19T02:17:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dive Into Kotlin（四）：为什么 Kotlin 的根类型是「Any?」">
+<meta name="twitter:description" content="在 Kotlin 中，如果说 Any 是所有非空类型的根类型，那么 Any? 才是所有类型的根类型。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Dive Into Kotlin（四）：为什么 Kotlin 的根类型是「Any?」 - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" ><div class="site-header-inner">
+    <h1 class="site-title ">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Dive Into Kotlin（四）：为什么 Kotlin 的根类型是「Any?」
+        
+      </h1>
+
+      <time class="post-time">
+          12月19日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Prefert"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Prefert"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>我们在<a href="https://scala.cool/2017/11/kotlin-1/">Dive Into Kotlin（二）：Kotlin 类型结构设计</a>中已经对Kotlin的类型系统进行过大致的介绍。</p>
+<p>文中提到过： <code>Any</code> 类型是 Kotlin 中 <strong>所有非空类型</strong>（ex: <code>String</code>, <code>Int</code>) 的根类型。  </p>
+<p>当我们需要和 Java 互操作的时候，Kotlin 把 Java 方法参数和返回类型中用到的 <code>Object</code> 类型看作 <code>Any</code>（更确切地说是当做「平台类型」)。当 Kotlin 函数中使用 <code>Any</code> 时，它会被编译成 Java 字节码中的 <code>Object</code>。</p>
+<blockquote>
+<p><strong>什么是平台类型?</strong></p>
+<p>平台类型本质上就是 Kotlin 不知道可空性信息的类型—所有 Java 引用类型在 Kotlin 中都表现为平台类型。当在 Kotlin 中处理平台类型的值的时候，它既可以被当做可空类型来处理，也可以被当做非空类型来操作。  </p>
+<p>平台类型的引入是 Kotlin 兼容 Java 时的一种权衡设计。试想下，如果所有来自 Java 的值都被看成非空，那么就容易写出比较危险的代码。反之，如果 Java 值都强制当做可空，则会导致大量的 <code>null</code> 检查。综合考量，平台类型是一种折中的设计方案。  </p>
+</blockquote>
+<p>在 Java 中，<code>Object</code> 类型位于其类型系统的顶级。如果说 Kotlin 与 Java 是100%兼容的，那我们是否可以说 Any 也是Kotlin的所有类型的顶级类型呢？在上一篇文章中，这个问题同样困扰了我，官方也并没有做出一个明确的说明。但是我们可以注意到的是， Kotlin 中引入了「可空类型」这个概念，这很可能会对系统层级结构产生影响。</p>
+<p>在探索根类型之前，先让我们理清两个概念：继承（<code>Inheriting</code>）和 子类型化（<code>Subtyping</code>）。</p>
+<h2 id="继承和子类型化的区别"><a href="#继承和子类型化的区别" class="headerlink" title="继承和子类型化的区别"></a>继承和子类型化的区别</h2><p>这是一个看似容易实则不简单的问题：到底什么才是子类型化( <code>Subtyping</code> )？我们曾在<a href="https://scala.cool/2017/08/subtyping-vs-typeclasses/">Subtyping vs Typeclasses（一）</a>这篇博客讨论过这个问题。如果你只有 Java 这门编程语言的开发经验，很容易陷入一个误区——继承关系决定父子类型关系。因为在 Java 中， 类与类型大部分情况下都是「等价」的（在 Java 泛型出现前）。</p>
+<p>事实上，「继承」和「子类型化」是两个完全不同的概念。</p>
+<ul>
+<li><p><strong>子类型化</strong>的核心是一种类型的替代关系（我们也可以称之为子类型多态），通常可表示为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">S &lt;: T</div></pre></td></tr></table></figure>
+<p>以上 <code>S</code> 是 <code>T</code> 的子类，这意味着在需要 <code>T</code> 类型值的地方，<code>S</code> 类型的值同样适用，如在 Kotlin 中 <code>Int</code> 是 <code>Number</code> 的子类：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">printNum</span><span class="params">(num: <span class="type">Number</span>)</span></span> &#123;</div><div class="line">  println(num)</div><div class="line">&#125;</div><div class="line"></div><div class="line">&gt;&gt;&gt; <span class="keyword">val</span> n: <span class="built_in">Int</span> = <span class="number">1</span></div><div class="line">&gt;&gt;&gt; printNum(n)</div><div class="line"></div><div class="line">&gt;&gt;&gt; <span class="number">1</span></div><div class="line">&gt;&gt;&gt; printNum(<span class="string">"I am a String"</span>)</div><div class="line">error: type mismatch: inferred type <span class="keyword">is</span> String but Number was expected</div></pre></td></tr></table></figure>
+</li>
+<li><p>相对而言，<strong>继承</strong>强调的是一种「实现上的复用」，而子类型化是一种类型语义的关系，与实现没关系。在 Java 中，我们似乎也可以通过类继承来实现上述关系：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">S</span> <span class="keyword">extends</span> <span class="title">class</span> <span class="title">T</span></span></div></pre></td></tr></table></figure>
+<p>  由于在声明父子类型关系的同时，也声明了继承的关系，所以通常会造成了某种程度上的混淆，但是这并不能说明这两个概念就是等价的。   </p>
+</li>
+</ul>
+<p>虽然 <code>Any</code> 与 <code>Any?</code> 看起来没有继承关系，然而当我们在需要用 <code>Any?</code> 类型值的地方，显然可以传入一个类型为 <code>Any</code> 的值，这在编译上不会产生问题。反之却行不通，比如：一个参数类型为 <code>Any</code> 的函数，我们传入符合 <code>Any?</code> 类型的 <code>null</code> 值，就会出现如下的错误:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">error: <span class="literal">null</span> can not be a value of a non-<span class="literal">null</span> type Any</div></pre></td></tr></table></figure>
+<p>以上，我们也可以初步得出结论：<code>Any</code>的值能在所有情况下代替 <code>Any?</code> 的值，这符合「子类型化」的概念。</p>
+<p>因此，我们可以很大胆地说：<strong>在Kotlin的类型系统中，<code>Any?</code> 是 <code>Any</code> 的父类型，而且是所有类型的根类型</strong>，虽然当前的 Kotlin 官网文档没有介绍过这一点。  </p>
+<h2 id="Any-与-Any"><a href="#Any-与-Any" class="headerlink" title="Any? 与 Any??"></a>Any? 与 Any??</h2><p>一个你可能会挑战的问题是，如果 <code>Any?</code> 是 <code>Any</code> 的父类型，那么 <code>Any??</code> 是否又是 <code>Any?</code> 的父类型， 如果成立，那么是否意味着就没有所谓的「所有类型的根类型」了?</p>
+<p>其实，Kotlin 中的可空类型可以看做所谓的 <code>Union Type</code>，在程序中通常用 <code>A | B</code> 表示，近似于数学中的并集。如果用类型的并集来表示 <code>Any?</code> ，可写为 <code>Any ∪ Null</code>。相应的 <code>Any??</code> 就表示为 <code>Any ∪ Null ∪ Null</code>，这等价于 <code>Any ∪ Null</code>， 即 <code>Any??</code> 等价于 <code>Any?</code> 。因此，说 <code>Any?</code> 是所有类型的根类型是没有问题的。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/">Kotlin</a>
+          
+            <a href="/tags/Android/">Android</a>
+          
+            <a href="/tags/Dive-Into-Kotlin/">~Dive Into Kotlin</a>
+          
+            <a href="/tags/Prefert/">^Prefert</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2018/11/java-2-scala-4/">
+        <span class="next-text nav-default">从 Java 到 Scala（四）：Traits</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1545148800000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2018
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>
