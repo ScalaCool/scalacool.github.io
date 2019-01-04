@@ -21,7 +21,7 @@
 
 
 
-  <link rel="alternate" href="/default" title="Scala Cool">
+  <link rel="alternate" href="/default" title="ScalaCool">
 
 
 
@@ -38,7 +38,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Scala 技术周刊 | 第 4 期">
 <meta property="og:url" content="http://scala.cool/2017/05/scala-weekly-4/index.html">
-<meta property="og:site_name" content="Scala Cool">
+<meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="《Scala 技术周刊》跟踪每周 Scala 社区动态，帮助读者了解过去一周内关于 Scala 发生的事情。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
@@ -79,14 +79,14 @@
 
 
 
-    <title> Scala 技术周刊 | 第 4 期 - Scala Cool </title>
+    <title> Scala 技术周刊 | 第 4 期 - ScalaCool </title>
   </head>
 
   <body>
     <div id="page">
       <header id="masthead" ><div class="site-header-inner">
     <h1 class="site-title ">
-        <a href="/." class="logo">Scala Cool</a>
+        <a href="/." class="logo">ScalaCool</a>
     </h1>
     <nav id="nav-top">
         
@@ -96,7 +96,7 @@
                         <a href="http://news.scala.cool">
                             
                             
-                                News
+                                动态
                             
                         </a>
                     </li>
@@ -105,7 +105,7 @@
                         <a href="https://scala.cool/2017/03/hello-scala/">
                             
                             
-                                About
+                                关于
                             
                         </a>
                     </li>
@@ -138,7 +138,9 @@
         </span>
       
       
-        <span class="_author-avatar-holder" data-author="ScalaCool"></span>
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="ScalaCool"></span>
+        </div>
       
     </header>
 
@@ -238,12 +240,13 @@
     <script>
       var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
       var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1494864000000 > 1517414400123 ? id.slice(-50, id.length) : id;
       var gitalk = new Gitalk({
         clientID: '23770b27c2837a5e79a1',
         clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
         repo: 'scalacool.github.io',
         owner: 'ScalaCool',
-        admin: ['yison-dripower'],
+        admin: ['yisonshan'],
         id: id,
         distractionFreeMode: true
       });

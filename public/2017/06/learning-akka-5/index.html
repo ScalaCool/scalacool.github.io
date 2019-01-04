@@ -21,7 +21,7 @@
 
 
 
-  <link rel="alternate" href="/default" title="Scala Cool">
+  <link rel="alternate" href="/default" title="ScalaCool">
 
 
 
@@ -38,12 +38,12 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Akka 系列（五）：Java 和 Scala 中的 Future">
 <meta property="og:url" content="http://scala.cool/2017/06/learning-akka-5/index.html">
-<meta property="og:site_name" content="Scala Cool">
+<meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="随着CPU的核数的增加，异步编程模型在并发领域中的得到了越来越多的应用，由于Scala是一门函数式语言，天然的支持异步编程模型，今天主要来看一下Java和Scala中的Futrue，带你走入异步编程的大门。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2017/06/async-work.png">
 <meta property="og:image" content="http://scala.cool/images/2017/06/future-runnable.png">
-<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta property="og:updated_time" content="2018-08-16T03:13:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Akka 系列（五）：Java 和 Scala 中的 Future">
 <meta name="twitter:description" content="随着CPU的核数的增加，异步编程模型在并发领域中的得到了越来越多的应用，由于Scala是一门函数式语言，天然的支持异步编程模型，今天主要来看一下Java和Scala中的Futrue，带你走入异步编程的大门。">
@@ -82,14 +82,14 @@
 
 
 
-    <title> Akka 系列（五）：Java 和 Scala 中的 Future - Scala Cool </title>
+    <title> Akka 系列（五）：Java 和 Scala 中的 Future - ScalaCool </title>
   </head>
 
   <body>
     <div id="page">
       <header id="masthead" ><div class="site-header-inner">
     <h1 class="site-title ">
-        <a href="/." class="logo">Scala Cool</a>
+        <a href="/." class="logo">ScalaCool</a>
     </h1>
     <nav id="nav-top">
         
@@ -99,7 +99,7 @@
                         <a href="http://news.scala.cool">
                             
                             
-                                News
+                                动态
                             
                         </a>
                     </li>
@@ -108,7 +108,7 @@
                         <a href="https://scala.cool/2017/03/hello-scala/">
                             
                             
-                                About
+                                关于
                             
                         </a>
                     </li>
@@ -141,7 +141,9 @@
         </span>
       
       
-        <span class="_author-avatar-holder" data-author="Godpan"></span>
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Godpan"></span>
+        </div>
       
     </header>
 
@@ -174,7 +176,13 @@
 </li>
 </ul>
 <h4 id="Future程序示例与结果获取"><a href="#Future程序示例与结果获取" class="headerlink" title="Future程序示例与结果获取"></a>Future程序示例与结果获取</h4><p>下面是一个简单的Future示例，我们先来看一下代码：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">ExecutorService es = Executors.newSingleThreadExecutor();</div><div class="line">Future f = es.submit(() -&gt; &#123;</div><div class="line">        System.out.println("execute call");</div><div class="line">        Thread.sleep(1000);</div><div class="line">        return 5;</div><div class="line">    &#125;);</div><div class="line">try &#123;</div><div class="line">    System.out.println(f.isDone()); //检测任务是否完成</div><div class="line">    System.out.println(f.get(2000, TimeUnit.MILLISECONDS));</div><div class="line">    System.out.println(f.isDone()); //检测任务是否完成</div><div class="line">&#125; catch (InterruptedException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125; catch (ExecutionException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125; catch (TimeoutException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125;</div><div class="line">``` </div><div class="line">上面的代码使用了lambda表达式，有兴趣的同学可以自己去了解下，这里我们首先构建了一个ExecutorService，然后利用submit提交执行Callable接口的任务。</div><div class="line"></div><div class="line">**为什么是Callable接口呢？** 其实这里我们并没有显示声明Callable接口，这里lambda会帮我们自动进行类型推导，首先submit接受Callable接口或Runnble接口类型作为参数，而这里我们又给定了返回值，所以lambda能自动帮我们推导出内部是一个Callable接口参数。</div><div class="line"></div><div class="line">到这里我们应该大致清楚了在Java中的得到Future，那么我们又是如何从Future中得到我们想要的值呢？这个结论其实很容易得出，你只需要去跑一下上面的程序即可，在利用get去获取Future中的值时，线程会一直阻塞，直到返回值或者超时，所以Future中的get方法是阻塞，所以虽然利用Future似乎是异步执行任务，但是在某些需求上还是会阻塞的，并不是真正的异步，stackoverflow上有两个讨论说明了这个问题[Future.get](http://stackoverflow.com/questions/31092067/method-call-to-future-get-blocks-is-that-really-desirable)，[without blocking when task complete](http://stackoverflow.com/questions/31092067/method-call-to-future-get-blocks-is-that-really-desirable)，有兴趣的同学可以去看看。</div><div class="line"></div><div class="line">### Scala中的Future</div><div class="line"></div><div class="line">Scala中的Future相对于Java的Future有什么不同呢？我总结了一下几点：</div><div class="line"></div><div class="line">#### 1.创建Future变得很容易</div><div class="line"></div><div class="line">异步编程作为函数式语言的一大优势，Scala对于Future的支持也是非常棒的，首先它也提供了Futrue接口，但不同的是我们在构建Future对象是不用像Java一样那么繁琐，并且非常简单，举个例子：</div><div class="line"></div><div class="line">```scala</div><div class="line">import scala.concurrent._ </div><div class="line">import ExecutionContext.Implicits.global </div><div class="line"></div><div class="line">val f: Future[String] = Future &#123; "Hello World!" &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ExecutorService es = Executors.newSingleThreadExecutor();</div><div class="line">Future f = es.submit(() -&gt; &#123;</div><div class="line">        System.out.println(<span class="string">"execute call"</span>);</div><div class="line">        Thread.sleep(<span class="number">1000</span>);</div><div class="line">        <span class="keyword">return</span> <span class="number">5</span>;</div><div class="line">    &#125;);</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    System.out.println(f.isDone()); <span class="comment">//检测任务是否完成</span></div><div class="line">    System.out.println(f.get(<span class="number">2000</span>, TimeUnit.MILLISECONDS));</div><div class="line">    System.out.println(f.isDone()); <span class="comment">//检测任务是否完成</span></div><div class="line">&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125; <span class="keyword">catch</span> (TimeoutException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码使用了lambda表达式，有兴趣的同学可以自己去了解下，这里我们首先构建了一个ExecutorService，然后利用submit提交执行Callable接口的任务。</p>
+<p><strong>为什么是Callable接口呢？</strong> 其实这里我们并没有显示声明Callable接口，这里lambda会帮我们自动进行类型推导，首先submit接受Callable接口或Runnble接口类型作为参数，而这里我们又给定了返回值，所以lambda能自动帮我们推导出内部是一个Callable接口参数。</p>
+<p>到这里我们应该大致清楚了在Java中的得到Future，那么我们又是如何从Future中得到我们想要的值呢？这个结论其实很容易得出，你只需要去跑一下上面的程序即可，在利用get去获取Future中的值时，线程会一直阻塞，直到返回值或者超时，所以Future中的get方法是阻塞，所以虽然利用Future似乎是异步执行任务，但是在某些需求上还是会阻塞的，并不是真正的异步，stackoverflow上有两个讨论说明了这个问题<a href="http://stackoverflow.com/questions/31092067/method-call-to-future-get-blocks-is-that-really-desirable" target="_blank" rel="external">Future.get</a>，<a href="http://stackoverflow.com/questions/31092067/method-call-to-future-get-blocks-is-that-really-desirable" target="_blank" rel="external">without blocking when task complete</a>，有兴趣的同学可以去看看。</p>
+<h3 id="Scala中的Future"><a href="#Scala中的Future" class="headerlink" title="Scala中的Future"></a>Scala中的Future</h3><p>Scala中的Future相对于Java的Future有什么不同呢？我总结了一下几点：</p>
+<h4 id="1-创建Future变得很容易"><a href="#1-创建Future变得很容易" class="headerlink" title="1.创建Future变得很容易"></a>1.创建Future变得很容易</h4><p>异步编程作为函数式语言的一大优势，Scala对于Future的支持也是非常棒的，首先它也提供了Futrue接口，但不同的是我们在构建Future对象是不用像Java一样那么繁琐，并且非常简单，举个例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> scala.concurrent._ </div><div class="line"><span class="keyword">import</span> <span class="type">ExecutionContext</span>.<span class="type">Implicits</span>.global </div><div class="line"></div><div class="line"><span class="keyword">val</span> f: <span class="type">Future</span>[<span class="type">String</span>] = <span class="type">Future</span> &#123; <span class="string">"Hello World!"</span> &#125;</div></pre></td></tr></table></figure>
 <p>是不是非常简单，也大大降低了我们使用Future的难度。</p>
 <h4 id="2-提供真正异步的Future"><a href="#2-提供真正异步的Future" class="headerlink" title="2.提供真正异步的Future"></a>2.提供真正异步的Future</h4><p>前面我们也说到，Java中的Future并不是全异步的，当你需要Future里的值的时候，你只能用get去获取它，亦或者不断访问Future的状态，若完成再去取值，但其意义上便不是真正的异步了，它在获取值的时候是一个阻塞的操作，当然也就无法执行其他的操作，直到结果返回。</p>
 <p>但在Scala中，我们无需担心，虽然它也提供了类似Java中获取值的方式，比如：</p>
@@ -268,12 +276,13 @@
     <script>
       var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
       var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1498406400000 > 1517414400123 ? id.slice(-50, id.length) : id;
       var gitalk = new Gitalk({
         clientID: '23770b27c2837a5e79a1',
         clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
         repo: 'scalacool.github.io',
         owner: 'ScalaCool',
-        admin: ['yison-dripower'],
+        admin: ['yisonshan'],
         id: id,
         distractionFreeMode: true
       });

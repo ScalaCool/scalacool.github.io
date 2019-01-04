@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2018/03/kotlin-2/"/>
+
+
+<meta name="description" content="在 Java/Android 开发中，我们经常用集合来处理数据。Java 中的集合相对而言是比较简单的，但是在很多时候，语法显得冗长。本文将带你感受 Kotlin 集合的魅力。">
+<meta name="keywords" content="Kotlin,~Dive Into Kotlin,^Prefert,Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dive Into Kotlin（三）：集合">
+<meta property="og:url" content="http://scala.cool/2018/03/kotlin-2/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="在 Java/Android 开发中，我们经常用集合来处理数据。Java 中的集合相对而言是比较简单的，但是在很多时候，语法显得冗长。本文将带你感受 Kotlin 集合的魅力。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2018/03/kotlin-iterator.svg">
+<meta property="og:image" content="http://scala.cool/images/2018/03/kotlin-collection.svg">
+<meta property="og:image" content="http://scala.cool/images/2018/03/kotlin-filter.png">
+<meta property="og:image" content="http://scala.cool/images/2018/03/kotlin-map.png">
+<meta property="og:image" content="http://scala.cool/images/2018/03/kotlin-flatMap.png">
+<meta property="og:updated_time" content="2018-03-23T04:18:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dive Into Kotlin（三）：集合">
+<meta name="twitter:description" content="在 Java/Android 开发中，我们经常用集合来处理数据。Java 中的集合相对而言是比较简单的，但是在很多时候，语法显得冗长。本文将带你感受 Kotlin 集合的魅力。">
+<meta name="twitter:image" content="http://scala.cool/images/2018/03/kotlin-iterator.svg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Dive Into Kotlin（三）：集合 - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" ><div class="site-header-inner">
+    <h1 class="site-title ">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Dive Into Kotlin（三）：集合
+        
+      </h1>
+
+      <time class="post-time">
+          3月22日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="prefert"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="prefert"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>在 Java/Android 开发中，我们经常用集合来处理数据。</p>
+<p>Java 中的集合相对而言是比较简单的，但是在很多时候，语法显得冗长。</p>
+<a id="more"></a>
+<h3 id="Java-传统集合-vs-Java-8-Stream-vs-Kotlin-集合"><a href="#Java-传统集合-vs-Java-8-Stream-vs-Kotlin-集合" class="headerlink" title="Java 传统集合 vs Java 8 Stream vs Kotlin 集合"></a><strong>Java 传统集合 vs Java 8 Stream vs Kotlin 集合</strong></h3><p>我们以文章（<code>Article</code>）为例子，一篇文章有一个标题、作者及多个标签：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Article</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> String title;</div><div class="line">    <span class="keyword">private</span> String author;</div><div class="line">    <span class="keyword">private</span> List&lt;String&gt; tags;</div><div class="line"></div><div class="line">    <span class="comment">// ... some get、set、construct method</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在有一个需求：将所有文章（<code>Article</code>）按作者（<code>author</code>）进行分组。  </p>
+<p>Java 实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String, List&lt;Article&gt;&gt; groupByAuthor(List&lt;Article&gt; articles) &#123;</div><div class="line">    Map&lt;String, List&lt;Article&gt;&gt; result = <span class="keyword">new</span> HashMap&lt;&gt;();</div><div class="line">    <span class="keyword">for</span> (Article article : articles) &#123;</div><div class="line">        <span class="keyword">if</span> (result.containsKey(article.getAuthor())) &#123;</div><div class="line">            result.get(article.getAuthor()).add(article);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            ArrayList&lt;Article&gt; articlesTemp = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">            articlesTemp.add(article);</div><div class="line">            result.put(article.getAuthor(), articlesTemp);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Kotlin 由于高度兼容 Java 而越来越受欢迎，最重要的还是它简洁的语法（本篇仅论集合层面），上面的代码在 Kotlin 中可以写为：  </p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">groupByAuthorKotlin</span><span class="params">(articles: <span class="type">List</span>&lt;<span class="type">Article</span>&gt;)</span></span>: Map&lt;String, List&lt;Article&gt;&gt; &#123;</div><div class="line">    <span class="keyword">return</span> articles.groupBy &#123; it.author &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>链式调用是不是很优雅？  </p>
+<p>使用 Java 8 的同学可能会表示不服（链式调用我也行！）：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String, List&lt;Article&gt;&gt; groupByAuthorStream(List&lt;Article&gt; articles) &#123;</div><div class="line">    <span class="keyword">return</span> articles.stream()</div><div class="line">            .collect(Collectors.groupingBy(Article::getAuthor));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>除了代码量上的优势，语法上也更能体现业务需求，便于维护。这也是越来越多的开发者喜欢函数式的原因之一。（关于 Stream 与 Kotlin 的对决将呈现在文章后半部分）  </p>
+<p>以上，相信你已经对 Kotlin 集合产生兴趣了，接下去让我们一起来看看 Kotlin 集合的结构。</p>
+<h2 id="一-Kotlin-集合的结构"><a href="#一-Kotlin-集合的结构" class="headerlink" title="一. Kotlin 集合的结构"></a><strong>一. Kotlin 集合的结构</strong></h2><p>我们都知道 Kotlin 集合基于 <a href="https://www.tutorialspoint.com/java/java_collections.htm" target="_blank" rel="external">Java 集合框架</a>。</p>
+<p>理所应当，它的核心也是 <code>Iterator</code> 。  </p>
+<h3 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a><strong>Iterator</strong></h3><p>作为一个 Java 开发者，我们都知道 <code>Iterator</code> 主要的作用就是提供遍历的能力。  </p>
+<p>但是，<strong>Kotlin 将集合分成了两类： 「可变集合」 与  「不可变集合」</strong>。造成<code>Iterator</code> 层级核心变动如下：</p>
+<ul>
+<li><code>ListIterator</code> 仅支持遍历。</li>
+<li><code>MutableIterator</code> 提供删除元素的能力。</li>
+<li><code>MutableListIterator</code> 继承以上两个接口，具备了新增元素的能力</li>
+</ul>
+<p>即：</p>
+<p><img src="/images/2018/03/kotlin-iterator.svg" alt="iterator"></p>
+<blockquote>
+<p>Hint： Kotlin 中 <code>out</code> 关键字代表这个类的对象为只读。</p>
+</blockquote>
+<h3 id="List-amp-amp-Set"><a href="#List-amp-amp-Set" class="headerlink" title="List &amp;&amp; Set"></a><strong>List &amp;&amp; Set</strong></h3><p>由以上，我们也可以推测出，<code>List</code> 以及<code>Set</code>的结构变动，最关键且唯一的变化就是区分了可变集合。</p>
+<p>整体结构可以参考下图：</p>
+<p><img src="/images/2018/03/kotlin-collection.svg" alt="kotlin collection hierarchy"></p>
+<p>与 Java 相比，Kotlin 集合的层次结构更加详细——这也是 Java 摸爬滚打产生的更好的实践。</p>
+<h2 id="二-Kotlin-的集合操作符"><a href="#二-Kotlin-的集合操作符" class="headerlink" title="二. Kotlin 的集合操作符"></a><strong>二. Kotlin 的集合操作符</strong></h2><p>如果你使用过 RxJava 等一系列库，你一定会对操作符非常了解也对操作符的强大深有感触。  </p>
+<p>Kotlin 也如此，原生便支持大量操作符，先上一部分感受一下：</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>元素操作</td>
+<td>contains /  elementAt / firstOrNull / lastOrNull / indexOf / singleOrNull</td>
+</tr>
+<tr>
+<td>判断操作</td>
+<td>any / all / none / count / reduce / fold</td>
+</tr>
+<tr>
+<td>过滤操作</td>
+<td>filter / filterNot / filterNotNull / take / min / max</td>
+</tr>
+<tr>
+<td>集合转换</td>
+<td>map / mapIndexed / mapNotNull / flatMap / groupBy / zip</td>
+</tr>
+<tr>
+<td>排序</td>
+<td>reversed /  sorted / sortedBy / sortedDescending</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Hint：可以在 <a href="https://github.com/JetBrains/kotlin/blob/master/libraries/stdlib/src/generated/_Collections.kt" target="_blank" rel="external">_Collections.kt</a> 中看到所有的操作符。</p>
+</blockquote>
+<p>Talk is cheap !  我们举几个例子：  </p>
+<h3 id="过滤-filter-与变换-map"><a href="#过滤-filter-与变换-map" class="headerlink" title="过滤 filter 与变换 map"></a><strong>过滤 <code>filter</code> 与变换 <code>map</code></strong></h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 定义并初始化列表</span></div><div class="line"><span class="keyword">val</span> list = listOf(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)</div><div class="line"></div><div class="line">println(list.filter &#123; it % <span class="number">2</span> == <span class="number">0</span> &#125;)</div><div class="line"><span class="comment">// [2, 4, 6]</span></div><div class="line"></div><div class="line">println(list.map &#123; it * it &#125;)</div><div class="line"><span class="comment">// [1, 4, 9, 16, 25, 36]</span></div></pre></td></tr></table></figure>
+<p>观察结果可知：  </p>
+<p><code>filter</code> 函数遍历集合并返回了符合条件元素的集合。  </p>
+<p><img src="/images/2018/03/kotlin-filter.png" alt="kotlin-filter"></p>
+<p><code>map</code> 函数遍历集合并对每个元素做出了相同的处理。  </p>
+<p><img src="/images/2018/03/kotlin-map.png" alt="kotlin-map"></p>
+<h3 id="平铺-flatten-与变换平铺-flatMap"><a href="#平铺-flatten-与变换平铺-flatMap" class="headerlink" title="平铺 flatten  与变换平铺 flatMap"></a><strong>平铺 <code>flatten</code>  与变换平铺 <code>flatMap</code></strong></h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> words = listOf(listOf(<span class="string">"kotlin"</span>), listOf(<span class="string">"is"</span>, <span class="string">"best"</span>))</div><div class="line">println(words.flatten())</div><div class="line"><span class="comment">// [kotlin, is, best]</span></div><div class="line">println(words.flatMap &#123; it.map(String::toUpperCase) &#125;)</div><div class="line"><span class="comment">// [KOTLIN, IS, BEST]</span></div></pre></td></tr></table></figure>
+<p>观察结果可知：  </p>
+<p><code>flatten</code>  函数可以将多个列表形式的元素平铺，就好像给每个元素脱掉了衣服，再将他们包在一起。  </p>
+<p><code>flatMap</code> 函数可是说是 flatten 的加强版，可以先将子列表进行变换后再平铺，再将他们包在一起。  </p>
+<p><img src="/images/2018/03/kotlin-flatMap.png" alt="kotlin-flatMap"></p>
+<h3 id="操作符的实现"><a href="#操作符的实现" class="headerlink" title="操作符的实现"></a><strong>操作符的实现</strong></h3><p>对于没有接触过函数式编程的朋友，可能会不禁发问： Kotlin 为什么能够实现这样的骚操作？  </p>
+<p>这些方法我们从最简单的 <code>filter</code> 入手。  </p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> Iterable<span class="type">&lt;T&gt;</span>.<span class="title">filter</span><span class="params">(predicate: (<span class="type">T</span>)</span></span> -&gt; <span class="built_in">Boolean</span>): List&lt;T&gt; &#123;</div><div class="line">    <span class="keyword">return</span> filterTo(ArrayList&lt;T&gt;(), predicate)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, C : MutableCollection&lt;in T&gt;</span>&gt; Iterable<span class="type">&lt;T&gt;</span>.<span class="title">filterTo</span><span class="params">(destination: <span class="type">C</span>, predicate: (<span class="type">T</span>)</span></span> -&gt; <span class="built_in">Boolean</span>): C &#123;</div><div class="line">    <span class="keyword">for</span> (element <span class="keyword">in</span> <span class="keyword">this</span>) <span class="keyword">if</span> (predicate(element)) destination.add(element)</div><div class="line">    <span class="keyword">return</span> destination</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上，不难看出 Kotlin 中集合操作符本质上就是方法调用。  </p>
+<p><code>filter</code> 其实是 <code>Itrable</code> 的一个扩展方法 (<code>extention</code>)，它接收一个 T 作为参数，并返回 <code>Boolean</code> 的闭包作为参数，内部调用了 <code>filterTo</code> 方法。  </p>
+<p>再看看 <code>filterTo</code> 方法：传入了目标类型 C 和判断用闭包。内部实际就是循环对元素判断，符合则添加到返回的集合中。  </p>
+<p>是不是很简单？</p>
+<p>我们尝试实现类似 <code>map</code>和 <code>filter</code> 结合的方法 <code>magicConvert</code>。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">fun</span>  <span class="type">&lt;T, E&gt;</span> Iterable<span class="type">&lt;T&gt;</span>.<span class="title">collect</span><span class="params">(function: (<span class="type">T</span>)</span></span> -&gt; E, predicate: (T) -&gt; <span class="built_in">Boolean</span>): MutableList&lt;E&gt; &#123;</div><div class="line">    <span class="keyword">val</span> result: MutableList&lt;E&gt; = mutableListOf()</div><div class="line">    <span class="keyword">for</span> (element <span class="keyword">in</span> <span class="keyword">this</span>) <span class="keyword">if</span>(predicate(element)) result.add(function(element))</div><div class="line">    <span class="keyword">return</span> result</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Test</span></div><div class="line">println(list.collect(&#123; it * it &#125;, &#123; it % <span class="number">2</span> == <span class="number">0</span> &#125;))</div><div class="line"><span class="comment">// [4, 16, 36]</span></div></pre></td></tr></table></figure>
+<p>至此，我们应该已经对 Kotlin 集合的操作有了基本了解。</p>
+<h2 id="三-对比-Kotlin-Collections-和-Java-8-Stream"><a href="#三-对比-Kotlin-Collections-和-Java-8-Stream" class="headerlink" title="三. 对比 Kotlin Collections 和 Java 8 Stream"></a><strong>三. 对比 Kotlin Collections 和 Java 8 Stream</strong></h2><p>对于使用过 RxJava 的你，一定对  <a href="http://www.oracle.com/technetwork/articles/java/ma14-java-se-8-streams-2177646.html" target="_blank" rel="external">Java Stream</a>有所了解。</p>
+<p>文章开头的例子已经展示过，在 Java 8 中， <code>stream()</code> 方法使得 Java 传统的 Collection 类拥有了函数式的操作。</p>
+<p>这种语法相较 Kotlin 来说稍微显得繁琐了一点，每次操作前都需要转换成 <code>stream</code> ，操作完还要 调用 <code>collect()</code> 转换回 Collection。  </p>
+<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Java</span></div><div class="line">someList</div><div class="line">  .stream()</div><div class="line">  .map() <span class="comment">// some operations</span></div><div class="line">  .collect(Collectors.toList());</div></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Kotlin</span></div><div class="line">someList</div><div class="line">  .map() <span class="comment">// some operations</span></div></pre></td></tr></table></figure>
+<p>但是这么做，其实是有原因：<strong>stream 只能被消费一次，不可多次重用</strong>。  </p>
+<p>下面这样的操作会抛出异常：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Stream&lt;Integer&gt; someIntegers = integers.stream();</div><div class="line">someIntegers.forEach(...);</div><div class="line">someIntegers.forEach(...); <span class="comment">// an exception</span></div></pre></td></tr></table></figure>
+<p>Kotlin 中因为 <strong>操作的中间状态被快速地分配给了变量</strong> ，运行起来并没有任何问题。</p>
+<h3 id="延迟序列"><a href="#延迟序列" class="headerlink" title="延迟序列"></a><strong>延迟序列</strong></h3><p>Java 8 Stream 一个关键的点是：<strong>它使用了惰性求值（<a href="https://zh.wikipedia.org/wiki/%E6%83%B0%E6%80%A7%E6%B1%82%E5%80%BC" target="_blank" rel="external">Lazy Evaluation</a>），即在需要的时候才会求值</strong>。</p>
+<p>而 <strong>Kotlin 则相反</strong>（除了 <code>sequences</code>，将在 <code>Lambda</code> 章节讲述)<strong>，采用及早求值（<a href="https://zh.wikipedia.org/wiki/%E5%8F%8A%E6%97%A9%E6%B1%82%E5%80%BC" target="_blank" rel="external">Eager Evaluation</a>）。</strong>  </p>
+<p>举个例子：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> result = listOf(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</div><div class="line">  .map &#123; n -&gt; n * n &#125;</div><div class="line">  .filter &#123; n -&gt; n &lt; <span class="number">10</span> &#125;</div><div class="line">  .first()</div></pre></td></tr></table></figure>
+<p>以上代码，在 Kotlin 的版本中将执行 5 次 <code>map()</code> 和 <code>filter()</code> 操作，最后返回第一个值。而在 Java Stream 中集合操作只会各执行 1 次。</p>
+<p>在对性能有要求的场景下，我们需要 <strong>使用 <code>asSequence（）</code> 方法将集合转为惰性序列</strong>，以最小开销来实现业务。</p>
+<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a><strong>操作符</strong></h3><p>Java Stream 的中间操作与 Kotlin 几乎没有差别。  </p>
+<p>需要注意的几个点是：</p>
+<ul>
+<li>Java Stream 有一个<code>peek()</code> 方法用于不间断的迭代 Stream 流。</li>
+<li>Java Stream 的 <code>flatMap()</code> 方法需要返回 Stream 实例（需要用 <code>Arrays.toStream()</code>处理），而 Kotlin 可以返回任何类型</li>
+<li>Java Stream 的部分 lambda 表达式不包含索引，仅有元素。</li>
+<li>另外，Java Stream 目前并不支持<code>zip ()</code>、<code>unzip()</code> 、<code>associate()</code> 操作。</li>
+</ul>
+<h2 id="四-总结"><a href="#四-总结" class="headerlink" title="四. 总结"></a><strong>四. 总结</strong></h2><p>本篇文章简述了 Kotlin 集合的结构，揭露集合操作符的部分本质 并 初探扩展函数。</p>
+<p>其次，通过与 Java 8 Stream 的比较，我们能感受到 Kotlin 以及函数式编程的优势与魅力。</p>
+<p>当然，Kotlin 的黑魔法不止于此。</p>
+<p>下一篇，我们将讨论 Kotlin 中的泛型和协变。</p>
+<hr>
+<p>参考：</p>
+<ul>
+<li><a href="https://www.runtastic.com/blog/en/kotlin-collections-inside-part-1/" target="_blank" rel="external">KOTLIN COLLECTIONS INSIDE. PART 1</a></li>
+<li><a href="https://www.runtastic.com/blog/en/kotlin-collections/" target="_blank" rel="external">KOTLIN COLLECTIONS INSIDE. PART 2</a></li>
+<li><a href="https://scala.cool/tags/%E9%9B%86%E5%90%88/">Scala 中的集合</a></li>
+<li><a href="http://www.baeldung.com/java-8-stream-vs-kotlin" target="_blank" rel="external">Java 8 Stream API Analogies in Kotlin</a></li>
+<li><a href="https://book.douban.com/subject/27093660/" target="_blank" rel="external"> 《Kotlin in Action》</a></li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/">Kotlin</a>
+          
+            <a href="/tags/Dive-Into-Kotlin/">~Dive Into Kotlin</a>
+          
+            <a href="/tags/Prefert/">^Prefert</a>
+          
+            <a href="/tags/Android/">Android</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/03/learning-kafka-2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Kafka 学习笔记（二） ：初探 Kafka</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/01/swift-vue-like-2/">
+        <span class="next-text nav-default">用 Swift 模仿 Vue + Vuex 进行 iOS 开发（二）：Coordinator</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1521648000000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2018
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

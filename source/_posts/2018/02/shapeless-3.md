@@ -86,7 +86,7 @@ trait At[L <: HList, N <: Nat] {
 }
 
 implicit class HListSyntax[L <: HList](l: L) {
-    def at(n: Nat)(implicit at: Nat[L, n.N]): at.Out = at.apply(l)
+    def at(n: Nat)(implicit at: At[L, n.N]): at.Out = at.apply(l)
 }
 ```
 

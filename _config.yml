@@ -3,9 +3,9 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Scala Cool
+title: ScalaCool
 subtitle: When Object-Oriented meets Functional that is cool.
-description: 水滴技术团队 - Scala 中文博客
+description: 水滴技术团队 | Scala 中文博客
 author: ScalaCool
 language: zh-CN
 timezone: Asia/Shanghai

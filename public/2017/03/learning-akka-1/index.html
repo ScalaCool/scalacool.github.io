@@ -21,7 +21,7 @@
 
 
 
-  <link rel="alternate" href="/default" title="Scala Cool">
+  <link rel="alternate" href="/default" title="ScalaCool">
 
 
 
@@ -38,11 +38,11 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Akka系列（一）：Akka 简介与 Actor 模型">
 <meta property="og:url" content="http://scala.cool/2017/03/learning-akka-1/index.html">
-<meta property="og:site_name" content="Scala Cool">
+<meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="Akka是一个构建在JVM上，基于Actor模型的的并发框架，为构建伸缩性强，有弹性的响应式并发应用提高更好的平台。本文主要是个人对Akka的学习和应用中的一些理解。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2017/03/actor-model.png">
-<meta property="og:updated_time" content="2018-03-05T05:26:43.000Z">
+<meta property="og:updated_time" content="2018-04-02T02:19:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Akka系列（一）：Akka 简介与 Actor 模型">
 <meta name="twitter:description" content="Akka是一个构建在JVM上，基于Actor模型的的并发框架，为构建伸缩性强，有弹性的响应式并发应用提高更好的平台。本文主要是个人对Akka的学习和应用中的一些理解。">
@@ -81,14 +81,14 @@
 
 
 
-    <title> Akka系列（一）：Akka 简介与 Actor 模型 - Scala Cool </title>
+    <title> Akka系列（一）：Akka 简介与 Actor 模型 - ScalaCool </title>
   </head>
 
   <body>
     <div id="page">
       <header id="masthead" ><div class="site-header-inner">
     <h1 class="site-title ">
-        <a href="/." class="logo">Scala Cool</a>
+        <a href="/." class="logo">ScalaCool</a>
     </h1>
     <nav id="nav-top">
         
@@ -98,7 +98,7 @@
                         <a href="http://news.scala.cool">
                             
                             
-                                News
+                                动态
                             
                         </a>
                     </li>
@@ -107,7 +107,7 @@
                         <a href="https://scala.cool/2017/03/hello-scala/">
                             
                             
-                                About
+                                关于
                             
                         </a>
                     </li>
@@ -140,7 +140,9 @@
         </span>
       
       
-        <span class="_author-avatar-holder" data-author="Godpan"></span>
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Godpan"></span>
+        </div>
       
     </header>
 
@@ -206,15 +208,15 @@
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2017/03/how-to-use-algebraic-data-type-in-scala-development/">
+      <a class="prev" href="/2017/03/scala-news-beta-release/">
         <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">如何在 Scala 中利用 ADT 良好地组织业务</span>
+        <span class="prev-text nav-default">ScalaNews beta releases !</span>
         <span class="prev-text nav-mobile">Prev</span>
       </a>
     
     
-      <a class="next" href="/2017/03/how-to-handle-collection-in-scala-1/">
-        <span class="next-text nav-default">Scala 中的集合（一）：集合类型与操作</span>
+      <a class="next" href="/2017/03/how-to-use-algebraic-data-type-in-scala-development/">
+        <span class="next-text nav-default">如何在 Scala 中利用 ADT 良好地组织业务</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
@@ -231,12 +233,13 @@
     <script>
       var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
       var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1490112000000 > 1517414400123 ? id.slice(-50, id.length) : id;
       var gitalk = new Gitalk({
         clientID: '23770b27c2837a5e79a1',
         clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
         repo: 'scalacool.github.io',
         owner: 'ScalaCool',
-        admin: ['yison-dripower'],
+        admin: ['yisonshan'],
         id: id,
         distractionFreeMode: true
       });
