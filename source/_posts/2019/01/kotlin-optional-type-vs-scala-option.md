@@ -1,10 +1,11 @@
 ---
-title: Kotlin Type? VS Scala Option
+title: Kotlin Type? vs Scala Option
 author: KnewHow
 tags:
-- 编程语言
-- ~Kotlin Type? VS Scala Option
+- Kotlin
+- 类型相关
 - ^KnewHow
+description: 最近阅读一些关于 Kotlin 类型系统方面的书，发现 Kotlin 的类型系统针对 null 有着独特的设计哲学。
 date: 2019-01-04
 ---
 
