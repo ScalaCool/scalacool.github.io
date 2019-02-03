@@ -19,6 +19,7 @@ rss: default
 menu:
   动态: http://news.scala.cool
   关于: https://scala.cool/2017/03/hello-scala/
+  EN: https://medium.com/drip-engineering
 #  Archives: /archives
 
 # ===========================================
