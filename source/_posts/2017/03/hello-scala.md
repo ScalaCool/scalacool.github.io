@@ -42,6 +42,7 @@ date: 2017-03-01
 
 ## 办公环境
 
+<img src="/images/2019/02/building.jpg" width="50%" />
 <img src="https://www.lgstatic.com/thumbnail_1000x0/i/image2/M01/DA/34/CgotOVxk62iAKmQTAAMG6Q35Ev481.jpeg" width="50%" />
 <img src="https://www.lgstatic.com/thumbnail_1000x0/i/image2/M01/DA/14/CgoB5lxk63WAXYBeAAMvEnYCbiE49.jpeg" width="50%" />
 <img src="https://www.lgstatic.com/thumbnail_1000x0/i/image2/M01/DA/14/CgoB5lxk63uAThG7AAJ0JNn16ZI37.jpeg" width="50%" />
