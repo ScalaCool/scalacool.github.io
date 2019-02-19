@@ -9,7 +9,7 @@ date: 2017-03-01
 
 这是「水滴产品团队」面向 Scala 的技术博客，发表与 Scala 相关的技术文章。
 
-我们是一个几乎 Scala 全栈开发的技术团队，技术氛围良好，热爱函数式编程，提倡高效办公，从不加班。
+我们是一个硅谷范的技术团队，几乎 Scala 全栈开发，技术氛围良好，热爱函数式编程，提倡高效办公，从不加班。
 
 如果你对 Scala 感兴趣，欢迎发送简历到我们的邮箱 [hr@dripower.com](mailto:hr@dripower.com) 。
 
@@ -40,3 +40,10 @@ date: 2017-03-01
 
 杭州 / 未来科技城 / 万利大厦 1102
 
+## 办公环境
+
+<img src="https://www.lgstatic.com/thumbnail_1000x0/i/image2/M01/DA/34/CgotOVxk62iAKmQTAAMG6Q35Ev481.jpeg" width="50%" />
+<img src="https://www.lgstatic.com/thumbnail_1000x0/i/image2/M01/DA/14/CgoB5lxk63WAXYBeAAMvEnYCbiE49.jpeg" width="50%" />
+<img src="https://www.lgstatic.com/thumbnail_1000x0/i/image2/M01/DA/14/CgoB5lxk63uAThG7AAJ0JNn16ZI37.jpeg" width="50%" />
+<img src="https://www.lgstatic.com/thumbnail_1000x0/i/image2/M01/DA/14/CgoB5lxk61eAL5YvAAsHaOyGuhs65.jpeg" width="50%" />
+<img src="/images/2019/02/pc.jpg" width="50%" />
