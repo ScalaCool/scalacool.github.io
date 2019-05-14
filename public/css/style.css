@@ -1183,7 +1183,7 @@ body {
 .colored-header {
   width: 200%;
   height: 120px;
-  border-radius: 0 0 50% 50%;
+  border-radius: 0 0 50% 0;
   background-image: linear-gradient(to right , #42CD9B, #3BAD7E);
   margin-bottom: 40px;
   margin-left: -50%;
@@ -1260,6 +1260,9 @@ body {
 
 @media only screen and (max-width: 750px) {
   #clogo {
-    margin-left: 0;
+    margin-left:
+  }
+  #dive-into-kotlin {
+    display: none;
   }
 }
