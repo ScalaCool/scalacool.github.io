@@ -7,7 +7,7 @@
             </a>
         </div>
         <div id="blog-name">
-            <img src="/images/blog-name.svg" />
+            <img src="/images/blog-name.png" />
         </div>
         <div class="dive-into-kotlin">
             <a
