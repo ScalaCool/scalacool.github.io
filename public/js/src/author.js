@@ -56,9 +56,9 @@ function generateTextAuthorHtml (nick) {
   ].join('')
 }
 function blink () {
-  $('#logo img').attr('src', '/images/avatar/scalacool-blind.png')
+  $('#clogo img').attr('src', '/images/avatar/scalacool-blind.png')
     setTimeout(function () {
-      $('#logo img').attr('src', '/images/avatar/scalacool.png')
+      $('#clogo img').attr('src', '/images/avatar/scalacool.png')
     }, 200)
 }
 $(document).ready(function () {

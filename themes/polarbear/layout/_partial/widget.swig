@@ -1,5 +1,5 @@
 <div id="secondary">
-    <div id="logo">
+    <!-- <div id="logo">
       <a href="/">
         <img src="/images/avatar/scalacool.png" onmouseover="this.src='/images/avatar/scalacool-blind.png'" onmouseout="this.src='/images/avatar/scalacool.png'" />
       </a>
@@ -10,7 +10,7 @@
         面向 Scala 的技术博客
         <em>」</em>
       </div>
-    </div>
+    </div> -->
     {% include "./_widget/custom.swig" %}
     {% include "./_widget/categories.swig" %}
     {% include "./_widget/tags.swig" %}
