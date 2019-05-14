@@ -1260,9 +1260,9 @@ body {
 
 @media only screen and (max-width: 750px) {
   #clogo {
-    margin-left:
+    margin-left: 0;
   }
-  #dive-into-kotlin {
+  .dive-into-kotlin {
     display: none;
   }
 }
