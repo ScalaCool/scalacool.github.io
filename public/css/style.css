@@ -1184,7 +1184,7 @@ body {
   width: 200%;
   height: 120px;
   border-radius: 0 0 50% 50%;
-  background-image: linear-gradient(to right , #42CD9B, #3BAD7E);
+  background-image: linear-gradient(to right , #42CD9B, red);
   margin-bottom: 40px;
   margin-left: -50%;
 }
