@@ -23,7 +23,8 @@ date: 2019-05-17
 
 > 书评在豆瓣：https://book.douban.com/subject/33419618/
 
-<img src="https://qiniu.drip.im/news-thumb/5cde3fcebaeb7.jpg" width="450" />
+<img src="/images/2019/05/dive-into-kotlin.jpg" width="450" />
+
 
 ## 勘误
 
