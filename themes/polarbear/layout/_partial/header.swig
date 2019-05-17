@@ -12,8 +12,7 @@
         <div class="dive-into-kotlin">
             <a
                 href="/2019/05/dive-into-kotlin/"
-                title="《Kotlin核心编程》"
-                target="_blank"><img src="/images/dive-into-kotlin.svg" /></a>
+                title="《Kotlin核心编程》"><img src="/images/dive-into-kotlin.svg" /></a>
         </div>
         <nav id="menu">
             {% if theme.menu %}
