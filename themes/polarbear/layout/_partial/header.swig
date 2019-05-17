@@ -11,7 +11,7 @@
         </div>
         <div class="dive-into-kotlin">
             <a
-                href="https://book.douban.com/subject/33419618/"
+                href="/2019/05/dive-into-kotlin/"
                 title="《Kotlin核心编程》"
                 target="_blank"><img src="/images/dive-into-kotlin.svg" /></a>
         </div>
