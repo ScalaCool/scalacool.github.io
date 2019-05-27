@@ -42,7 +42,7 @@
 <meta property="og:description" content="本页面是为了《Kotlin核心编程》这本而构建的，主要讨论和该书中涉及的相关技术和勘误说明，也欢迎任何关于本书内容的讨论，谢谢！">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2019/05/dive-into-kotlin.jpg">
-<meta property="og:updated_time" content="2019-05-17T05:17:17.000Z">
+<meta property="og:updated_time" content="2019-05-27T02:23:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于书籍《Kotlin核心编程》">
 <meta name="twitter:description" content="本页面是为了《Kotlin核心编程》这本而构建的，主要讨论和该书中涉及的相关技术和勘误说明，也欢迎任何关于本书内容的讨论，谢谢！">
@@ -170,10 +170,13 @@
 <p>书评在豆瓣：<a href="https://book.douban.com/subject/33419618/" target="_blank" rel="external">https://book.douban.com/subject/33419618/</a></p>
 </blockquote>
 <p><img src="/images/2019/05/dive-into-kotlin.jpg" width="450"></p>
-<h2 id="勘误"><a href="#勘误" class="headerlink" title="勘误"></a>勘误</h2><table>
+<h2 id="勘误"><a href="#勘误" class="headerlink" title="勘误"></a>勘误</h2><blockquote>
+<p>我们对由于不严谨、稿件版本等原因导致的错别字、代码、格式等问题表示抱歉，会在新批次印刷前进行订正。</p>
+</blockquote>
+<p>版次（2019 年 4 月第 1 版第 1 次印刷）</p>
+<table>
 <thead>
 <tr>
-<th>页码</th>
 <th>原文</th>
 <th>改为</th>
 <th>状态</th>
@@ -184,7 +187,36 @@
 <td>64</td>
 <td>I am run very fast</td>
 <td>I can run very fast</td>
-<td>待修正</td>
+</tr>
+<tr>
+<td>198</td>
+<td><code>fun toMap(a: User): Map&lt;String, Any&gt; = { ... }</code></td>
+<td><code>fun toMap(a: User): Map&lt;String, Any&gt; { return ... }</code></td>
+</tr>
+<tr>
+<td>199</td>
+<td><code>fun &lt;A : Any&gt; toMap(a: A): Map&lt;String, Any?&gt; = { ... }</code></td>
+<td><code>fun &lt;A : Any&gt; toMap(a: A): Map&lt;String, Any?&gt; { return ... }</code></td>
+</tr>
+<tr>
+<td>199</td>
+<td>素据</td>
+<td>数据</td>
+</tr>
+<tr>
+<td>206</td>
+<td><code>Succ::class.declaredMemberExtensionFunctions.map{it.name}</code></td>
+<td><code>Nat::class.declaredMemberExtensionFunctions.map{it.name}</code></td>
+</tr>
+<tr>
+<td>206</td>
+<td><code>Nat::class.declaredMemberExtensionProperties</code></td>
+<td><code>Nat::class.declaredMemberExtensionProperties.map{it.name}</code> </td>
+</tr>
+<tr>
+<td>207</td>
+<td>缺乏必要的Person类</td>
+<td>在 <code>KMutablePropertyShow</code>函数上方增加 <code>data class Person(val name: String, val age: Int, var address: String)</code></td>
 </tr>
 </tbody>
 </table>
