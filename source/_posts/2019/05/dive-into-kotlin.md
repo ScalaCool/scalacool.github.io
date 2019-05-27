@@ -32,7 +32,7 @@ date: 2019-05-17
 
 版次（2019 年 4 月第 1 版第 1 次印刷）
 
-原文 |  改为 | 状态
+页码 |  原文 | 改为
 -|-|-
 64 | I am run very fast | I can run very fast
 198 | `fun toMap(a: User): Map<String, Any> = { ... }` | `fun toMap(a: User): Map<String, Any> { return ... }`
