@@ -7,7 +7,7 @@ description: When Object-Oriented meets Functional that is cool.
 date: 2017-03-01
 ---
 
-这是「水滴产品团队」面向 Scala 的技术博客，发表与 Scala 相关的技术文章。
+这是「水滴产品团队」面向 Scala 的技术博客，发表与JVM 生态相关（Scala、Kotlin 为主）的技术文章。
 
 我们是一个硅谷范的技术团队，几乎 Scala 全栈开发，技术氛围良好，热爱函数式编程，提倡高效办公，从不加班。
 
