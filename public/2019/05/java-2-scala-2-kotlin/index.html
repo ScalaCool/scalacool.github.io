@@ -41,7 +41,7 @@
 <meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="本文我们会通过对比 Java、Scala、Kotlin 这三门语言各自的发展路线，来认识 Kotlin 的设计哲学。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-31T02:21:39.000Z">
+<meta property="og:updated_time" content="2019-05-31T02:29:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从 Java 到 Scala，再到 Kotlin">
 <meta name="twitter:description" content="本文我们会通过对比 Java、Scala、Kotlin 这三门语言各自的发展路线，来认识 Kotlin 的设计哲学。">
@@ -231,13 +231,13 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(x: <span class="type">Int</span>)</span></span> = x * <span class="number">2</span> + <span class="number">2</span></div></pre></td></tr></table></figure>
 <p>然而，大部分情况下，我们还是可以采用类似Java的方式来定义一个函数，如：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(x: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> &#123;</div><div class="line">    <span class="keyword">val</span> y = x * <span class="number">2</span></div><div class="line">    <span class="keyword">return</span> y + <span class="number">2</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>由于Kotlin比Scala更加兼容Java的生态和语法，Java程序员可以更加容易地掌握它。另一方面，Kotlin非常注重语法的简洁表达。如果你了解Scala中的implicit，可能曾被这个Scala的语法惊吓到，因为它非常强大。然而，正如我们提到的“简单灵活”的另一面，则意味着抽象和晦涩。Kotlin注重的是工程的实用性，所以它创造了扩展的语法，虽然相比implicit在功能上有损，但显得更加的具体直观，且依旧非常强大，满足了日常开发中绝大多数的需求。值得一提的是，Android则依靠这个Java所没有的特性，推出了扩展库android-ktx，我们会在第7章专门介绍这种强大的特性。</p>
+<p>由于Kotlin比Scala更加兼容Java的生态和语法，Java程序员可以更加容易地掌握它。另一方面，Kotlin非常注重语法的简洁表达。如果你了解Scala中的implicit，可能曾被这个Scala的语法惊吓到，因为它非常强大。然而，正如我们提到的“简单灵活”的另一面，则意味着抽象和晦涩。Kotlin注重的是工程的实用性，所以它创造了扩展的语法，虽然相比implicit在功能上有损，但显得更加的具体直观，且依旧非常强大，满足了日常开发中绝大多数的需求。值得一提的是，Android则依靠这个Java所没有的特性，推出了扩展库android-ktx。</p>
 <p>此外，Kotlin还新增了一些Java、Scala中没有的语法糖。如果你从事Android开发，那么肯定少不了在工程中写过这样子的Java代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(parentView <span class="keyword">instanceof</span> ViewGroup)&#123;</div><div class="line">    ((ViewGroup) parentView).addView(childView);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>为了类型安全我们不得不写两遍ViewGroup，然而在Kotlin中我们却可以直接这么写：</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(parentView <span class="keyword">is</span> ViewGroup)&#123;</div><div class="line">    parentView.addView(childView)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这依靠的是Kotlin中的Smart Casts特性，我们不评价这种语法糖是否好坏，但它可以在一定程度上改善我们在工程中的开发体验。</p>
 <p>总体而言，Kotlin旨在成为一门提升Java生产力的更好的编程语言，它拥有简洁的表达能力、强大的工具支持，同时至今仍然保持着非常快速的编译能力。相较而言，用Scala开发则常常受到编译过慢而带来的困扰。</p>
-<h3 id="强大的生态"><a href="#强大的生态" class="headerlink" title="强大的生态"></a>强大的生态</h3><p>现在，我们已经了解了Kotlin整体的设计哲学，以及它相较Java、Scala的魅力所在。当然，本章似乎并没有任何关于语法细节的介绍，不着急，我们会在后续的内容中深入介绍Kotlin的语言特性，并且探索它具体的高级应用。</p>
+<h3 id="强大的生态"><a href="#强大的生态" class="headerlink" title="强大的生态"></a>强大的生态</h3><p>现在，我们已经了解了Kotlin整体的设计哲学，以及它相较Java、Scala的魅力所在。当然，本文似乎并没有任何关于语法细节的介绍，不着急，我们会在后续的内容中深入介绍Kotlin的语言特性，并且探索它具体的高级应用。</p>
 <p>关于Kotlin，还有一个问题需要解答—我们究竟可以用它来做什么。大概率上你是因为Kotlin成为Android官方支持语言的新闻而知晓它的。事实上，Kotlin不仅支持Android，它还是一门通用语言，如果用一句话来总结，那就是“Targeting JVM / JavaScript and Native”。现阶段的Kotlin我们至少可以用它做以下的事情：</p>
 <ul>
 <li>Android开发</li>
@@ -256,9 +256,10 @@
 </ul>
 <p>因为Kotlin Native这个项目，Kotlin终于告别了Java，离开了JVM，直接编译成机器码供系统环境运行。虽然Kotlin Native尚处于早期阶段，但后续的发展非常值得期待。如果你家里有一个树莓派，不妨可以用它来试一试。</p>
 <p>如你所见，Kotlin还是一门非常开放、具有强大生态的编程语言。如果说与Java兼容能让它运行在所有支持Java的地方，那么它的革命创新使得它超越了Java，进入了更加广阔的世界。</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本书的每个章节都会有个小结，但第一章比较特别，我们打算用一个比喻来结尾。这个生动形象的说法来自于Lutz Hühnken的博客，他把Java、Scala、Kotlin比作滑雪运动中的不同种类。</p>
-<p>如果说JVM平台是一个滑雪世界，那么最早的Java语言就是大家最熟知的滑雪方式—双脚各一个雪橇来进行滑雪。Scala则更像是滑雪板，运动员将两只脚都站在一块单板上来滑行。那些用滑雪板的高级运动员非常令人羡慕，因为他们可以用更优雅的姿势获得更快的速度，而且最重要的是他们可以做“深粉雪”滑行，这也就是所谓的函数式编程。</p>
-<p>然而，对于用惯雪橇的滑雪运动员而言，尝试用滑雪板来滑雪，就像是学习一种新的运动，会经常摔跤。其实，大部分人还是更乐意用雪橇来进行滑雪。这时候，刻滑板出现了，使用它，运动员完全可以保留原有雪橇的习惯，但同时依旧可以做某个程度上的深粉雪滑行。你猜的没错，它就是Kotlin。<br>对于滑雪这项运动而言，别忘了，还有一个世界性的赛事—Android开发，它暂时并没有对滑雪板开放，但对刻滑板则已经敞开了怀抱。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>我们打算用一个比喻来结尾。这个生动形象的说法来自于Lutz Hühnken的博客，他把Java、Scala、Kotlin比作滑雪运动中的不同种类。</p>
+<p>如果说JVM平台是一个滑雪世界，那么最早的Java语言就是大家最熟知的滑雪方式—双脚各踏一个滑雪板来进行滑雪。Scala则更像将两只脚都站在一块单板上来滑行的滑雪方式。那些用滑雪单板的高级运动员非常令人羡慕，因为他们可以用更优雅的姿势获得更快的速度，而且最重要的是他们可以做“深粉雪”滑行，这也就是所谓的函数式编程。</p>
+<p>然而，对于用惯双板滑雪的运动员而言，尝试用单板来滑雪，就像是学习一种新的运动，会经常摔跤。其实，大部分人还是更乐意用双板来进行滑雪。这时候，刻滑板出现了，使用它，运动员完全可以保留原有双板的习惯，但同时依旧可以做某个程度上的深粉雪滑行。你猜的没错，它就是Kotlin。</p>
+<p>对于滑雪这项运动而言，别忘了，还有一个世界性的赛事—Android开发，它暂时并没有对单板开放，但对刻滑板则已经敞开了怀抱。</p>
 <p>所以，如果你是想要寻找一种更好的Java语言的话，欢迎来到Kotlin的滑雪世界！</p>
 <blockquote>
 <p>以上内容摘自<a href="https://scala.cool/2019/05/dive-into-kotlin/">《Kotlin核心编程》</a></p>
