@@ -99,10 +99,10 @@ f1(1, f2(2))
 
 ```haskell
 f1 :: Int -> Int -> Int
-f1 x y = x + y
+f1 x y = x
 
 f2 :: Int -> Int
-f2 x = x
+f2 x = f2 x
 ```
 
 运行 `ghci` 载入函数后调用 `f1 1 (f2 2)`，你就会发现：纳尼！竟然成功返回了结果 1。这到底是怎么回事呢？

@@ -41,7 +41,7 @@
 <meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="上一篇文章我们介绍了函数式编程的思维，这一篇我们来了解下函数式编程的魅力。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta property="og:updated_time" content="2019-06-04T06:45:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cats（二）：引用透明性和等式推理">
 <meta name="twitter:description" content="上一篇文章我们介绍了函数式编程的思维，这一篇我们来了解下函数式编程的魅力。">
@@ -198,7 +198,7 @@
 <p>似乎已经有了答案，所谓「相同的计算结果」，还可以是死循环。。。</p>
 </blockquote>
 <p>这时，一个会 Haskell 的程序员路过，迷之微笑，花了 10 秒钟翻译成了以下的版本：</p>
-<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="title">f1</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span></div><div class="line"><span class="title">f1</span> x y = x + y</div><div class="line"></div><div class="line"><span class="title">f2</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span></div><div class="line"><span class="title">f2</span> x = x</div></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="title">f1</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span></div><div class="line"><span class="title">f1</span> x y = x</div><div class="line"></div><div class="line"><span class="title">f2</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span></div><div class="line"><span class="title">f2</span> x = f2 x</div></pre></td></tr></table></figure>
 <p>运行 <code>ghci</code> 载入函数后调用 <code>f1 1 (f2 2)</code>，你就会发现：纳尼！竟然成功返回了结果 1。这到底是怎么回事呢？</p>
 <h3 id="应用序-vs-正则序"><a href="#应用序-vs-正则序" class="headerlink" title="应用序 vs 正则序"></a>应用序 vs 正则序</h3><p>也许相当多开发的同学至今未曾思考过这个问题：<strong>编程语言中的表达式求值策略是怎样的？</strong></p>
 <p>其实，编程语言中存在两种不同的代换模型：<strong>应用序</strong> 和 <strong>正则序</strong>。</p>
