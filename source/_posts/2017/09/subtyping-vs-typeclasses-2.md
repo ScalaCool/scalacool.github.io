@@ -95,14 +95,14 @@ object G1 {
   def ordering(o: (Player1, Player1) => Int) = new Comparator[Player1] {
     def compare(first: Player1, second: Player1) = o(first, second)
   }
-  val mvp = ordering(_.score - _.score)
+  val mvp =  ordering((p1: Player1, p2: Player1) => (p1.score - p2.score).toInt)
 }
 
 object G2 {
   def ordering(o: (Player2, Player2) => Int) = new Comparator[Player2] {
     def compare(first: Player2, second: Player2) = o(first, second)
   }
-  val mvp = ordering(_.score - _.score)
+  val mvp =  ordering((p1: Player2, p2: Player2) => (p1.score - p2.score).toInt)
 }
 ```
 
@@ -142,14 +142,14 @@ object G1 {
   def ordering(o: (Player1, Player1) => Int) = new Comparator[Player1] {
     def compare(first: Player1, second: Player1) = o(first, second)
   }
-  implicit val mvp = ordering(_.score - _.score)
+  implicit val mvp =  ordering((p1: Player1, p2: Player1) => (p1.score - p2.score).toInt)
 }
 
 object G2 {
   def ordering(o: (Player2, Player2) => Int) = new Comparator[Player2] {
     def compare(first: Player2, second: Player2) = o(first, second)
   }
-  implicit val mvp = ordering(_.score - _.score)
+  implicit val mvp =  ordering((p1: Player2, p2: Player2) => (p1.score - p2.score).toInt)
 }
 ```
 
