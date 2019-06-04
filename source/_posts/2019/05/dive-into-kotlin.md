@@ -89,23 +89,6 @@ date: 2019-05-17
     </td>
   </tr>
   <tr>
-    <td>130</td>
-    <td>
-      ```kotlin
-      fun sum(a: Int, b: Int) {
-          return a + b
-      }
-      ```
-    </td>
-    <td>
-      ```kotlin
-      fun sum(a: Int, b: Int): Int {
-          return a + b
-      }
-      ```
-    </td>
-  </tr>
-  <tr>
     <td>198</td>
     <td>`fun toMap(a: User): Map<String, Any> = { ... }`</td>
     <td>`fun toMap(a: User): Map<String, Any> { return ... }`</td>
