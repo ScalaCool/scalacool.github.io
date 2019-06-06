@@ -54,6 +54,11 @@ date: 2019-05-17
     <td>I can run very fast</td>
   </tr>
   <tr>
+    <td>127</td>
+    <td>?Any?是?Any的父类型</td>
+    <td>Any?是Any的父类型</td>
+  </tr>
+  <tr>
     <td>130</td>
     <td>
       ```kotlin
