@@ -54,6 +54,16 @@ date: 2019-05-17
     <td>I can run very fast</td>
   </tr>
   <tr>
+    <td>66</td>
+    <td>`fun kind() = "flying animals"`(Flyer接口中)</td>
+    <td>`fun kind() = "[Flyer] flying animals"`</td>
+  </tr>
+  <tr>
+    <td>66</td>
+    <td>`fun kind() = "flying animals"`(Animal接口中)</td>
+    <td>`fun kind() = "[Animal] flying animals"`</td>
+  </tr>
+  <tr>
     <td>127</td>
     <td>?Any?是?Any的父类型</td>
     <td>Any?是Any的父类型</td>
@@ -74,6 +84,11 @@ date: 2019-05-17
       }
       ```
     </td>
+  </tr>
+  <tr>
+    <td>142</td>
+    <td>`public interface List<? extends T> { ... }`</td>
+    <td>`List<? extends Object> list = new ArrayList<String>();`</td>
   </tr>
   <tr>
     <td>144</td>
