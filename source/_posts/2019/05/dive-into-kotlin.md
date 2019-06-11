@@ -39,6 +39,11 @@ date: 2019-05-17
     <th>改为</th>
   </tr>
   <tr>
+    <td>39</td>
+    <td>`"kot" >= "abc" && "abc" <= "xyz"`</td>
+    <td>`"kot" >= "abc" && "kot" <= "xyz"`</td>
+  </tr>
+  <tr>
     <td>56</td>
     <td>internal public Bird</td>
     <td>internal class Bird</td>
