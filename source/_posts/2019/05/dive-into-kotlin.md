@@ -144,6 +144,16 @@ date: 2019-05-17
     <td>在 `KMutablePropertyShow`函数上方增加 ` data class Person(val name: String, val age: Int, var address: String)` </td>
   </tr>
   <tr>
+    <td>211</td>
+    <td>Sourc。</td>
+    <td>Source。</td>
+  </tr>
+  <tr>
+    <td>211</td>
+    <td>RUNTIM。</td>
+    <td>RUNTIME。</td>
+  </tr>
+  <tr>
     <td>254</td>
     <td>
       ```haskell
@@ -162,6 +172,34 @@ date: 2019-05-17
       f2 :: Int -> Int
       f2 x = f2 x 
       ```
+    </td>
+  </tr>
+  <tr>
+    <td>254</td>
+    <td>
+      ```haskell
+      f1(1(f2(2)))
+      ```
+      ```haskell
+      f2(2)
+      ```
+    </td>
+    <td>
+      ```haskell
+      f1 1 (f2 2)
+      ```
+      ```haskell
+      f2 2
+      ```
+    </td>
+  </tr>
+  <tr>
+    <td>293</td>
+    <td>
+      没有synchronized，
+    </td>
+    <td>
+      没有synchronized关键字，
     </td>
   </tr>
   <tr>
@@ -191,6 +229,15 @@ date: 2019-05-17
           }
       }
       ```
+    </td>
+  </tr>
+  <tr>
+    <td>299</td>
+    <td>
+      这个这个方案
+    </td>
+    <td>
+      这个方案
     </td>
   </tr>
 </table>
