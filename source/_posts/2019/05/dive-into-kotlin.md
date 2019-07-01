@@ -28,8 +28,8 @@ date: 2019-05-17
 ## 深度书评
 
 - [扶墙老师：怎么实现我不管，这才是我要的最好的计算机语言！](https://afoo.me/posts/2019-05-19-more_than_CS_languages.html)
-- [Benny Huo：给大家推荐一本深入学习 Kotlin 的书](https://mp.weixin.qq.com/s?timestamp=1561611881&src=3&ver=1&signature=KqrkjFM5Nv-*xWjn1WnsMGhPVt1ZR*ZVyMJqtOPxVEojn-2*YhrcE0U3*RbCK3An9nHJocQ81hYzTvT9EpAMAbTfxutAykMJHtZ6vvgjRztY3Q*ucINQywIkFx3e6Mhova7z9rTJlLckO3DeE26miHNktrXmx*Sbetmf9pPCgjs=)
-- [mikyou：进阶Kotlin开发? 那不妨看看这本书](https://mp.weixin.qq.com/s?timestamp=1561611923&src=3&ver=1&signature=KqrkjFM5Nv-*xWjn1WnsMHvzHM71Anqk9IVzN07WFD9CTLalVoqnvDQyPGQJguaT-2kp4*ZQf9t2r6OAGeOQLR2JldHTlG*HnSr3646UYAWl10ZcVaEpy*K8n-53oMHpKIBVYH-vbzKezYQC---YXov7V1is9W8I5v5I2VeOnuY=)
+- [Benny Huo：给大家推荐一本深入学习 Kotlin 的书](https://mp.weixin.qq.com/s/kitZdm5rzGvUpZmTQa-LcA)
+- [mikyou：进阶Kotlin开发? 那不妨看看这本书](https://mp.weixin.qq.com/s/_FhF-efuWq4lG5vPVRTUTw)
 
 
 ## 勘误
