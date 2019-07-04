@@ -31,6 +31,10 @@ date: 2019-05-17
 - [Benny Huo：给大家推荐一本深入学习 Kotlin 的书](https://mp.weixin.qq.com/s/kitZdm5rzGvUpZmTQa-LcA)
 - [mikyou：进阶Kotlin开发? 那不妨看看这本书](https://mp.weixin.qq.com/s/_FhF-efuWq4lG5vPVRTUTw)
 
+## 延伸阅读
+
+- [图书 - Kotlin 语言中文站](https://www.kotlincn.net/docs/books.html)
+
 
 ## 勘误
 
