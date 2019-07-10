@@ -125,8 +125,20 @@ date: 2019-05-17
   </tr>
   <tr>
     <td>198</td>
-    <td>`fun toMap(a: User): Map<String, Any> = { ... }`</td>
-    <td>`fun toMap(a: User): Map<String, Any> { return ... }`</td>
+    <td>
+      ```kotlin
+      fun toMap(a: User): Map<String, Any> = {
+        hashMapOf("name" to name, "age" to age)
+      }
+      ```
+    </td>
+    <td>
+      ```kotlin
+      fun toMap(a: User): Map<String, Any> {
+        return hashMapOf("name" to a.name, "age" to a.age)
+      }
+      ```
+    </td>
   </tr>
   <tr>
     <td>199</td>
