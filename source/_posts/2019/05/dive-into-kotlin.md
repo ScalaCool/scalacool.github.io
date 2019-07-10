@@ -91,6 +91,11 @@ date: 2019-05-17
           return a + b
       }
       ```
+      ```kotlin
+      fun sum(a: T, b: T) {
+          return a + b
+      }
+      ```
     </td>
     <td>
       ```kotlin
@@ -98,6 +103,20 @@ date: 2019-05-17
           return a + b
       }
       ```
+      ```kotlin
+      fun sum(a: T, b: T): T {
+          return a + b
+      }
+      ```
+    </td>
+  </tr>
+  <tr>
+    <td>130</td>
+    <td>
+      能不能将参数的类型也参数化呢？比如：
+    </td>
+    <td>
+      能不能将参数的类型也参数化呢？比如以下伪代码：
     </td>
   </tr>
   <tr>
