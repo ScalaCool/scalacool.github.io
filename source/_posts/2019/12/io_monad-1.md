@@ -163,10 +163,10 @@ implicit def ioMonadErrorInstance: MonadError[IO, Throwable] = new MonadError[IO
 case class NotAInt(str: String) extends Throwable
 val readInt: IO[Int] = Console.getStr().flatMap { str =>
   val r: Either[Throwable, Int] = try {
-  Right(str.toInt)
-} catch {
-  case e: Throwable => Left(NotAInt(str))
-}
+    Right(str.toInt)
+  } catch {
+    case e: Throwable => Left(NotAInt(str))
+  }
   MonadError[IO, Throwable].fromEither(r) // 召唤 MonadError 实例
 }
 ```
