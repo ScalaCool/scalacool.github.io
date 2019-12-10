@@ -1,8 +1,8 @@
 ---
-title: IO Monad 设计浅析（一）- Monad 和 MonadError
+title: IO Monad 设计浅析（一）：Monad 和 MonadError
 author: Jilen
 tags:
-- FP
+- ~IO Monad 设计浅析
 - 函数式编程
 - ^Jilen
 description: ZIO 是最近 Scala 社区非常热门且与众不同的 IO Monad 实现，本专题我们会从各个角度分析 ZIO 和 Cats-Effect 等 IO Monad 的设计
