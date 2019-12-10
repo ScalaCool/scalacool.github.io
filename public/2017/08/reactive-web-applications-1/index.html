@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang>
-  <head><meta name="generator" content="Hexo 3.9.0">
+<html lang="">
+  <head>
     
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,29 +26,29 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
 
 
 
-<link rel="canonical" href="http://scala.cool/2017/08/reactive-web-applications-1/">
+<link rel="canonical" href="http://scala.cool/2017/08/reactive-web-applications-1/"/>
 
 
 <meta name="description" content="如果你正在阅读本书，你可能听过诸如「响应式应用」、「响应式编程」、「响应式流」或「响应式宣言」等概念。这些词加上「响应式」前缀后感觉更加高大上了，但是你可能会去思考在这些不同场景下「响应式」的含义。那就让我们去看看这个词在计算机系统中的起源，从中寻求答案。">
-<meta name="keywords" content="^Shaw,翻译,Play,响应式编程,~响应式 Web 应用">
+<meta name="keywords" content="翻译,Play,响应式编程,~响应式 Web 应用,^Shaw">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt;译&gt; 响应式 Web 应用（一）">
 <meta property="og:url" content="http://scala.cool/2017/08/reactive-web-applications-1/index.html">
 <meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="如果你正在阅读本书，你可能听过诸如「响应式应用」、「响应式编程」、「响应式流」或「响应式宣言」等概念。这些词加上「响应式」前缀后感觉更加高大上了，但是你可能会去思考在这些不同场景下「响应式」的含义。那就让我们去看看这个词在计算机系统中的起源，从中寻求答案。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-18T10:04:32.558Z">
+<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;译&gt; 响应式 Web 应用（一）">
 <meta name="twitter:description" content="如果你正在阅读本书，你可能听过诸如「响应式应用」、「响应式编程」、「响应式流」或「响应式宣言」等概念。这些词加上「响应式」前缀后感觉更加高大上了，但是你可能会去思考在这些不同场景下「响应式」的含义。那就让我们去看看这个词在计算机系统中的起源，从中寻求答案。">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
 
 
 
@@ -79,12 +79,12 @@
 
 
 
-    <title> <译> 响应式 Web 应用（一） - ScalaCool </译></title>
+    <title> <译> 响应式 Web 应用（一） - ScalaCool </title>
   </head>
 
   <body>
     <div id="page">
-      <header id="masthead">
+      <header id="masthead" >
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -136,7 +136,7 @@
         
           <译> 响应式 Web 应用（一）
         
-      </译></h1>
+      </h1>
 
       <time class="post-time">
           8月8日
@@ -158,7 +158,7 @@
 
     
             <div class="post-content">
-            <h2 id="原书"><a href="#原书" class="headerlink" title="原书"></a>原书</h2><p><a href="https://www.manning.com/books/reactive-web-applications" target="_blank" rel="noopener">https://www.manning.com/books/reactive-web-applications</a></p>
+            <h2 id="原书"><a href="#原书" class="headerlink" title="原书"></a>原书</h2><p><a href="https://www.manning.com/books/reactive-web-applications" target="_blank" rel="external">https://www.manning.com/books/reactive-web-applications</a></p>
 <h2 id="第一章：你是说「响应式」？"><a href="#第一章：你是说「响应式」？" class="headerlink" title="第一章：你是说「响应式」？"></a>第一章：你是说「响应式」？</h2><h2 id="本章内容"><a href="#本章内容" class="headerlink" title="本章内容"></a>本章内容</h2><ul>
 <li><p>响应式应用及其起源</p>
 </li>
@@ -179,9 +179,9 @@
 </ul>
 <p>我们将首先澄清「响应式」一词的意思，并探讨在新的硬件设计和软件架构的趋势下，如何重新考虑使用可计算资源。最后，还将探究为什么失败处理起着关键性的作用，以及如何去实现相应的逻辑。</p>
 <h2 id="1-1-特定场景下的「响应式」"><a href="#1-1-特定场景下的「响应式」" class="headerlink" title="1.1 特定场景下的「响应式」"></a>1.1 特定场景下的「响应式」</h2><p>如果你正在阅读本书，你可能听过诸如「响应式应用」、「响应式编程」、「响应式流」或「响应式宣言」等概念。这些词加上「响应式」前缀后感觉更加高大上了，但是你可能会去思考在这些不同场景下「响应式」的含义。那就让我们去看看这个词在计算机系统中的起源，从中寻求答案。</p>
-<h3 id="1-1-1-「响应式」的起源"><a href="#1-1-1-「响应式」的起源" class="headerlink" title="1.1.1 「响应式」的起源"></a>1.1.1 「响应式」的起源</h3><p>「响应式系统」并不是一个新的概念。David Harel 和 Amir Pnueli 在<a href="http://mng.bz/p1n3" target="_blank" rel="noopener">《关于响应式系统的发展》</a>（1985年出版）的论文中就收集整理了几个二分法，以此来表征复杂的计算机系统，并提出了一个新的二分法：<strong>转换系统与响应式系统</strong>。转换系统接受一组已知的输入，然后转换这些输入，最终产生输出。例如，转换系统可以提示用户进行一些输入，然后再根据用户提供的内容来提示用户，并最终产出结果。</p>
+<h3 id="1-1-1-「响应式」的起源"><a href="#1-1-1-「响应式」的起源" class="headerlink" title="1.1.1 「响应式」的起源"></a>1.1.1 「响应式」的起源</h3><p>「响应式系统」并不是一个新的概念。David Harel 和 Amir Pnueli 在<a href="http://mng.bz/p1n3" target="_blank" rel="external">《关于响应式系统的发展》</a>（1985年出版）的论文中就收集整理了几个二分法，以此来表征复杂的计算机系统，并提出了一个新的二分法：<strong>转换系统与响应式系统</strong>。转换系统接受一组已知的输入，然后转换这些输入，最终产生输出。例如，转换系统可以提示用户进行一些输入，然后再根据用户提供的内容来提示用户，并最终产出结果。</p>
 <p>思考一下，比如，袖珍计算器，它接受数字并执行基本操作，以便在按下等号键时最终返回结果。另一方面，响应式系统由外部环境持续刺激，其作用是不断响应这些刺激。例如，具有运动监测测功能的 WIFI 摄像机可以注意到小偷进入了房间，然后它会向摄像机主人的手机发送警报，于是他们无助地目睹了小偷将其房间里的贵重物品洗劫一空，以及不久之后警察到达现场的情景。</p>
-<p>几年后，<a href="https://hal.inria.fr/inria-00075494/document" target="_blank" rel="noopener">Gérard Berry</a> 通过介绍交互式程序和响应式程序之间的区别来改进了这一定义。 交互式程序与环境交互的速度由程序本身决定，而响应式程序则由外部环境决定。</p>
+<p>几年后，<a href="https://hal.inria.fr/inria-00075494/document" target="_blank" rel="external">Gérard Berry</a> 通过介绍交互式程序和响应式程序之间的区别来改进了这一定义。 交互式程序与环境交互的速度由程序本身决定，而响应式程序则由外部环境决定。</p>
 <p>因此，响应式程序能够：</p>
 <ul>
 <li><p>持续与它们的环境进行交互</p>
@@ -219,8 +219,6 @@
       <footer class="post-footer">
         <div class="post-tags">
           
-            <a href="/tags/Shaw/">^Shaw</a>
-          
             <a href="/tags/翻译/">翻译</a>
           
             <a href="/tags/Play/">Play</a>
@@ -228,6 +226,8 @@
             <a href="/tags/响应式编程/">响应式编程</a>
           
             <a href="/tags/响应式-Web-应用/">~响应式 Web 应用</a>
+          
+            <a href="/tags/Shaw/">^Shaw</a>
           
         </div>
 

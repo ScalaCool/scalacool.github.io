@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang>
-  <head><meta name="generator" content="Hexo 3.9.0">
+<html lang="">
+  <head>
     
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,29 +26,29 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
 
 
 
-<link rel="canonical" href="http://scala.cool/2019/05/java-2-scala-2-kotlin/">
+<link rel="canonical" href="http://scala.cool/2019/05/java-2-scala-2-kotlin/"/>
 
 
 <meta name="description" content="本文我们会通过对比 Java、Scala、Kotlin 这三门语言各自的发展路线，来认识 Kotlin 的设计哲学。">
-<meta name="keywords" content="Java,函数式编程,Kotlin">
+<meta name="keywords" content="Kotlin,Java,函数式编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从 Java 到 Scala，再到 Kotlin">
 <meta property="og:url" content="http://scala.cool/2019/05/java-2-scala-2-kotlin/index.html">
 <meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="本文我们会通过对比 Java、Scala、Kotlin 这三门语言各自的发展路线，来认识 Kotlin 的设计哲学。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-29T07:52:37.051Z">
+<meta property="og:updated_time" content="2019-06-10T01:43:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从 Java 到 Scala，再到 Kotlin">
 <meta name="twitter:description" content="本文我们会通过对比 Java、Scala、Kotlin 这三门语言各自的发展路线，来认识 Kotlin 的设计哲学。">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
 
 
 
@@ -84,7 +84,7 @@
 
   <body>
     <div id="page">
-      <header id="masthead">
+      <header id="masthead" >
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -181,7 +181,7 @@
 <li>更强大的类型推导</li>
 <li>模式匹配</li>
 </ul>
-<p>以上的语言特性，对于初尝函数式编程甜头的Java开发者而言，是十分值得期待的。它们可以进一步解放Java，让开发工作变得更加高效和灵活。比如，一旦Java支持了数据类，我们就可以用非常简短的语法来表示一个常见的数据对象类，就像这样子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> class <span class="title">User</span><span class="params">(String firstName, String lastName, DateTime birthday)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>以上的语言特性，对于初尝函数式编程甜头的Java开发者而言，是十分值得期待的。它们可以进一步解放Java，让开发工作变得更加高效和灵活。比如，一旦Java支持了数据类，我们就可以用非常简短的语法来表示一个常见的数据对象类，就像这样子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> class <span class="title">User</span><span class="params">(String firstName, String lastName, DateTime birthday)</span></span></div></pre></td></tr></table></figure></p>
 <p>而用如今的JavaBean，则意味着好几倍的代码量，这一切都让人迫不及待。与此同时，或许早有Java程序员开始了JVM平台上另一种语言的研究。这门语言已支持了所有这些新的特性，并在设计的一开始，就集成了面向对象和函数式两大特征，它就是Scala。</p>
 <h2 id="Scala的百宝箱"><a href="#Scala的百宝箱" class="headerlink" title="Scala的百宝箱"></a>Scala的百宝箱</h2><p>Scala是洛桑联邦理工大学的马丁（Martin Odersky）教授创造的一门语言。他也参与了Java语言发展的研究工作，Java 5引入泛型就是他的杰作。事实上，在Java刚发布的时候，马丁教授就开始了Java的改良工作—他在JVM平台探索函数式编程，发布了一个名为Pizza的语言，那时就支持了泛型、高阶函数和模式匹配。</p>
 <p>然而，在随后的探索过程中，他渐渐发现Java是一门具有硬性约束的语言，在某些时候不能采用最优的方式来实施设计方案。因此，他和他的研究伙伴决定重新创造一门语言，既在学术上合理，同时也具备实用价值，这就是Scala的由来。</p>
@@ -226,15 +226,15 @@
 </blockquote>
 <p>其次，虽然都是兼容Java，Scala（最近的几个版本）必须要求Java 8，而Kotlin则可以跟Java 6一起工作，这也是后者在Android上更加流行的原因之一。</p>
 <p>另外，Kotlin并没有像Scala那样在语法的探索上表现得“随心所欲”，Java程序员在学习Kotlin新语法特性的同时，依旧可以保留更多原有的习惯。举个例子，在Scala中，一切皆有类型。所以大部分时间，我们都用等号来定义一个Scala的函数。函数体最后一个表达式的值就是这个函数的返回类型。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span></span>(x: <span class="type">Int</span>) = &#123;</span><br><span class="line">    <span class="keyword">val</span> y = x + <span class="number">2</span></span><br><span class="line">    x + y</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span></span>(x: <span class="type">Int</span>) = &#123;</div><div class="line">    <span class="keyword">val</span> y = x + <span class="number">2</span></div><div class="line">    x + y</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>没错，Scala舍弃了return关键字。在Kotlin中，它也引入了使用单行表达式来定义函数的语法，不需要用return来返回结果值。</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(x: <span class="type">Int</span>)</span></span> = x * <span class="number">2</span> + <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(x: <span class="type">Int</span>)</span></span> = x * <span class="number">2</span> + <span class="number">2</span></div></pre></td></tr></table></figure>
 <p>然而，大部分情况下，我们还是可以采用类似Java的方式来定义一个函数，如：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(x: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">    <span class="keyword">val</span> y = x * <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> y + <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(x: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> &#123;</div><div class="line">    <span class="keyword">val</span> y = x * <span class="number">2</span></div><div class="line">    <span class="keyword">return</span> y + <span class="number">2</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>由于Kotlin比Scala更加兼容Java的生态和语法，Java程序员可以更加容易地掌握它。另一方面，Kotlin非常注重语法的简洁表达。如果你了解Scala中的implicit，可能曾被这个Scala的语法惊吓到，因为它非常强大。然而，正如我们提到的“简单灵活”的另一面，则意味着抽象和晦涩。Kotlin注重的是工程的实用性，所以它创造了扩展的语法，虽然相比implicit在功能上有损，但显得更加的具体直观，且依旧非常强大，满足了日常开发中绝大多数的需求。值得一提的是，Android则依靠这个Java所没有的特性，推出了扩展库android-ktx。</p>
-<p>此外，Kotlin还新增了一些Java、Scala中没有的语法糖。如果你从事Android开发，那么肯定少不了在工程中写过这样子的Java代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(parentView <span class="keyword">instanceof</span> ViewGroup)&#123;</span><br><span class="line">    ((ViewGroup) parentView).addView(childView);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此外，Kotlin还新增了一些Java、Scala中没有的语法糖。如果你从事Android开发，那么肯定少不了在工程中写过这样子的Java代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(parentView <span class="keyword">instanceof</span> ViewGroup)&#123;</div><div class="line">    ((ViewGroup) parentView).addView(childView);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>为了类型安全我们不得不写两遍ViewGroup，然而在Kotlin中我们却可以直接这么写：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(parentView <span class="keyword">is</span> ViewGroup)&#123;</span><br><span class="line">    parentView.addView(childView)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(parentView <span class="keyword">is</span> ViewGroup)&#123;</div><div class="line">    parentView.addView(childView)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这依靠的是Kotlin中的Smart Casts特性，我们不评价这种语法糖是否好坏，但它可以在一定程度上改善我们在工程中的开发体验。</p>
 <p>总体而言，Kotlin旨在成为一门提升Java生产力的更好的编程语言，它拥有简洁的表达能力、强大的工具支持，同时至今仍然保持着非常快速的编译能力。相较而言，用Scala开发则常常受到编译过慢而带来的困扰。</p>
 <h3 id="强大的生态"><a href="#强大的生态" class="headerlink" title="强大的生态"></a>强大的生态</h3><p>现在，我们已经了解了Kotlin整体的设计哲学，以及它相较Java、Scala的魅力所在。当然，本文似乎并没有任何关于语法细节的介绍，不着急，我们会在后续的内容中深入介绍Kotlin的语言特性，并且探索它具体的高级应用。</p>
@@ -272,11 +272,11 @@
       <footer class="post-footer">
         <div class="post-tags">
           
+            <a href="/tags/Kotlin/">Kotlin</a>
+          
             <a href="/tags/Java/">Java</a>
           
             <a href="/tags/函数式编程/">函数式编程</a>
-          
-            <a href="/tags/Kotlin/">Kotlin</a>
           
         </div>
 

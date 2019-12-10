@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang>
-  <head><meta name="generator" content="Hexo 3.9.0">
+<html lang="">
+  <head>
     
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,15 +26,15 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
 
 
 
-<link rel="canonical" href="http://scala.cool/2018/09/febible-position-layout/">
+<link rel="canonical" href="http://scala.cool/2018/09/febible-position-layout/"/>
 
 
 <meta name="description" content="本文旨在让你更深入地了解 position ,并为你提供一套使用 position 的范式，为你使用 position 提供一点建议和参考。">
-<meta name="keywords" content="前端开发,^Captain,~前端重构范式,^Rhyme">
+<meta name="keywords" content="前端开发,^Rhyme,~前端重构范式,^Captain">
 <meta property="og:type" content="article">
 <meta property="og:title" content="前端重构范式之 position">
 <meta property="og:url" content="http://scala.cool/2018/09/febible-position-layout/index.html">
@@ -49,15 +49,15 @@
 <meta property="og:image" content="https://scala.cool/images/2018/09/Xnip2018-09-18_00-27-58.jpg">
 <meta property="og:image" content="https://scala.cool/images/2018/09/Xnip2018-09-18_00-41-23.jpg">
 <meta property="og:image" content="https://scala.cool/images/2018/09/Xnip2018-09-18_00-43-28.jpg">
-<meta property="og:updated_time" content="2019-11-29T07:52:37.051Z">
+<meta property="og:updated_time" content="2018-09-18T06:14:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前端重构范式之 position">
 <meta name="twitter:description" content="本文旨在让你更深入地了解 position ,并为你提供一套使用 position 的范式，为你使用 position 提供一点建议和参考。">
 <meta name="twitter:image" content="https://scala.cool/images/2018/09/Xnip2018-09-17_22-40-11.jpg">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
 
 
 
@@ -93,7 +93,7 @@
 
   <body>
     <div id="page">
-      <header id="masthead">
+      <header id="masthead" >
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -249,24 +249,24 @@
 <p>所谓的「深度<code>relative</code>」，指的是<code>relative</code>包裹的组件处于较深的层级，也就是被包裹的比较深，导致其中的<code>absolute</code>组件要想不被其他元素覆盖，需要一级一级地往f父元素设置<code>z-index</code>或者排查<code>overflow</code>属性。这个问题最关键的核心就是<code>relative</code>组件层级太深。</p>
 </blockquote>
 <p>这里讲得可能有点抽象，让我们一起来看一个例子：</p>
-<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-17_22-40-11.jpg" alt></p>
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-17_22-40-11.jpg" alt=""></p>
 <p>这是我在实际项目开发中遇到的一个典型的例子。简单来讲，就是点击重选按钮，在指定的位置跳出图标选择框，并且在窗口滚动时依然有效。具体效果如下图所示：</p>
-<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-17_22-45-18.jpg" alt></p>
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-17_22-45-18.jpg" alt=""></p>
 <p>就是这么一个简单的例子，当然以上是已经实现好的效果。如果你没有遇到过类似的问题，你会觉得这个问题很简单，使用<code>relative</code>和<code>absolute</code>就能轻松解决。但是，在这里先卖个关子，以上的效果是使用<code>fixed</code>实现的。</p>
 <p>我们首先使用我们典型的<code>relative</code>和<code>absolute</code>来实现以上的效果，我们可以得到如下的效果：</p>
-<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-17_23-00-15.jpg" alt></p>
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-17_23-00-15.jpg" alt=""></p>
 <p>首先你会发现一个最为明显的问题，就是图标选择框被其他元素盖住了，这个时候的原因就很多样了，或许是因为它所在的祖先元素的元素层级没有人家高，又或许是因为祖先元素设置了<code>overflow:hidden</code>等等。这个时候如果我们依然要坚持使用<code>relative</code>和<code>absolute</code>的解决方案，那我们通常会采取的解决方案就是，一级一级的网上排查<code>overflow:hidden</code>又或者是设置<code>z-index</code>，直到解决问题为止。</p>
 <h4 id="z-index"><a href="#z-index" class="headerlink" title="z-index"></a>z-index</h4><p>说到<code>z-index</code>，这里可以简单下使用方法。它仅在<code>positon</code>属性不为<code>static</code>时起作用。从<code>position</code>从基础可以了解到<code>absolute</code>和<code>fixed</code>会让元素脱离文档流，这两个修饰的元素默认层级自然比文档流的要高，然而<code>relative</code>则不会脱离文档流，但当它设置了 TRBL 时它也会覆盖文档流，其默认层级自然也是比后者要高的，<strong>脱离文档流和层级的概念不能混淆</strong>。</p>
 <h5 id="同级原则"><a href="#同级原则" class="headerlink" title="同级原则"></a>同级原则</h5><p>所谓同级，顾名思义，也就是同级间层级的比较，一个元素<code>position</code>不为<code>static</code>后，如果不给它的<code>z-index</code>设定值，默认为0，由下图可以看到，A 元素设定了<code>z-index</code>为0，B元素未设定，E 元素设定了<code>z-index</code>为负数，按照顺序 B 覆盖住了 A，而E则被A盖住。往后则是<code>z-index</code>大的把小的覆盖。</p>
 <p><img src="https://scala.cool/images/2018/09/image-20180917213219642.png" alt="image-20180917213219642"></p>
 <p>在此仅展示结构，css 代码则省去。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: 0"</span>&gt;</span>A<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"position: absolute"</span>&gt;</span>B<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"3"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: 1"</span>&gt;</span>C<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: 2"</span>&gt;</span>D<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"5"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: -1"</span>&gt;</span>E<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: 0"</span>&gt;</span>A<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"position: absolute"</span>&gt;</span>B<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"3"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: 1"</span>&gt;</span>C<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: 2"</span>&gt;</span>D<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"5"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: -1"</span>&gt;</span>E<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
 <h5 id="多级原则"><a href="#多级原则" class="headerlink" title="多级原则"></a>多级原则</h5><p>看到这个标题，你可能会问，这是啥意思？其实很简单，它的意思是，要比较的元素不再是简单的同级概念，而是其中一个或两者都有祖先元素。看看下面这个代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:2;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span>A<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:999;"</span>&gt;</span>B<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:2;"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span>A<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:999;"</span>&gt;</span>B<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>效果图：</p>
 <p><img src="https://scala.cool/images/2018/09/image-20180917214330725.png" alt="image-20180917214330725"></p>
 <p>可见，A、B父元素的层级影响了相应的子元素的层级，就算 B 的<code>z-index</code>设的再大，它的父元素的<code>z-index</code>总是小于 A 的父元素的<code>z-index</code>值，这时候不论 A 的<code>z-index</code>怎么变化，元素 A 就会像图中一样一直压着 B，这就是从父原则。不过这里要划一下重点，这里的父元素不一定要同级，换句话说，两个元素间的层级比较，是<strong>相应的的同级祖先元素各自往下找到第一个<code>position</code>不为<code>static</code>的的两个元素之间的比较</strong>。举个栗子，结构改成下面这个结构，实现效果是一样的。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:2;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span>A<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:999;"</span>&gt;</span>B<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:2;"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span>A<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span></div><div class="line">  	<span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:999;"</span>&gt;</span>B<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>以上讲了这么多，你或许觉得怎么这么繁琐，要考虑这儿考虑那儿的，也会发现即使你用这种方法达到了你想要的效果，它也并不能从根本上解决问题。我一个简单的小组件，你却需要我去影响那么多父级元素，谁知道会造成什么意想之外的情况。除了这个，设置过多的<code>z-index</code>会导致页面层级管理的混乱，使得页面很难管理，所有有一个原则，要么对<code>z-index</code>做明文的规定，要么就少用层级过深的<code>z-index</code>。</p>
 <p>我这里有一种较好的解决方案，就是「<code>fixed</code>组件」。如果你有更好的解决方案，欢迎在下方评论区中进行分享。</p>
 <h3 id="fixed组件"><a href="#fixed组件" class="headerlink" title="fixed组件"></a>fixed组件</h3><p>我们都知道当元素设置了<code>position:fixed</code>之后，该元素将具备以下的特性：</p>
@@ -282,19 +282,19 @@
 <blockquote>
 <p>在下面的例子中，我们只对「图标组件」设置了<code>position:fixed</code>定位，页面中的其他大部分都是<code>position:static</code>组件，因此可以很轻松的解决原来的覆盖问题，也不会影响其他布局，更不会造成<code>z-index</code>管理混乱的问题。</p>
 </blockquote>
-<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-18_00-27-58.jpg" alt></p>
-<ol start="2">
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-18_00-27-58.jpg" alt=""></p>
+<ol>
 <li>使用js控制<code>fixed</code>组件的<code>margin</code>，我们可以实现，<code>fixed组件</code>相对于父元素进行定位</li>
 </ol>
 <blockquote>
 <p>通常我们在应用<code>fixed</code>组件的时候，都要解决<code>fixed</code>组件的滚动问题。通常<code>fixed</code>组件不会随着滚动条的滚动而滚动，但是我们拥有强大的js,我们可以通过为<code>fixed</code>组件设置一个固定的<code>margin-top</code>,然后通过js动态的控制这个值，使得它可以相对父元素进行滚动。因为我们都知道，<code>margin</code>属性调节的是<code>box</code>之间的距离，<code>fixed</code>组件脱了文档流，但它依然是一个box,因此我们可以使用margin来调节<code>fixed</code>组件与父元素之间的相对位置。</p>
 </blockquote>
 <p>就拿上面的例子而言，具体代码如下所示：</p>
-<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-18_00-41-23.jpg" alt></p>
-<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-18_00-43-28.jpg" alt></p>
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-18_00-41-23.jpg" alt=""></p>
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-18_00-43-28.jpg" alt=""></p>
 <h2 id="副作用fixed"><a href="#副作用fixed" class="headerlink" title="副作用fixed"></a>副作用<code>fixed</code></h2><h3 id="fixed-失效"><a href="#fixed-失效" class="headerlink" title="fixed 失效"></a>fixed 失效</h3><p>在固定定位元素的父元素上应用transform属性，固定定位的元素会相对于父元素来定位</p>
 <p>具体可参考以下这篇博文，简单来说就是<code>transform</code>属性会对<code>fixed</code>组件造成影响</p>
-<p><a href="http://meyerweb.com/eric/thoughts/2011/09/12/un-fixing-fixed-elements-with-css-transforms/" target="_blank" rel="noopener">Eric’s Archived Thoughts: Un-fixing Fixed Elements with CSS Transforms</a></p>
+<p><a href="http://meyerweb.com/eric/thoughts/2011/09/12/un-fixing-fixed-elements-with-css-transforms/" target="_blank" rel="external">Eric’s Archived Thoughts: Un-fixing Fixed Elements with CSS Transforms</a></p>
 <h1 id="范式"><a href="#范式" class="headerlink" title="范式"></a>范式</h1><p>讲了这个多关于<code>position</code>的副作用，我想到这里你或许也早已经有了一套自己的范式，其实里面的很多细节我们都已经在前面提到过。在这里我将分享一套属于我自己的<code>position</code>范式，学才疏浅，请不要见怪</p>
 <ol>
 <li>相对于具体元素的小组件可以采用<code>relative</code>+<code>absolute</code>或者「<code>fixed</code>组件」的解决方案。如果组件层级较深，推荐使用「<code>fixed</code>组件」的方式来进行定位；具体可以参照上面提到过的图标选择框的例子。</li>
@@ -312,11 +312,11 @@
           
             <a href="/tags/前端开发/">前端开发</a>
           
-            <a href="/tags/Captain/">^Captain</a>
+            <a href="/tags/Rhyme/">^Rhyme</a>
           
             <a href="/tags/前端重构范式/">~前端重构范式</a>
           
-            <a href="/tags/Rhyme/">^Rhyme</a>
+            <a href="/tags/Captain/">^Captain</a>
           
         </div>
 

@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang>
-  <head><meta name="generator" content="Hexo 3.9.0">
+<html lang="">
+  <head>
     
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,11 +26,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
 
 
 
-<link rel="canonical" href="http://scala.cool/2017/07/learning-akka-6/">
+<link rel="canonical" href="http://scala.cool/2017/07/learning-akka-6/"/>
 
 
 <meta name="description" content="看了 Akka 最新文档中写的 What problems does the actor model solve? ,阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。">
@@ -50,15 +50,15 @@
 <meta property="og:image" content="http://scala.cool/images/2017/07/actor-graph.png">
 <meta property="og:image" content="http://scala.cool/images/2017/07/serialized-timeline-invariants.png">
 <meta property="og:image" content="http://scala.cool/images/2017/07/actor-tree-supervision.png">
-<meta property="og:updated_time" content="2018-01-18T10:04:32.554Z">
+<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Akka 系列（六）：Actor 解决了什么问题？">
 <meta name="twitter:description" content="看了 Akka 最新文档中写的 What problems does the actor model solve? ,阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。">
 <meta name="twitter:image" content="http://scala.cool/images/2017/07/seq-chart.png">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
 
 
 
@@ -94,7 +94,7 @@
 
   <body>
     <div id="page">
-      <header id="masthead">
+      <header id="masthead" >
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -168,7 +168,7 @@
 
     
             <div class="post-content">
-            <p>这段时间由于忙毕业前前后后的事情，拖更了很久，表示非常抱歉，回归后的第一篇文章主要是看到了Akka最新文档中写的 <a href="http://doc.akka.io/docs/akka/current/scala/guide/actors-intro.html" target="_blank" rel="noopener">What problems does the actor model solve?</a> ,阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。</p>
+            <p>这段时间由于忙毕业前前后后的事情，拖更了很久，表示非常抱歉，回归后的第一篇文章主要是看到了Akka最新文档中写的 <a href="http://doc.akka.io/docs/akka/current/scala/guide/actors-intro.html" target="_blank" rel="external">What problems does the actor model solve?</a> ,阅读完后觉得还是蛮不错，能简洁清晰的阐述目前并发领域遇到的问题，并为何利用Actor模型可以解决这些问题，本文主要是利用自己的理解将这篇文章进行翻译，有不足之处还请指出。</p>
 <h2 id="Actor解决了什么问题？"><a href="#Actor解决了什么问题？" class="headerlink" title="Actor解决了什么问题？"></a>Actor解决了什么问题？</h2><p>Akka 使用 Actor 模型来克服传统面向对象编程模型的局限性，并应对高并发分布式系统所带来的挑战。 充分理解 Actor 模型是必需的，它有助于我们认识到传统的编程方法在并发和分布式计算的领域上的不足之处。</p>
 <h3 id="封装的弊端"><a href="#封装的弊端" class="headerlink" title="封装的弊端"></a>封装的弊端</h3><p>面向对象编程（OOP）是一种广泛采用的，熟悉的编程模型，它的一个核心理念就是封装，并规定对象封装的内部数据不能从外部直接访问，只允许相关的属性方法进行数据操作，比如我们熟悉的Javabean中的getX，setX等方法，对象为封装的内部数据提供安全的数据操作。</p>
 <p>举个例子，有序二叉树必须保证树节点数据的分布规则，若你想利用有序二叉树进行查询相关数据，就必须要依赖这个约束。</p>

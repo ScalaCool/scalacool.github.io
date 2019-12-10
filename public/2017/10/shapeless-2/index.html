@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang>
-  <head><meta name="generator" content="Hexo 3.9.0">
+<html lang="">
+  <head>
     
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,29 +26,29 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
 
 
 
-<link rel="canonical" href="http://scala.cool/2017/10/shapeless-2/">
+<link rel="canonical" href="http://scala.cool/2017/10/shapeless-2/"/>
 
 
 <meta name="description" content="本文将介绍一下 shapeless Nat 类型">
-<meta name="keywords" content="类型相关,^Jilen,Shapeless,~Shapeless 入门指南">
+<meta name="keywords" content="^Jilen,类型相关,Shapeless,~Shapeless 入门指南">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shapeless 入门指南（二）：自然数类型 Nat">
 <meta property="og:url" content="http://scala.cool/2017/10/shapeless-2/index.html">
 <meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="本文将介绍一下 shapeless Nat 类型">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-06T07:26:04.022Z">
+<meta property="og:updated_time" content="2018-03-16T10:04:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shapeless 入门指南（二）：自然数类型 Nat">
 <meta name="twitter:description" content="本文将介绍一下 shapeless Nat 类型">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
 
 
 
@@ -84,7 +84,7 @@
 
   <body>
     <div id="page">
-      <header id="masthead">
+      <header id="masthead" >
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -160,7 +160,7 @@
             <div class="post-content">
             <p><a href="/2017/09/shapeless-1/">上一篇文章</a>介绍了 shapeless 的重要功能：自动派生 typeclass 实例。<br>本文将阐述一个看起来没什么作用，但实际上是 shapeless 关于泛型编程的重要基石： Nat （自然数）</p>
 <h2 id="皮亚诺公理-Peano-axioms"><a href="#皮亚诺公理-Peano-axioms" class="headerlink" title="皮亚诺公理(Peano axioms)"></a>皮亚诺公理(Peano axioms)</h2><p>首先我们确定一下自然数只是一个符号系统，我们用 0，1，2，… 这些符号表示一些抽象的概念</p>
-<p><a href="https://zh.wikipedia.org/wiki/%E7%9A%AE%E4%BA%9A%E8%AF%BA%E5%85%AC%E7%90%86" target="_blank" rel="noopener">皮亚诺公理</a>告诉我们这个符号系统有三个组成元素</p>
+<p><a href="https://zh.wikipedia.org/wiki/%E7%9A%AE%E4%BA%9A%E8%AF%BA%E5%85%AC%E7%90%86" target="_blank" rel="external">皮亚诺公理</a>告诉我们这个符号系统有三个组成元素</p>
 <blockquote>
 <ul>
 <li>一个初始元素（比如0） x</li>
@@ -183,7 +183,7 @@
 </ol>
 </blockquote>
 <p>  基于上述公理就可以建立一阶算术系统</p>
-<h2 id="Nat-类型与自然数对应关系"><a href="#Nat-类型与自然数对应关系" class="headerlink" title="Nat 类型与自然数对应关系"></a>Nat 类型与自然数对应关系</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Nat</span> </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">type</span> <span class="title">N</span> <span class="title">&lt;</span></span>: <span class="type">Nat</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Succ</span>[<span class="type">P</span> &lt;: <span class="type">Nat</span>](<span class="params"></span>) <span class="keyword">extends</span> <span class="title">Nat</span> </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">type</span> <span class="title">N</span> </span>= <span class="type">Succ</span>[<span class="type">P</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_0</span> <span class="keyword">extends</span> <span class="title">Nat</span> <span class="keyword">with</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">type</span> <span class="title">N</span> </span>= _0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Nat-类型与自然数对应关系"><a href="#Nat-类型与自然数对应关系" class="headerlink" title="Nat 类型与自然数对应关系"></a>Nat 类型与自然数对应关系</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Nat</span> </span>&#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">N</span> <span class="title">&lt;</span></span>: <span class="type">Nat</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Succ</span>[<span class="type">P</span> &lt;: <span class="type">Nat</span>](<span class="params"></span>) <span class="keyword">extends</span> <span class="title">Nat</span> </span>&#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">N</span> </span>= <span class="type">Succ</span>[<span class="type">P</span>]</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">_0</span> <span class="keyword">extends</span> <span class="title">Nat</span> <span class="keyword">with</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">N</span> </span>= _0</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>很容易就可以总结出 Nat 类型和自然数的对应关系</p>
 <ul>
 <li>X 为 所有 <code>Nat</code> 子类型</li>
@@ -205,8 +205,8 @@
 <li>a + Succ(b) = Succ(a + b)</li>
 </ol>
 </blockquote>
-<p>在 shapeless 里，加法定义如下(Aux 类型的作用参考<a href="http://gigiigig.github.io/posts/2015/09/13/aux-pattern.html" target="_blank" rel="noopener">此处</a>)</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Sum</span>[<span class="type">A</span> &lt;: <span class="type">Nat</span>, <span class="type">B</span> &lt;: <span class="type">Nat</span>] <span class="keyword">extends</span> <span class="title">Serializable</span> </span>&#123; <span class="class"><span class="keyword">type</span> <span class="title">Out</span> <span class="title">&lt;</span></span>: <span class="type">Nat</span> &#125;</span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Sum</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">Aux</span>[<span class="type">A</span> &lt;: <span class="type">Nat</span>, <span class="type">B</span> &lt;: <span class="type">Nat</span>, <span class="type">C</span> &lt;: <span class="type">Nat</span>] </span>= <span class="type">Sum</span>[<span class="type">A</span>, <span class="type">B</span>] &#123; <span class="class"><span class="keyword">type</span> <span class="title">Out</span> </span>= <span class="type">C</span> &#125;</span><br><span class="line">    <span class="comment">// 对应 1 处定义</span></span><br><span class="line">    <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">sum1</span></span>[<span class="type">B</span> &lt;: <span class="type">Nat</span>]: <span class="type">Aux</span>[_0, <span class="type">B</span>, <span class="type">B</span>] = <span class="keyword">new</span> <span class="type">Sum</span>[_0, <span class="type">B</span>] &#123; <span class="class"><span class="keyword">type</span> <span class="title">Out</span> </span>= <span class="type">B</span> &#125;</span><br><span class="line">    <span class="comment">// 此处定义与 2 处略有不同</span></span><br><span class="line">    <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">sum2</span></span>[<span class="type">A</span> &lt;: <span class="type">Nat</span>, <span class="type">B</span> &lt;: <span class="type">Nat</span>, <span class="type">C</span> &lt;: <span class="type">Nat</span>]</span><br><span class="line">      (<span class="keyword">implicit</span> sum : <span class="type">Sum</span>.<span class="type">Aux</span>[<span class="type">A</span>, <span class="type">Succ</span>[<span class="type">B</span>], <span class="type">C</span>]): <span class="type">Aux</span>[<span class="type">Succ</span>[<span class="type">A</span>], <span class="type">B</span>, <span class="type">C</span>] =</span><br><span class="line">      <span class="keyword">new</span> <span class="type">Sum</span>[<span class="type">Succ</span>[<span class="type">A</span>], <span class="type">B</span>] &#123; <span class="class"><span class="keyword">type</span> <span class="title">Out</span> </span>= <span class="type">C</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 shapeless 里，加法定义如下(Aux 类型的作用参考<a href="http://gigiigig.github.io/posts/2015/09/13/aux-pattern.html" target="_blank" rel="external">此处</a>)</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Sum</span>[<span class="type">A</span> &lt;: <span class="type">Nat</span>, <span class="type">B</span> &lt;: <span class="type">Nat</span>] <span class="keyword">extends</span> <span class="title">Serializable</span> </span>&#123; <span class="class"><span class="keyword">type</span> <span class="title">Out</span> <span class="title">&lt;</span></span>: <span class="type">Nat</span> &#125;</div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Sum</span> </span>&#123;</div><div class="line">    <span class="class"><span class="keyword">type</span> <span class="title">Aux</span>[<span class="type">A</span> &lt;: <span class="type">Nat</span>, <span class="type">B</span> &lt;: <span class="type">Nat</span>, <span class="type">C</span> &lt;: <span class="type">Nat</span>] </span>= <span class="type">Sum</span>[<span class="type">A</span>, <span class="type">B</span>] &#123; <span class="class"><span class="keyword">type</span> <span class="title">Out</span> </span>= <span class="type">C</span> &#125;</div><div class="line">    <span class="comment">// 对应 1 处定义</span></div><div class="line">    <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">sum1</span></span>[<span class="type">B</span> &lt;: <span class="type">Nat</span>]: <span class="type">Aux</span>[_0, <span class="type">B</span>, <span class="type">B</span>] = <span class="keyword">new</span> <span class="type">Sum</span>[_0, <span class="type">B</span>] &#123; <span class="class"><span class="keyword">type</span> <span class="title">Out</span> </span>= <span class="type">B</span> &#125;</div><div class="line">    <span class="comment">// 此处定义与 2 处略有不同</span></div><div class="line">    <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">sum2</span></span>[<span class="type">A</span> &lt;: <span class="type">Nat</span>, <span class="type">B</span> &lt;: <span class="type">Nat</span>, <span class="type">C</span> &lt;: <span class="type">Nat</span>]</div><div class="line">      (<span class="keyword">implicit</span> sum : <span class="type">Sum</span>.<span class="type">Aux</span>[<span class="type">A</span>, <span class="type">Succ</span>[<span class="type">B</span>], <span class="type">C</span>]): <span class="type">Aux</span>[<span class="type">Succ</span>[<span class="type">A</span>], <span class="type">B</span>, <span class="type">C</span>] =</div><div class="line">      <span class="keyword">new</span> <span class="type">Sum</span>[<span class="type">Succ</span>[<span class="type">A</span>], <span class="type">B</span>] &#123; <span class="class"><span class="keyword">type</span> <span class="title">Out</span> </span>= <span class="type">C</span> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这里第 2 条规则定义为 <code>Sum[A, Succ[B]].C = Sum[Succ[A] , B].C</code>，而加法的第二个规则则要求 <code>Sum[A, Succ[B]].C = Succ[Sum[A, B].C]</code><br>shapeless 这里定义实际上可以推导出第 2 规则。</p>
 <p>将上述类型转换成命题： a + S(b) =  S(a) + b =&gt; a + S(b) = S(a + b)</p>
 <blockquote>
@@ -217,8 +217,8 @@
 <li>假设 b = x 时, <code>a + S(x) = S(a + x)</code> 成立，则 b = S(x) 时 <code>a + S(S(x)) = S(a) + S(x) = S(S(a) + x) = S(a + S(x))</code>，可以得出对于 <code>b = S(x) ，a + S(b) = S(a + b)</code> 也成立</li>
 <li>上述两者归纳得出命题成立</li>
 </ul>
-<p>现在来看看<a href="https://scalafiddle.io/sf/ceGYBDZ/1" target="_blank" rel="noopener">如何使用</a> <code>Sum</code> 来约束类型</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">alias</span> </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">type</span> <span class="title">_1</span> </span>= <span class="type">Succ</span>[_0]</span><br><span class="line">  <span class="class"><span class="keyword">type</span> <span class="title">_2</span> </span>= <span class="type">Succ</span>[_1]</span><br><span class="line">  <span class="class"><span class="keyword">type</span> <span class="title">_3</span> </span>= <span class="type">Succ</span>[_2]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> alias._</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span></span>[<span class="type">A</span> &lt;: <span class="type">Nat</span>, <span class="type">B</span> &lt;: <span class="type">Nat</span>](<span class="keyword">implicit</span> sum: <span class="type">Sum</span>.<span class="type">Aux</span>[<span class="type">A</span>, <span class="type">B</span>, _3]) = &#123;&#125;</span><br><span class="line"></span><br><span class="line">check[_0, _3]</span><br><span class="line">check[_1, _2]</span><br><span class="line">check[_2, _1]</span><br><span class="line">check[_3, _0]</span><br><span class="line">check[_1， _1] <span class="comment">// 编译错误</span></span><br></pre></td></tr></table></figure>
+<p>现在来看看<a href="https://scalafiddle.io/sf/ceGYBDZ/1" target="_blank" rel="external">如何使用</a> <code>Sum</code> 来约束类型</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">alias</span> </span>&#123;</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">_1</span> </span>= <span class="type">Succ</span>[_0]</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">_2</span> </span>= <span class="type">Succ</span>[_1]</div><div class="line">  <span class="class"><span class="keyword">type</span> <span class="title">_3</span> </span>= <span class="type">Succ</span>[_2]</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">import</span> alias._</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span></span>[<span class="type">A</span> &lt;: <span class="type">Nat</span>, <span class="type">B</span> &lt;: <span class="type">Nat</span>](<span class="keyword">implicit</span> sum: <span class="type">Sum</span>.<span class="type">Aux</span>[<span class="type">A</span>, <span class="type">B</span>, _3]) = &#123;&#125;</div><div class="line"></div><div class="line">check[_0, _3]</div><div class="line">check[_1, _2]</div><div class="line">check[_2, _1]</div><div class="line">check[_3, _0]</div><div class="line">check[_1， _1] <span class="comment">// 编译错误</span></div></pre></td></tr></table></figure>
 <p>上述 <code>check</code> 方法要求两个类型的 <code>Sum</code> 是 <code>_3</code>，可以看只有 <code>Sum</code> 是 <code>_3</code> 的 <code>A</code>，<code>B</code> 类型才能通过编译</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文介绍了 shapeless 的重要基础类型 Nat，理解该类型是掌握 shapeless 其他类型的重要前提</p>
 
@@ -229,9 +229,9 @@
       <footer class="post-footer">
         <div class="post-tags">
           
-            <a href="/tags/类型相关/">类型相关</a>
-          
             <a href="/tags/Jilen/">^Jilen</a>
+          
+            <a href="/tags/类型相关/">类型相关</a>
           
             <a href="/tags/Shapeless/">Shapeless</a>
           
