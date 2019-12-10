@@ -88,7 +88,6 @@ def sum(i: IO[Int], j: IO[Int]): IO[Int] = {
 
 val readInt = Console.getStr().map(_.toInt)
 val app = sum(readInt, readInt).flatMap { r =>
-println(s"writing result")
   Console.putStrLn(r.toString)
 }
 app.unsafeRun()
