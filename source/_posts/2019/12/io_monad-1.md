@@ -101,7 +101,7 @@ app.unsafeRun()
 
 ## 错误处理
 
-虽然上述程序隔离了副作用，但它仍旧不是一个纯函数，原因在于它数字转化：
+虽然上述程序隔离了副作用（我们先忽略边界处的 `unsafeRun` ），但它仍旧不是一个纯函数，原因在于它数字转化：
 
 ```scala
 val readInt = Console.getStr().map(_.toInt)
