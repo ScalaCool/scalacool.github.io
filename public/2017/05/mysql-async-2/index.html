@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,11 +26,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://scala.cool/2017/05/mysql-async-2/"/>
+<link rel="canonical" href="http://scala.cool/2017/05/mysql-async-2/">
 
 
 <meta name="description" content="Mysql Async 异步驱动存在的缺点分析">
@@ -41,14 +41,14 @@
 <meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="Mysql Async 异步驱动存在的缺点分析">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta property="og:updated_time" content="2018-01-18T10:04:32.554Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL 异步驱动浅析 （二）：缺点分析">
 <meta name="twitter:description" content="Mysql Async 异步驱动存在的缺点分析">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -84,7 +84,7 @@
 
   <body>
     <div id="page">
-      <header id="masthead" >
+      <header id="masthead">
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -163,12 +163,12 @@
 <h2 id="一、不会自动关闭-PreparedStatement"><a href="#一、不会自动关闭-PreparedStatement" class="headerlink" title="一、不会自动关闭 PreparedStatement"></a>一、不会自动关闭 PreparedStatement</h2><p>假如你的业务中存在很多中 statement，这可能会导致 <code>PreparedStatement</code> 数量不够。<br>通常可以通过以下方法解决：</p>
 <ul>
 <li>增加 mysql 服务端 <code>PreparedStatement</code> 数量设置</li>
-<li>另外还可以使用修改过的<a href="https://github.com/dripower/postgresql-async" target="_blank" rel="external">版本</a>（已发布到maven中心库）</li>
+<li>另外还可以使用修改过的<a href="https://github.com/dripower/postgresql-async" target="_blank" rel="noopener">版本</a>（已发布到maven中心库）</li>
 </ul>
 <h2 id="二、执行事务时，所有语句必须串行"><a href="#二、执行事务时，所有语句必须串行" class="headerlink" title="二、执行事务时，所有语句必须串行"></a>二、执行事务时，所有语句必须串行</h2><p>因为该驱动一个链接不能同时执行多个 SQL 语句（受限于MySQL协议）所以</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">conn.inTransaction &#123; c =&gt;</div><div class="line">  <span class="keyword">val</span> fa = c.sendQuery(<span class="string">"xxx"</span>)</div><div class="line">  <span class="keyword">val</span> fb = c.sendQuery(<span class="string">"yyy"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conn.inTransaction &#123; c =&gt;</span><br><span class="line">  <span class="keyword">val</span> fa = c.sendQuery(<span class="string">"xxx"</span>)</span><br><span class="line">  <span class="keyword">val</span> fb = c.sendQuery(<span class="string">"yyy"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这样的代码就不能正确运行，必须改成如下串行或等价的形式</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">conn.inTransaction &#123; c =&gt;</div><div class="line">  <span class="keyword">for</span> &#123;</div><div class="line">   a &lt;- c.sendQuery(<span class="string">"xxx"</span>)</div><div class="line">   b &lt;- c.sendQuery(<span class="string">"yyy"</span>)</div><div class="line">  &#125; <span class="keyword">yield</span> (a, b)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conn.inTransaction &#123; c =&gt;</span><br><span class="line">  <span class="keyword">for</span> &#123;</span><br><span class="line">   a &lt;- c.sendQuery(<span class="string">"xxx"</span>)</span><br><span class="line">   b &lt;- c.sendQuery(<span class="string">"yyy"</span>)</span><br><span class="line">  &#125; <span class="keyword">yield</span> (a, b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="三、不支持客户端-PreparedStatement"><a href="#三、不支持客户端-PreparedStatement" class="headerlink" title="三、不支持客户端 PreparedStatement"></a>三、不支持客户端 PreparedStatement</h2><p><code>Mysql-connector-java</code> 支持客户端 PreparedStatement，从而可以开启将多个插入重写为一个批量插入的功能（rewriteBatchedStatements）。<br>批量插入语句可以减少锁的次数，从而大幅大幅提升性能的，这在一些插入频繁场景（如 akka-persistence）非常有用。</p>
 <p>要解决这个问题，只能手工生成 <code>批量插入语句</code>。</p>
 <h2 id="四、Netty-是不可配置的"><a href="#四、Netty-是不可配置的" class="headerlink" title="四、Netty 是不可配置的"></a>四、Netty 是不可配置的</h2><p>Netty 相关的设置硬编码在实现里，无法自定义 <code>EventLoop</code> 也无法开启 Linux 平台 <code>native epoll</code> 支持（该选项可以进一步提升性能，减少 GC 压力）。</p>

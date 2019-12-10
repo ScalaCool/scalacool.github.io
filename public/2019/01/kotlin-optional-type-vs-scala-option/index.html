@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,11 +26,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://scala.cool/2019/01/kotlin-optional-type-vs-scala-option/"/>
+<link rel="canonical" href="http://scala.cool/2019/01/kotlin-optional-type-vs-scala-option/">
 
 
 <meta name="description" content="最近阅读一些关于 Kotlin 类型系统方面的书，发现 Kotlin 的类型系统针对 null 有着独特的设计哲学。">
@@ -41,14 +41,14 @@
 <meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="最近阅读一些关于 Kotlin 类型系统方面的书，发现 Kotlin 的类型系统针对 null 有着独特的设计哲学。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-04T05:34:08.000Z">
+<meta property="og:updated_time" content="2019-11-29T07:52:37.051Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kotlin Type? vs Scala Option">
 <meta name="twitter:description" content="最近阅读一些关于 Kotlin 类型系统方面的书，发现 Kotlin 的类型系统针对 null 有着独特的设计哲学。">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -84,7 +84,7 @@
 
   <body>
     <div id="page">
-      <header id="masthead" >
+      <header id="masthead">
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -175,13 +175,13 @@
 <p>而在 <code>Optional</code> 的设计哲学中，你可以使用 <code>Option[T]</code> 来包裹一个不确定是否为 <code>null</code> 的值。这里我们使用 Scala 的代码来演示：<code>val s: Option[String] = Option(getString...)</code>，此时 <code>s</code> 的类型为 <code>Option[String]</code>，你仍然不能直接调用<code>s.length</code>，你可以使用 <code>map</code> 函数：<code>s.map(s =&gt; s.length)</code>，它的返回值是一个 <code>Option[Int]</code> 类型。和 <code>Type?</code> 很类似，对一个 <code>Option[T]</code> 类型使用 <code>map</code> 函数，结果当然是一个 <code>Option[S]</code> 类型。在 Scala 中，你也可以使用模式匹配来处理 <code>Option</code> 类型。</p>
 <p>总结：二者都可以完美的规避 <code>NullPointerException</code>，<code>Type?</code> 使用安全调用来避免直接调用 <code>Type</code> 类型的方法，而 <code>Option</code> 则使用 map 函数或者模式匹配来处理。本质上都是避免直接调用值可能为 <code>null</code> 的类型变量的方法。</p>
 <h2 id="代码可读性"><a href="#代码可读性" class="headerlink" title="代码可读性"></a>代码可读性</h2><p>实际的业务是比较复杂的，例如，我们需要计算两个数字字符串的乘积，首先我们需要把他们转换为 <code>Int</code> 类型，如果其中一个字符串是转换失败，则无法计算结果。</p>
-<p>在 Kotlin 的 <code>Type?</code> 中，我们需要重新定义 <code>String</code> 类型的 <code>toInt</code> 方法，让它返回一个 <code>Int?</code> 类型，代码如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">tryString2Int</span><span class="params">(a: <span class="type">String</span>)</span></span> = <span class="keyword">try</span> &#123;</div><div class="line">    a.toInt()</div><div class="line">&#125;<span class="keyword">catch</span> (e:Exception)&#123;</div><div class="line">    <span class="literal">null</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>然后我们需要定义一个方法来计算两个数字字符串的乘积，这里我们使用 <code>Type?</code> 的 let 函数，它接受一个 Lambda 表达式，如果调用者的值不为 <code>null</code>，则调用 Lambda 表达式，否则直接返回 <code>null</code>。<code>strNumberMuti</code> 函数返回的是一个 <code>Double?</code> 类型，如果有任何一个字符串转换数字失败，就返回 <code>null</code>，都转换成功才计算乘积。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">strNumberMuti</span><span class="params">(s1: <span class="type">String</span>, s2: <span class="type">String</span>)</span></span>: <span class="built_in">Double</span>? =</div><div class="line">    tryString2Int(s1)?.let&#123; a -&gt;</div><div class="line">        tryString2Int(s2)?.let &#123;</div><div class="line">            t -&gt; a * t * <span class="number">1.0</span> &#125;&#125;</div></pre></td></tr></table></figure></p>
-<p>这段代码的可读取有点差呀，而且在实际的业务开发过程中，可能会有更多的 <code>Type?</code> 类型，那代码岂不是要爆炸了！。幸运的是，Kotlin 允许我们使用 <code>if</code> 来代替 <code>let</code> 函数 做相同的判断，代码如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">strNumberMuti2</span><span class="params">(s1: <span class="type">String</span>, s2: <span class="type">String</span>)</span></span>:<span class="built_in">Double</span>? &#123;</div><div class="line">    <span class="keyword">val</span> a = tryString2Int(s1)</div><div class="line">    <span class="keyword">val</span> b = tryString2Int(s2)</div><div class="line">    <span class="keyword">return</span> <span class="keyword">if</span>(a!=<span class="literal">null</span> &amp;&amp; b!= <span class="literal">null</span>) a * b * <span class="number">1.0</span> <span class="keyword">else</span> <span class="literal">null</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在 Kotlin 的 <code>Type?</code> 中，我们需要重新定义 <code>String</code> 类型的 <code>toInt</code> 方法，让它返回一个 <code>Int?</code> 类型，代码如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">tryString2Int</span><span class="params">(a: <span class="type">String</span>)</span></span> = <span class="keyword">try</span> &#123;</span><br><span class="line">    a.toInt()</span><br><span class="line">&#125;<span class="keyword">catch</span> (e:Exception)&#123;</span><br><span class="line">    <span class="literal">null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我们需要定义一个方法来计算两个数字字符串的乘积，这里我们使用 <code>Type?</code> 的 let 函数，它接受一个 Lambda 表达式，如果调用者的值不为 <code>null</code>，则调用 Lambda 表达式，否则直接返回 <code>null</code>。<code>strNumberMuti</code> 函数返回的是一个 <code>Double?</code> 类型，如果有任何一个字符串转换数字失败，就返回 <code>null</code>，都转换成功才计算乘积。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">strNumberMuti</span><span class="params">(s1: <span class="type">String</span>, s2: <span class="type">String</span>)</span></span>: <span class="built_in">Double</span>? =</span><br><span class="line">    tryString2Int(s1)?.let&#123; a -&gt;</span><br><span class="line">        tryString2Int(s2)?.let &#123;</span><br><span class="line">            t -&gt; a * t * <span class="number">1.0</span> &#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码的可读取有点差呀，而且在实际的业务开发过程中，可能会有更多的 <code>Type?</code> 类型，那代码岂不是要爆炸了！。幸运的是，Kotlin 允许我们使用 <code>if</code> 来代替 <code>let</code> 函数 做相同的判断，代码如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">strNumberMuti2</span><span class="params">(s1: <span class="type">String</span>, s2: <span class="type">String</span>)</span></span>:<span class="built_in">Double</span>? &#123;</span><br><span class="line">    <span class="keyword">val</span> a = tryString2Int(s1)</span><br><span class="line">    <span class="keyword">val</span> b = tryString2Int(s2)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">if</span>(a!=<span class="literal">null</span> &amp;&amp; b!= <span class="literal">null</span>) a * b * <span class="number">1.0</span> <span class="keyword">else</span> <span class="literal">null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>这样的代码可读性就好多了，但是丢失函数式的编程美感。而且感觉 <code>Type?</code> 是一种语法糖，手动对 <code>Type?</code> 进行非空校验，就可以直接使用 <code>Type</code> 类型了！！</p>
-<p>同样的我们使用 Scala 的 <code>Option[T]</code> 来完成上面的需求，为了让 <code>toInt</code> 函数返回 <code>Option[T]</code> 类型，我们定义了一个 <code>Try</code> 函数，这个函数看不懂没关系，你只需知道它接受一个函数，并且返回一个 <code>Option[A]</code> 值即可。代码让如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">Try</span></span>[<span class="type">A</span>](a: =&gt; <span class="type">A</span>): <span class="type">Option</span>[<span class="type">A</span>] = &#123;</div><div class="line">    <span class="keyword">try</span> <span class="type">Some</span>(a)</div><div class="line">    <span class="keyword">catch</span> &#123;<span class="keyword">case</span> e: <span class="type">Exception</span> =&gt; <span class="type">None</span>&#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>同样的我们使用 Scala 的 <code>Option[T]</code> 来完成上面的需求，为了让 <code>toInt</code> 函数返回 <code>Option[T]</code> 类型，我们定义了一个 <code>Try</code> 函数，这个函数看不懂没关系，你只需知道它接受一个函数，并且返回一个 <code>Option[A]</code> 值即可。代码让如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Try</span></span>[<span class="type">A</span>](a: =&gt; <span class="type">A</span>): <span class="type">Option</span>[<span class="type">A</span>] = &#123;</span><br><span class="line">    <span class="keyword">try</span> <span class="type">Some</span>(a)</span><br><span class="line">    <span class="keyword">catch</span> &#123;<span class="keyword">case</span> e: <span class="type">Exception</span> =&gt; <span class="type">None</span>&#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
 <p>同样的，我们需要写一个函数，用来把两个字符串数字转换为整数，并且做它们的乘积，这里我们为了使代码更简洁，使用了 Scala 的 for 推导，具体的用法可以参考 Scala 官方的 Document。<code>strNumberNu</code>返回类型是 <code>Option[Double]</code>，如果有任何一个转换失败，返回 <code>None</code>，否则返回 <code>Some[Double]</code>，代码如下：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">strNumberMuti</span></span>(s1: <span class="type">String</span>, s2: <span class="type">String</span>): <span class="type">Option</span>[<span class="type">Double</span>] = &#123;</div><div class="line">   <span class="keyword">for</span>&#123;</div><div class="line">     a &lt;- <span class="type">Try</span>&#123; s1.toInt &#125;</div><div class="line">     b &lt;- <span class="type">Try</span>&#123; s2.toInt &#125;</div><div class="line">   &#125; <span class="keyword">yield</span> a * b</div><div class="line"></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">strNumberMuti</span></span>(s1: <span class="type">String</span>, s2: <span class="type">String</span>): <span class="type">Option</span>[<span class="type">Double</span>] = &#123;</span><br><span class="line">   <span class="keyword">for</span>&#123;</span><br><span class="line">     a &lt;- <span class="type">Try</span>&#123; s1.toInt &#125;</span><br><span class="line">     b &lt;- <span class="type">Try</span>&#123; s2.toInt &#125;</span><br><span class="line">   &#125; <span class="keyword">yield</span> a * b</span><br><span class="line"></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <p>可以看出，使用 Scala 的 <code>Option[T]</code> 更具有函数式的编程美感，而且代码的可读性极强，而且即使有更多的 <code>Option[T]</code>，for 推导都可以轻松应对。</p>
 <p>总结：面对比较复杂的业务场景，<code>Type?</code> 和 <code>Option[T]</code> 都可以轻松应对，但是 <code>Type?</code> 的用法就显得有些 low，还是使用 <code>!=null</code> 的套路，这也暴露了它的设计是存在缺陷的。相反的 <code>Option[T]</code> 的设计理念是完备的，而且极具函数式的编程美感。</p>
 <h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><p>性能是衡量设计好坏的一个重要的方面，下面我们只做一个简单的测试：让两个字符串都是<code>&quot;999&quot;</code>，然后分别执行 Kotlin 的 <code>strNumberMuti</code> 和 Scala 的 <code>strNumberMuti</code> 一千万次，然后我们发现 Kotlin 的 <code>strNumberMuti</code> 执行时间大约在 1.9s，而 Scala 的 <code>strNumberMuti</code> 执行时间约在 5.0s。由此可以看出，Kotlin 的 <code>Type?</code> 比 Scala <code>Option[T]</code> 拥有更好的性能，其实这样很正常，因为 Kotlin 的 <code>Type?</code> 是语法糖，创建一个 <code>Type?</code> 的对象其实和创建一个 <code>Type</code> 的对象其实消耗的性能差不多，但是 <code>Option[T]</code>不仅仅需要创建 <code>T</code> 类型的对象，更需要创建 <code>Option[T]</code> 类型的对象来包裹 <code>T</code> 类型的对象，因此它的开销大一点。</p>

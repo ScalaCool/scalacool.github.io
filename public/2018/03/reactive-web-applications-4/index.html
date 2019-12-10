@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,29 +26,29 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://scala.cool/2018/03/reactive-web-applications-4/"/>
+<link rel="canonical" href="http://scala.cool/2018/03/reactive-web-applications-4/">
 
 
 <meta name="description" content="在开发适合多核架构的 web 应用程序之前，我们先了解一下异步编程。">
-<meta name="keywords" content="翻译,Play,响应式编程,~响应式 Web 应用,^Shaw">
+<meta name="keywords" content="^Shaw,翻译,Play,响应式编程,~响应式 Web 应用">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt;译&gt; 响应式 Web 应用（四）">
 <meta property="og:url" content="http://scala.cool/2018/03/reactive-web-applications-4/index.html">
 <meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="在开发适合多核架构的 web 应用程序之前，我们先了解一下异步编程。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-16T10:04:29.000Z">
+<meta property="og:updated_time" content="2018-03-12T08:18:55.618Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;译&gt; 响应式 Web 应用（四）">
 <meta name="twitter:description" content="在开发适合多核架构的 web 应用程序之前，我们先了解一下异步编程。">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -79,12 +79,12 @@
 
 
 
-    <title> <译> 响应式 Web 应用（四） - ScalaCool </title>
+    <title> <译> 响应式 Web 应用（四） - ScalaCool </译></title>
   </head>
 
   <body>
     <div id="page">
-      <header id="masthead" >
+      <header id="masthead">
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -136,7 +136,7 @@
         
           <译> 响应式 Web 应用（四）
         
-      </h1>
+      </译></h1>
 
       <time class="post-time">
           3月8日
@@ -161,25 +161,25 @@
             <h2 id="上一篇"><a href="#上一篇" class="headerlink" title="上一篇"></a>上一篇</h2><p><a href="https://scala.cool/2017/10/reactive-web-applications-3/">响应式 Web 应用（三）</a></p>
 <h2 id="1-2-2-开发适合多核架构的-web-应用程序"><a href="#1-2-2-开发适合多核架构的-web-应用程序" class="headerlink" title="1.2.2 开发适合多核架构的 web 应用程序"></a>1.2.2 开发适合多核架构的 web 应用程序</h2><p>基于多线程的 web 服务器依赖于多个线程池来为传入的请求分配可用的 CPU 资源，但是这种机制对于开发人员是不可见的，这样可以让开发人员在开发时可以将这些多线程看作是只有一个主线程在工作。可以说，将处理多线程的复杂性隐藏起来，将其抽象成只有一个主线程，在一开始可能会显得比较简单。确实，像 Servlet API 这样的编程约定给人带来了一种错觉：即只有一个主线程来响应传入的 HTTP 请求，并且调用了所有的资源都去处理她。但现实情况却有所不同，这种漏洞百出的抽象形式也给其自身带来了一系列的问题。</p>
 <h3 id="共享可变状态与异步编程"><a href="#共享可变状态与异步编程" class="headerlink" title="共享可变状态与异步编程"></a>共享可变状态与异步编程</h3><p>如果你已经构建了由线程服务器提供的 web 应用程序，那么你很有可能会发现自己正被一些「副作用」所困扰着，因为共享可变状态会造成竞争条件进而就产生了副作用。JVM 上的线程在并发条件下，并不会彼此隔离：他们可以像其他线程一样去访问同样的内存空间、打开文件句柄以及其他共享资源。对于此行为所导致的问题，这里有一个经典的例子，在一个 Java servlet 中使用  DateFormat 类的时候：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> DateFormat dateFormatter = <span class="keyword">new</span> SimpleDateFormat();</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> DateFormat dateFormatter = <span class="keyword">new</span> SimpleDateFormat();</span><br></pre></td></tr></table></figure>
 <p>上面这行代码的问题就是 DateFormat 不是线程安全的。当她被两个线程调用的时候，她的行为不会因为这是由两个不同线程的调用而有所不同。相反，她会使用相同的变量来保持其内部的状态。这将会导致不可预料的行为以及难以理解的 bug。就算一些有经验的程序员也会花大量的时间去理解「竞争条件」、「死锁」以及一些奇怪有趣但又令人抓狂的「副作用」，但这并不是说以事件驱动的方式编写的应用程序不会受共享可变状态的影响。</p>
 <p>在大多数情况下，应用程序开源人员会决定是否去使用可变的数据结构，并且会思考对它们进行何种程度的阐述。但是，像 Play 这样的框架以及像 Scala 这样的语言不鼓励开发人员使用共享的可变状态。</p>
 <h3 id="语言设计与不可变状态"><a href="#语言设计与不可变状态" class="headerlink" title="语言设计与不可变状态"></a>语言设计与不可变状态</h3><p>对于有并发需求的 web 应用，若使用支持「不可变状态」的语言和工具将会让开发变得更加容易。</p>
 <p>Scala 在设计的时候就是默认使用不可变的值，而不是可变的变量。当然，在 Java 中也能通过不可变的方式去编写程序，但相比 Scala，Java 需要写更多的样板代码。例如，在 Scala 中声明一个不可变的值是这样的：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> theAnswer = <span class="number">42</span></div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> theAnswer = <span class="number">42</span></span><br></pre></td></tr></table></figure>
 <p>在 Java 中，通过显式地加上 final 关键字可以达到相同的结果</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">final</span> int theAnswer = <span class="number">42</span></div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> int theAnswer = <span class="number">42</span></span><br></pre></td></tr></table></figure>
 <p>这虽然看上去并没有什么太大的区别，但在开发一个大型应用时，就意味着 final 关键字需要多次被使用。当涉及到更复杂的数据结构时，比如列表或者映射，Scala 就提供了这些数据结构的可变和不可变两个版本。默认情况下，Scala 采用不可变的数据结构：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> a = <span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</div></pre></td></tr></table></figure>
-<p>相反，Java 在其集合库中却没有提供库不可变的数据结构，你必须使用第三方库，比如 Google 的 <a href="https:// github.com/google/guava" target="_blank" rel="external">Guava</a> 来得到一组有用的不可变数据结构。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>相反，Java 在其集合库中却没有提供库不可变的数据结构，你必须使用第三方库，比如 Google 的 <a href="https:// github.com/google/guava" target="_blank" rel="noopener">Guava</a> 来得到一组有用的不可变数据结构。</p>
 <h4 id="关于-Scala"><a href="#关于-Scala" class="headerlink" title="关于 Scala"></a>关于 Scala</h4><p>Scala 的主要设计目标之一是使开发人员能够把握多核编程和分布式系统的复杂性。它通过支持不可变的值和数据结构，提供了函数和高阶函数，并将函数作为语言的一等公民，同时也使得编程风格更加简洁。因此，本书的例子是用 Scala 而不是 Java 编写的。（但是，请注意，Play、Akka 和 响应式流都拥有有 Java api）我们将在第3章中再次介绍 Scala 函数式编程的核心概念。</p>
 <h3 id="锁与竞争"><a href="#锁与竞争" class="headerlink" title="锁与竞争"></a>锁与竞争</h3><p>为了避免并发访问非线程安全资源导致的副作用，使用锁来让其他线程知道资源当前处于占用状态。如果一切顺利，持有该锁的线程将会释放它，然后通知其他可能正在等待的线程，告诉他们现在可以依次访问该资源了。</p>
 <p>但是，在某些情况下，线程可能彼此等待对方释放锁进而产生死锁。如果一个线程占用资源的时间太长，那么其他线程就会出现“饥饿”的状态，当一个依赖锁的 Web 应用程序的负载激增时，锁的竞争就会频繁出现，这样会导致应用程序的性能下降。</p>
 <p>CPU 厂商已经采用的新型多核架构并没有更好地解决锁带来的问题，如果一个 CPU 提供超过 1000 个真正执行的线程，但是应用程序却依赖锁来同步访问内存中的极少的几个区域，我们能够想象这个机制将会会造成多大的性能损失。显然我们需要一个更适合多线程和多核范式的编程模型。</p>
 <h3 id="看似复杂的异步编程"><a href="#看似复杂的异步编程" class="headerlink" title="看似复杂的异步编程"></a>看似复杂的异步编程</h3><p>在很长一段时间内，编写异步程序在开发人员中并不常见，因为它似乎比编写优秀而经典的同步程序要困难得多。在同步程序中，各个操作是按顺序执行的，但是异步却不是这样，当以异步的方式编写程序时，某个请求处理过程可能会被拆分为好几个片段。</p>
 <p>编写异步代码的常用方法之一是使用回调，因为需要在等待某个操作（比如从一个远程服务中获取数据）完成时保证程序不会出现阻塞，所以开发人员需要实现一个回调方法，一旦数据可用，该方法就会被执行。倡导线程编程的人可能不太会采用这种方式，因为当处理过程稍微复杂一点时，就可能会出现“回调地狱”。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fetchPriceList = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;                                <span class="comment">// 入口方法，将商品和价格组合</span></div><div class="line">  $.get(<span class="string">'/items'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">items</span>) </span>&#123;                             <span class="comment">// 第一层回调，处理获取到的商品列表</span></div><div class="line">    <span class="keyword">var</span> priceList = [];</div><div class="line">    items.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item, itemIndex</span>) </span>&#123;                  <span class="comment">// 第二层回调，请求每个商品的信息</span></div><div class="line">      $.get(<span class="string">'/prices'</span>, &#123; <span class="attr">itemId</span>: item.id &#125;, <span class="function"><span class="keyword">function</span>(<span class="params">price</span>) </span>&#123;  <span class="comment">// 第三层回调，获取每个商品的价格</span></div><div class="line">        priceList.push(&#123; <span class="attr">item</span>: item, <span class="attr">price</span>: price &#125;);</div><div class="line">        <span class="keyword">if</span> ( priceList.length == items.length ) &#123;</div><div class="line">          <span class="keyword">return</span> priceList;</div><div class="line">        &#125;</div><div class="line">      &#125;).fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;                                   <span class="comment">// 第四层回调，当价格没有被获取到时的错误处理</span></div><div class="line">        priceList.push(&#123; <span class="attr">item</span>: item &#125;);</div><div class="line">        <span class="keyword">if</span> ( priceList.length == items.length ) &#123;</div><div class="line">          <span class="keyword">return</span> priceList;</div><div class="line">        &#125;</div><div class="line">      &#125;);</div><div class="line">    &#125;)</div><div class="line">  &#125;).fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;                                     <span class="comment">//第五层回调，当商品信息没有被获取到时的错误处理</span></div><div class="line">    alert(<span class="string">"Could not retrieve items"</span>);</div><div class="line">  &#125;); &#125;</div></pre></td></tr></table></figure>
-<p>很容易想到，当必须从更多的数据源中获取数据时，回调的嵌套级别就会进一步增加，这将会导致代码更加难以理解和维护。关于回调地狱的文章不计其数，甚至还有人为此注册了一个域名 <a href="http://callbackhell.com" target="_blank" rel="external">http://callbackhell.com</a>。在大型的 Node.js 应用中也经常会出现回调地狱。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fetchPriceList = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;                                <span class="comment">// 入口方法，将商品和价格组合</span></span><br><span class="line">  $.get(<span class="string">'/items'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">items</span>) </span>&#123;                             <span class="comment">// 第一层回调，处理获取到的商品列表</span></span><br><span class="line">    <span class="keyword">var</span> priceList = [];</span><br><span class="line">    items.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item, itemIndex</span>) </span>&#123;                  <span class="comment">// 第二层回调，请求每个商品的信息</span></span><br><span class="line">      $.get(<span class="string">'/prices'</span>, &#123; <span class="attr">itemId</span>: item.id &#125;, <span class="function"><span class="keyword">function</span>(<span class="params">price</span>) </span>&#123;  <span class="comment">// 第三层回调，获取每个商品的价格</span></span><br><span class="line">        priceList.push(&#123; <span class="attr">item</span>: item, <span class="attr">price</span>: price &#125;);</span><br><span class="line">        <span class="keyword">if</span> ( priceList.length == items.length ) &#123;</span><br><span class="line">          <span class="keyword">return</span> priceList;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;).fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;                                   <span class="comment">// 第四层回调，当价格没有被获取到时的错误处理</span></span><br><span class="line">        priceList.push(&#123; <span class="attr">item</span>: item &#125;);</span><br><span class="line">        <span class="keyword">if</span> ( priceList.length == items.length ) &#123;</span><br><span class="line">          <span class="keyword">return</span> priceList;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;).fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;                                     <span class="comment">//第五层回调，当商品信息没有被获取到时的错误处理</span></span><br><span class="line">    alert(<span class="string">"Could not retrieve items"</span>);</span><br><span class="line">  &#125;); &#125;</span><br></pre></td></tr></table></figure>
+<p>很容易想到，当必须从更多的数据源中获取数据时，回调的嵌套级别就会进一步增加，这将会导致代码更加难以理解和维护。关于回调地狱的文章不计其数，甚至还有人为此注册了一个域名 <a href="http://callbackhell.com" target="_blank" rel="noopener">http://callbackhell.com</a>。在大型的 Node.js 应用中也经常会出现回调地狱。</p>
 <p>但是编写异步程序完全没必要那么复杂。虽然回调有很多优点，但是她的抽象层次还是过于低级，以至于在编写复杂的异步流时显得那么无力。为了使异步编程更加人性化，JavaScript 仅仅只是在工具和抽象层面缓缓地前进。但是一些其他编程语言，比如 Scala，在设计之初就考虑到了这些抽象，并利用了众所周知的函数式编程则，使得从不同的角度处理该类问题成为了可能。</p>
 <h3 id="异步编程的新方式"><a href="#异步编程的新方式" class="headerlink" title="异步编程的新方式"></a>异步编程的新方式</h3><p>受函数式编程概念的启发，一些工具， 比如 Java 8 的 lambdas 或者 Scala 的函数都极大的简化了对多个回调的处理（与 JavaScript 所提供的相当少的解决方案相比），除了建立在语言层面的这些工具外，像 futures 和 actors 也能为异步编程提供强有力的支持，这些都极大地消除了回调地狱的现象。</p>
 <p>从命令式同步的编码风格转换到函数式且异步的编码风格不是一蹴而就的，我们将在第3章和第5章中讨论异步编程的工具，技术和思维模型。</p>
@@ -192,6 +192,8 @@
       <footer class="post-footer">
         <div class="post-tags">
           
+            <a href="/tags/Shaw/">^Shaw</a>
+          
             <a href="/tags/翻译/">翻译</a>
           
             <a href="/tags/Play/">Play</a>
@@ -199,8 +201,6 @@
             <a href="/tags/响应式编程/">响应式编程</a>
           
             <a href="/tags/响应式-Web-应用/">~响应式 Web 应用</a>
-          
-            <a href="/tags/Shaw/">^Shaw</a>
           
         </div>
 

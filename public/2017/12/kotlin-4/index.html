@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,29 +26,29 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://scala.cool/2017/12/kotlin-4/"/>
+<link rel="canonical" href="http://scala.cool/2017/12/kotlin-4/">
 
 
 <meta name="description" content="在 Kotlin 中，如果说 Any 是所有非空类型的根类型，那么 Any? 才是所有类型的根类型。">
-<meta name="keywords" content="类型相关,Kotlin,~Dive Into Kotlin,^Prefert">
+<meta name="keywords" content="类型相关,^Prefert,Kotlin,~Dive Into Kotlin">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dive Into Kotlin（四）：为什么 Kotlin 的根类型是「Any?」">
 <meta property="og:url" content="http://scala.cool/2017/12/kotlin-4/index.html">
 <meta property="og:site_name" content="ScalaCool">
 <meta property="og:description" content="在 Kotlin 中，如果说 Any 是所有非空类型的根类型，那么 Any? 才是所有类型的根类型。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-19T02:33:31.000Z">
+<meta property="og:updated_time" content="2019-11-29T07:52:37.051Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dive Into Kotlin（四）：为什么 Kotlin 的根类型是「Any?」">
 <meta name="twitter:description" content="在 Kotlin 中，如果说 Any 是所有非空类型的根类型，那么 Any? 才是所有类型的根类型。">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -84,7 +84,7 @@
 
   <body>
     <div id="page">
-      <header id="masthead" >
+      <header id="masthead">
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -172,17 +172,17 @@
 <p>事实上，「继承」和「子类型化」是两个完全不同的概念。</p>
 <ul>
 <li><p><strong>子类型化</strong>的核心是一种类型的替代关系（我们也可以称之为子类型多态），通常可表示为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">S &lt;: T</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">S &lt;: T</span><br></pre></td></tr></table></figure>
 <p>以上 <code>S</code> 是 <code>T</code> 的子类，这意味着在需要 <code>T</code> 类型值的地方，<code>S</code> 类型的值同样适用，如在 Kotlin 中 <code>Int</code> 是 <code>Number</code> 的子类：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span> <span class="title">printNum</span><span class="params">(num: <span class="type">Number</span>)</span></span> &#123;</div><div class="line">  println(num)</div><div class="line">&#125;</div><div class="line"></div><div class="line">&gt;&gt;&gt; <span class="keyword">val</span> n: <span class="built_in">Int</span> = <span class="number">1</span></div><div class="line">&gt;&gt;&gt; printNum(n)</div><div class="line"></div><div class="line">&gt;&gt;&gt; <span class="number">1</span></div><div class="line">&gt;&gt;&gt; printNum(<span class="string">"I am a String"</span>)</div><div class="line">error: type mismatch: inferred type <span class="keyword">is</span> String but Number was expected</div></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">printNum</span><span class="params">(num: <span class="type">Number</span>)</span></span> &#123;</span><br><span class="line">  println(num)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; <span class="keyword">val</span> n: <span class="built_in">Int</span> = <span class="number">1</span></span><br><span class="line">&gt;&gt;&gt; printNum(n)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; <span class="number">1</span></span><br><span class="line">&gt;&gt;&gt; printNum(<span class="string">"I am a String"</span>)</span><br><span class="line">error: type mismatch: inferred type <span class="keyword">is</span> String but Number was expected</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>相对而言，<strong>继承</strong>强调的是一种「实现上的复用」，而子类型化是一种类型语义的关系，与实现没关系。在 Java 中，我们似乎也可以通过类继承来实现上述关系：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">S</span> <span class="keyword">extends</span> <span class="title">class</span> <span class="title">T</span></span></div></pre></td></tr></table></figure>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">S</span> <span class="keyword">extends</span> <span class="title">class</span> <span class="title">T</span></span></span><br></pre></td></tr></table></figure>
 <p>  由于在声明父子类型关系的同时，也声明了继承的关系，所以通常会造成了某种程度上的混淆，但是这并不能说明这两个概念就是等价的。   </p>
 </li>
 </ul>
 <p>虽然 <code>Any</code> 与 <code>Any?</code> 看起来没有继承关系，然而当我们在需要用 <code>Any?</code> 类型值的地方，显然可以传入一个类型为 <code>Any</code> 的值，这在编译上不会产生问题。反之却行不通，比如：一个参数类型为 <code>Any</code> 的函数，我们传入符合 <code>Any?</code> 类型的 <code>null</code> 值，就会出现如下的错误:</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">error: <span class="literal">null</span> can not be a value of a non-<span class="literal">null</span> type Any</div></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error: <span class="literal">null</span> can not be a value of a non-<span class="literal">null</span> type Any</span><br></pre></td></tr></table></figure>
 <p>以上，我们也可以初步得出结论：<code>Any</code>的值能在所有情况下代替 <code>Any?</code> 的值，这符合「子类型化」的概念。</p>
 <p>因此，我们可以很大胆地说：<strong>在Kotlin的类型系统中，<code>Any?</code> 是 <code>Any</code> 的父类型，而且是所有类型的根类型</strong>，虽然当前的 Kotlin 官网文档没有介绍过这一点。  </p>
 <h2 id="Any-与-Any"><a href="#Any-与-Any" class="headerlink" title="Any? 与 Any??"></a>Any? 与 Any??</h2><p>一个你可能会挑战的问题是，如果 <code>Any?</code> 是 <code>Any</code> 的父类型，那么 <code>Any??</code> 是否又是 <code>Any?</code> 的父类型， 如果成立，那么是否意味着就没有所谓的「所有类型的根类型」了?</p>
@@ -197,11 +197,11 @@
           
             <a href="/tags/类型相关/">类型相关</a>
           
+            <a href="/tags/Prefert/">^Prefert</a>
+          
             <a href="/tags/Kotlin/">Kotlin</a>
           
             <a href="/tags/Dive-Into-Kotlin/">~Dive Into Kotlin</a>
-          
-            <a href="/tags/Prefert/">^Prefert</a>
           
         </div>
 

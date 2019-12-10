@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,15 +26,15 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://scala.cool/2017/09/reactive-web-applications-2/"/>
+<link rel="canonical" href="http://scala.cool/2017/09/reactive-web-applications-2/">
 
 
 <meta name="description" content="如果你正在阅读本书，你可能听过诸如「响应式应用」、「响应式编程」、「响应式流」或「响应式宣言」等概念。这些词加上「响应式」前缀后感觉更加高大上了，但是你可能会去思考在这些不同场景下「响应式」的含义。那就让我们去看看这个词在计算机系统中的起源，从中寻求答案。">
-<meta name="keywords" content="翻译,Play,响应式编程,~响应式 Web 应用,^Shaw">
+<meta name="keywords" content="^Shaw,翻译,Play,响应式编程,~响应式 Web 应用">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt;译&gt; 响应式 Web 应用（二）">
 <meta property="og:url" content="http://scala.cool/2017/09/reactive-web-applications-2/index.html">
@@ -43,15 +43,15 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2017/09/spreadsheet.png">
 <meta property="og:image" content="http://scala.cool/images/2017/09/High-level-architecture-of-play.png">
-<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta property="og:updated_time" content="2018-01-18T10:04:32.558Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;译&gt; 响应式 Web 应用（二）">
 <meta name="twitter:description" content="如果你正在阅读本书，你可能听过诸如「响应式应用」、「响应式编程」、「响应式流」或「响应式宣言」等概念。这些词加上「响应式」前缀后感觉更加高大上了，但是你可能会去思考在这些不同场景下「响应式」的含义。那就让我们去看看这个词在计算机系统中的起源，从中寻求答案。">
 <meta name="twitter:image" content="http://scala.cool/images/2017/09/spreadsheet.png">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -82,12 +82,12 @@
 
 
 
-    <title> <译> 响应式 Web 应用（二） - ScalaCool </title>
+    <title> <译> 响应式 Web 应用（二） - ScalaCool </译></title>
   </head>
 
   <body>
     <div id="page">
-      <header id="masthead" >
+      <header id="masthead">
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -139,7 +139,7 @@
         
           <译> 响应式 Web 应用（二）
         
-      </h1>
+      </译></h1>
 
       <time class="post-time">
           9月14日
@@ -172,10 +172,10 @@
 <p>在 Web 应用程序开发方面，这种技术越来越多地用于前端应用程序的开发。比如 KnockoutJS、AngularJS、Meteor 以及 React.js 等工具都使用了这种模式。开发者不需要关心在特定 DOM 元素上声明的监听器的细节，他们只需要描述数据的变化是如何通过用户界面进行传播的就可以了。采用这种模式使得如何去实现响应式用户界面变得简单化了。我们将在第8章中探讨响应式用户界面。</p>
 <p>在服务端也能找到类似的抽象，其中事件起着关键性的作用。比如「响应式流」，她旨在为 JVM 上的异步流处理提供一个标准接口。关于这种新的方式我们将会在第9章详细讨论。</p>
 <h2 id="1-1-4-响应式技术的出现"><a href="#1-1-4-响应式技术的出现" class="headerlink" title="1.1.4 响应式技术的出现"></a>1.1.4 响应式技术的出现</h2><p>这些年来出现了许多技术和框架，她们都有一些共同点，根据这些共同点，我们可以将其归为响应式技术。但是开发响应式应用并不仅仅是简单地使用响应式技术，这点将会在后面介绍。但是所采用的技术必须满足许多先决条件用以支持响应式的行为，尤其是异步和事件驱动代码执行的能力。</p>
-<p>微软的 Reactive Extensions （Rx; <a href="https://rx.codeplex.com/" target="_blank" rel="external">https://rx.codeplex.com/</a>）是一个用于编写基于异步以及事件驱动程序的类库。你可以在 .NET 平台以及其他平台（例如 JavaScript）上使用它。在 Node.js（<a href="http://nodejs.org" target="_blank" rel="external">http://nodejs.org</a>）上使用 JavaScript 去构建异步的、基于事件驱动的应用程序现已非常流行。同样，在 JVM 上也有大量的类库支持异步以及事件驱动，比如 Apache MINA （<a href="https:// mina.apache.org" target="_blank" rel="external">https:// mina.apache.org</a>） 以及 Netty（<a href="http://netty.io" target="_blank" rel="external">http://netty.io</a>）。</p>
+<p>微软的 Reactive Extensions （Rx; <a href="https://rx.codeplex.com/" target="_blank" rel="noopener">https://rx.codeplex.com/</a>）是一个用于编写基于异步以及事件驱动程序的类库。你可以在 .NET 平台以及其他平台（例如 JavaScript）上使用它。在 Node.js（<a href="http://nodejs.org" target="_blank" rel="noopener">http://nodejs.org</a>）上使用 JavaScript 去构建异步的、基于事件驱动的应用程序现已非常流行。同样，在 JVM 上也有大量的类库支持异步以及事件驱动，比如 Apache MINA （<a href="https:// mina.apache.org" target="_blank" rel="noopener">https:// mina.apache.org</a>） 以及 Netty（<a href="http://netty.io" target="_blank" rel="noopener">http://netty.io</a>）。</p>
 <p>这些底层技术都提供了构建异步和事件驱动应用程序的基本工具，但是要使一个 Web 应用达到一种成熟完备的状态还需要做很多工作。一个成熟的应用程序必须要能够兼顾许多方面，比如代码组织、视图模板、客户端资源（例如样式表和 JavaScript 文件）的引入和组织。还有数据库的连接以及系统的安全性等。当下有许多所谓的全栈式 Web 应用框架，其中还有少部分采用了响应式技术，但是只有极少部分拥抱了响应式技术的原理和核心，她们通过采用响应式技术来从根本上去构建 Web 框架。</p>
 <p>全栈式框架关注一个应用程序在构建以及部署过程中所涉及到的所有层面：客户端UI技术（或集成方式），服务器端业务逻辑，身份验证，数据库访问集成以及各种通用模块的类库（如远程 Web 服务调用）。在响应式应用程序中，所有这些层都必须遵循相同的异步调用和错误恢复的原则。</p>
-<p>Play 框架是迄今为止 JVM 上唯一的一个全栈响应式 Web 应用框架。其他诸如 Lift （<a href="http://liftweb .net" target="_blank" rel="external">http://liftweb.net</a>）的全栈式框架为 web 应用程序的开发提供了一个很好的选择。但是她们没有将异步，故障恢复能力和可伸缩性作为主要的目标来设计。</p>
+<p>Play 框架是迄今为止 JVM 上唯一的一个全栈响应式 Web 应用框架。其他诸如 Lift （<a href="http://liftweb .net" target="_blank" rel="noopener">http://liftweb.net</a>）的全栈式框架为 web 应用程序的开发提供了一个很好的选择。但是她们没有将异步，故障恢复能力和可伸缩性作为主要的目标来设计。</p>
 <p>Play 是基于 Netty 来构建的，并通过使用「响应式流」所提供的异步流处理来支持其响应式行为（如图 1.1）。</p>
 <center><br><img src="/images/2017/09/High-level-architecture-of-play.png" alt="Image of play high level architecture"><br></center>
 
@@ -189,6 +189,8 @@
       <footer class="post-footer">
         <div class="post-tags">
           
+            <a href="/tags/Shaw/">^Shaw</a>
+          
             <a href="/tags/翻译/">翻译</a>
           
             <a href="/tags/Play/">Play</a>
@@ -196,8 +198,6 @@
             <a href="/tags/响应式编程/">响应式编程</a>
           
             <a href="/tags/响应式-Web-应用/">~响应式 Web 应用</a>
-          
-            <a href="/tags/Shaw/">^Shaw</a>
           
         </div>
 

@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,11 +26,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://scala.cool/2017/11/mysql-protocol/"/>
+<link rel="canonical" href="http://scala.cool/2017/11/mysql-protocol/">
 
 
 <meta name="description" content="MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序。">
@@ -42,15 +42,15 @@
 <meta property="og:description" content="MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2017/11/mysql-process.png">
-<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta property="og:updated_time" content="2018-01-18T10:04:32.558Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Asyncdb（四）：MySQL网络协议分析">
 <meta name="twitter:description" content="MySQL对大家来说，都应该很熟悉了，从大学里的课程到实际工作中数据的存储查询，很多时候都需要用到数据库，很多人也写过与数据库交互的程序。">
 <meta name="twitter:image" content="http://scala.cool/images/2017/11/mysql-process.png">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -86,7 +86,7 @@
 
   <body>
     <div id="page">
-      <header id="masthead" >
+      <header id="masthead">
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -164,7 +164,7 @@
 <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>阅读本文之前你需要对网络协议需要有基本的了解，比如两台机子之间的数据是如何通信的，硬件层可以暂时不需了解，但网络层和传输层的协议要有一定的理解，比如IP数据包，TCP/IP协议，UDP协议等相关概念，有了这些基础，有利于你阅读本文。</p>
 <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在历史悠久的时代，数据库只作为单机存储，也不怎么需要与程序进行交互的时候的首，它的网络通信并不是那么重要，但随着时代的发展，数据库不再只是单纯的作为一个数据的仓库了，它需要提供与外界的交互，比如远程连接，程序操作数据库等，这时候一份规范的网络通信的协议就非常重要了，比如它是如何校验权限，如何解析SQL语句，如何返回执行结果都需要用到相应的协议，很多时候我们并不需要接触这些内容，因为它太底层了，我们直接使用把它们封装好的第三方包就可以了，为什么还要去学习它的网络协议呢？确实对于一开始学习编程的人来说，这有点操之过急，反而有时候会适得其反，但当你对这一方面有了一定的了解之后，你便会迫不及待得想去探索更深层的奥秘，去了解并学习我们平常用的第三方类库是怎么去实现，明白它的底层原理，甚至对一些莫名其妙的bug也不会再害怕。</p>
 <h1 id="MySQL连接方式"><a href="#MySQL连接方式" class="headerlink" title="MySQL连接方式"></a>MySQL连接方式</h1><p>分析协议，我们首先要了解如何与数据库连接，说到MySQL连接方式，大家突然可能有点懵，其实它一直伴随着我们，比如我们第一次装数据库完成后执行的第一次登录，比如你没有设置密码：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot</div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot</span><br></pre></td></tr></table></figure>
 <p>这是最基本的一种数据库连接方式，那么MySQL连接方式到底有几种呢？到MySQL5.7为止，总共有五种，分别是TCP/IP，TLS/SSL，Unix Sockets，Shared Memory，Named pipes，下面我们就来看看这五种的区别：</p>
 <table>
 <thead>
@@ -199,7 +199,7 @@
 <td>是</td>
 <td>类Unix系统</td>
 <td>是</td>
-<td>设置–socket=<empty\> 来关闭.</empty\></td>
+<td>设置–socket=&lt;empty> 来关闭.</td>
 <td>–socket=socket path</td>
 </tr>
 <tr>
@@ -208,7 +208,7 @@
 <td>Windows系统</td>
 <td>是</td>
 <td>–shared-memory=on/off.</td>
-<td>–shared-memory-base-name=<name\></name\></td>
+<td>–shared-memory-base-name=&lt;name></td>
 </tr>
 <tr>
 <td>Named pipes</td>
@@ -216,19 +216,19 @@
 <td>Windows系统</td>
 <td>否</td>
 <td>–enable-named-pipe=on/off.</td>
-<td>–socket=<name\></name\></td>
+<td>–socket=&lt;name></td>
 </tr>
 </tbody>
 </table>
 <p>从上表中我们可以清晰看出每种连接方式的区别，接下里我会具体说明几种连接是怎么操作的，由于我的机子是Mac OS系统，这里只模拟非Windows系统下的三种方式,因为这三种方式都是默认开启的，我们不需要进行任何配置：</p>
-<h2 id="1-Unix-Sockets："><a href="#1-Unix-Sockets：" class="headerlink" title="1.Unix Sockets："></a>1.Unix Sockets：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot</div></pre></td></tr></table></figure>
+<h2 id="1-Unix-Sockets："><a href="#1-Unix-Sockets：" class="headerlink" title="1.Unix Sockets："></a>1.Unix Sockets：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot</span><br></pre></td></tr></table></figure>
 <p>若你在本机使用这种方式连接MySQL数据库的话，它默认会使用Unix Sockets。</p>
-<h2 id="2-TCP-IP："><a href="#2-TCP-IP：" class="headerlink" title="2.TCP/IP："></a>2.TCP/IP：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql <span class="comment">--protocol=tcp -uroot</span></div><div class="line">mysql -P3306 -h127.0.0.1 -uroot</div></pre></td></tr></table></figure>
+<h2 id="2-TCP-IP："><a href="#2-TCP-IP：" class="headerlink" title="2.TCP/IP："></a>2.TCP/IP：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql <span class="comment">--protocol=tcp -uroot</span></span><br><span class="line">mysql -P3306 -h127.0.0.1 -uroot</span><br></pre></td></tr></table></figure>
 <p>连接的时候我们指定连接协议，或者指定相应的IP及端口，我们的连接方式就变成了TCP/IP方式。</p>
-<h2 id="3-TLS-SSL："><a href="#3-TLS-SSL：" class="headerlink" title="3.TLS/SSL："></a>3.TLS/SSL：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql <span class="comment">--protocol=tcp -uroot --ssl=on</span></div><div class="line">mysql -P3306 -h127.0.0.1 -uroot <span class="comment">--ssl=on</span></div></pre></td></tr></table></figure>
+<h2 id="3-TLS-SSL："><a href="#3-TLS-SSL：" class="headerlink" title="3.TLS/SSL："></a>3.TLS/SSL：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql <span class="comment">--protocol=tcp -uroot --ssl=on</span></span><br><span class="line">mysql -P3306 -h127.0.0.1 -uroot <span class="comment">--ssl=on</span></span><br></pre></td></tr></table></figure>
 <p>上表说过，TLS/SSL是基于TCP/IP的，所以我们只需再指定打开ssl配置即可。</p>
 <p>然后我们可以通过以下语句来查询目前数据库的连接情况：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> connection_type <span class="keyword">from</span> performance_schema.threads <span class="keyword">where</span> connection_type <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">null</span></div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> connection_type <span class="keyword">from</span> performance_schema.threads <span class="keyword">where</span> connection_type <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">null</span></span><br></pre></td></tr></table></figure>
 <p>那么我们如何选择连接方式呢？个人总结了以下几个原则：</p>
 <ul>
 <li>若是你能确定程序和数据库在同一台机子(类Unix系统)上，推荐使用Unix Sockets，因为它效率更高；</li>
@@ -274,8 +274,8 @@
 </tbody>
 </table>
 <p>举个简单的例子，比如1024的编码为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">0xFC 0x00 0x04</div></pre></td></tr></table></figure>
-<p>其中0x代表16进制，实际数据传输中并没有该标识，第一位代表这是一个251~2^16之间的数值，所以后面两位为数值具体的值，这里使用的是小端字节序，MySQL默认使用的也是这种编码次序，所以这里1024是0x00 0x04，字节序相关知识可以参考：<a href="http://www.ruanyifeng.com/blog/2016/11/byte-order.html" target="_blank" rel="external">理解字节序</a>，到这里大家应该对这种编码格式有了一定的了解了，下面我们就来看看String。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0xFC 0x00 0x04</span><br></pre></td></tr></table></figure>
+<p>其中0x代表16进制，实际数据传输中并没有该标识，第一位代表这是一个251~2^16之间的数值，所以后面两位为数值具体的值，这里使用的是小端字节序，MySQL默认使用的也是这种编码次序，所以这里1024是0x00 0x04，字节序相关知识可以参考：<a href="http://www.ruanyifeng.com/blog/2016/11/byte-order.html" target="_blank" rel="noopener">理解字节序</a>，到这里大家应该对这种编码格式有了一定的了解了，下面我们就来看看String。</p>
 <h3 id="String-字符串"><a href="#String-字符串" class="headerlink" title="String(字符串)"></a>String(字符串)</h3><p>String的编码格式相对Integer来说会复杂一点，主要有以下几种：</p>
 <ul>
 <li>FixedLengthString（定长方式）：需先知道String的长度，MySQL中的一个例子就是ERR_Packet包（后续会讲到）就使用了这种编码方式，因为它的长度固定，用5个字节存储所有数据。</li>
@@ -334,7 +334,7 @@
 </tbody>
 </table>
 <p>若是数据内容大于或者等于2^24-1个字节，将会拆分发送，举个例子，比如发送16 777 215 (2^24-1) 字节的内容，则会按一下这种方式发送</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ff ff ff 00 ...</div><div class="line">00 00 00 01</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ff ff ff 00 ...</span><br><span class="line">00 00 00 01</span><br></pre></td></tr></table></figure>
 <p>第一个数据包满载，第二个数据包是一个空数据包（一种临界情况）。</p>
 <h3 id="Client-to-Server"><a href="#Client-to-Server" class="headerlink" title="Client to Server"></a>Client to Server</h3><p>Client向Server端发送的格式相对来说就简单一点了</p>
 <table>
@@ -516,9 +516,9 @@
 </tbody>
 </table>
 <p>这里距一个常见的的例子，比如切换数据库：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">use godpan</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use godpan</span><br></pre></td></tr></table></figure>
 <p>相应的报文格式则为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">0x02 0x67 0x6f 0x64 0x70 0x61 0x6e</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x02 0x67 0x6f 0x64 0x70 0x61 0x6e</span><br></pre></td></tr></table></figure>
 <p>其中0x02代表切换数据库命令，后面的字节则为godpan的16进制表达。</p>
 <h2 id="数据包类型"><a href="#数据包类型" class="headerlink" title="数据包类型"></a>数据包类型</h2><p>有了以上的基础，我们基本知道的与MySQL通信之间的方式以及数据格式，那么与其通信间到底有哪几种数据包呢？接下去的内容是建立在MySQL4.1版本以后，之前版本的数据包类型这里不再论述。</p>
 <p>这里主要分为两个阶段，第一个阶段是数据库账户认证阶段，第二个阶段则是执行具体命令阶段，我们先来看看前者。</p>
@@ -598,7 +598,7 @@
 </tbody>
 </table>
 <p>上表就是整个Handshake packet的这个包结构，属性的含义以及规范都有相应的说明，下面是我本机解析的某次连接数据库的Handshake packet包，仅供参考：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;protocolVersion=10, serverVersion=&apos;5.7.13&apos;, threadId=4055, scramble=[49, 97, 80, 3, 35, 118, 45, 15, 5, 118, 9, 11, 124, 93, 93, 5, 31, 47, 111, 109, 0, 0, 0, 0, 0], serverCapabilities=65535, serverLanguage=33, serverStatus=2&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;protocolVersion=10, serverVersion=&apos;5.7.13&apos;, threadId=4055, scramble=[49, 97, 80, 3, 35, 118, 45, 15, 5, 118, 9, 11, 124, 93, 93, 5, 31, 47, 111, 109, 0, 0, 0, 0, 0], serverCapabilities=65535, serverLanguage=33, serverStatus=2&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="Auth-packet"><a href="#Auth-packet" class="headerlink" title="Auth packet"></a>Auth packet</h4><p>Auth packet是由Client向Server发送的认证包，用于验证数据库账户登录，相应内容的格式：</p>
 <table>
 <thead>
@@ -752,7 +752,7 @@
 </tbody>
 </table>
 <p>下面是我本机解析的某次正确连接数据库后的OK packet包，仅供参考：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">OK&#123;affectedRows=0, insertId=0, serverStatus=2, message=&apos;....&apos;&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OK&#123;affectedRows=0, insertId=0, serverStatus=2, message=&apos;....&apos;&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="Error-包"><a href="#Error-包" class="headerlink" title="Error 包"></a>Error 包</h4><p>顾名思义Error 包就是当出现错误的时候返回的信息，比如账户验证不通过，查询命令不合法，非空字段未指定值等相关操作，Server端都会向Client端发送Error 包。</p>
 <p>Error 包的主要结构：</p>
 <table>
@@ -798,9 +798,9 @@
 </tbody>
 </table>
 <p>比如我们现在已经连接了数据库，执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">use test_database;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use test_database;</span><br></pre></td></tr></table></figure>
 <p>但是我们数据库中并没有test_database这个数据库，我们将会得到相应的错误信息，下面是我本机解析的Error packet包，仅供参考：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Error&#123;errno=1046, sqlState=&apos;3D000&apos;, message=&apos;No database selected&apos;&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error&#123;errno=1046, sqlState=&apos;3D000&apos;, message=&apos;No database selected&apos;&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="EOF-Packet"><a href="#EOF-Packet" class="headerlink" title="EOF Packet"></a>EOF Packet</h4><p>EOF Packet是用于标识某个阶段数据结束的标志包，会在一下几种情况中产生：</p>
 <ul>
 <li>结果集中字段信息结束的时候；</li>
@@ -962,7 +962,7 @@
 </tr>
 </tbody>
 </table>
-<p>其中field的类型与标识具体定义和对应变量含义可参考这篇文章：<a href="http://hutaow.com/blog/2013/11/06/mysql-protocol-analysis/#428-com_shutdown" target="_blank" rel="external">MySQL协议分析</a></p>
+<p>其中field的类型与标识具体定义和对应变量含义可参考这篇文章：<a href="http://hutaow.com/blog/2013/11/06/mysql-protocol-analysis/#428-com_shutdown" target="_blank" rel="noopener">MySQL协议分析</a></p>
 <h5 id="EOF-包"><a href="#EOF-包" class="headerlink" title="EOF 包"></a>EOF 包</h5><p>这里的EOF包是标识这列信息的结束，具体结构信息参考上面的EOF包解释。</p>
 <h5 id="Row-Data"><a href="#Row-Data" class="headerlink" title="Row Data"></a>Row Data</h5><p>Row Data含着的是我们需要获取的数据，一个Result Set包里面包含着多个Row Data结构(得到的数据可能多行)，每个Row Data中包含着多个字段值，它们之间没有间隔，比如我们现在查询到的数据为（id: 1, name: godpan) 那么Row Data内容为（1，godpan),这两个值是连在一起的，对应的值都用LengthEncodedString编码。</p>
 <h5 id="EOF-包-1"><a href="#EOF-包-1" class="headerlink" title="EOF 包"></a>EOF 包</h5><p>等待Row Data发送完之后，Server最后会向Client端发送一个EOF包，标识所有的行数据已经发送完毕。</p>
@@ -1002,9 +1002,9 @@
 </tbody>
 </table>
 <p>比如我现在执执行下面的语句：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">PreparedStatement ps = connection.prepareStatement(<span class="string">"SELECT * FROM `godpan_fans` where id=?"</span>);</div><div class="line">ps.setInteger(<span class="number">1</span>, <span class="number">1</span>);</div><div class="line">ps.executeQuery();</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PreparedStatement ps = connection.prepareStatement(<span class="string">"SELECT * FROM `godpan_fans` where id=?"</span>);</span><br><span class="line">ps.setInteger(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">ps.executeQuery();</span><br></pre></td></tr></table></figure>
 <p>得到下面的PREPARE_OK包，仅供参考：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PSOK&#123;statementId=1, columns=5, parameters=1&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PSOK&#123;statementId=1, columns=5, parameters=1&#125;</span><br></pre></td></tr></table></figure>
 <p>如果上面的columns大于0，以及parameters大于0，则将有额外的两个包传输，分别是columns的信息以及parameters的信息，对应信息结构：</p>
 <table>
 <thead>
@@ -1092,7 +1092,7 @@
 <p>接着我们来看一下第二点，是如何用具体值类型来对相应的值进行编码的，这里主要分为三类，基本数据类型，时间类型，字符串类型；</p>
 <ul>
 <li>基本数据类型：比如TINYINT使用一个字节编码，FLOAT使用四个字节，DOUBLE使用8个字节等；</li>
-<li>时间类型：使用类似LengthEncodedString的编码方式编码，具体可参考<a href="https://dev.mysql.com/doc/dev/mysql-server/latest/PAGE_PROTOCOL.html" target="_blank" rel="external">MySQL_PROTOCOL</a>；</li>
+<li>时间类型：使用类似LengthEncodedString的编码方式编码，具体可参考<a href="https://dev.mysql.com/doc/dev/mysql-server/latest/PAGE_PROTOCOL.html" target="_blank" rel="noopener">MySQL_PROTOCOL</a>；</li>
 <li>字符串类：不属于上面两类的都属于字符串类型，使用普通的LengthEncodedString；</li>
 </ul>
 <h4 id="Execute包"><a href="#Execute包" class="headerlink" title="Execute包"></a>Execute包</h4><p>Execute包顾名思义是一个执行包，它是由Client端发送到Server端的，但它和普通的命令又有点不同，它主要是用来执行预处理语句，并会携带相应参数，具体结构如下：</p>

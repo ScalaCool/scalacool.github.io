@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
-<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
 
 
-<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -26,11 +26,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://scala.cool/2018/03/Form-Java2Scala-1-oop/"/>
+<link rel="canonical" href="http://scala.cool/2018/03/Form-Java2Scala-1-oop/">
 
 
 <meta name="description" content="本文将介绍 shapeless 中 Nat 类型的应用">
@@ -42,15 +42,15 @@
 <meta property="og:description" content="本文将介绍 shapeless 中 Nat 类型的应用">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://scala.cool/images/2018/03/java2Scala-1-oop/scala-unified-types.png">
-<meta property="og:updated_time" content="2019-01-04T05:20:11.000Z">
+<meta property="og:updated_time" content="2019-11-29T07:52:37.051Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从 Java 到 Scala（一）：面向对象谈起">
 <meta name="twitter:description" content="本文将介绍 shapeless 中 Nat 类型的应用">
 <meta name="twitter:image" content="http://scala.cool/images/2018/03/java2Scala-1-oop/scala-unified-types.png">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -86,7 +86,7 @@
 
   <body>
     <div id="page">
-      <header id="masthead" >
+      <header id="masthead">
 <div class="site-header-inner">
     <h1 class="site-title">
         <a href="/." class="logo">ScalaCool</a>
@@ -165,7 +165,7 @@
 <p>“你知道 Spark 吗？它就是使用 Scala 编写的，不过在我们团队中，Scala 主要作为后端语言，我们 90% 以上的业务代码都是使用 Scala 编写。Scala 在国内使用的比较少，但是在国外用的还是蛮多的，如 Twitter 就是使用 Scala 写的后端。”</p>
 <p>自那以后，我便开始了 Scala 的学习之旅。</p>
 <blockquote>
-<p>Scala 是由德国的计算机科学家和编程方法教授 <a href="https://en.wikipedia.org/wiki/Martin_Odersky" target="_blank" rel="external">Martin Odersky</a> 设计出来的，它的设计原理严格遵循数学的逻辑推理。因此它是一门优秀的编程语言，它不仅仅在工业界被广泛使用，在学术界也占用很高的研究地位。</p>
+<p>Scala 是由德国的计算机科学家和编程方法教授 <a href="https://en.wikipedia.org/wiki/Martin_Odersky" target="_blank" rel="noopener">Martin Odersky</a> 设计出来的，它的设计原理严格遵循数学的逻辑推理。因此它是一门优秀的编程语言，它不仅仅在工业界被广泛使用，在学术界也占用很高的研究地位。</p>
 </blockquote>
 <p>由于之前的 Java 背景，我经常拿 Scala 与 Java 这两门语言比较。 Scala 和 Java 都基于 JVM，因此 Java 的类库，Scala　都可以直接使用。但是我对 Scala 印象最深的点，并不是「面向对象」，而是它还拥抱「函数式」，尤其是它的「高阶」。</p>
 <p><strong>如果我们把「面向对象」比作站在地面上观察事物的原理，并且使用这些原理解决问题，那么「高阶」就是让你站在山上去看待事物，对问题进行更高层次的抽象。</strong></p>
@@ -179,9 +179,9 @@
 <p>在代码层面，「对象」的行为可以定义为「方法」，「对象」的状态可以定义为「属性」，那我们如何去描述一类「对象」的方法或者属性呢？－<strong>封装</strong>。</p>
 <p>例如共享单车，它有车轮，二维码等属性，有开锁和关锁等行为。那么我们可以有三种方式来封装共享单车。</p>
 <h3 id="基于对象的封装"><a href="#基于对象的封装" class="headerlink" title="基于对象的封装"></a>基于对象的封装</h3><p>这种方式就是直接封装，最典型的例子就是 C 语言中的结构体。<br>封装共享单车的「模板」如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> SharedBicycle&#123;</div><div class="line">  车轮;</div><div class="line">  二维码;</div><div class="line">  开锁;</div><div class="line">  关锁;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h3 id="基于类的封装"><a href="#基于类的封装" class="headerlink" title="基于类的封装"></a>基于类的封装</h3><p>大多数「面向对象」的语言，如 Java，Scala，C++等，都使用这种方式封装，「模板」如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SharedBicycle</span></span>&#123;</div><div class="line">  属性：车轮;</div><div class="line">  属性：二维码;</div><div class="line">  方法：开锁;</div><div class="line">  方法：关锁;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3 id="基于原型的封装"><a href="#基于原型的封装" class="headerlink" title="基于原型的封装"></a>基于原型的封装</h3><p>JavaScript 就是使用这种封装方式，「模板」如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">SharedBicycle</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">this</span>.车轮 = xxx;</div><div class="line">  <span class="keyword">this</span>.二维码 = xxx;</div><div class="line">&#125;</div><div class="line"><span class="comment">//添加原型方法</span></div><div class="line">SharedBicycle.prototype.开锁 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;...&#125;;</div><div class="line">SharedBicycle.prototype.关锁 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;...&#125;;</div></pre></td></tr></table></figure></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">SharedBicycle</span>&#123;</span></span><br><span class="line">  车轮;</span><br><span class="line">  二维码;</span><br><span class="line">  开锁;</span><br><span class="line">  关锁;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="基于类的封装"><a href="#基于类的封装" class="headerlink" title="基于类的封装"></a>基于类的封装</h3><p>大多数「面向对象」的语言，如 Java，Scala，C++等，都使用这种方式封装，「模板」如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SharedBicycle</span></span>&#123;</span><br><span class="line">  属性：车轮;</span><br><span class="line">  属性：二维码;</span><br><span class="line">  方法：开锁;</span><br><span class="line">  方法：关锁;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="基于原型的封装"><a href="#基于原型的封装" class="headerlink" title="基于原型的封装"></a>基于原型的封装</h3><p>JavaScript 就是使用这种封装方式，「模板」如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SharedBicycle</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.车轮 = xxx;</span><br><span class="line">  <span class="keyword">this</span>.二维码 = xxx;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//添加原型方法</span></span><br><span class="line">SharedBicycle.prototype.开锁 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;...&#125;;</span><br><span class="line">SharedBicycle.prototype.关锁 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;...&#125;;</span><br></pre></td></tr></table></figure></p>
 <h3 id="纯面向对象"><a href="#纯面向对象" class="headerlink" title="纯面向对象"></a>纯面向对象</h3><p>我们已经得知，可以用多种实现面向对象的不同技术，那么什么是纯面向对象的语言呢？</p>
 <p>我们知道 Java 是一门「面向对象」的语言，那么在 Java 中是否真的「万物皆对象」？    </p>
 <p>在 Java 中，我们可以写这么一段代码 <code>int a = 3;</code>　然后我们发现 <code>a</code>  并没有封装任何的属性或者方法。</p>
@@ -190,30 +190,30 @@
 <p>那么是什么支持 Scala 一切皆为「对象」的呢？－<strong>Scala 的通用类型系统。</strong></p>
 <h2 id="Scala-通用类型系统"><a href="#Scala-通用类型系统" class="headerlink" title="Scala 通用类型系统"></a>Scala 通用类型系统</h2><h3 id="顶类型"><a href="#顶类型" class="headerlink" title="顶类型"></a>顶类型</h3><p>我们知道，在 Java 中，所有「对象」的「顶类型」都是 <code>java.lang.Object</code>，但是 Java 却忽略了 <code>int</code>，<code>double</code>等 JVM 「原始类型」,它们并没有继承 <code>java.lang.Object</code>。</p>
 <p>但是在 Scala 中，存在一个通用的「顶类型」－　Any。</p>
-<center><br>  <img src="/images/2018/03/java2Scala-1-oop/scala-unified-types.png" alt=""><br></center>
+<center><br>  <img src="/images/2018/03/java2Scala-1-oop/scala-unified-types.png" alt><br></center>
 
 
 <p>Scala 引入了<code>Any</code> 作为所有类型共同的顶类型。<code>Any</code> 是 <code>AnyRef</code> 和 <code>AnyVal</code> 的超类。</p>
 <p><code>AnyRef</code> 面向 Java（JVM）的对象世界，它对应 <code>java.lang.Object</code> ，是所有对象的超类。</p>
 <p><code>AnyVal</code> 则代表了 Java 的值世界，例如 <code>int</code> 以及其它 JVM 原始类型。</p>
 <p>正是依赖这种继承设计，我们才能够使用 <code>Any</code> 定义方法，同时兼容 <code>scala.int</code> 以及 <code>java.lang.String</code> 的实例。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></div><div class="line"></div><div class="line"><span class="keyword">val</span> allThings = <span class="type">ArrayBuffer</span>[<span class="type">Any</span>]()</div><div class="line"></div><div class="line"><span class="keyword">val</span> myInt = <span class="number">42</span>             <span class="comment">// Int, kept as low-level `int` during runtime</span></div><div class="line"></div><div class="line">allThings += myInt         <span class="comment">// Int (extends AnyVal)</span></div><div class="line"></div><div class="line">allThings += <span class="keyword">new</span> <span class="type">Person</span>()  <span class="comment">// Person (extends AnyRef), no magic here</span></div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">val</span> <span class="title">allThings</span> </span>= <span class="type">ArrayBuffer</span>[<span class="type">Any</span>]()</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> myInt = <span class="number">42</span>             <span class="comment">// Int, kept as low-level `int` during runtime</span></span><br><span class="line"></span><br><span class="line">allThings += myInt         <span class="comment">// Int (extends AnyVal)</span></span><br><span class="line"></span><br><span class="line">allThings += <span class="keyword">new</span> <span class="type">Person</span>()  <span class="comment">// Person (extends AnyRef), no magic here</span></span><br></pre></td></tr></table></figure>
 <p>正是通过这种「通用类型系统」的设计，使得 Scala 摆脱「原始类型」这种边缘情况的纠缠，从而实现「纯粹的面向对象」。</p>
 <p>说完了「顶类型」，我们再来看看「底类型」。</p>
 <h3 id="底类型"><a href="#底类型" class="headerlink" title="底类型"></a>底类型</h3><p>我们知道在 Java 中比较闹心的就是异常处理，当我们调用一个抛出异常的方法，我们必须抛出或者处理异常。</p>
 <p>但是在 Scala 中，我们知道一切表达式皆有类型，难道「抛异常」也是有类型的？</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="keyword">val</span> a = <span class="type">Try</span>(<span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">Exception</span>(<span class="string">"123"</span>))</div><div class="line">a: scala.util.<span class="type">Try</span>[<span class="type">Nothing</span>] = <span class="type">Failure</span>(java.lang.<span class="type">Exception</span>: <span class="number">123</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> a = <span class="type">Try</span>(<span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">Exception</span>(<span class="string">"123"</span>))</span><br><span class="line">a: scala.util.<span class="type">Try</span>[<span class="type">Nothing</span>] = <span class="type">Failure</span>(java.lang.<span class="type">Exception</span>: <span class="number">123</span>)</span><br></pre></td></tr></table></figure>
 <p>我们发现「抛异常」竟然是 <code>Nothing</code> 类型，在 Scala 中，难道 <code>Nothing</code> 仅仅是作为「抛异常」的类型？</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">scala&gt;  <span class="function"><span class="keyword">def</span> <span class="title">fun</span></span>(flag:<span class="type">Boolean</span>)=&#123;</div><div class="line">          <span class="keyword">if</span>(flag)&#123;</div><div class="line">            <span class="number">1</span>                          <span class="comment">// Int</span></div><div class="line">          &#125;<span class="keyword">else</span>&#123;</div><div class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">Exception</span>(<span class="string">"123"</span>) <span class="comment">//Nothing</span></div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">fun: (flag: <span class="type">Boolean</span>)<span class="type">Int</span></div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">scala&gt;  <span class="function"><span class="keyword">def</span> <span class="title">fun</span></span>(flag:<span class="type">Boolean</span>)=&#123;</span><br><span class="line">          <span class="keyword">if</span>(flag)&#123;</span><br><span class="line">            <span class="number">1</span>                          <span class="comment">// Int</span></span><br><span class="line">          &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">Exception</span>(<span class="string">"123"</span>) <span class="comment">//Nothing</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">fun: (flag: <span class="type">Boolean</span>)<span class="type">Int</span></span><br></pre></td></tr></table></figure>
 <p>我们发现 <code>fun</code> 函数并没有报错，而且返回值类型竟然是 <code>Int</code>，这让我们有一个大胆的猜测：<strong><code>Nothing</code> 是 <code>Int</code> 的子类型。</strong></p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[<span class="type">Int</span>] -&gt; ... -&gt; <span class="type">AnyVal</span> -&gt; <span class="type">Any</span></div><div class="line"><span class="type">Nothing</span> -&gt; [<span class="type">Int</span>] -&gt; ... -&gt; <span class="type">AnyVal</span> -&gt; <span class="type">Any</span></div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">Int</span>] -&gt; ... -&gt; <span class="type">AnyVal</span> -&gt; <span class="type">Any</span></span><br><span class="line"><span class="type">Nothing</span> -&gt; [<span class="type">Int</span>] -&gt; ... -&gt; <span class="type">AnyVal</span> -&gt; <span class="type">Any</span></span><br></pre></td></tr></table></figure>
 <p>其实在 Scala 中， <code>Nothing</code> 不仅仅是 <code>Int</code> 的子类型，它更是<strong>所有类型的子类型。</strong> 这让我们又产生了一个大胆的猜测：难道 <code>Nothing</code> 继承了所有的类型？咳咳，这个问题我们以后在讨论。</p>
 <p>在 Scala 中，还有一个类型 <code>Null</code> 遵循着和 <code>Nothing</code> 一样的原理。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">fun2</span></span>(flag:<span class="type">Boolean</span>)=&#123;</div><div class="line">          <span class="keyword">if</span>(flag)&#123;</div><div class="line">            <span class="string">"123"</span>  <span class="comment">//String</span></div><div class="line">          &#125;<span class="keyword">else</span>&#123;</div><div class="line">            <span class="literal">null</span>   <span class="comment">//Null</span></div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">fun2: (flag: <span class="type">Boolean</span>)<span class="type">String</span></div></pre></td></tr></table></figure>
-<p>同理，我们可以得出 <code>Null</code> 是 <code>String的子类型</code><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[<span class="type">String</span>] -&gt; <span class="type">AnyRef</span> -&gt; <span class="type">Any</span></div><div class="line"><span class="type">Null</span> -&gt; [<span class="type">String</span>] -&gt; <span class="type">AnyRef</span> -&gt; <span class="type">Any</span></div></pre></td></tr></table></figure></p>
-<p>那我们看看 <code>Null</code> 是否可以兼容 <code>Int</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">scala&gt;  def fun3(flag:Boolean)=&#123;</div><div class="line">          if(flag)&#123;</div><div class="line">            123  //Int</div><div class="line">          &#125;else&#123;</div><div class="line">            null   //Null</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">fun3: (flag: Boolean)Any</div></pre></td></tr></table></figure></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">fun2</span></span>(flag:<span class="type">Boolean</span>)=&#123;</span><br><span class="line">          <span class="keyword">if</span>(flag)&#123;</span><br><span class="line">            <span class="string">"123"</span>  <span class="comment">//String</span></span><br><span class="line">          &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="literal">null</span>   <span class="comment">//Null</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">fun2: (flag: <span class="type">Boolean</span>)<span class="type">String</span></span><br></pre></td></tr></table></figure>
+<p>同理，我们可以得出 <code>Null</code> 是 <code>String的子类型</code><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">String</span>] -&gt; <span class="type">AnyRef</span> -&gt; <span class="type">Any</span></span><br><span class="line"><span class="type">Null</span> -&gt; [<span class="type">String</span>] -&gt; <span class="type">AnyRef</span> -&gt; <span class="type">Any</span></span><br></pre></td></tr></table></figure></p>
+<p>那我们看看 <code>Null</code> 是否可以兼容 <code>Int</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">scala&gt;  def fun3(flag:Boolean)=&#123;</span><br><span class="line">          if(flag)&#123;</span><br><span class="line">            123  //Int</span><br><span class="line">          &#125;else&#123;</span><br><span class="line">            null   //Null</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">fun3: (flag: Boolean)Any</span><br></pre></td></tr></table></figure></p>
 <p>我们发现 <code>fun3</code> 的返回值类型竟然是 <code>Any</code>，说明 <code>Null</code> 不能兼容 Scala 的「值类型」，其实从 Scala 的帮助手册中我们就可以得出结论：<strong><code>Null</code> 是所有引用类型的子类型</strong></p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">abstract</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Null</span> <span class="keyword">extends</span> <span class="title">AnyRef</span></span></div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Null</span> <span class="keyword">extends</span> <span class="title">AnyRef</span></span></span><br></pre></td></tr></table></figure>
 <p>正因如此，<code>fun3</code> 的返回值类型才是 <code>Any</code>，因为 <code>Any</code> 才是 <code>AnyVal</code> 和 <code>AnyRef</code> 公共的超类。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文以面向对象为引子，找到了一个 Java 和 Scala 共有的知识节点，从而引出 Scala 的通用类型系统。那么在下一篇文章中，我们由此展开进一步思考，到底什么是所谓的「类型」，以及 Scala 在类型方面存在哪些与 Java 不同的有趣的地方。</p>
 <blockquote>
@@ -239,15 +239,15 @@
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2018/02/back-2-font-xinfa-1/">
+      <a class="prev" href="/2018/02/shapeless-3/">
         <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">后端工程师入门前端页面重构（二）：心法 I</span>
+        <span class="prev-text nav-default">Shapeless 入门指南（三）： Nat 和 implicit 在 shapeless 中的应用</span>
         <span class="prev-text nav-mobile">Prev</span>
       </a>
     
     
-      <a class="next" href="/2018/02/shapeless-3/">
-        <span class="next-text nav-default">Shapeless 入门指南（三）： Nat 和 implicit 在 shapeless 中的应用</span>
+      <a class="next" href="/2018/01/scala-weekly-29/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第 29 期</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
