@@ -96,7 +96,7 @@ app.unsafeRun()
 上述程序在 `IO` 类型没有定义 `flatMap` 、 `map` 的情况下，我们通过 `import cats.syntax.all._` 就可以使用 cats 通过 implicit class 定义的扩展函数。
 
 
-这是 cats 约定的套路，扩展方法都定义在所谓 syntax 包中，当然我们也可以 for-comprehension 来使程序结果更清晰。
+这是 cats 约定的套路，扩展方法都定义在所谓 syntax 包中，当然我们也可以 for-comprehension 来使程序结构更清晰。
 
 
 ## 错误处理
@@ -116,7 +116,7 @@ val readInt = Console.getStr().map(_.toInt)
 但这在一些要求知道错误信息的地方，就行不通了，Java 程序员可能会通过创建 ChecedException 来携带错误信息，实现错误处理逻辑。
 
 
-scala 程序通常会使用 `Try` 或者 `Error` 来表达一个结果可能存在失败，上述程序我们可以用 `Either` 把 `readInt` 改成以下形式：
+scala 程序通常会使用 `Try` 或者 `Either` 来表达一个结果可能存在失败，上述程序我们可以用 `Either` 把 `readInt` 改成以下形式：
 ```scala
  val readInt: IO[Either[String, Int]] = Console.getStr().map { str =>
  try{
