@@ -1245,6 +1245,10 @@ body {
   width: 40px;
 }
 br {
+  display: none;
+}
+.code br {
+  display: block;
 }
 @media only screen and (max-width: 750px) {
   #clogo {
