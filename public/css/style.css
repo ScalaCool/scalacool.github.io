@@ -1247,6 +1247,9 @@ body {
 br {
   display: none;
 }
+.highlight br {
+  display: block;
+}
 @media only screen and (max-width: 750px) {
   #clogo {
     margin-left: 0;
