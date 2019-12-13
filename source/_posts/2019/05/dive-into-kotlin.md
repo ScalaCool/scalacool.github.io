@@ -281,6 +281,39 @@ date: 2019-05-17
       这个方案
     </td>
   </tr>
+  <tr>
+    <td>289</td>
+    <td>
+      两段代码
+    </td>
+    <td>
+    分别替换为：
+      ```kotlin
+      import kotlinx.coroutines.experimental.*
+
+      fun main(args: Array<String>) { 
+        GlobalScope.launch { // 在后台启动一个协程
+          delay(1000L) // 延迟一秒(非阻塞)
+          println("World!") // 延迟之后输出 
+        }
+        println("Hello,") // 协程被延迟了一秒，但是主线程继续执行
+        Thread.sleep(2000L) // 为了使 JVM 保活，阻塞主线程 2 秒钟(这段代码删掉会出现什 么情况?)
+      }
+      ```
+      ```kotlin
+      import kotlinx.coroutines.experimental.*
+
+      fun main(args: Array<String>) = runBlocking {
+         GlobalScope.launch {
+            delay(1000L)
+         println("World!")
+         }
+         println("Hello,")
+         delay(2000L)
+      }
+      ```
+    </td>
+  </tr>
 </table>
 
 ## 感谢
