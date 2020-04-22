@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2018/08/java-2-scala-2/"/>
+
+
+<meta name="description" content="object 是一种让静态回归常态、打破模式、天然的语言特性。">
+<meta name="keywords" content="类型相关,Java,~从 Java 到 Scala,^Rhyme">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从 Java 到 Scala（二）：object">
+<meta property="og:url" content="http://scala.cool/2018/08/java-2-scala-2/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="object 是一种让静态回归常态、打破模式、天然的语言特性。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-27T03:45:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从 Java 到 Scala（二）：object">
+<meta name="twitter:description" content="object 是一种让静态回归常态、打破模式、天然的语言特性。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> 从 Java 到 Scala（二）：object - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" >
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          从 Java 到 Scala（二）：object
+        
+      </h1>
+
+      <time class="post-time">
+          8月30日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Rhyme"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Rhyme"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p><strong><code>object</code>是一种让静态回归常态、打破模式、天然的语言特性。</strong></p>
+<p>其实在写这篇文章之前，我思绪万千，迟迟不能落笔，总想着自己会不会遗漏了某个知识点，或者有讲得不太那么准确的地方，但是后来我想明白了，学习一样东西，最重要的并不是要了解它的每一个细节，而是要了解它的核心思想。如果你能够理解上面讲的那句话，我想你或许也就掌握了<code>object</code>。</p>
+<p>其实，<code>object</code>较之Java,更多的是一种思想设计理念上的升华，就如同我本来就该有这东西，你却需要我手动费很大地劲自己造出来一样。</p>
+<p>在<code>object</code>当中，我们可以轻松的构建出一个「单例对象」，而在Java当中我们通常得遵守一套「单例模式」的应用才能构建出一个单例对象。但是请你细想一番，「单例对象」难道不该是一种更加自然的存在吗？</p>
+<p>另外，和「单例对象」一样，<code>object</code>当中的另一个重量级的语言特性：「伴生对象」也同样遵循这一套逻辑,让「静态」以一种更为常态的形式存在。</p>
+<h2 id="单例对象（Singleton-Object）"><a href="#单例对象（Singleton-Object）" class="headerlink" title="单例对象（Singleton Object）"></a>单例对象（Singleton Object）</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 构建一个单例对象Singleton</span></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">  <span class="keyword">var</span> hello = <span class="string">"Hello World"</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">sayHello</span></span>:<span class="type">String</span> = &#123;</div><div class="line">    hello</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在Scala中，我们使用关键字<code>object</code>来构建单例对象。任何用到单例模式的地方，你都可以用Scala的<code>object</code>来实现。以下代码向你展示了在Scala中单例对象的基本使用。我们只需要在我们用到的地方引入我们需要的「单例对象」即可。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="type">Singleton</span>._ <span class="comment">//引入Singleton对象中的所有方法</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">test</span></span>:<span class="type">String</span> = sayHello</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="伴生对象（Companion-Object）"><a href="#伴生对象（Companion-Object）" class="headerlink" title="伴生对象（Companion Object）"></a>伴生对象（Companion Object）</h2><p>在Java中，我们通常会用到既有实例方法又有静态方法的类，在Scala中我们可以通过「伴生类」和「伴生对象」来实现。刚开始，你可能会对这两个词感到困惑，其实不用慌张，你完全可以在一开始用Java中的<strong>普通的不包含静态的类</strong>来代替「伴生类」，用<strong>类中的所有的静态</strong>来代替「伴生对象」。说的简单一点，就是<strong>将Java类中的静态搬到一个单例对象中。</strong></p>
+<p>下面分别用Java和伴生对象来实现下面这个简单的售票功能。</p>
+<p>使用Java实现的这段代码，这里就不再多说，我想你肯定比我还要熟悉。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">TicketJava</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> static int ticket = <span class="number">10</span>;</div><div class="line">    <span class="keyword">private</span> <span class="type">String</span> name;</div><div class="line">    public <span class="type">TicketJava</span>(<span class="type">String</span> name)&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line">    public static void sellTicketTo(<span class="type">String</span> name)&#123;</div><div class="line">        <span class="type">System</span>.out.println(name + <span class="string">" get ticket "</span> + ticket);</div><div class="line">    &#125;</div><div class="line">    public void buyTicket() &#123;</div><div class="line">        sellTicketTo(name);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以下是使用「伴生对象」实现的版本。你只需要关注一个细节，<strong>静态所在的位置</strong>。</p>
+<p>与<strong>类同名且与类在同一个源文件下</strong>的<code>object</code>对象就是「伴生对象」，与之相对的类就叫做「伴生类」。</p>
+<p>伴生对象与静态实现的功能没有二异，原来静态所具备的特性，在「伴生对象」中都能找到。在Java中，静态特性包裹在Class类中，它们可以互访私有特性，因此你也就能明白接下来的这句话：<strong>「伴生对象」与「伴生类」能够互访私有特性</strong>。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ticket</span>(<span class="params">name: <span class="type">String</span></span>) </span>&#123;<span class="comment">// name 是类Ticket的成员变量</span></div><div class="line">    </div><div class="line">  <span class="comment">// 在Scala中import语句可以写在任意地方</span></div><div class="line">  <span class="comment">// 因此你可以控制import语句的作用范围，使得代码更加灵活</span></div><div class="line">  <span class="keyword">import</span> <span class="type">Ticket</span>._</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">buyTicket</span></span>(): <span class="type">Unit</span> = &#123;</div><div class="line">    <span class="comment">// 调用伴生对象中的方法</span></div><div class="line">    sellTicketTo(name)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 伴生对象，和类同名，且在同一个源文件下，可以互访私有属性</span></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Ticket</span> </span>&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">var</span> ticket: <span class="type">Int</span> = <span class="number">10</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">sellTicketTo</span></span>(name: <span class="type">String</span>): <span class="type">Unit</span> = &#123;</div><div class="line">    println(<span class="string">f"<span class="subst">$name</span> get ticket <span class="subst">$ticket</span>"</span>)</div><div class="line">    ticket = ticket - <span class="number">1</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="扩展类或特质的对象"><a href="#扩展类或特质的对象" class="headerlink" title="扩展类或特质的对象"></a>扩展类或特质的对象</h2><blockquote>
+<p>特质：可以理解为Java中的接口</p>
+</blockquote>
+<p>在Scala中，所有用object修饰的都是「单例对象」，我们以后将用「单例对象」代替Scala中的对象这个概念。</p>
+<p><strong>关于单例对象，你需要记住一个核心的理念：共享。</strong>单例对象、单例模式，所有和单例相关的都离不开<strong>共享</strong>这个概念。或者说的更准确一点，是<strong>共享对象</strong>。</p>
+<p>对象在本质上可以具备类的所有特性，因为类是对象的模板，对象不过是类的一个实例而已。而类有一个重要的特性：<strong>继承或实现</strong>。在Scala中我们会将继承或实现称作<strong>扩展类或特质</strong>。扩展使得类能够进行更好的抽象。在Java中我们通常会对类执行扩展操作，但是在Scala中，自从单例对象被作为一种更常态的特性，单例对象也可以扩展类或特质来实现更多的功能。其中一个很典型的应用就是借助单例对象的扩展来表示一些公共的状态。</p>
+<p>例如以下代码：</p>
+<p>我们可以通过用「单例对象」继承指定的抽象结构来共享一些默认的状态和对象。其实，关键的核心思想还是两个字<strong>共享</strong></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Status</span>(<span class="params">var status: <span class="type">Int</span></span>) </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">operation</span></span>()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Ok</span> <span class="keyword">extends</span> <span class="title">Status</span>(<span class="params">200</span>) </span>&#123;</div><div class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">operation</span></span>(): <span class="type">Unit</span> = println(<span class="string">"Ok operation"</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Error</span> <span class="keyword">extends</span> <span class="title">Status</span>(<span class="params">500</span>) </span>&#123;</div><div class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">operation</span></span>(): <span class="type">Unit</span> = println(<span class="string">"Error operation"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>与此类似的，我们通过继承<code>Enumeration</code>接口可以在Scala中实现枚举的功能。Scala默认没有实现枚举功能的。具体的这里不进行讲述，感兴趣的可以上网进行查询。</p>
+<p>总而言之，凡是有<strong>共享</strong>这个概念的地方，你都可以考虑使用「单例对象」来实现。</p>
+<h2 id="apply方法"><a href="#apply方法" class="headerlink" title="apply方法"></a>apply方法</h2><p>首先来看一段代码</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> <span class="type">Array</span>[<span class="type">Person</span>](<span class="keyword">new</span> <span class="type">Person</span>(<span class="string">"Rhyme"</span>),<span class="keyword">new</span> <span class="type">Person</span>(<span class="string">"Captain"</span>))</div><div class="line"><span class="type">Array</span>[<span class="type">Person</span>](<span class="type">Person</span>(<span class="string">"Rhyme"</span>),<span class="type">Person</span>(<span class="string">"Captain"</span>))</div></pre></td></tr></table></figure>
+<p>你觉得哪种形式更加简洁直观呢？第一种方式这里不再解释，第二种方式，你会发现，我们省去了<code>new</code>关键字。</p>
+<p>我们先不管具体的语言特性，单从代码本身来看，你会更倾向于哪一种？</p>
+<p>很明显，我会选择第二种省去<code>new</code>关键字的方式。原因很简单：更加自然，更加简洁。首先，作为同行，想必<code>new</code>关键字我们再熟悉不过了。敲了它不下一万遍有没有！敲了这么多，你就没有感觉过<strong>烦</strong>吗？</p>
+<p>其实<strong>烦</strong>这个字很关键，一旦你写某段代码写得烦了，就说明这段代码本身就是存在题的。然而如果你觉得它并没有什么，那只能说明你已经麻木了，作为一个好的程序员，不应该麻木，我们要想法设法，写<strong>最关键的代码</strong>。</p>
+<p>首先作为一个全民公认的<code>new</code>操作，为什么我不可以将<code>new</code>这个关键字从类名前面移去呢？注意我们关注的应该是<strong>最关键的代码</strong>。<code>new</code>关键字对我来说，已经是再熟悉不过的东西了，它对我已经没有价值了，就让他默认存在就好了，我不需要再看到它！</p>
+<p>而这种可以帮你省去<code>new</code>操作的语言特性我们就可以使用<code>apply</code>方法来实现。</p>
+<p>我们通常会在伴生对象中定义一个<code>apply()</code>方法，例如如下代码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>(<span class="params">name: <span class="type">String</span></span>) </span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Person</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(name: <span class="type">String</span>):<span class="type">Person</span> = <span class="keyword">new</span> <span class="type">Person</span>(name)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>apply</code>方法将为我们返回一个「伴生类」的对象。当我门在执行<code>Person(&quot;Rhyme&quot;)</code>的时候，默认就会调用「伴生对象」中的<code>apply()</code>放回，并为你返回一个创建好的对象。如果你不想使用<code>apply()</code>方法，自己定义一个更适合自己的工厂方法也是一个不错的选择。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>(<span class="params">name: <span class="type">String</span></span>) </span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Person</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createPerson</span></span>(name:<span class="type">String</span>):<span class="type">Person</span> = &#123;</div><div class="line">    <span class="keyword">new</span> <span class="type">Person</span>(name)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="回归常态"><a href="#回归常态" class="headerlink" title="回归常态"></a>回归常态</h2><p>其实，以上这些特性，你发现没有，Scala在底层的技术实现上，并没有做太多的改变，将这些Scala代码编译，用javap来查看编译之后的代码，你会发现它利用的依然是原先Java中的那些代码逻辑，只不过它一直在做优化，一直在简化，让<strong>单例</strong>，<strong>静态</strong>，<strong>对象创建</strong>等语言特性回归它们应有的常态，让他们成为一种天然的语言特性存在着，就像鱼儿之于大海一样自然的存在着。</p>
+<p>最后，再让我们回到最开始讲的那句话：<strong><code>object</code>是一种让静态回归常态、打破模式、天然的语言特性。</strong> 仔细再品味品味，你是不是又有一些新的体会呢！</p>
+<p>在下一篇中，我们会继续探索object更加具体的应用，比如如何去改造Java传统的工厂方法和模式。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/类型相关/">类型相关</a>
+          
+            <a href="/tags/Java/">Java</a>
+          
+            <a href="/tags/从-Java-到-Scala/">~从 Java 到 Scala</a>
+          
+            <a href="/tags/Rhyme/">^Rhyme</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/09/java-2-scala-3/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">从 Java 到 Scala（三）：object 的应用</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/08/febible-float-layout/">
+        <span class="next-text nav-default">前端重构范式之 float layout</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1535558400000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2019
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

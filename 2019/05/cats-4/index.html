@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2019/05/cats-4/"/>
+
+
+<meta name="description" content="在上一篇介绍高阶类型的文章中，我们引出了 Typeclass 这个概念，本文将更加详细地认识它，并介绍如何使用 Cats 中的 Typeclass。">
+<meta name="keywords" content="^Yison,Typeclass,函数式编程,Cats,~Cats">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cats（四）：Typeclass">
+<meta property="og:url" content="http://scala.cool/2019/05/cats-4/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="在上一篇介绍高阶类型的文章中，我们引出了 Typeclass 这个概念，本文将更加详细地认识它，并介绍如何使用 Cats 中的 Typeclass。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-11T10:00:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cats（四）：Typeclass">
+<meta name="twitter:description" content="在上一篇介绍高阶类型的文章中，我们引出了 Typeclass 这个概念，本文将更加详细地认识它，并介绍如何使用 Cats 中的 Typeclass。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Cats（四）：Typeclass - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" >
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Cats（四）：Typeclass
+        
+      </h1>
+
+      <time class="post-time">
+          5月25日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Yison"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Yison"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>在<a href="https://scala.cool/2018/11/cats-3/">上一篇</a>介绍高阶类型的文章中，我们引出了 Typeclass 这个概念，并且演示了如何在 Kotlin 中模拟高阶类型，以及实现了一个 Kotlin 版本的 Functor。</p>
+<p>如果你只是一个 Kotlin 开发者，相信你很难说服自己用这种方式进行程序设计。的确，在缺少高阶类型这种语言特性的支持下，构建 Typeclass 不是一种很自然的事情，回归到 Scala 和 Cats，我们可以庆幸没有这种烦恼。</p>
+<h2 id="认识-Typeclass"><a href="#认识-Typeclass" class="headerlink" title="认识 Typeclass"></a>认识 Typeclass</h2><p>我们曾在<a href="https://scala.cool/tags/Subtyping-vs-Typeclasses/">《Subtyping vs Typeclasses》</a>中具体介绍过 Typeclass，并且比较了它与熟悉的多态技术 Subtyping 之间的差异。你可能已经知晓，Typeclass 是始于 Haskell 的一种编程模式，它是一种有关<a href="https://scala.cool/2017/08/subtyping-vs-typeclasses/#%E4%BA%8C%E3%80%81%E7%89%B9%E5%AE%9A%E5%A4%9A%E6%80%81">特设多态</a>的技术，可以代替继承来对已存的类库扩展功能，并且无需改变源码。</p>
+<p>简单来说，一个 Typeclass 模式，主要由三部分来组成：</p>
+<ul>
+<li>Typeclass 本身，通常至少是包含一个类型变量的 Trait</li>
+<li>实现了该 Typeclass 的一个实例</li>
+<li>一个封装了 Typeclass 实例的方法，供外部调用</li>
+</ul>
+<p>尽管你可能已经知道了什么是 Typeclass，我们还是再通过一个例子来介绍如何定义一个 Typeclass。在之前介绍 Typeclass 的文章中我们实现了一个 <code>Comparable</code> 的Typeclass，现在来回顾下它。</p>
+<h3 id="Typeclass-Trait"><a href="#Typeclass-Trait" class="headerlink" title="Typeclass Trait"></a>Typeclass Trait</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Comparator</span>[<span class="type">T</span>] </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(first: <span class="type">T</span>, second: <span class="type">T</span>): <span class="type">Int</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">&gt;=</span></span>(first: <span class="type">T</span>, second: <span class="type">T</span>): <span class="type">Boolean</span> = compare(first, second) &gt;= <span class="number">0</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Comparator</code> 包含了一个类型变量 T 来支持各种数据类型之间的比较，它可以是 Scala 标准库中的某个类型，也可以是我们自己定义的某种数据类型（当然前提是该类型拥有实现了 <code>Comparator</code> 的实例）。</p>
+<h3 id="Typeclass-Instances"><a href="#Typeclass-Instances" class="headerlink" title="Typeclass Instances"></a>Typeclass Instances</h3><p>我们来定义一个数据类型 <code>Player</code>，代表游戏玩家：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Player</span>(<span class="params">kill: <span class="type">Int</span>, death: <span class="type">Int</span>, assist: <span class="type">Int</span></span>) </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">score</span> </span>= (kill + assist * <span class="number">0.8</span>) / death</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>现在来定义 <code>Player</code> 基于 <code>Comparator</code> 的实例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">PlayerInstances</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">ordering</span></span>(o: (<span class="type">Player</span>, <span class="type">Player</span>) =&gt; <span class="type">Int</span>) = <span class="keyword">new</span> <span class="type">Comparator</span>[<span class="type">Player</span>] &#123;</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(first: <span class="type">Player</span>, second: <span class="type">Player</span>) = o(first, second)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> mvp = ordering((p1: <span class="type">Player</span>, p2: <span class="type">Player</span>) =&gt; (p1.score - p2.score).toInt)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们发现在定义 <code>mvp</code> 的时候，前面带有了 <code>implicit</code> 关键字，这个非常重要，它使得我们后续可以隐式调用 <code>ordering</code> 方法。需要注意的是，由于我们这里实现的是一个基于排序的功能，所以额外定义了 <code>mvp</code> 来支持寻找一个 <code>Player</code> 列表中表现最优的对象。</p>
+<p>在通常情况下，如果我们定义的是一个基于单个数据类型的操作（非数据间的操作），你往往会把 <code>implicit</code> 加在实例本身。比如<a href="https://underscore.io/books/scala-with-cats/" target="_blank" rel="external">《Scala with Cats》</a> 举了一个 Json 转化的例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">JsonWriter</span>[<span class="type">A</span>] </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">write</span></span>(value: <span class="type">A</span>): <span class="type">Json</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">JsonWriterInstances</span> </span>&#123;</div><div class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> stringWriter: <span class="type">JsonWriter</span>[<span class="type">String</span>] = <span class="keyword">new</span> <span class="type">JsonWriter</span>[<span class="type">String</span>] &#123;</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write</span></span>(value: <span class="type">String</span>): <span class="type">Json</span> = <span class="type">JsString</span>(value)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Typeclass-Interfaces"><a href="#Typeclass-Interfaces" class="headerlink" title="Typeclass Interfaces"></a>Typeclass Interfaces</h3><p>在有了 Typeclass 实例之后，我们就可以对它进行封装，然后供外部调用。由于 Scala 存在 <code>implicit</code> 这种强大的语法，我们可以使用不同的风格来调用。首先来看看旧文中实现的方案：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Players</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">findMvp</span></span>[<span class="type">T</span>](list: <span class="type">List</span>[<span class="type">T</span>])(<span class="keyword">implicit</span> ordering: <span class="type">Comparator</span>[<span class="type">T</span>]): <span class="type">T</span> = &#123;</div><div class="line">    list.reduce((a, b) =&gt; <span class="keyword">if</span> (ordering &gt;=(a, b)) a <span class="keyword">else</span> b)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>另一种使用了 Context Bounds 的写法是：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">findMvp</span></span>[<span class="type">T</span>:<span class="type">Comparator</span>](list: <span class="type">List</span>[<span class="type">T</span>]): <span class="type">T</span> = &#123;</div><div class="line">  list.reduce((a, b) =&gt; <span class="keyword">if</span> (implicitly[<span class="type">Comparator</span>[<span class="type">T</span>]] &gt;=(a, b)) a <span class="keyword">else</span> b)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由于定义了 <code>implicit ordering</code>，Scala 编译器会在 <code>Comparator[T]</code> 中自动寻找到相关的 <code>ordering</code> 。于是我们就可以如此使用了:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="type">PlayerInstances</span>.mvp</div><div class="line"></div><div class="line"><span class="keyword">val</span> players = <span class="type">List</span>(<span class="type">Player</span>(<span class="number">12</span>, <span class="number">3</span>, <span class="number">4</span>), <span class="type">Player</span>(<span class="number">5</span>, <span class="number">9</span>, <span class="number">10</span>), <span class="type">Player</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>))</div><div class="line"><span class="type">Players</span>.findMvp(players)</div></pre></td></tr></table></figure>
+<p>我们见识到了 Typeclass 的神奇运用，当然你可能并不是很喜欢 <code>Players.findMvp(players)</code> 这种语法，确实我们还可以对其进行改进。</p>
+<p>现在来使用 <code>implicit</code> 实现另一种方案：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> scala.language.implicitConversions</div><div class="line"><span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">PlayerListOps</span></span>[<span class="type">T</span>](l: <span class="type">List</span>[<span class="type">T</span>]) = <span class="keyword">new</span> <span class="type">PlayerList</span>(l)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PlayerList</span>[<span class="type">T</span>](<span class="params">l: <span class="type">List</span>[<span class="type">T</span>]</span>) </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">mvp</span></span>(<span class="keyword">implicit</span> ordering: <span class="type">Comparator</span>[<span class="type">T</span>]): <span class="type">T</span> = &#123;</div><div class="line">    l.reduce((a, b) =&gt; <span class="keyword">if</span> (ordering &gt;=(a, b)) a <span class="keyword">else</span> b)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因此，我们就可以如下调用，可读性得到进一步的增强：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="type">PlayerInstances</span>.mvp</div><div class="line"></div><div class="line"><span class="keyword">val</span> players = <span class="type">List</span>(<span class="type">Player1</span>(<span class="number">12</span>, <span class="number">3</span>, <span class="number">4</span>), <span class="type">Player1</span>(<span class="number">5</span>, <span class="number">9</span>, <span class="number">10</span>), <span class="type">Player</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>))</div><div class="line">players.mvp</div></pre></td></tr></table></figure>
+<h2 id="使用-Cats-的-Show"><a href="#使用-Cats-的-Show" class="headerlink" title="使用 Cats 的 Show"></a>使用 Cats 的 Show</h2><p>现在你应该比较熟悉 Typeclass 了。当然，关于 Typeclass 的话题还有很多，我们可以以后在其他话题中再对其进行探讨。接下来，你终于要跟 Cats 这个类库打交道了。第一步，我们就来看看如何使用 Cats 中很简单的一个 Typeclass — Show。</p>
+<h3 id="引入-Show"><a href="#引入-Show" class="headerlink" title="引入 Show"></a>引入 Show</h3><p>首先来看看 Cats 中 <a href="https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/Show.scala" target="_blank" rel="external">Show</a> 的定义，为了便于理解，我们可以将其先简化为以下的定义（虽然这与源码不是完全一致）：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> cats</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Show</span>[<span class="type">A</span>] </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(value: <span class="type">A</span>): <span class="type">String</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Show</code> 支持具体类型返回一个代表自身的字符串值。也许你会说这样子很傻，因为 Scala 在 <code>Any</code> 类型上都支持了 <code>toString</code> 方法。然而，从一个更周全的设计角度而言，这种做法是非「类型安全」的。比如以下的代码，程序可以通过编译。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scala&gt; (<span class="keyword">new</span> &#123;&#125;).toString</div><div class="line">res0: <span class="type">String</span> = $anon$<span class="number">1</span>@<span class="number">7</span>de26db8</div></pre></td></tr></table></figure>
+<p>作为对比，<code>Show</code> 的方案则更安全：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scala&gt; (<span class="keyword">new</span> &#123;&#125;).show</div><div class="line">&lt;console&gt;:<span class="number">8</span>: error: value show is not a member of <span class="type">AnyRef</span></div><div class="line">              (<span class="keyword">new</span> &#123;&#125;).show</div></pre></td></tr></table></figure>
+<blockquote>
+<p>类似的类型问题也存在于 Scala 标准库的判等操作，也许你已经遇到 <code>Option[T]</code> 类型数据在判等时的麻烦问题，Cats 的 <code>Eq</code> 则提供了类型安全的解决方案，我们稍后就会介绍它。</p>
+</blockquote>
+<p>接下来，我们先来看看 <code>Show</code> 的 <code>apply</code> 方法，它支持获取相应类型的 <code>Show</code> 实例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>[<span class="type">A</span>](<span class="keyword">implicit</span> instance: <span class="type">Show</span>[<span class="type">A</span>]): <span class="type">Show</span>[<span class="type">A</span>] = instance</div></pre></td></tr></table></figure>
+<p>在调用 <code>apply</code> 之前，我们需要先导入供隐式寻找的实例作用域，它存在于 <code>cats.instances</code> 包下，你可以通过 <a href="https://github.com/typelevel/cats/blob/master/core/src/main/scala/cats/instances/package.scala" target="_blank" rel="external">cats/instances/package.scala</a> 来查看细节。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="type">Cats</span>.<span class="type">Show</span></div><div class="line"><span class="keyword">import</span> <span class="keyword">import</span> cats.instances.int._</div><div class="line"></div><div class="line"><span class="keyword">val</span> showInt: <span class="type">Show</span>[<span class="type">Int</span>] = <span class="type">Show</span>.apply[<span class="type">Int</span>]</div><div class="line"></div><div class="line"><span class="keyword">val</span> int2Str: <span class="type">String</span> = showInt.show(<span class="number">2019</span>)</div><div class="line"><span class="comment">// int2Str: String = 2019</span></div></pre></td></tr></table></figure>
+<p>我们再来看下 <code>cats.syntax</code> 这个包，它主要封装了 Typeclass 实例来供外部使用，正是起到了以上 Typeclass 模式介绍中的第三个部分的作用。继续上面代码的例子，我们通过引入 <code>cats.syntax.show._</code> 来直接实现各种黑科技。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> cats.syntax.show._</div><div class="line"></div><div class="line"><span class="keyword">val</span> intShow = <span class="number">2019.</span>show</div><div class="line"><span class="comment">// intShow: String = 2019</span></div><div class="line"></div><div class="line"><span class="keyword">val</span> stringShow = <span class="string">"scala"</span>.show</div><div class="line"><span class="comment">// stringShow: String = scala</span></div></pre></td></tr></table></figure>
+<h3 id="自定义-Person-类"><a href="#自定义-Person-类" class="headerlink" title="自定义 Person 类"></a>自定义 Person 类</h3><p>那么，我们如何让自定义的数据类型，也支持 <code>Show</code> 的功能呢？我们先来定义一个 <code>Person</code> 类：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span>(<span class="params">name: <span class="type">String</span></span>)</span></div></pre></td></tr></table></figure>
+<p>根据之前习得得方法，我们可以定义一个 <code>Person</code> 类型的 <code>Show</code> 实例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">implicit</span> <span class="keyword">val</span> personShow: <span class="type">Show</span>[<span class="type">Person</span>] = <span class="keyword">new</span> <span class="type">Show</span>[<span class="type">Person</span>] &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(p: <span class="type">Person</span>): <span class="type">String</span> = <span class="string">s"I am <span class="subst">$&#123;p.name&#125;</span>."</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然而，作为一个类库 Cats 自然有更加简单的方法。事实上，Cats 提供了两种实现的方法：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/** creates an instance of [[Show]] using the provided function */</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span></span>[<span class="type">A</span>](f: <span class="type">A</span> =&gt; <span class="type">String</span>): <span class="type">Show</span>[<span class="type">A</span>] = <span class="keyword">new</span> <span class="type">Show</span>[<span class="type">A</span>] &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">A</span>): <span class="type">String</span> = f(a)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/** creates an instance of [[Show]] using object toString */</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fromToString</span></span>[<span class="type">A</span>]: <span class="type">Show</span>[<span class="type">A</span>] = <span class="keyword">new</span> <span class="type">Show</span>[<span class="type">A</span>] &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">A</span>): <span class="type">String</span> = a.toString</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>show</code>方法支持传入一个函数来自定义行为，<code>fromToString</code> 则直接采用了 <code>toString</code> 方法。在这个例子中，我们可以采用 <code>show</code> 方法来实现需要的逻辑：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">implicit</span> <span class="keyword">val</span> showPerson: <span class="type">Show</span>[<span class="type">Person</span>] = <span class="type">Show</span>.show(p =&gt; <span class="string">s"I am <span class="subst">$&#123;p.name&#125;</span>."</span>)</div></pre></td></tr></table></figure>
+<p>现在来测试下效果：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> shaw = <span class="type">Person</span>(<span class="string">"Show"</span>)</div><div class="line"><span class="comment">// shaw: Person = Person(Show)</span></div><div class="line"></div><div class="line">shaw.show</div><div class="line"><span class="comment">// res1: String = Shaw</span></div></pre></td></tr></table></figure>
+<h3 id="Eq-与判等类型安全"><a href="#Eq-与判等类型安全" class="headerlink" title="Eq 与判等类型安全"></a>Eq 与判等类型安全</h3><p>另一个我们要介绍的 Typeclass 就是 <code>Eq</code>。它在 Cats 中实现的套路跟 <code>Show</code> 是类似的，你也可以自己联练习下 <code>Eq</code> 相关的使用。这里，我们着重强调下判等操作中「类型安全」的重要性。</p>
+<p>如果你编写过一定量的 Scala 程序代码，很可能遭遇过这样子的陷阱：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="type">List</span>(<span class="type">Some</span>(<span class="number">1</span>), <span class="type">Some</span>(<span class="number">2</span>), <span class="type">Some</span>(<span class="number">3</span>)).filter(_ == <span class="number">1</span>)</div><div class="line">&lt;console&gt;:<span class="number">8</span>: warning: comparing values of types <span class="type">Some</span>[<span class="type">Int</span>] and <span class="type">Int</span> using `==' will always <span class="keyword">yield</span> <span class="literal">false</span></div><div class="line">              <span class="type">List</span>(<span class="type">Some</span>(<span class="number">1</span>), <span class="type">Some</span>(<span class="number">2</span>), <span class="type">Some</span>(<span class="number">3</span>)).filter(_ == <span class="number">1</span>)</div><div class="line"></div><div class="line">res5: <span class="type">List</span>[<span class="type">Some</span>[<span class="type">Int</span>]] = <span class="type">List</span>()</div></pre></td></tr></table></figure>
+<p>如上所见，这段代码通过了编译并不会报错，然而由于 <code>Option[T]</code> 类型的存在，我们很可能犯下这种错误，并且很长时间才发现问题。Cats 中的 <code>Eq</code> 则可以解决这个问题。</p>
+<p>我们用它来做些测试：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> cats._</div><div class="line"><span class="keyword">import</span> cats.data._</div><div class="line"><span class="keyword">import</span> cats.implicits._</div><div class="line"></div><div class="line"><span class="number">1</span> === <span class="number">1</span></div><div class="line"><span class="comment">// Boolean = true</span></div><div class="line"></div><div class="line"><span class="number">1</span> === <span class="string">"scala"</span></div><div class="line"><span class="comment">// error: type mismatch</span></div><div class="line"></div><div class="line"><span class="number">1</span> =!= <span class="number">2</span></div><div class="line"><span class="comment">// Boolean = true</span></div><div class="line"></div><div class="line"><span class="type">List</span>(<span class="type">Some</span>(<span class="number">1</span>), <span class="type">Some</span>(<span class="number">2</span>), <span class="type">Some</span>(<span class="number">3</span>)).filter(_ === <span class="number">1</span>)</div><div class="line"><span class="comment">// error: type mismatch</span></div></pre></td></tr></table></figure>
+<p>Cats 定义了 <code>===</code> 和 <code>=!=</code> 来分别代表相等、不相等操作，它们被定义在 <code>cats.syntax.eq</code> 包下。实际上，它们依赖的是 <code>Eq</code> 特质中的 <code>eqv</code> 和 <code>neqv</code> 方法：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Returns `true` if `x` and `y` are equivalent, `false` otherwise.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">eqv</span></span>(x: <span class="type">A</span>, y: <span class="type">A</span>): <span class="type">Boolean</span></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Returns `false` if `x` and `y` are equivalent, `true` otherwise.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">neqv</span></span>(x: <span class="type">A</span>, y: <span class="type">A</span>): <span class="type">Boolean</span> = !eqv(x, y)</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文我们再一次介绍了 Typeclass 模式，以及讲解了 Cats 中两个简单的 Typeclass — <code>Show</code> 和 <code>Eq</code>。此外，还有其他一些简单的 Typeclass 比如 <code>Order</code>、<code>Read</code>，建议你自行去研究，它们都采用了类似的实现方法，并且拥有良好的「类型安全」设计。</p>
+<p>在接下来的文章里，我们将深入到 Cats 中更核心的知识，比如 Monoid、Monad、Functor等等，它们是函数式编程中最通用的结构。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Yison/">^Yison</a>
+          
+            <a href="/tags/Typeclass/">Typeclass</a>
+          
+            <a href="/tags/函数式编程/">函数式编程</a>
+          
+            <a href="/tags/Cats/">Cats</a>
+          
+            <a href="/tags/Cats/">~Cats</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2019/05/java-2-scala-2-kotlin/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">从 Java 到 Scala，再到 Kotlin</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2019/05/dive-into-kotlin/">
+        <span class="next-text nav-default">关于书籍《Kotlin核心编程》</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1558713600000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2019
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

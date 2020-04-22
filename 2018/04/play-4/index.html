@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2018/04/play-4/"/>
+
+
+<meta name="description" content="本文将详细地介绍一些在日常开发中所采用的依赖注入的方式，以供大家进行合理地选择。">
+<meta name="keywords" content="Play,^Shaw,~Play! Framework 系列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Play! Framework 系列（四）：DI 模式比较">
+<meta property="og:url" content="http://scala.cool/2018/04/play-4/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="本文将详细地介绍一些在日常开发中所采用的依赖注入的方式，以供大家进行合理地选择。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-08T01:47:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Play! Framework 系列（四）：DI 模式比较">
+<meta name="twitter:description" content="本文将详细地介绍一些在日常开发中所采用的依赖注入的方式，以供大家进行合理地选择。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Play! Framework 系列（四）：DI 模式比较 - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" >
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Play! Framework 系列（四）：DI 模式比较
+        
+      </h1>
+
+      <time class="post-time">
+          4月2日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Shaw"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Shaw"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>在 <a href="https://scala.cool/2017/11/play-3/">Play! Framework 系列（三）</a>中我们简单介绍了一下 Play 框架自身支持的两种依赖注入（运行时依赖注入、编译时依赖注入）。相信大家对 Play! 的依赖注入应该有所了解了。本文将详细地介绍一些在日常开发中所采用的依赖注入的方式，以供大家进行合理地选择。</p>
+<h2 id="Guice-和-手动注入"><a href="#Guice-和-手动注入" class="headerlink" title="Guice 和 手动注入"></a>Guice 和 手动注入</h2><p>在<a href="https://scala.cool/2017/11/play-3/">上一篇</a>文章中我们所介绍的「运行时依赖注入」以及「编译时依赖注入」就是用的 Guice 以及手动注入，在这里就不作详细介绍了，大家可以去看看上篇文章以及相应的 <a href="https://github.com/Shonrain/Play-Demo/tree/master/play-demo-2" target="_blank" rel="external">Demo</a></p>
+<p>接下来我们介绍比较常用的依赖注入模式。</p>
+<h2 id="cake-pattern（蛋糕模式）"><a href="#cake-pattern（蛋糕模式）" class="headerlink" title="cake pattern（蛋糕模式）"></a>cake pattern（蛋糕模式）</h2><p>我们首先介绍一下 Scala 中比较经典的一种依赖注入的模式—— cake pattern（也叫“蛋糕模式”），“蛋糕模式”也属于「编译时依赖注入」的一种，她不需要依赖 DI 框架。那 “蛋糕模式” 是如何实现的呢？我们知道，在 Scala 中，多个 trait（特质）能够 “混入” 到 class 中，这样在某个 class 中我们就能够得到所有 trait 中定义的东西了。“蛋糕模式”就是基于此种特性而实现的。</p>
+<p>接下来我们就通过一个例子来了解一下“蛋糕模式”：</p>
+<p>我们需要在页面上显示一个包含所有会员信息的会员列表，需要显示的内容有：</p>
+<ol>
+<li>会员信息</li>
+<li>会员卡的信息</li>
+</ol>
+<p>需求很简单，接下来我们用代码组织一下业务：</p>
+<p>我们需要从数据库中查询「会员卡」以及「会员」的信息，所以这里我们首先定义一个数据库连接的类：DatabaseAccessService 来对相应的数据库进行操作：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">DatabaseAccessServiceComp</span> </span>&#123;</div><div class="line">  <span class="keyword">val</span> databaseAccessService = <span class="keyword">new</span> <span class="type">DatabaseAccessService</span>()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DatabaseAccessService</span></span>&#123;</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>大家可能会发现，在我们之前文章中的 service 中并没有定义 trait，而这里却定义了，并且在 trait 中，我们实例化了 DatabaseAccessService， 这就是“蛋糕模式”中所需要的，现在看好像并没有什么卵用，别急，等我们将所有的 service 都定义好了，她就有用了。</p>
+<p>接下来我们定义 WxcardService 以及 WxcardMemberService：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//定义 WxcardService</span></div><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">WxcardServiceComp</span> </span>&#123;</div><div class="line">  <span class="keyword">this</span>: <span class="type">DatabaseAccessServiceComp</span> =&gt;</div><div class="line"></div><div class="line">  <span class="keyword">val</span> wxcardService = <span class="keyword">new</span> <span class="type">WxcardService</span>(databaseAccessService)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WxcardService</span>(<span class="params">databaseAccessService: <span class="type">DatabaseAccessService</span></span>) </span>&#123;</div><div class="line">  ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//定义 WxcardMembrService</span></div><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">WxcardMemberServiceComp</span> </span>&#123;</div><div class="line">  <span class="keyword">this</span>: <span class="type">DatabaseAccessServiceComp</span> =&gt;</div><div class="line"></div><div class="line">  <span class="keyword">val</span> wxcardMemberService = <span class="keyword">new</span> <span class="type">WxcardMemberService</span>(databaseAccessService)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WxcardMemberService</span>(<span class="params">databaseAccessService: <span class="type">DatabaseAccessService</span></span>) </span>&#123;</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>写法与上面定义的 DatabaseAccessService 没有什么区别，因为上面两个 service 都需要依赖 DatabaseAccessService，所以在特质中用「自身类型」来将其混入，如果需要多个依赖，可以这样写：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span> <span class="type">DatabaseAccessServiceComp</span> <span class="keyword">with</span> <span class="type">BarComp</span> <span class="keyword">with</span> <span class="type">FooComp</span> =&gt;</div></pre></td></tr></table></figure>
+<p>最后我们需要定义一个 WxcardController，来将数据传递到相应的页面上去：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WxcardController</span> (<span class="params"></span></span></div><div class="line">  cc: <span class="type">ControllerComponents</span>,</div><div class="line">  wxcardService: <span class="type">WxcardService</span>,</div><div class="line">  wxcardMemberService: <span class="type">WxcardMemberService</span></div><div class="line">) <span class="keyword">extends</span> <span class="title">AbstractController</span>(<span class="params">cc</span>) &#123;...&#125;</div></pre></td></tr></table></figure>
+<p>可以看到 WxcardController 需要依赖我们上面定义的一些 service，那么在蛋糕模式下，我们怎样才能将这些依赖注入到 WxcardController 中呢，由于“蛋糕模式”也是「编译时依赖注入」的一种，那么我们可以参考<a href="https://scala.cool/2017/11/play-3/">上一篇</a>文章中所采用的方式：</p>
+<p>同样，我们需要实现自己的 ApplicationLoader：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//定义 load 那部分代码省略了，大家可以去看 Demo</span></div><div class="line">...</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponents</span>(<span class="params">context: <span class="type">ApplicationLoader</span>.<span class="type">Context</span></span>)</span></div><div class="line">    <span class="keyword">extends</span> <span class="type">BuiltInComponentsFromContext</span>(context)</div><div class="line">    <span class="keyword">with</span> play.filters.<span class="type">HttpFiltersComponents</span></div><div class="line">    <span class="keyword">with</span> <span class="type">DatabaseAccessServiceComp</span></div><div class="line">    <span class="keyword">with</span> <span class="type">WxcardServiceComp</span></div><div class="line">    <span class="keyword">with</span> <span class="type">WxcardMemberServiceComp</span> &#123;</div><div class="line"></div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> wxcardController = <span class="keyword">new</span> <span class="type">WxcardController</span>(controllerComponents, wxcardService, wxcardMemberService)</div><div class="line"></div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> router: <span class="type">Router</span> = <span class="keyword">new</span> <span class="type">Routes</span>(httpErrorHandler, wxcardController)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过上面的代码，就完成了注入，可以看到我们定义的所有 xxxServiceComp 特质都被混入到了 MyComponents 中，这样，当 Play加载时，我们所定义的 service 就都在这里被实例化了，为什么呢？因为我们在定义 xxxServiceComp 时，都会有这么一行代码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> xxxService = <span class="keyword">new</span> <span class="type">XxxService</span>()</div></pre></td></tr></table></figure>
+<p>这就是为什么我们之前要在每个 service 中都定义一个 trait，因为 Scala 中的 class 可以混入多个 trait，在这里，我们可以将所有需要的依赖都混入到 MyComponents 中，然后实现注入。</p>
+<p>至于为什么要叫“蛋糕模式”，我个人是这么理解的：<br>我们定义的 xxxServiceComp 比如 WxcardServiceComp 相当于蛋糕中的某一层，而那些需要被多次依赖的 xxxServiceComp，比如上面定义的 DatabaseAccessServiceComp 可以看作是蛋糕中的调味料（比如水果，巧克力啥的），将这些蛋糕一层一层地放在一起，然后再混入一些调味料，就组成了一个大的蛋糕—— MyComponents。</p>
+<p>可以看到“蛋糕模式”中，我们需要写非常多的样板代码，要为每个 service 都定义一个 trait，感觉心很累，那么接下来我们就介绍一种比较轻巧而又简洁的的方式。</p>
+<h2 id="macwire"><a href="#macwire" class="headerlink" title="macwire"></a>macwire</h2><p><a href="https://github.com/adamw/macwire" target="_blank" rel="external">macwire</a> 是基于 「Scala 宏」来实现的，我们使用她可以让依赖注入变得非常简单，并且使我们的代码量减少许多。接下来，我们就通过 macwire 来实现一下上面的例子。</p>
+<p>首先在项目中引入 macwire，在 build.sbt 文件中增加一行依赖：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">libraryDependencies ++= <span class="type">Seq</span>(</div><div class="line">  <span class="string">"org.scalatestplus.play"</span>   %% <span class="string">"scalatestplus-play"</span> % <span class="string">"3.0.0-M3"</span> % <span class="type">Test</span>,</div><div class="line"></div><div class="line">  <span class="comment">//在这里添加 macwire 的依赖</span></div><div class="line">  <span class="string">"com.softwaremill.macwire"</span> %% <span class="string">"macros"</span>             % <span class="string">"2.3.0"</span>    % <span class="type">Provided</span>,</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>然后定义 service：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//定义 DatabaseAccessService</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DatabaseAccessService</span></span>&#123;</div><div class="line">  ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//定义 WxcardService</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WxcardService</span>(<span class="params">databaseAccessService: <span class="type">DatabaseAccessService</span></span>) </span>&#123;</div><div class="line">  ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//定义 WxcardMembrService</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WxcardMemberService</span>(<span class="params">databaseAccessService: <span class="type">DatabaseAccessService</span></span>) </span>&#123;</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，我们现在就不需要定义 trait 了，接下来，定义 WxcardController：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WxcardController</span> (<span class="params"></span></span></div><div class="line">  cc: <span class="type">ControllerComponents</span>,</div><div class="line">  wxcardService: <span class="type">WxcardService</span>,</div><div class="line">  wxcardMemberService: <span class="type">WxcardMemberService</span></div><div class="line">) <span class="keyword">extends</span> <span class="title">AbstractController</span>(<span class="params">cc</span>) &#123;...&#125;</div></pre></td></tr></table></figure>
+<p>controller 的定义和上面的一样，接下来，我们就使用 macwire 来实现依赖注入，macwire 也是「编译时依赖注入」的一种，所以我们同样需要实现 ApplicationLoader：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> com.softwaremill.macwire._</div><div class="line">...</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponents</span>(<span class="params">context: <span class="type">ApplicationLoader</span>.<span class="type">Context</span></span>)</span></div><div class="line">    <span class="keyword">extends</span> <span class="type">BuiltInComponentsFromContext</span>(context)</div><div class="line">    <span class="keyword">with</span> play.filters.<span class="type">HttpFiltersComponents</span> &#123;</div><div class="line"></div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> databaseAccessService = wire[<span class="type">DatabaseAccessService</span>]</div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> wxcardService = wire[<span class="type">WxcardService</span>]</div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> wxcardMemberService = wire[<span class="type">WxcardMemberService</span>]</div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> wxcardController = wire[<span class="type">WxcardController</span>]</div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> router: <span class="type">Router</span> = &#123;</div><div class="line">    <span class="keyword">val</span> prefix = <span class="string">"/"</span></div><div class="line">    wire[<span class="type">Routes</span>]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在上面的代码中，我们只需要将相应的依赖通过下面的方式实例化就可以了：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> wxcardService = wire[<span class="type">WxcardService</span>]</div></pre></td></tr></table></figure>
+<p>就是在类型外面添加了一个 <code>wire</code>，这样就完成了实例化，并且也不需要指定依赖的参数，macwire 会自动帮我们完成实例化和注入：</p>
+<p>比如上面的</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> databaseAccessService = wire[<span class="type">DatabaseAccessService</span>]</div><div class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> wxcardService = wire[<span class="type">WxcardService</span>]</div><div class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> wxcardMemberService = wire[<span class="type">WxcardMemberService</span>]</div><div class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> wxcardController = wire[<span class="type">WxcardController</span>]</div></pre></td></tr></table></figure>
+<p>macwire 就帮我们转化成了：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> databaseAccessService = <span class="keyword">new</span> <span class="type">DatabaseAccessService</span>()</div><div class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> wxcardService = <span class="keyword">new</span> <span class="type">WxcardService</span>(databaseAccessService)</div><div class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> wxcardMemberService = <span class="keyword">new</span> <span class="type">WxcardMemberService</span>(databaseAccessService)</div><div class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> wxcardController = <span class="keyword">new</span> <span class="type">WxcardController</span>(controllerComponents, wxcardService, wxcardMemberService)</div></pre></td></tr></table></figure>
+<p>我们只需要在定义某个类的时候声明我们需要哪些依赖，实例化和注入 macwire 都会帮我们去完成，macwire 在实例化某个类的时候，会去当前文件或者与当前文件有关的代码中查找相关的依赖，找到了就完成注入，若没有找到说明该依赖没有被定义过，或者没有正确引入。</p>
+<p>在日常开发中，我们会创建很多个 service，将所有的 service 放在 MyComponents 中实例化会使得代码显得很臃肿，而且也不便于维护。通常我们会专门定义一个 Module 来组织这些 service：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> config</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.softwaremill.macwire._</div><div class="line"><span class="keyword">import</span> services._</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">ServicesModule</span> </span>&#123;</div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> databaseAccessService = wire[<span class="type">DatabaseAccessService</span>]</div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> wxcardService = wire[<span class="type">WxcardService</span>]</div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> wxcardMemberService = wire[<span class="type">WxcardMemberService</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里我们新建了一个 ServiceModule.scala 文件来将组织这些 service。</p>
+<p>那么上面的 ApplicationLoader 文件就可以这样去写：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> com.softwaremill.macwire._</div><div class="line">...</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponents</span>(<span class="params">context: <span class="type">ApplicationLoader</span>.<span class="type">Context</span></span>)</span></div><div class="line">    <span class="keyword">extends</span> <span class="type">BuiltInComponentsFromContext</span>(context)</div><div class="line">    <span class="keyword">with</span> play.filters.<span class="type">HttpFiltersComponents</span></div><div class="line">    <span class="keyword">with</span> config.<span class="type">ServicesModule</span> &#123;</div><div class="line"></div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> wxcardController = wire[<span class="type">WxcardController</span>]</div><div class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> router: <span class="type">Router</span> = &#123;</div><div class="line">    <span class="keyword">val</span> prefix = <span class="string">"/"</span></div><div class="line">    wire[<span class="type">Routes</span>]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到 macwire 使用起来非常简单，并且能够简化我们的依赖注入。在我们的项目中所采用的是 macwire，所以推荐大家使用 macwire。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>关于 Play 中的「依赖注入」到这里就结束了，希望能够给大家一些帮助，另外 Play 系列的文章从上一篇到现在拖了太久了，非常抱歉，感谢一直以来的关注，后面我会加快写作节奏的，本文的例子请戳<a href="https://github.com/Shonrain/Play-Demo/tree/master/play-demo-3" target="_blank" rel="external">源码链接</a>。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Play/">Play</a>
+          
+            <a href="/tags/Shaw/">^Shaw</a>
+          
+            <a href="/tags/Play-Framework-系列/">~Play! Framework 系列</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/08/febible-float-layout/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">前端重构范式之 float layout</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/03/learning-kafka-2/">
+        <span class="next-text nav-default">Kafka 学习笔记（二） ：初探 Kafka</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1522598400000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2019
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

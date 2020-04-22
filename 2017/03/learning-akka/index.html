@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="Akka是一个构建在JVM上，基于Actor模型的的并发框架，为构建伸缩性强，有弹性的响应式并发应用提高更好的平台。本文主要是个人对Akka的学习和应用中的一些理解。"/>
+
+
+
+
+  <meta name="keywords" content="Akka," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Scala Cool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/03/learning-akka/"/>
+
+
+<meta name="description" content="Akka是一个构建在JVM上，基于Actor模型的的并发框架，为构建伸缩性强，有弹性的响应式并发应用提高更好的平台。本文主要是个人对Akka的学习和应用中的一些理解。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Akka系列（一）：Akka简介与Actor模型">
+<meta property="og:url" content="http://scala.cool/2017/03/learning-akka/index.html">
+<meta property="og:site_name" content="Scala Cool">
+<meta property="og:description" content="Akka是一个构建在JVM上，基于Actor模型的的并发框架，为构建伸缩性强，有弹性的响应式并发应用提高更好的平台。本文主要是个人对Akka的学习和应用中的一些理解。">
+<meta property="og:image" content="http://scala.cool/images/2017/03/actor-model.png">
+<meta property="og:updated_time" content="2017-03-22T03:02:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Akka系列（一）：Akka简介与Actor模型">
+<meta name="twitter:description" content="Akka是一个构建在JVM上，基于Actor模型的的并发框架，为构建伸缩性强，有弹性的响应式并发应用提高更好的平台。本文主要是个人对Akka的学习和应用中的一些理解。">
+<meta name="twitter:image" content="http://scala.cool/images/2017/03/actor-model.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Akka系列（一）：Akka简介与Actor模型 - Scala Cool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Scala Cool</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Akka系列（一）：Akka简介与Actor模型
+        
+      </h1>
+
+      <time class="post-time">
+          3月22日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Godpan"></span>
+        </span>
+      
+      
+        <span class="_author-avatar-holder" data-author="Godpan"></span>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>Akka是一个构建在JVM上，基于Actor模型的的并发框架，为构建伸缩性强，有弹性的响应式并发应用提高更好的平台。本文主要是个人对Akka的学习和应用中的一些理解。</p>
+<h2 id="Actor模型"><a href="#Actor模型" class="headerlink" title="Actor模型"></a>Actor模型</h2><p>Akka的核心就是Actor，所以不得不说Actor，Actor模型我通俗的举个例子，假定现实中的两个人，他们只知道对方的地址，他们想要交流，给对方传递信息，但是又没有手机，电话，网络之类的其他途径，所以他们之间只能用信件传递消息，很像现实中的的邮政系统，你要寄一封信，只需根据地址把信投寄到相应的信箱中，具体它是如何帮你处理送达的，你就不需要了解了，你也有可能收到收信人的回复，这相当于消息反馈。上述例子中的信件就相当于Actor中的消息，Actor与Actor之间只能通过消息通信。当然Actor模型比这要复杂的多，这里主要是简洁的阐述一下Actor模型的概念。</p>
+<h3 id="Akka中Actors模型"><a href="#Akka中Actors模型" class="headerlink" title="Akka中Actors模型"></a>Akka中Actors模型</h3><ul>
+<li><code>对并发模型进行了更高的抽象</code></li>
+<li><code>异步、非阻塞、高性能的事件驱动编程模型</code></li>
+<li><code>轻量级事件处理（1GB内存可容纳百万级别个Actor）</code></li>
+</ul>
+<p><code>为什么Actor模型是一种处理并发问题的解决方案？</code></p>
+<p>一开始我也不怎么理解，脑子里的一贯思维是处理并发问题就是如何保证共享数据的一致性和正确性，为什么会有保持共享数据正确性这个问题呢？无非是我们的程序是多线程的，多个线程对同一个数据进行修改，若不加同步条件，势必会造成数据污染。那么我们是不是可以转换一下思维，用单线程去处理相应的请求，但是又有人会问了，若是用单线程处理，那系统的性能又如何保证。Actor模型的出现解决了这个问题。</p>
+<p><code>Actor模型概图</code>：</p>
+<p><img src="/images/2017/03/actor-model.png" alt="Actor模型"></p>
+<p>从上图中我们可以看到，Actor与Actor之前只能用消息进行通信，当某一个Actor给另外一个Actor发消息，消息是有顺序的，你只需要将消息投寄的相应的邮箱，至于对方Actor怎么处理你的消息你并不知道，当然你也可等待它的回复。</p>
+<p>JVM中的Actor有以下几个特点：</p>
+<ul>
+<li><code>每个Actor都有对应一个邮箱</code></li>
+<li><code>Actor是串行处理消息的</code></li>
+<li><code>Actor中的消息是不可变的</code></li>
+</ul>
+<p>其实只从上面一些描述来看，并不能看出Actor在处理并发问题上的有什么优势。</p>
+<p>但我总结了两点：<code>简化并发编程</code>，<code>提升程序性能</code></p>
+<h5 id="1-简化并发编程："><a href="#1-简化并发编程：" class="headerlink" title="1.简化并发编程："></a>1.简化并发编程：</h5><p>我们一开始说过并发导致最大的问题就是对共享数据的操作，我们在面对并发问题时多采用的是<br>用锁去保证共享数据的一致性，但这同样也会带来其他相关问题，比如要去考虑锁的粒度（对方法，程序块等），锁的形式（读锁，写锁等）等问题，这些问题对并发程序来说是至关重要的，但一个初写并发程序的程序员来说，往往不能掌控的很好，这无疑给程序员在编程上提高了复杂性，而且还不容易掌控，但使用Actor就不导致这些问题，首先Actor的消息特性就觉得了在与Actor通信上不会有共享数据的困扰，另外在Actor内部是串行处理消息的，同样不会对Actor内的数据造成污染，用Actor编写并发程序无疑大大降低了编码的复杂度。</p>
+<h5 id="2-提升程序性能："><a href="#2-提升程序性能：" class="headerlink" title="2.提升程序性能："></a>2.提升程序性能：</h5><p>我们之前说过既然用单线程处理，那如何保证程序的性能？首先Actor是非常轻量级的，你可以再程序中创建许多个Actor，而且Actor是异步的，那么如何利用它的这个特性呢，我们要做的就是把相应的并发事件尽可能的分割成一个个小的事件，让每个Actor去处理相应的小事件,充分去利用它异步的特点，来提升程序的性能。</p>
+<p>其实Scala中原生的Actor并不能完成很多事，不是一套完整的并发解决方案，不适合用于生产环境，比如错误恢复，状态持久化等，所以在较新版本的Scala类库中，Akka包已经取代了原生的Actor。</p>
+<h2 id="Akka"><a href="#Akka" class="headerlink" title="Akka"></a>Akka</h2><p>那下面我们来简单说说Akka吧，Akka作为一套成熟的并发解决方案，已经被业界大量采用，尤其是在金融，游戏等领域，Akka中的容错机制，持久化，远程调用，日志等都是很重要的模块，这些内容都会在这个系列的后续文章里一一讲解。下面就以一个入门Akka程序来结束本篇文章吧。现在我们假设有一个家居机器人，我们只需要给它发送消息它便会帮我们处理相应的事情，现在我们用程序来模拟这个场景：<a href="https://github.com/godpan/akka-demo/tree/master/Example_01" target="_blank" rel="external">源码链接</a></p>
+<p><code>本示例使用Scala语言，构建工具为SBT，IDE为IntelliJ IDEA.</code></p>
+<p>1.首先创建一个基于SBT的Scala工程</p>
+<p><code>build.sbt</code>配置：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">name := <span class="string">"Example_01"</span></div><div class="line"></div><div class="line">version := <span class="string">"1.0"</span></div><div class="line"></div><div class="line">scalaVersion := <span class="string">"2.11.8"</span></div><div class="line"></div><div class="line"><span class="keyword">val</span> akkaVersion   = <span class="string">"2.4.16"</span></div><div class="line"></div><div class="line">libraryDependencies +=</div><div class="line">  <span class="string">"com.typesafe.akka"</span> %% <span class="string">"akka-actor"</span> % akkaVersion</div></pre></td></tr></table></figure>
+<p>2.我们来定义一些消息：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Action</span></span>&#123;</div><div class="line">  <span class="keyword">val</span> message: <span class="type">String</span></div><div class="line">  <span class="keyword">val</span> time: <span class="type">Int</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">TurnOnLight</span>(<span class="params">time: <span class="type">Int</span></span>) <span class="keyword">extends</span> <span class="title">Action</span> </span>&#123;   <span class="comment">// 开灯消息</span></div><div class="line">  <span class="keyword">val</span> message = <span class="string">"Turn on the living room light"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">BoilWater</span>(<span class="params">time: <span class="type">Int</span></span>) <span class="keyword">extends</span> <span class="title">Action</span> </span>&#123;   <span class="comment">// 烧水消息</span></div><div class="line">  <span class="keyword">val</span> message = <span class="string">"Burn a pot of water"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.我们利用Actor来实现一个模拟机器人：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RobotActor</span> <span class="keyword">extends</span> <span class="title">Actor</span> </span>&#123;</div><div class="line">  <span class="keyword">val</span> log = <span class="type">Logging</span>(context.system, <span class="keyword">this</span>)</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">receive</span></span>: <span class="type">Receive</span> = &#123; <span class="comment">//机器人接受指令</span></div><div class="line">    <span class="keyword">case</span> t: <span class="type">TurnOnLight</span> =&gt; log.info(<span class="string">s"<span class="subst">$&#123;t.message&#125;</span> after <span class="subst">$&#123;t.time&#125;</span> hour"</span>)</div><div class="line">    <span class="keyword">case</span> b: <span class="type">BoilWater</span> =&gt; log.info(<span class="string">s"<span class="subst">$&#123;b.message&#125;</span> after <span class="subst">$&#123;b.time&#125;</span> hour"</span>)</div><div class="line">    <span class="keyword">case</span> _ =&gt; log.info(<span class="string">"I can not handle this message"</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>4.我们去测试这个机器人：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Example_01</span> <span class="keyword">extends</span> <span class="title">App</span> </span>&#123;</div><div class="line">  <span class="keyword">val</span> actorSyatem = <span class="type">ActorSystem</span>(<span class="string">"robot-system"</span>) </div><div class="line">  <span class="keyword">val</span> robotActor = actorSyatem.actorOf(<span class="type">Props</span>(<span class="keyword">new</span> <span class="type">RobotActor</span>()), <span class="string">"robotActor"</span>) <span class="comment">//创建一个机器人</span></div><div class="line">  robotActor ! <span class="type">TurnOnLight</span>(<span class="number">1</span>) <span class="comment">//给机器人发送一个开灯命令</span></div><div class="line">  robotActor ! <span class="type">BoilWater</span>(<span class="number">2</span>) <span class="comment">//给机器人发送一个烧水命令</span></div><div class="line">  robotActor ! <span class="string">"who are you"</span> <span class="comment">//给机器人发送一个任意命令</span></div><div class="line">  actorSyatem terminate ()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>5.运行结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[INFO] [03/19/2017 13:48:05.622] [robot-system-akka.actor.default-dispatcher-4] [akka://robot-system/user/robotActor] Turn on the living room light after 1 hour</div><div class="line">[INFO] [03/19/2017 13:48:05.622] [robot-system-akka.actor.default-dispatcher-4] [akka://robot-system/user/robotActor] Burn a pot of water after 2 hour</div><div class="line">[INFO] [03/19/2017 13:48:05.622] [robot-system-akka.actor.default-dispatcher-4] [akka://robot-system/user/robotActor] I can not handle this message</div></pre></td></tr></table></figure>
+<p>上面是一个非常简单的Akka例子，我们首先创建了一个机器人的Actor，然后通过向它发送不同指令，让它根据指令去做相应的事情，大家可以自己尝试去写一写相似的例子。</p>
+<p>这篇就先到这里了，下一篇主要给大家讲讲Akka中Actor的分层结构。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Akka/">Akka</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2017/03/how-to-handle-collection-in-scala/">
+        <span class="next-text nav-default">如何在 Scala 中科学地操作 collection</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+    2017
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+</html>

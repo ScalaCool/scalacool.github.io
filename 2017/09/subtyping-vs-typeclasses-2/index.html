@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/09/subtyping-vs-typeclasses-2/"/>
+
+
+<meta name="description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
+<meta name="keywords" content="类型相关,^Yison,Typeclass,~Subtyping vs Typeclasses,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Subtyping vs Typeclasses（二）">
+<meta property="og:url" content="http://scala.cool/2017/09/subtyping-vs-typeclasses-2/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-10T01:43:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Subtyping vs Typeclasses（二）">
+<meta name="twitter:description" content="本文我们将介绍 Type Classes，类似上一篇文章提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Subtyping vs Typeclasses（二） - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" >
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Subtyping vs Typeclasses（二）
+        
+      </h1>
+
+      <time class="post-time">
+          9月18日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Yison"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Yison"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>本文我们将介绍 Type Classes，类似 <a href="https://scala.cool/2017/08/subtyping-vs-typeclasses/">上一篇文章</a> 提及的 Subtyping ，这也是一种实现多态的技术，然而却更灵活。</p>
+<h2 id="什么是-Type-Classes"><a href="#什么是-Type-Classes" class="headerlink" title="什么是 Type Classes"></a>什么是 Type Classes</h2><p>Type Classes 是发源于 Haskell 的一个概念。顾名思义，不少人把它理解成 「class of types」，这其实并不科学。事实上，Haskell 并没有类似 Java 中的 class 的概念，一个更准确的理解，可以是「<strong>constructor class</strong>」 — 本质上它区别于单态，但也不是多态，而是提供一个介于两者之间的过渡机制。</p>
+<p>让我们看看 <a href="http://learnyouahaskell.com/introduction" target="_blank" rel="external">《Learn You a Haskell for Great Good! 》</a> 中对 Type classes 的相关描述：</p>
+<blockquote>
+<p>A typeclass is a sort of interface that defines some behavior. If a type is a part of a typeclass, that means that it supports and implements the behavior the typeclass describes. </p>
+</blockquote>
+<p>简单理解，我们可以基于一个 type class 创造不同的类型，来实现多态的需求。</p>
+<p>接下来我们将通过具体的例子来进一步认识 type classes，目前，你可能仍然不明白，但你可以把它想象为类似于 Java 中的 Interfaces，虽然这也不准确。</p>
+<h2 id="排序问题"><a href="#排序问题" class="headerlink" title="排序问题"></a>排序问题</h2><p>想象我们现在要为某两款 Moba 游戏（G1 和 G2）写段程序，支持在有限的玩家中筛选出 MVP 选手。</p>
+<p>假设两游戏在评价 MVP 中对 KDA 中的助攻指标权重不同， 公式如下：</p>
+<blockquote>
+<p>MVP (G1) = (人头数 + 助攻数 x 0.8) / 死亡数<br>MVP (G2) = (人头数 + 助攻数 x 0.6) / 死亡数</p>
+</blockquote>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Player1</span>(<span class="params">kill: <span class="type">Int</span>, death: <span class="type">Int</span>, assist: <span class="type">Int</span></span>) </span>= &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">score</span> </span>= (kill + assist * <span class="number">0.8</span>) / death</div><div class="line">&#125;</div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Player2</span>(<span class="params">kill: <span class="type">Int</span>, death: <span class="type">Int</span>, assist: <span class="type">Int</span></span>) </span>= &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">score</span> </span>= (kill + assist * <span class="number">0.6</span>) / death</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>有经验的朋友很快发现这其实是一个排序问题，又熟悉 Java 的朋友自然联想到了 <code>Comparable</code> 和 <code>Comparator</code> 接口。</p>
+<h3 id="Comparable-方案"><a href="#Comparable-方案" class="headerlink" title="Comparable 方案"></a>Comparable 方案</h3><p>我们先来看下 <code>Comparable</code> 接口的定义：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comparable</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(T o)</span></span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>非常简单，内部只定义一个 <code>compareTo</code> 方法，实现接口的类可以自定义该方法的实现，由此对具体的类型比较大小。</p>
+<p>Scala 兼容 Java 的类库，所以我们可以这样实现：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Player1</span>(<span class="params">kill: <span class="type">Int</span>, death: <span class="type">Int</span>, assist: <span class="type">Int</span></span>) <span class="keyword">extends</span> <span class="title">Comparable</span>[<span class="type">Player1</span>] </span>= &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">score</span> </span>= (kill + assist * <span class="number">0.8</span>) / death</div><div class="line">  <span class="comment">// 覆写 compareTo</span></div><div class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compareTo</span></span>(o: <span class="type">Player1</span>): <span class="type">Int</span> = java.lang.<span class="type">Long</span>.compare(score, o.score)</div><div class="line">&#125;</div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Player2</span>(<span class="params">kill: <span class="type">Int</span>, death: <span class="type">Int</span>, assist: <span class="type">Int</span></span>) <span class="keyword">extends</span> <span class="title">Comparable</span>[<span class="type">Player2</span>] </span>= &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">score</span> </span>= (kill + assist * <span class="number">0.8</span>) / death</div><div class="line">  <span class="comment">// 覆写 compareTo</span></div><div class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compareTo</span></span>(o: <span class="type">Player2</span>): <span class="type">Int</span> = java.lang.<span class="type">Long</span>.compare(score, o.score)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在 Java 中，这是对排序问题很标准的一种处理方式，它的优点显而易见 — 只需定义一次，则可以在任何有 <code>PlayerX</code> 的地方进行 compare。然而它的缺点也同样明显，如果我想要在不同的地方对 <code>PlayerX</code> 采用其它的排序算法，那么就有点捉襟见肘了。</p>
+<p>此外，该种方式还有个较大的问题，它并不是「类型安全」的，需要额外的处理，类似的原因我们会在后续的文章中作更深入的介绍。</p>
+<h3 id="Comparator-方案"><a href="#Comparator-方案" class="headerlink" title="Comparator 方案"></a>Comparator 方案</h3><p><code>Comparator</code> 相比 <code>Comparable</code> 要灵活一些，这其实是一种很常见的思路。我们先在 Scala 中如此实现：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> players = <span class="type">List</span>(<span class="type">Player1</span>(<span class="number">12</span>, <span class="number">3</span>, <span class="number">4</span>), <span class="type">Player1</span>(<span class="number">5</span>, <span class="number">9</span>, <span class="number">10</span>), <span class="type">Player</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>))</div><div class="line">players.sortWith((p1, p2) =&gt; p1.score &gt;= p2.score).head</div></pre></td></tr></table></figure>
+<p>显然它可以在调用处随意定义排序算法，然而却又增加了每次调用时定义算法的成本。</p>
+<p>好吧，我们还是需要模拟一个 <code>Comparator</code> 接口：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Comparator</span>[<span class="type">T</span>] </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(first: <span class="type">T</span>, second: <span class="type">T</span>): <span class="type">Int</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">&gt;=</span></span>(first: <span class="type">T</span>, second: <span class="type">T</span>): <span class="type">Boolean</span> = compare(first, second) &gt;= <span class="number">0</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">G1</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">ordering</span></span>(o: (<span class="type">Player1</span>, <span class="type">Player1</span>) =&gt; <span class="type">Int</span>) = <span class="keyword">new</span> <span class="type">Comparator</span>[<span class="type">Player1</span>] &#123;</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(first: <span class="type">Player1</span>, second: <span class="type">Player1</span>) = o(first, second)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">val</span> mvp =  ordering((p1: <span class="type">Player1</span>, p2: <span class="type">Player1</span>) =&gt; (p1.score - p2.score).toInt)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">G2</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">ordering</span></span>(o: (<span class="type">Player2</span>, <span class="type">Player2</span>) =&gt; <span class="type">Int</span>) = <span class="keyword">new</span> <span class="type">Comparator</span>[<span class="type">Player2</span>] &#123;</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(first: <span class="type">Player2</span>, second: <span class="type">Player2</span>) = o(first, second)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">val</span> mvp =  ordering((p1: <span class="type">Player2</span>, p2: <span class="type">Player2</span>) =&gt; (p1.score - p2.score).toInt)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>大功告成，我们对样板数据筛选 MVP:<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">findMvp</span></span>[<span class="type">T</span>](list: <span class="type">List</span>[<span class="type">T</span>])(ordering: <span class="type">Comparator</span>[<span class="type">T</span>]): <span class="type">T</span> = &#123;</div><div class="line">  list.reduce((a, b) =&gt; <span class="keyword">if</span> (ordering &gt;=(a, b)) a <span class="keyword">else</span> b)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">val</span> players1 = <span class="type">List</span>(<span class="type">Player1</span>(<span class="number">12</span>, <span class="number">3</span>, <span class="number">4</span>), <span class="type">Player1</span>(<span class="number">5</span>, <span class="number">9</span>, <span class="number">10</span>), <span class="type">Player</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>))</div><div class="line">findMvp(players1)(<span class="type">G1</span>.mvp)</div><div class="line"></div><div class="line"><span class="keyword">val</span> players2 = <span class="type">List</span>(<span class="type">Player1</span>(<span class="number">12</span>, <span class="number">3</span>, <span class="number">4</span>), <span class="type">Player1</span>(<span class="number">5</span>, <span class="number">9</span>, <span class="number">10</span>), <span class="type">Player</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>))</div><div class="line">findMvp(players2)(<span class="type">G2</span>.mvp)</div></pre></td></tr></table></figure></p>
+<p>看起来不错，美中不足是每次调用 <code>findMvp</code> 时都必须显式地指定排序算法。</p>
+<h3 id="Type-Class-方案"><a href="#Type-Class-方案" class="headerlink" title="Type Class 方案"></a>Type Class 方案</h3><p>Type Class 可以很好地解决以上的几个问题。在 Scala 中，类型系统其实并没有像 Haskell 一样内置 Type Class 原生特性，不过我们可以通过 <code>implicit</code> 来实现所谓的 Type Class Pattern，因此反而更加强大。</p>
+<blockquote>
+<p>相比 Haskell，Scala 中的 Type Class Pattern 可以对不同的作用域采取选择性生效，可参见 <a href="http://debasishg.blogspot.co.id/2010/06/scala-implicits-type-classes-here-i.html" target="_blank" rel="external">Scala Implicits : Type Classes Here I Come</a></p>
+</blockquote>
+<p>首先，我们先来改造下 <code>findMvp</code>:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">findMvp</span></span>[<span class="type">T</span>](list: <span class="type">List</span>[<span class="type">T</span>])(<span class="keyword">implicit</span> ordering: <span class="type">Comparator</span>[<span class="type">T</span>]): <span class="type">T</span> = &#123;</div><div class="line">  list.reduce((a, b) =&gt; <span class="keyword">if</span> (ordering &gt;=(a, b)) a <span class="keyword">else</span> b)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>紧接着，再给我们的排序算法定义增加 <code>implicit</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">G1</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">ordering</span></span>(o: (<span class="type">Player1</span>, <span class="type">Player1</span>) =&gt; <span class="type">Int</span>) = <span class="keyword">new</span> <span class="type">Comparator</span>[<span class="type">Player1</span>] &#123;</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(first: <span class="type">Player1</span>, second: <span class="type">Player1</span>) = o(first, second)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> mvp =  ordering((p1: <span class="type">Player1</span>, p2: <span class="type">Player1</span>) =&gt; (p1.score - p2.score).toInt)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">G2</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">ordering</span></span>(o: (<span class="type">Player2</span>, <span class="type">Player2</span>) =&gt; <span class="type">Int</span>) = <span class="keyword">new</span> <span class="type">Comparator</span>[<span class="type">Player2</span>] &#123;</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(first: <span class="type">Player2</span>, second: <span class="type">Player2</span>) = o(first, second)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> mvp =  ordering((p1: <span class="type">Player2</span>, p2: <span class="type">Player2</span>) =&gt; (p1.score - p2.score).toInt)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后，我们就可以如此调用了：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="type">G1</span>.mvp</div><div class="line"><span class="keyword">import</span> <span class="type">G2</span>.mvp</div><div class="line"></div><div class="line"><span class="keyword">val</span> players1 = <span class="type">List</span>(<span class="type">Player1</span>(<span class="number">12</span>, <span class="number">3</span>, <span class="number">4</span>), <span class="type">Player1</span>(<span class="number">5</span>, <span class="number">9</span>, <span class="number">10</span>), <span class="type">Player</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>))</div><div class="line">findMvp(players1)</div><div class="line"></div><div class="line"><span class="keyword">val</span> players2 = <span class="type">List</span>(<span class="type">Player1</span>(<span class="number">12</span>, <span class="number">3</span>, <span class="number">4</span>), <span class="type">Player1</span>(<span class="number">5</span>, <span class="number">9</span>, <span class="number">10</span>), <span class="type">Player</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>))</div><div class="line">findMvp(players2)</div></pre></td></tr></table></figure>
+<p>如此神奇？由于定义了 <code>implicit ordering</code>，Scala 编译器会在 <code>Comparator[T]</code> 特质中自动寻找到相关的 ordering 。</p>
+<p>Scala 中的 Type Class 就是如此的简单，也许你还是对 <code>findMvp</code> 的定义有点不适，好吧，我们可以利用 Context Bounds 来优化它。</p>
+<h3 id="Context-Bounds"><a href="#Context-Bounds" class="headerlink" title="Context Bounds"></a>Context Bounds</h3><p>这个名字看起来也有点怵，其实它无非只是一种语法糖而已。拿以上的例子来讲，<code>[T: Comparator]</code> 就是一个 context bound，它告诉编译器当 <code>findMvp</code> 被调用时，<code>Comparator[T]</code> 类型的一个 implict 值会存在作用域当中。之后我们就可以 <code>implicitly[Comparator[T]]</code> 来获取这个值。</p>
+<p>因此，优化语法后的代码如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">findMvp</span></span>[<span class="type">T</span>:<span class="type">Comparator</span>](list: <span class="type">List</span>[<span class="type">T</span>]): <span class="type">T</span> = &#123;</div><div class="line">  list.reduce((a, b) =&gt; <span class="keyword">if</span> (implicitly[<span class="type">Comparator</span>[<span class="type">T</span>]] &gt;=(a, b)) a <span class="keyword">else</span> b)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上的介绍，我们发现 Type Classes 是一种灵活且强大的技术，Scala 标准库以及其它很多知名的类库（如 Cats）都大量使用了这种模式。</p>
+<p>它有点类似我们熟悉的 Interfaces（对应 Scala 中的 Trait），都可以通过名字、输入、输出，描述一系列相关的操作。然而，它们又显著地不同，在下一篇文章中，我们将对 Subtyping 和 Typeclasses 这两种技术做进一步的分析比较。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://learnyouahaskell.com/" target="_blank" rel="external">Learn You a Haskell</a></li>
+<li><a href="https://medium.com/@aarshkshah1992/type-classes-in-scala-d968d77bc711" target="_blank" rel="external">Type Classes in Scala</a></li>
+<li><a href="http://frankraiser.de/wordpress/?p=162" target="_blank" rel="external">The order of things – Contracts and Typeclasses</a></li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/类型相关/">类型相关</a>
+          
+            <a href="/tags/Yison/">^Yison</a>
+          
+            <a href="/tags/Typeclass/">Typeclass</a>
+          
+            <a href="/tags/Subtyping-vs-Typeclasses/">~Subtyping vs Typeclasses</a>
+          
+            <a href="/tags/Java/">Java</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/09/scala-weekly-22/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Scala 技术周刊 | 第 22 期</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/09/scala-weekly-21/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第 21 期</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1505664000000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2019
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

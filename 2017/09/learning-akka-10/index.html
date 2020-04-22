@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/09/learning-akka-10/"/>
+
+
+<meta name="description" content="上一篇文章我们讲了Akka Remote，理解了Akka中的远程通信，其实Akka Cluster可以看成Akka Remote的扩展，由原来的两点变成由多点组成的通信网络，这种模式相信大家都很了解，就是集群，它的优势主要有两点：系统伸缩性高，容错性更好。">
+<meta name="keywords" content="Akka,~Akka 系列,^Godpan">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Akka 系列（十）：Akka 集群之 Akka Cluster">
+<meta property="og:url" content="http://scala.cool/2017/09/learning-akka-10/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="上一篇文章我们讲了Akka Remote，理解了Akka中的远程通信，其实Akka Cluster可以看成Akka Remote的扩展，由原来的两点变成由多点组成的通信网络，这种模式相信大家都很了解，就是集群，它的优势主要有两点：系统伸缩性高，容错性更好。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2017/09/akka-cluster.png">
+<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Akka 系列（十）：Akka 集群之 Akka Cluster">
+<meta name="twitter:description" content="上一篇文章我们讲了Akka Remote，理解了Akka中的远程通信，其实Akka Cluster可以看成Akka Remote的扩展，由原来的两点变成由多点组成的通信网络，这种模式相信大家都很了解，就是集群，它的优势主要有两点：系统伸缩性高，容错性更好。">
+<meta name="twitter:image" content="http://scala.cool/images/2017/09/akka-cluster.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Akka 系列（十）：Akka 集群之 Akka Cluster - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" >
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Akka 系列（十）：Akka 集群之 Akka Cluster
+        
+      </h1>
+
+      <time class="post-time">
+          9月14日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Godpan"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Godpan"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>上一篇文章我们讲了Akka Remote，理解了Akka中的远程通信，其实Akka Cluster可以看成Akka Remote的扩展，由原来的两点变成由多点组成的通信网络，这种模式相信大家都很了解，就是集群，它的优势主要有两点：系统伸缩性高，容错性更好。</p>
+<h3 id="集群概念"><a href="#集群概念" class="headerlink" title="集群概念"></a>集群概念</h3><p>很多人很容易把分布式和集群的概念搞错，包括我也是，我一开始也以为它们两个是一样的概念，只是叫法不同而已，但其实不然，虽然它们在实际场景中都是部署在不同的机器上，但它们所提供的功能并不是一样的。举个简单的例子来看看它们之间的不同：</p>
+<p>为了保持整个系列连续性，我又以抽奖为基础举一个例子：</p>
+<p>假定我们现在抽奖流程包括，抽奖分配奖品和用户根据链接领取指定奖品，用户先抽奖然后获取奖品链接，点击链接填写相应信息领取奖品。</p>
+<h4 id="1-分布式："><a href="#1-分布式：" class="headerlink" title="1.分布式："></a>1.分布式：</h4><p>我们现在把抽奖分配奖品和用户根据链接领取指定奖品分别部署在两台机器上，突然有一天很不幸，抽奖活动进行到一半，抽奖分配奖品那台机子所在的区域停电了，很显然，后续的用户参与抽奖就不能进行了，因为我们只有一台抽奖分配奖品的机子，但由于我们将领取奖品的业务部署在另一台机器上，所以前面那些中奖的用户还是可以正常的领取奖品，具体相关定义可参考《分布式系统概念与设计》中对分布式系统的定义。</p>
+<h4 id="2-集群："><a href="#2-集群：" class="headerlink" title="2.集群："></a>2.集群：</h4><p>现在我们还是有两台机器，但是我们在两个机器上都部署了抽奖分配奖品和用户根据链接领取指定奖品的业务逻辑，突然有一天，有一台所在的区域停电了，但这时我们并担心，因为另一台服务器还是可以正常的运行处理用户的所有请求。</p>
+<p>它们的各自特点：</p>
+<ul>
+<li>分布式：是指在多台不同的服务器中部署不同的服务模块，通过远程调用协同工作，对外提供服务；</li>
+<li>集群：是指在多台不同的服务器中部署相同应用或服务模块，构成一个集群，通过负载均衡设备对外提供服务；</li>
+</ul>
+<p>总的来说： 分布式是以分离任务缩短时间来提高效率，而集群是在单位时间内处理更多的任务来提高效率。</p>
+<h3 id="Akka-Cluster"><a href="#Akka-Cluster" class="headerlink" title="Akka Cluster"></a>Akka Cluster</h3><p>在前面的文章Akka Actor的工作方式，我们可以将一个任务分解成一个个小任务，然后分配给它的子Actor执行，其实这就可以看成一个小的分布式系统，那么在Akka中，集群又是一种怎样的概念呢？</p>
+<p>其实往简单里说，就是一些相同的ActorSystem的组合，它们具有着相同的功能，我们需要执行的任务可以随机的分配到目前可用的ActorSystem上，这点跟Nginx的负载均衡很类似，根据算法和配置将请求转发给运行正常的服务器去，Akka集群的表现形式也是这样，当然它背后的理论基础是基于gossip协议的，目前很多分布式的数据库的数据同步都采用这个协议，有兴趣的同学可以自己去研究研究，只是我也是一知半解，这里就不写了，怕误导了大家。</p>
+<p>下面我来讲讲Akka Cluster中比较重要的几个概念：</p>
+<h4 id="Seed-Nodes"><a href="#Seed-Nodes" class="headerlink" title="Seed Nodes"></a>Seed Nodes</h4><p>Seed Nodes可以看过是种子节点或者原始节点，它的一个主要作用用于可以自动接收新加入集群的节点的信息，并与之通信，使用方式可以用配置文件或者运行时指定，推荐使用配置文件方式，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">akka.cluster.seed-nodes = [</div><div class="line">  &quot;akka.tcp://ClusterSystem@host1:2552&quot;,</div><div class="line">  &quot;akka.tcp://ClusterSystem@host2:2552&quot;]</div></pre></td></tr></table></figure>
+<p>seed-nodes列表中的第一个节点会集群启动的时候初始化，而其他节点则是在有需要时再初始化。</p>
+<p>当然你也可以不指定seed nodes，但你可以需要手动或者在程序中写相关逻辑让相应的节点加入集群，具体使用方式可参考官方文档。</p>
+<h4 id="Cluster-Events"><a href="#Cluster-Events" class="headerlink" title="Cluster Events"></a>Cluster Events</h4><p>Cluster Events字面意思是集群事件，那么这是什么意思呢？其实它代表着是一个节点的各种状态和操作，举个例子，假设你在打一局王者5v5的游戏，那么你可以把十个人看成一个集群，我们每个人都是一个节点，我们的任何操作和状态都能被整个系统捕获到，比如A杀了B、A超神了，A离开了游戏，A重新连接了游戏等等，这些状态和操作在Cluster Events中就相当于节点之于集群，那么它具体是怎么使用的呢？</p>
+<p>首先我们必须将节点注册到集群中，或者说节点订阅了某个集群，我们可以这么做：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cluster.subscribe(self, classOf[<span class="type">MemberEvent</span>], classOf[<span class="type">UnreachableMember</span>])</div></pre></td></tr></table></figure>
+<p>具体代码相关的使用我会再下面写一个demo例子，来说明是如何具体使用它们的。</p>
+<p>从上面的代码我们可以看到有一个MemberEvent的概念，这个其实就是每个成员所可能拥有的events，那么一个成员在它的生命周期中有以下的events</p>
+<ul>
+<li>ClusterEvent.MemberJoined - 新的节点加入集群，此时的状态是Joining；</li>
+<li>ClusterEvent.MemberUp - 新的节点加入集群，此时的状态是Up；</li>
+<li>ClusterEvent.MemberExited - 节点正在离开集群，此时的状态是Exiting；</li>
+<li>ClusterEvent.MemberRemoved - 节点已经离开集群，此时的状态是Removed；</li>
+<li>ClusterEvent.UnreachableMember - 节点被标记为不可触达；</li>
+<li>ClusterEvent.ReachableMember - 节点被标记为可触达；</li>
+</ul>
+<p>状态说明：</p>
+<ul>
+<li>Joining: 加入集群的瞬间状态</li>
+<li>Up: 正常服务状态</li>
+<li>Leaving / Exiting: 正常移出中状态</li>
+<li>Down: 被标记为停机（不再是集群决策的一部分）</li>
+<li>Removed: 已从集群中移除</li>
+</ul>
+<h4 id="Roles"><a href="#Roles" class="headerlink" title="Roles"></a>Roles</h4><p>虽然上面说到集群中的各个节点的功能是一样的，其实并不一定，比如我们将分布式和集群融合到一起，集群中的一部分节点负责接收请求，一部分用于计算，一部分用于数据存储等等，所以Akka Cluster提供了一种Roles的概念，用来表示该节点的功能特性，我们可以在配置文件中指定,比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">akka.cluster.roles = request</div><div class="line">akka.cluster.roles = compute</div><div class="line">akka.cluster.roles = store</div></pre></td></tr></table></figure>
+<h4 id="ClusterClient"><a href="#ClusterClient" class="headerlink" title="ClusterClient"></a>ClusterClient</h4><p>ClusterClient是一个集群客户端，主要用于集群外部系统与集群通信，使用它非常方便，我们只需要将集群中的任意指定一个节点作为集群客户端，然后将其注册为一个该集群的接待员，最后我们就可以在外部系统直接与之通信了，使用ClusterClient需要做相应的配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">akka.extensions = [&quot;akka.cluster.client.ClusterClientReceptionist&quot;]</div></pre></td></tr></table></figure>
+<p>假设我们现在我一个接待的Actor，叫做frontend,我们就可以这样做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">val frontend = system.actorOf(Props[TransformationFrontend], name = &quot;frontend&quot;)</div><div class="line">ClusterClientReceptionist(system).registerService(frontend)</div></pre></td></tr></table></figure>
+<h3 id="Akka-Cluster例子"><a href="#Akka-Cluster例子" class="headerlink" title="Akka Cluster例子"></a>Akka Cluster例子</h3><p>上面讲了集群概念和Akka Cluster中相对重要的概念，下面我们就来写一个Akka Cluster的demo，</p>
+<p>demo需求：</p>
+<p>线假设需要执行一些相同任务，频率为2s一个，现在我们需要将这些任务分配给Akka集群中的不同节点去执行，这里使用ClusterClient作为集群与外部的通信接口。</p>
+<p>首先我们先来定义一些命令：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">package</span> sample.cluster.transformation</div><div class="line"></div><div class="line"><span class="keyword">final</span> <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">TransformationJob</span>(<span class="params">text: <span class="type">String</span></span>) <span class="title">//</span> <span class="title">任务内容</span></span></div><div class="line"><span class="keyword">final</span> <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">TransformationResult</span>(<span class="params">text: <span class="type">String</span></span>) <span class="title">//</span> <span class="title">执行任务结果</span></span></div><div class="line"><span class="keyword">final</span> <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">JobFailed</span>(<span class="params">reason: <span class="type">String</span>, job: <span class="type">TransformationJob</span></span>) <span class="title">//任务失败相应原因</span></span></div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">object</span> <span class="title">BackendRegistration</span> <span class="title">//</span> <span class="title">后台具体执行任务节点注册事件</span></span></div></pre></td></tr></table></figure>
+<p>然后我们实现具体执行任务逻辑的后台节点：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TransformationBackend</span> <span class="keyword">extends</span> <span class="title">Actor</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">val</span> cluster = <span class="type">Cluster</span>(context.system)</div><div class="line"></div><div class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">preStart</span></span>(): <span class="type">Unit</span> = cluster.subscribe(self, classOf[<span class="type">MemberEvent</span>])  <span class="comment">//在启动Actor时将该节点订阅到集群中</span></div><div class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">postStop</span></span>(): <span class="type">Unit</span> = cluster.unsubscribe(self)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">receive</span> </span>= &#123;</div><div class="line">    <span class="keyword">case</span> <span class="type">TransformationJob</span>(text) =&gt; &#123; <span class="comment">// 接收任务请求</span></div><div class="line">      <span class="keyword">val</span> result = text.toUpperCase <span class="comment">// 任务执行得到结果（将字符串转换为大写）</span></div><div class="line">      sender() ! <span class="type">TransformationResult</span>(text.toUpperCase) <span class="comment">// 向发送者返回结果</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">case</span> state: <span class="type">CurrentClusterState</span> =&gt;</div><div class="line">      state.members.filter(_.status == <span class="type">MemberStatus</span>.<span class="type">Up</span>) foreach register <span class="comment">// 根据节点状态向集群客户端注册</span></div><div class="line">    <span class="keyword">case</span> <span class="type">MemberUp</span>(m) =&gt; register(m)  <span class="comment">// 将刚处于Up状态的节点向集群客户端注册</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">register</span></span>(member: <span class="type">Member</span>): <span class="type">Unit</span> = &#123;   <span class="comment">//将节点注册到集群客户端</span></div><div class="line">    context.actorSelection(<span class="type">RootActorPath</span>(member.address) / <span class="string">"user"</span> / <span class="string">"frontend"</span>) !</div><div class="line">      <span class="type">BackendRegistration</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><em>相应节点的配置文件信息，我这里就不贴了，请从相应的源码demo里获取。</em><a href="https://github.com/godpan/akka-demo/tree/master/Example_07" target="_blank" rel="external">源码链接</a></p>
+<p>接着我们来实现集群客户端：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TransformationFrontend</span> <span class="keyword">extends</span> <span class="title">Actor</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> backends = <span class="type">IndexedSeq</span>.empty[<span class="type">ActorRef</span>] <span class="comment">//任务后台节点列表</span></div><div class="line">  <span class="keyword">var</span> jobCounter = <span class="number">0</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">receive</span> </span>= &#123;</div><div class="line">    <span class="keyword">case</span> job: <span class="type">TransformationJob</span> <span class="keyword">if</span> backends.isEmpty =&gt;  <span class="comment">//目前暂无执行任务节点可用</span></div><div class="line">      sender() ! <span class="type">JobFailed</span>(<span class="string">"Service unavailable, try again later"</span>, job)</div><div class="line"></div><div class="line">    <span class="keyword">case</span> job: <span class="type">TransformationJob</span> =&gt; <span class="comment">//执行相应任务</span></div><div class="line">      jobCounter += <span class="number">1</span></div><div class="line">      <span class="keyword">implicit</span> <span class="keyword">val</span> timeout = <span class="type">Timeout</span>(<span class="number">5</span> seconds)</div><div class="line">      <span class="keyword">val</span> backend = backends(jobCounter % backends.size) <span class="comment">//根据相应算法选择执行任务的节点</span></div><div class="line">      println(<span class="string">s"the backend is <span class="subst">$&#123;backend&#125;</span> and the job is <span class="subst">$&#123;job&#125;</span>"</span>)</div><div class="line">      <span class="keyword">val</span> result  = (backend ? job)</div><div class="line">        .map(x =&gt; x.asInstanceOf[<span class="type">TransformationResult</span>])  <span class="comment">// 后台节点处理得到结果</span></div><div class="line">      result pipeTo sender  <span class="comment">//向外部系统发送执行结果</span></div><div class="line"></div><div class="line">    <span class="keyword">case</span> <span class="type">BackendRegistration</span> <span class="keyword">if</span> !backends.contains(sender()) =&gt;  <span class="comment">// 添加新的后台任务节点</span></div><div class="line">      context watch sender() <span class="comment">//监控相应的任务节点</span></div><div class="line">      backends = backends :+ sender()</div><div class="line"></div><div class="line">    <span class="keyword">case</span> <span class="type">Terminated</span>(a) =&gt;</div><div class="line">      backends = backends.filterNot(_ == a)  <span class="comment">// 移除已经终止运行的节点</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 最后我们实现与集群客户端交互的逻辑：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ClientJobTransformationSendingActor</span> <span class="keyword">extends</span> <span class="title">Actor</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">val</span> initialContacts = <span class="type">Set</span>(</div><div class="line">    <span class="type">ActorPath</span>.fromString(<span class="string">"akka.tcp://ClusterSystem@127.0.0.1:2551/system/receptionist"</span>))</div><div class="line">  <span class="keyword">val</span> settings = <span class="type">ClusterClientSettings</span>(context.system)</div><div class="line">    .withInitialContacts(initialContacts)</div><div class="line"></div><div class="line">  <span class="keyword">val</span> c = context.system.actorOf(<span class="type">ClusterClient</span>.props(settings), <span class="string">"demo-client"</span>)</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">receive</span> </span>= &#123;</div><div class="line">    <span class="keyword">case</span> <span class="type">TransformationResult</span>(result) =&gt; &#123;</div><div class="line">      println(<span class="string">s"Client response and the result is <span class="subst">$&#123;result&#125;</span>"</span>)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">case</span> <span class="type">Send</span>(counter) =&gt; &#123;</div><div class="line">        <span class="keyword">val</span> job = <span class="type">TransformationJob</span>(<span class="string">"hello-"</span> + counter)</div><div class="line">        <span class="keyword">implicit</span> <span class="keyword">val</span> timeout = <span class="type">Timeout</span>(<span class="number">5</span> seconds)</div><div class="line">        <span class="keyword">val</span> result = <span class="type">Patterns</span>.ask(c,<span class="type">ClusterClient</span>.<span class="type">Send</span>(<span class="string">"/user/frontend"</span>, job, localAffinity = <span class="literal">true</span>), timeout)</div><div class="line">        result.onComplete &#123;</div><div class="line">          <span class="keyword">case</span> <span class="type">Success</span>(transformationResult) =&gt; &#123;</div><div class="line">            self ! transformationResult</div><div class="line">          &#125;</div><div class="line">          <span class="keyword">case</span> <span class="type">Failure</span>(t) =&gt; println(<span class="string">"An error has occured: "</span> + t.getMessage)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面我们开始运行这个domo：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">DemoClient</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args : <span class="type">Array</span>[<span class="type">String</span>]) &#123;</div><div class="line"></div><div class="line">    <span class="type">TransformationFrontendApp</span>.main(<span class="type">Seq</span>(<span class="string">"2551"</span>).toArray)  <span class="comment">//启动集群客户端</span></div><div class="line">    <span class="type">TransformationBackendApp</span>.main(<span class="type">Seq</span>(<span class="string">"8001"</span>).toArray)   <span class="comment">//启动三个后台节点</span></div><div class="line">    <span class="type">TransformationBackendApp</span>.main(<span class="type">Seq</span>(<span class="string">"8002"</span>).toArray)</div><div class="line">    <span class="type">TransformationBackendApp</span>.main(<span class="type">Seq</span>(<span class="string">"8003"</span>).toArray)</div><div class="line"></div><div class="line">    <span class="keyword">val</span> system = <span class="type">ActorSystem</span>(<span class="string">"OTHERSYSTEM"</span>)</div><div class="line">    <span class="keyword">val</span> clientJobTransformationSendingActor =</div><div class="line">      system.actorOf(<span class="type">Props</span>[<span class="type">ClientJobTransformationSendingActor</span>],</div><div class="line">        name = <span class="string">"clientJobTransformationSendingActor"</span>)</div><div class="line"></div><div class="line">    <span class="keyword">val</span> counter = <span class="keyword">new</span> <span class="type">AtomicInteger</span></div><div class="line">    <span class="keyword">import</span> system.dispatcher</div><div class="line">    system.scheduler.schedule(<span class="number">2.</span>seconds, <span class="number">2.</span>seconds) &#123;   <span class="comment">//定时发送任务</span></div><div class="line">      clientJobTransformationSendingActor ! <span class="type">Send</span>(counter.incrementAndGet())</div><div class="line">    &#125;</div><div class="line">    <span class="type">StdIn</span>.readLine()</div><div class="line">    system.terminate()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<p><img src="/images/2017/09/akka-cluster.png" alt="akka-cluster"></p>
+<p>从结果可以看到，我们将任务根据算法分配给不同的后台节点进行执行，最终返回结果。</p>
+<h3 id="本文目的"><a href="#本文目的" class="headerlink" title="本文目的"></a>本文目的</h3><ul>
+<li>掌握集群基本概念</li>
+<li>了解学习Akka cluster的工作方式和主要角色</li>
+<li>尝试自己写一个Akka cluster的相关例子</li>
+<li>下一步进阶了解Akka cluster的背后原理</li>
+</ul>
+<p>本文的demo例子已上传github：<a href="https://github.com/godpan/akka-demo/tree/master/Example_07" target="_blank" rel="external">源码链接</a></p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Akka/">Akka</a>
+          
+            <a href="/tags/Akka-系列/">~Akka 系列</a>
+          
+            <a href="/tags/Godpan/">^Godpan</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/09/reactive-web-applications-2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default"><译> 响应式 Web 应用（二）</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/09/scala-weekly-20/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第 20 期</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1505354400000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2019
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

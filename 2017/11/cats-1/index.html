@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/11/cats-1/"/>
+
+
+<meta name="description" content="如果你看到一个开源类库，logo 是四只猫 + 五个箭头，可能会略感不适 — 这是工程代码里可以使用的玩意儿吗？">
+<meta name="keywords" content="^Yison,函数式编程,Cats,~Cats">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cats（一）：从函数式编程思维谈起">
+<meta property="og:url" content="http://scala.cool/2017/11/cats-1/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="如果你看到一个开源类库，logo 是四只猫 + 五个箭头，可能会略感不适 — 这是工程代码里可以使用的玩意儿吗？">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://scala.cool/images/2017/11/cats-logo.png">
+<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cats（一）：从函数式编程思维谈起">
+<meta name="twitter:description" content="如果你看到一个开源类库，logo 是四只猫 + 五个箭头，可能会略感不适 — 这是工程代码里可以使用的玩意儿吗？">
+<meta name="twitter:image" content="https://scala.cool/images/2017/11/cats-logo.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Cats（一）：从函数式编程思维谈起 - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" >
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Cats（一）：从函数式编程思维谈起
+        
+      </h1>
+
+      <time class="post-time">
+          11月30日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Yison"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Yison"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p><img src="https://scala.cool/images/2017/11/cats-logo.png" alt="Cats logo"></p>
+<p>如果你看到一个开源类库，logo 是四只猫 + 五个箭头，可能会略感不适 — 这是工程代码里可以使用的玩意儿吗？</p>
+<p>没错，这是 <a href="https://typelevel.org/" target="_blank" rel="external">TypeLevel</a> 设计的一个函数式类库，一群推崇函数式编程的家伙注入到 Scala 生态中的重磅炸弹，它是 <a href="https://typelevel.org/cats/index.html" target="_blank" rel="external">Cats</a>，源于 Category（范畴）的缩写。</p>
+<p>在 <a href="https://drip.im" target="_blank" rel="external">水滴</a> 的系统中，我们大规模使用了 Cats 来解决一些业务问题，并且从中受益。但显然这并不是 Scala 标准库所支持的打法，所以本系列旨在系统地介绍这个类库，让更多人了解它。</p>
+<blockquote>
+<p>我们最开始使用的是 <a href="https://github.com/scalaz/scalaz" target="_blank" rel="external">Scalaz</a>，它是 Cats 的前身，由于语法问题导致很多吐槽，之后采用 Cats 替代。</p>
+</blockquote>
+<p>当然，很多了解过 Cats 的人知道，关于它已经有以下这些优秀的学习资料：</p>
+<ul>
+<li><a href="http://eed3si9n.com/herding-cats/" target="_blank" rel="external">herding cats</a>，同样也是 <a href="http://eed3si9n.com/learning-scalaz/" target="_blank" rel="external">learning scalaz</a> 的作者。</li>
+<li><a href="http://underscore.io/books/advanced-scala/" target="_blank" rel="external">Scala with Cats Book</a>，出自 underscore.io</li>
+</ul>
+<p>但显然，如果之前并没有函数式编程经验的同学，可能会在首次阅读这些资料的时候犯困。因此，该系列希望在正式介绍 Cats 这个神器之前，先友好地探讨一些关于「函数式编程」的基本问题。如：</p>
+<ul>
+<li>什么是函数式编程</li>
+<li>函数式编程有哪些特点</li>
+<li>函数式编程有哪些优点</li>
+</ul>
+<h2 id="函数式编程？"><a href="#函数式编程？" class="headerlink" title="函数式编程？"></a>函数式编程？</h2><p>那么，什么才是函数式编程呢？其实，关于这点并没有准确权威的定义，本文也不想就此给出一个答案。</p>
+<p>但是，我们希望来讨论下什么是「函数式编程思维」，它跟我们熟知的「命令式编程」到底有哪些不同。</p>
+<p>经常上知乎的朋友发现了，这是知乎上一个非常好的问题。</p>
+<p><a href="https://www.zhihu.com/question/28292740" target="_blank" rel="external">什么是函数式编程思维？— 知乎</a></p>
+<p>本文推荐以下的回答：</p>
+<p>@nameoverflow:<br><strong>函数式编程关心数据的映射，命令式编程关心解决问题的步骤。</strong></p>
+<p>更数学化的版本：<br>@parker liu<br><strong>函数式编程关心类型（代数结构）之间的关系，命令式编程关心解决问题的步骤。</strong></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>函数式编程的思维就是如何将类型（代数结构）之间的关系组合起来，用数学的构造主义构造出你设计的程序。</p>
+<h3 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h3><p>我们来解剖这个结论，直观上函数式编程是一件非常简单的事情，我们只需做一件事情就够了，那就是「组合」。</p>
+<p>但此时，我们肯定又变得一头雾水，以下问题紧接着就来了：</p>
+<ul>
+<li>真的有这么简单吗？</li>
+<li>到底什么是「组合」呢？</li>
+<li>在理论上，它真能做到完备性吗？</li>
+<li>什么才是所谓的「关系」呢？</li>
+</ul>
+<p>别急，我们先来讨论一个基本的问题 — <strong>什么是过程和数据？</strong></p>
+<h2 id="过程和数据"><a href="#过程和数据" class="headerlink" title="过程和数据"></a>过程和数据</h2><p>看过 <a href="https://book.douban.com/subject/1148282/" target="_blank" rel="external">SICP</a> 的朋友肯定已经发现，这是这本书第一章和第二章所研究的内容。</p>
+<p>简单来说，数据是一种我们希望去操作的东西，而过程就是有关操作这些数据的规则的描述。它们构成了程序设计的基本元素。</p>
+<p>在 Lisp 这种函数式编程语言中，过程和数据一样，属于第一级状态，这也就意味着：</p>
+<ul>
+<li>可以用变量命名</li>
+<li>可以提供给过程作为参数</li>
+<li>可以作为过程的结果返回</li>
+<li>可以包含在其它的数据结构中</li>
+</ul>
+<p>举个例子，我们可以定义一个过程，它接受的参数是一个过程，返回的是另外一个过程，这似乎看起来有点怪。<br>换个例子，定义一个过程，它接受的参数是一个数，返回的是另外一个数，这是不是就熟悉多了？</p>
+<p>在函数式编程中，我们会发现其实「过程」和「数据」的界限有时候是模糊的。也就是说，有时我们可以把它们当作一个东西。</p>
+<p>回到我们刚才的结论：「函数式编程关心类型（代数结构）之间的关系」。</p>
+<p>我们于是可以这么理解，函数式编程要解决的第一个问题：<strong>就是需要足够高的抽象能力，能对各种数据和过程进行抽象，提供类型（代数结构）</strong>。</p>
+<p>这也同样是后续我们在学习 Cats 过程中要获得解答的一个疑问，它是如何帮助我们实现这一点。</p>
+<blockquote>
+<p>推荐阅读 @shaw 写的 <a href="https://scala.cool/2017/03/how-to-use-algebraic-data-type-in-scala-development/">如何在 Scala 中利用 ADT 良好地组织业务</a></p>
+</blockquote>
+<h2 id="图灵完备与-Lambda-演算"><a href="#图灵完备与-Lambda-演算" class="headerlink" title="图灵完备与 Lambda 演算"></a>图灵完备与 Lambda 演算</h2><p>其次，我们再来讨论下，到底什么是所谓的「关系」?</p>
+<p>我们肯定有这样子的疑惑，如果函数式编程思维仅靠「组合」就能够描述所有的程序，那么在理论上它必须具备完备性。</p>
+<p>不少朋友知道所谓的 <a href="https://en.wikipedia.org/wiki/Turing_completeness" target="_blank" rel="external">图灵完备</a>。它听起来逼格很高，其实这是一个很简单的概念，意味着用图灵机能做到的所有事情，可以解决所有的可计算问题。</p>
+<p>另外一个可支持解决所有可计算问题的方案就是「Lambda 演算」。在 Lisp 这种函数式编程语言中的基石，就是这个理论。</p>
+<p>函数式编程中的 lambda 可以看成是两个类型之间的关系，一个输入类型和一个输出类型。lambda 演算就是给 lambda 表达式一个输入类型的值，则可以得到一个输出类型的值，这是一个计算，计算过程满足 \alpha -等价和 \beta -规约。</p>
+<p>关于图灵完备和 Lambda 演算，有机会我们可以在后续的文章中继续讨论。</p>
+<h2 id="面向组合子编程"><a href="#面向组合子编程" class="headerlink" title="面向组合子编程"></a>面向组合子编程</h2><p>我们再来聊聊核心，所谓的「组合」。</p>
+<p>「面向组合子编程」是十年前 javaeye 的牛人 @Ajoo 提出的概念。</p>
+<p>首先，我们可以引用哲学的基本方法来比喻我们常见的「面向对象编程」与「面向组合子编程」差异。</p>
+<p><strong>前者是归纳法，后者是演绎法</strong>。</p>
+<p>也就说，我们在用 Java 这些面向对象的语言进行程序设计的时候，通常采用的是总结的方法，然而函数式编程语言提倡的「组合」，更贴近数学的思维，它是一种推导。</p>
+<p>所以，函数式编程所关心的组合，更多做的是先高度抽象类型关系，然后对这些关系的转化，所谓的 transformer。</p>
+<p>于是，我们得出第二个关键的问题：<strong>即 Cats 如何提供足够的 transformer，来帮助我们实现各种关系之间的组合</strong>。</p>
+<h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><p>对于第一次接触这些概念的朋友来说，还是有点抽象，下面我们来举一个实际的例子来加深认识。</p>
+<p>假设我们现在要设计一个抽奖活动的参与过程，涉及以下逻辑：</p>
+<ul>
+<li>获取活动奖品数据</li>
+<li>判断活动的开始、进行、结束、奖品是否抢光等状态</li>
+</ul>
+<h3 id="命令式风格"><a href="#命令式风格" class="headerlink" title="命令式风格"></a>命令式风格</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.joda.time.<span class="type">DateTime</span></div><div class="line"><span class="keyword">import</span> scala.concurrent.<span class="type">Future</span></div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Activity</span>(<span class="params">id: <span class="type">Long</span>, start: <span class="type">DateTime</span>, end: <span class="type">DateTime</span></span>)</span></div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Prize</span>(<span class="params">id: <span class="type">Long</span>, name: <span class="type">String</span>, count: <span class="type">Int</span></span>)</span></div><div class="line"></div><div class="line"><span class="keyword">val</span> activity = syncGetActivity()</div><div class="line"><span class="keyword">val</span> prizes = syncGetPrizes(activity.id)</div><div class="line"></div><div class="line"><span class="keyword">if</span> (activity.start.isBefore(<span class="type">DateTime</span>.now())) &#123;</div><div class="line">  println(<span class="string">"activity not starts"</span>)</div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (activity.end.isBefore(<span class="type">DateTime</span>.now())) &#123;</div><div class="line">  println(<span class="string">"activity ends"</span>)</div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (prizes.map(_.count).sum &lt; <span class="number">1</span>) &#123;</div><div class="line">  println(<span class="string">"activity has no prizes"</span>)</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">  println(<span class="string">"activity is running"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="函数式风格"><a href="#函数式风格" class="headerlink" title="函数式风格"></a>函数式风格</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.joda.time.<span class="type">DateTime</span></div><div class="line"><span class="keyword">import</span> scala.concurrent.<span class="type">Future</span></div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Activity</span>(<span class="params">id: <span class="type">Long</span>, start: <span class="type">DateTime</span>, end: <span class="type">DateTime</span></span>)</span></div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Prize</span>(<span class="params">id: <span class="type">Long</span>, name: <span class="type">String</span>, count: <span class="type">Int</span></span>)</span></div><div class="line"></div><div class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">trait</span> <span class="title">ActivityStatus</span> </span>&#123;</div><div class="line">  <span class="keyword">val</span> activity: <span class="type">Activity</span></div><div class="line">  <span class="keyword">val</span> prizes: <span class="type">Seq</span>[<span class="type">Prize</span>]</div><div class="line">&#125;</div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityNotStarts</span>(<span class="params">activity: <span class="type">Activity</span>, prizes: <span class="type">Seq</span>[<span class="type">Prize</span>]</span>) <span class="keyword">extends</span> <span class="title">ActivityStatus</span></span></div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityEnds</span>(<span class="params">activity: <span class="type">Activity</span>, prizes: <span class="type">Seq</span>[<span class="type">Prize</span>]</span>) <span class="keyword">extends</span> <span class="title">ActivityStatus</span></span></div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityPrizeEmpty</span>(<span class="params">activity: <span class="type">Activity</span>, prizes: <span class="type">Seq</span>[<span class="type">Prize</span>]</span>) <span class="keyword">extends</span> <span class="title">ActivityStatus</span></span></div><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityRunning</span>(<span class="params">activity: <span class="type">Activity</span>, prizes: <span class="type">Seq</span>[<span class="type">Prize</span>]</span>) <span class="keyword">extends</span> <span class="title">ActivityStatus</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">getActivityStatus</span></span>(): <span class="type">Future</span>[<span class="type">ActivityStatus</span>] = &#123;</div><div class="line">  <span class="keyword">for</span> &#123;</div><div class="line">    activity &lt;- asyncGetActivity()</div><div class="line">    prizes &lt;- asyncGetPrizes(activity.id)</div><div class="line">  &#125; <span class="keyword">yield</span> (activity, prizes) <span class="keyword">match</span> &#123;</div><div class="line">    <span class="keyword">case</span> (a, pzs) <span class="keyword">if</span> a.start.isBefore(<span class="type">DateTime</span>.now()) =&gt; <span class="type">ActivityNotStarts</span>(a, pzs)</div><div class="line">    <span class="keyword">case</span> (a, pzs) <span class="keyword">if</span> a.end.isBefore(<span class="type">DateTime</span>.now()) =&gt; <span class="type">ActivityNotStarts</span>(a, pzs)</div><div class="line">    <span class="keyword">case</span> (a, pzs) <span class="keyword">if</span> pzs.map(_.count).sum &lt; <span class="number">1</span> =&gt; <span class="type">ActivityPrizeEmpty</span>(a, pzs)</div><div class="line">    <span class="keyword">case</span> (a, pzs) =&gt; <span class="type">ActivityRunning</span>(a, pzs)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上，我们可以发现函数式风格，会倾向于基于更高的业务层次进行抽象，直觉上是一个 <strong>describe what</strong> 的设计，而不是 <strong>how to do</strong>。</p>
+<p>值得一提的是，<code>asyncGetActivity</code> 这个从数据库异步获取活动数据过程，它的类型是一个高阶类型 <code>Future[Activity]</code>，这也就是我们之前提到的对过程进行抽象，定义类型。</p>
+<p>通过对 <code>asyncGetActivity</code> 和 <code>asyncGetPrizes</code> 两个异步过程的组合，我们最终转化得到了 <code>ActivityStatus</code> 这个类型的对象结果。</p>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>Scala 是一门结合「面向对象」和「函数式」的编程语言，我们用它可以写出截然不同的代码风格。很多人把它当作 better Java 来使用，但如果结合 Cats 这个函数式类库，我们就可以更好地采用函数式编程思维来设计程序，从而发挥 Scala 更大的威力。</p>
+<p>通过该篇文章，我们对函数式编程有了直觉上的感受。当然，你可能依旧云里雾里，不要紧，我们会在后续的文章里进一步的讨论。在下一篇文章中，我们会介绍下函数式编程所带来的优势。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Yison/">^Yison</a>
+          
+            <a href="/tags/函数式编程/">函数式编程</a>
+          
+            <a href="/tags/Cats/">Cats</a>
+          
+            <a href="/tags/Cats/">~Cats</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/11/kotlin-1/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Dive Into Kotlin（二）：Kotlin 类型结构设计</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/11/mysql-protocol/">
+        <span class="next-text nav-default">Asyncdb（四）：MySQL网络协议分析</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1511971200000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2019
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

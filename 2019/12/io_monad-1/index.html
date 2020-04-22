@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2019/12/io_monad-1/"/>
+
+
+<meta name="description" content="ZIO 是最近 Scala 社区非常热门且与众不同的 IO Monad 实现，本专题我们会从各个角度分析 ZIO 和 Cats-Effect 等 IO Monad 的设计。">
+<meta name="keywords" content="^Jilen,~IO Monad 设计浅析,函数式编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IO Monad 设计浅析（一）：Monad 和 MonadError">
+<meta property="og:url" content="http://scala.cool/2019/12/io_monad-1/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="ZIO 是最近 Scala 社区非常热门且与众不同的 IO Monad 实现，本专题我们会从各个角度分析 ZIO 和 Cats-Effect 等 IO Monad 的设计。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-13T11:01:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IO Monad 设计浅析（一）：Monad 和 MonadError">
+<meta name="twitter:description" content="ZIO 是最近 Scala 社区非常热门且与众不同的 IO Monad 实现，本专题我们会从各个角度分析 ZIO 和 Cats-Effect 等 IO Monad 的设计。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> IO Monad 设计浅析（一）：Monad 和 MonadError - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" >
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          IO Monad 设计浅析（一）：Monad 和 MonadError
+        
+      </h1>
+
+      <time class="post-time">
+          12月9日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Jilen"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Jilen"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>ZIO 是最近 Scala 社区非常热门且与众不同的 IO Monad 实现，本专题我们会从各个角度分析 ZIO 和 Cats-Effect 等 IO Monad 的设计。</p>
+<h2 id="一个简单的-IO-Monad-方案"><a href="#一个简单的-IO-Monad-方案" class="headerlink" title="一个简单的 IO Monad 方案"></a>一个简单的 IO Monad 方案</h2><p>对于 <code>Monad</code>, 大家都很熟悉：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Monad</span>[<span class="type">F</span>[_]] </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">flatMap</span></span>[<span class="type">A</span>, <span class="type">B</span>](fa: <span class="type">F</span>[<span class="type">A</span>])(f: <span class="type">A</span> =&gt; <span class="type">F</span>[<span class="type">B</span>]): <span class="type">F</span>[<span class="type">B</span>]</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">pure</span></span>[<span class="type">A</span>](x: <span class="type">A</span>): <span class="type">F</span>[<span class="type">A</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>是一个定义了函数 <code>flatMap</code> 和 <code>pure</code> 的很常见的 Typeclass（也有其他的形式，就不具体讨论了）。</p>
+<p>可以看到，<code>Monad</code> 通常来说只有一个类型参数。例如我们最常见的 <code>List</code>，就是一个典型的 <code>Monad</code>。</p>
+<blockquote>
+<p>注意，当我们说 <code>List</code> 是一个 <code>Monad</code> 的时候，是指我们可以实现一个 <code>List</code> 的 <code>Monad</code> 实例，并且这个实例满足 <code>Monad</code> 相关的 Laws。</p>
+</blockquote>
+<p>同样的，IO Monad 也是 Monad，特别的是，它可以隔离副作用。</p>
+<p>假如要自己设计一个简单的 IO Monad，我们脑子里通常会冒出这样的方案：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">IO</span> </span>&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Pure</span>[<span class="type">A</span>](<span class="params">value: <span class="type">A</span></span>) <span class="keyword">extends</span> <span class="title">IO</span>[<span class="type">A</span>]</span></div><div class="line">  <span class="keyword">private</span> <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">FlatMap</span>[<span class="type">A</span>, <span class="type">B</span>](<span class="params">fa: <span class="type">IO</span>[<span class="type">A</span>], f: <span class="type">A</span> =&gt; <span class="type">IO</span>[<span class="type">B</span>]</span>) <span class="keyword">extends</span> <span class="title">IO</span>[<span class="type">B</span>]</span></div><div class="line">  <span class="keyword">private</span> <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Effect</span>[<span class="type">A</span>](<span class="params">run: (</span>) <span class="title">=&gt;</span> <span class="title">A</span>) <span class="keyword">extends</span> <span class="title">IO</span>[<span class="type">A</span>]</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">effect</span></span>[<span class="type">A</span>](f: () =&gt; <span class="type">A</span>): <span class="type">IO</span>[<span class="type">A</span>] = <span class="type">Effect</span>(f)</div><div class="line"></div><div class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> ioMonadInstance: <span class="type">Monad</span>[<span class="type">IO</span>] = <span class="keyword">new</span> <span class="type">Monad</span>[<span class="type">IO</span>] <span class="keyword">with</span> <span class="type">StackSafeMonad</span>[<span class="type">IO</span>] &#123;</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pure</span></span>[<span class="type">A</span>](x: <span class="type">A</span>) = <span class="type">IO</span>.<span class="type">Pure</span>(x)</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">flatMap</span></span>[<span class="type">A</span>, <span class="type">B</span>](fa: <span class="type">IO</span>[<span class="type">A</span>])(f: <span class="type">A</span> =&gt; <span class="type">IO</span>[<span class="type">B</span>]): <span class="type">IO</span>[<span class="type">B</span>] = <span class="type">FlatMap</span>(fa, f)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">trait</span> <span class="title">IO</span>[<span class="type">A</span>] </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">unsafeRun</span></span>(): <span class="type">A</span> = <span class="keyword">this</span> <span class="keyword">match</span> &#123;</div><div class="line">    <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Pure</span>(a) =&gt; a</div><div class="line">    <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">FlatMap</span>(fa, f) =&gt; f(fa.unsafeRun).unsafeRun</div><div class="line">    <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Effect</span>(run) =&gt; run()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是比较常见的以 ADT 形式描述程序的数据类型。</p>
+<p>其中 <code>Effect</code> 子类型提供了非常朴素的副作用隔离功能，它简单的把执行副作用的代码保存在一个无参函数中，从而达到延迟执行效果。</p>
+<p>同时，它还定义了 cats 的 <code>Monad</code> 实例， 从而我们就可以用 cats 提供的 Monad 相关的任何操作。</p>
+<p><code>IO</code> 除了 <code>unsafeRun</code> 以外的所有操作都是纯函数，按照 FP 的潜规则，所有的副作用都只在应用边界触发，程序的可推理程度会大幅提升。</p>
+<p>下面就是一个控制台程序的例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> cats.syntax.all._</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">object</span> <span class="title">Console</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">getStr</span></span>(): <span class="type">IO</span>[<span class="type">String</span>] = <span class="type">IO</span>.effect(() =&gt; scala.io.<span class="type">StdIn</span>.readLine())</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">putStrLn</span></span>(str: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Unit</span>] = <span class="type">IO</span>.effect(() =&gt; println(str))</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(i: <span class="type">IO</span>[<span class="type">Int</span>], j: <span class="type">IO</span>[<span class="type">Int</span>]): <span class="type">IO</span>[<span class="type">Int</span>] = &#123;</div><div class="line">    i.flatMap &#123; ii =&gt;</div><div class="line">    j.map(jj =&gt; ii + jj)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">val</span> readInt = <span class="type">Console</span>.getStr().map(_.toInt)</div><div class="line"><span class="keyword">val</span> app = sum(readInt, readInt).flatMap &#123; r =&gt;</div><div class="line">  <span class="type">Console</span>.putStrLn(r.toString)</div><div class="line">&#125;</div><div class="line">app.unsafeRun()</div></pre></td></tr></table></figure>
+<p>上述程序在 <code>IO</code> 类型没有定义 <code>flatMap</code> 、 <code>map</code> 的情况下，我们通过 <code>import cats.syntax.all._</code> 就可以使用 cats 通过 implicit class 定义的扩展函数。</p>
+<p>这是 cats 约定的套路，扩展方法都定义在所谓 syntax 包中，当然我们也可以 for-comprehension 来使程序结构更清晰。</p>
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><p>虽然上述程序隔离了副作用（我们先忽略应用边界处的 <code>unsafeRun</code> ），但它仍旧不是一个纯函数，原因在于它数字转化：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> readInt = <span class="type">Console</span>.getStr().map(_.toInt)</div></pre></td></tr></table></figure>
+<p>使用了<code>String.toInt</code>，这可能会在运行时抛出异常，所以这不是一个 total function，它对非整形的输入存在未定义行为（抛出异常），这种情况一般叫做 partial function。</p>
+<p>严谨的程序显然不能接受运行到一半突然终止了，尤其是在一些服务端程序，这些程序通常需要一直运行提供服务，错误处理就显得格外重要。按照 Java 的习惯，我们只要在合适的地方加上 <code>try</code> <code>catch</code> 打印一行日志或显示系统错误 “假装” 已经处理了这些异常。</p>
+<p>但这在一些要求知道错误信息的地方，就行不通了，Java 程序员可能会通过创建 CheckedException 来携带错误信息，实现错误处理逻辑。</p>
+<p>scala 程序通常会使用 <code>Try</code> 或者 <code>Either</code> 来表达一个结果可能存在失败，上述程序我们可以用 <code>Either</code> 把 <code>readInt</code> 改成以下形式：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">val</span> readInt: <span class="type">IO</span>[<span class="type">Either</span>[<span class="type">String</span>, <span class="type">Int</span>]] = <span class="type">Console</span>.getStr().map &#123; str =&gt;</div><div class="line"> <span class="keyword">try</span>&#123;</div><div class="line">    <span class="type">Right</span>(str.toInt)</div><div class="line">  &#125; <span class="keyword">catch</span> &#123;</div><div class="line">    <span class="keyword">case</span> e: <span class="type">Exception</span> =&gt; <span class="type">Left</span>(<span class="string">s"<span class="subst">$str</span> is not a number"</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样，我们就成功地把错误信息保留在了 <code>Either</code> 中。然而，<code>sum</code> 函数的输入参数也得改成 <code>IO[Either[String, Int]]</code> 才行。这会导致 <code>sum</code> 的逻辑非常臃肿，这个函数它不需要关心具体错误信息，<code>Either</code> 的各种判断，会让逻辑变得不好理解。</p>
+<p>为了解决这个问题 cats 还有 <code>MonadError</code> 的 Typeclass 来处理这类问题。我们只需要提供 <code>IO</code> 类型的 <code>MonadError</code> 实例，就可以使用相关操作。为了到达这个目的，我们将在 IO 中增加一种能携带错误子类型：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Failure</span>[<span class="type">A</span>](<span class="params">ex: <span class="type">Throwable</span></span>) <span class="keyword">extends</span> <span class="title">IO</span>[<span class="type">A</span>]</span></div><div class="line">...</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">unsafeRun</span></span>(): <span class="type">A</span> = <span class="keyword">this</span> <span class="keyword">match</span> &#123;</div><div class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Pure</span>(a) =&gt; a</div><div class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">FlatMap</span>(fa, f) =&gt; f(fa.unsafeRun).unsafeRun</div><div class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Effect</span>(run) =&gt; run()</div><div class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Failure</span>(ex) =&gt; <span class="keyword">throw</span> ex</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">ioMonadErrorInstance</span></span>: <span class="type">MonadError</span>[<span class="type">IO</span>, <span class="type">Throwable</span>] = <span class="keyword">new</span> <span class="type">MonadError</span>[<span class="type">IO</span>, <span class="type">Throwable</span>] <span class="keyword">with</span> <span class="type">StackSafeMonad</span>[<span class="type">IO</span>] &#123;</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">pure</span></span>[<span class="type">A</span>](x: <span class="type">A</span>) = <span class="type">IO</span>.<span class="type">Pure</span>(x)</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">flatMap</span></span>[<span class="type">A</span>, <span class="type">B</span>](fa: <span class="type">IO</span>[<span class="type">A</span>])(f: <span class="type">A</span> =&gt; <span class="type">IO</span>[<span class="type">B</span>]): <span class="type">IO</span>[<span class="type">B</span>] = <span class="type">IO</span>.<span class="type">FlatMap</span>(fa, f)</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">raiseError</span></span>[<span class="type">A</span>](e: <span class="type">Throwable</span>) = <span class="type">IO</span>.<span class="type">Failure</span>(e)</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">handleErrorWith</span></span>[<span class="type">A</span>](fa: <span class="type">IO</span>[<span class="type">A</span>])(f: <span class="type">Throwable</span> =&gt; <span class="type">IO</span>[<span class="type">A</span>]): <span class="type">IO</span>[<span class="type">A</span>] = &#123;</div><div class="line">    fa <span class="keyword">match</span> &#123;</div><div class="line">      <span class="keyword">case</span> <span class="type">Failure</span>(ex) =&gt; f(ex)</div><div class="line">      <span class="keyword">case</span> io =&gt; io</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意 <code>unsafeRun</code> 本来就是不安全的，所以我们抛出异常并没有超出预期。</p>
+</blockquote>
+<p>这样一来我们就可以把 <code>readInt</code> 重构成：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">NotAInt</span>(<span class="params">str: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Throwable</span></span></div><div class="line"><span class="keyword">val</span> readInt: <span class="type">IO</span>[<span class="type">Int</span>] = <span class="type">Console</span>.getStr().flatMap &#123; str =&gt;</div><div class="line">  <span class="keyword">val</span> r: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">Int</span>] = <span class="keyword">try</span> &#123;</div><div class="line">    <span class="type">Right</span>(str.toInt)</div><div class="line">  &#125; <span class="keyword">catch</span> &#123;</div><div class="line">    <span class="keyword">case</span> e: <span class="type">Throwable</span> =&gt; <span class="type">Left</span>(<span class="type">NotAInt</span>(str))</div><div class="line">  &#125;</div><div class="line">  <span class="type">MonadError</span>[<span class="type">IO</span>, <span class="type">Throwable</span>].fromEither(r) <span class="comment">// 召唤 MonadError 实例</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果我们想处理这个错误，只需要在程序逻辑中增加相应逻辑：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> app = sum(readInt, readInt).flatMap &#123; r =&gt;</div><div class="line">  <span class="type">Console</span>.putStrLn(r.toString)</div><div class="line">&#125;.recoverWith &#123;</div><div class="line">  <span class="keyword">case</span> <span class="type">NotAInt</span>(str) =&gt; <span class="type">Console</span>.putStrLn(<span class="string">s"<span class="subst">$str</span> 不是一个字符串"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当然，这个方案也不是没有缺点：</p>
+<ul>
+<li>首先，所有的错误都必须是 <code>Throwable</code> 的子类型。</li>
+<li>其次，所有的错误类型在程序中都泛化成了 <code>Throwable</code>，无法直观的从类型中看出错误类型，这样可能会导致调用者不知道需要处理什么错误。</li>
+</ul>
+<p>所以在实际应用中，我们也可能会使用 <code>IO[Either[E, A]]</code> 以及相应的 transformer <code>EitherT</code> 来处理问题。这里我们只是演示一下 IO Monad 设计时，如果要携带错误信息，通常如何实现。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文简单介绍 IO Monad 的一个朴素设计，主要作为后续考察其他 IO Monad 如: Cats-Effect / ZIO 做一个铺垫。</p>
+<p>同时本文也提出了编程中错误处理的重要性，以及如何用 MonadError 实现一种错误处理的手段,后续文章中，我们也会介绍其他错误处理的手段。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Jilen/">^Jilen</a>
+          
+            <a href="/tags/IO-Monad-设计浅析/">~IO Monad 设计浅析</a>
+          
+            <a href="/tags/函数式编程/">函数式编程</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2019/05/java-2-scala-2-kotlin/">
+        <span class="next-text nav-default">从 Java 到 Scala，再到 Kotlin</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1575820800000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2019
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

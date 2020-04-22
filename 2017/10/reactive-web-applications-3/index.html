@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。"/>
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区" />
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/10/reactive-web-applications-3/"/>
+
+
+<meta name="description" content="通过重新思考应用程序对计算机资源的利用率，可以帮助我们更好地去理解「为什么我们需要采用响应式应用」以及「响应式应用时怎样的」。">
+<meta name="keywords" content="翻译,Play,响应式编程,~响应式 Web 应用,^Shaw">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&lt;译&gt; 响应式 Web 应用（三）">
+<meta property="og:url" content="http://scala.cool/2017/10/reactive-web-applications-3/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="通过重新思考应用程序对计算机资源的利用率，可以帮助我们更好地去理解「为什么我们需要采用响应式应用」以及「响应式应用时怎样的」。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2017/10/Threaded-web-server.png">
+<meta property="og:image" content="http://scala.cool/images/2017/10/threaded-web-application-servers-as-train-stations.png">
+<meta property="og:image" content="http://scala.cool/images/2017/10/Evented-web-server.png">
+<meta property="og:updated_time" content="2018-01-12T05:12:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&lt;译&gt; 响应式 Web 应用（三）">
+<meta name="twitter:description" content="通过重新思考应用程序对计算机资源的利用率，可以帮助我们更好地去理解「为什么我们需要采用响应式应用」以及「响应式应用时怎样的」。">
+<meta name="twitter:image" content="http://scala.cool/images/2017/10/Threaded-web-server.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> <译> 响应式 Web 应用（三） - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead" >
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <译> 响应式 Web 应用（三）
+        
+      </h1>
+
+      <time class="post-time">
+          10月12日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Shaw"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Shaw"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h2 id="上一篇"><a href="#上一篇" class="headerlink" title="上一篇"></a>上一篇</h2><p><a href="https://scala.cool/2017/09/reactive-web-applications-2/">&lt;译&gt; 响应式 Web 应用（二）</a></p>
+<h2 id="1-2-重新思考对计算机资源的利用"><a href="#1-2-重新思考对计算机资源的利用" class="headerlink" title="1.2 重新思考对计算机资源的利用"></a>1.2 重新思考对计算机资源的利用</h2><p>要理解「为什么要采用响应式应用」以及「响应式应用是怎样的」，我们首先需要快速了解一下计算机方面的知识。计算机在过去的几十年中已经进步了许多。特别是在CPU的时钟速度（MHz到GHz）和内存（千字节到千兆字节）方面。</p>
+<p>然而，CPU 内核的数量在不断变化才是过去几年中发生的最大变化，尽管单个 CPU 的时钟速度没有增加。在撰写本文时，大多数计算机至少有4个 CPU 内核，并且已经有供应商能够提供具有1024个内核的 CPU 了。</p>
+<p>另一方面，计算机的整体架构以及程序的执行机制尚未放生重大变化。因此，这种架构的一些局限性（比如冯·诺依曼的瓶颈）现在已成为一个问题。要了解这种演变是如何影响 Web 应用程序开发的，我们需要先来看看两个最受欢迎的 Web 服务器体系结构。</p>
+<h3 id="1-2-1-基于线程或者事件的-web-应用服务器"><a href="#1-2-1-基于线程或者事件的-web-应用服务器" class="headerlink" title="1.2.1 基于线程或者事件的 web 应用服务器"></a>1.2.1 基于线程或者事件的 web 应用服务器</h3><p>大致来说，有两种可以用来实现 web 服务器的编程模型，分别是线程模型以及事件模型。在线程模型中，大量的线程负责处理传入的请求。在事件模型中，少量的请求处理线程通过消息传递彼此进行通信。响应式 web 应用服务器采用的是事件模型。</p>
+<h4 id="基于线程模型的服务器"><a href="#基于线程模型的服务器" class="headerlink" title="基于线程模型的服务器"></a>基于线程模型的服务器</h4><p>基于线程的服务器（比如 Apache Tomcat），可以看作是一个有很多个月台的火车站，站长（接收者线程）决定哪列火车（HTTP 请求）到达哪个月台（请求处理线程）。不难看出，有多少个月台，就可以同时接纳多少列火车。下图说明了基于线程的服务器是如何处理 HTTP 请求的。</p>
+<center><br><img src="/images/2017/10/Threaded-web-server.png" alt="Image of Threaded web server"><br></center>
+
+<p>顾名思义，基于线程的 web 服务器依赖于在队列中尽可能多地使用线程，<br>关于火车和线程服务器之间的比较如表1.2所示。</p>
+<center><br><img src="/images/2017/10/threaded-web-application-servers-as-train-stations.png" alt="Imgage of threaded web application servers as train stations.png"><br></center>
+
+
+<h4 id="基于事件模型的服务器"><a href="#基于事件模型的服务器" class="headerlink" title="基于事件模型的服务器"></a>基于事件模型的服务器</h4><p>为了解释事件服务器的工作原理，我们举一个餐厅服务员的例子。</p>
+<p>服务员可以从几个顾客那里接收订单，然后将这些订单交给厨房里的多位厨师。服务员将他们的时间分配给手头上的不同任务，而不用花太多时间在某一个任务上面。他们不需要一次性地处理整个订单，比如：先上酒，然后冷盘，接下来主菜，最后是甜点和浓咖啡。因此，服务员可以高效地一次性服务多张桌子。</p>
+<p>在我写这本书的时候，Play 是基于 Netty 而构建的。当开发人员用 Play 构建应用的时候，开发人员只需要实现厨师“烹饪”响应的行为，而不用去实现服务员的行为，因为这些 Play 已经帮我们实现了。</p>
+<p>基于事件模型的 Web 服务器的机制如下图所示。</p>
+<center><br><img src="/images/2017/10/Evented-web-server.png" alt="Image of Evented web server"><br></center>
+
+<p>在事件服务器中，传入的请求被分割成多个事件，这些事件代表了处理整个请求所涉及到的各种较小的任务。例如解析请求主体，从磁盘检索文件或者调用另外一个 web 服务。分割操作是由事件处理程序来完成的，这可能会触发 I/O 操作，进而产生新的事件。</p>
+<p>例如，你想发送一个请求来获取服务器上文件的大小。在此种情况下，事件处理程序在处理这个请求的时候将会对磁盘进行异步调用。当操作系统计算出文件大小的时候，会发出一个中断，这个中断也就相当于一个新的事件。当轮到这个新事件执行的时候，你就得到了该请求响应的结果——文件的大小。当操作系统在计算文件大小的时候，事件循环程序可以处理队列中的其他事件。</p>
+<p>这种编程模型的一个重要意义就是，在任务上花费的时间应该是很小的。当服务员要上菜的时候，而厨师却坚持要将某一个订单上的全部菜品做完才让服务员去上菜。那么一旦服务员最后从厨房出来，将会看到顾客们一张张生气的面孔。</p>
+<p>当整个流水线，比如命令或者 HTTP 请求是异步的时候，事件模型才会起作用，她可以使整个流水线能够不被阻塞地去执行。非阻塞 I/O 通常指的是输入-输出操作，这些操作在执行工作时不会占用当前的执行线程，而是在工作完成时发送通知。</p>
+<h4 id="在事件模型服务器以及线程模型服务器上内存的利用率"><a href="#在事件模型服务器以及线程模型服务器上内存的利用率" class="headerlink" title="在事件模型服务器以及线程模型服务器上内存的利用率"></a>在事件模型服务器以及线程模型服务器上内存的利用率</h4><p>与线程模型相比，基于事件模型的服务器对硬件资源的利用率要高的多。事件服务器的工作线程只需要几个“服务员”线程就可以处理大量的请求而不用再像线程服务器那样，生成成千上万的“火车轨道”了。使用较少数量的线程有两个好处，分别是减少内存占用和改善性能，因为这样做减少了上下文切换、线程管理的时间以及调度开销。</p>
+<p>在 JVM 上创建的每个线程都有自己的堆栈空间，默认为 1MB。Apache Tomcat 的默认线程池大小为200，这意味着要启动 Apache Tomcat，需要分配超过 200MB 的内存。但是，你仅仅只需要 16MB 就可以将一个 Play 程序跑起来。</p>
+<p>虽然 200MB 在现在看来不算是一个很大的内存，但是不要忘了，这意味着要想同时处理200条请求就需要 200MB 的内存（这里我们先不考虑在处理这些请求的时候可能会有额外的任务会占用内存的情况），但是如果你想同时满足10000个请求，那么你将需要大量的内存。这种情况并不总是能够满足的，因为依赖于可用的内存，所以线程模型在面对大规模的并发情况时很难去做扩展。并且，线程模型除了使用大量内存之外，还会使 CPU 的效率降低。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/翻译/">翻译</a>
+          
+            <a href="/tags/Play/">Play</a>
+          
+            <a href="/tags/响应式编程/">响应式编程</a>
+          
+            <a href="/tags/响应式-Web-应用/">~响应式 Web 应用</a>
+          
+            <a href="/tags/Shaw/">^Shaw</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/10/scala-weekly-23/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Scala 技术周刊 | 第 23 期</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/09/subtyping-vs-typeclasses-3/">
+        <span class="next-text nav-default">Subtyping vs Typeclasses（三）</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1507784400000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2019
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>
