@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2018/11/java-2-scala-4/">
+
+
+<meta name="description" content="Traits在尝试着将抽象更好地融为一个整体。">
+<meta name="keywords" content="类型相关,Java,~从 Java 到 Scala,^Rhyme,trait">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从 Java 到 Scala（四）：Traits">
+<meta property="og:url" content="http://scala.cool/2018/11/java-2-scala-4/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="Traits在尝试着将抽象更好地融为一个整体。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-04-22T02:50:45.360Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从 Java 到 Scala（四）：Traits">
+<meta name="twitter:description" content="Traits在尝试着将抽象更好地融为一个整体。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> 从 Java 到 Scala（四）：Traits - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          从 Java 到 Scala（四）：Traits
+        
+      </h1>
+
+      <time class="post-time">
+          11月28日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Rhyme"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Rhyme"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>Traits特质，一个我们既熟悉又陌生的特性。熟悉是因为你会发现它和你平时在 Java 中使用的 interface 接口有着很大的相似之处，而陌生又是因为Traits的新玩法会让你打破对原有接口的认知，进入一个更具有挑战性，玩法更高级的领域。所以，在一开始，我们可以对 Traits 有一个初步的认识：它是一个加强版的<code>interface</code>。之后，随着你对它了解的深入，你就会发现相比 Java 接口,Traits 跟类更为相似。再之后，你或许会觉察到，<strong>Traits在尝试着将抽象更好地融为一个整体。</strong></p>
+<h2 id="Traits-入门"><a href="#Traits-入门" class="headerlink" title="Traits 入门"></a>Traits 入门</h2><p>在 Java 中为了避免多重继承所带来的昂贵代价(方法或字段冲突、菱形继承等问题)，Java 的设计者们使用了 interface 接口。而为了解决 Java 接口无法进行<code>stackable modifications</code>(即无法使用对象状态进行迭代)、无法提供字段等局限，在 Scala 中，我们使用 Traits 特质而非接口。</p>
+<h3 id="定义一个trait"><a href="#定义一个trait" class="headerlink" title="定义一个trait"></a>定义一个trait</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">  <span class="keyword">val</span> typeOf: <span class="type">String</span> = <span class="string">"哺乳动物"</span> <span class="comment">//  带有默认值的字段</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">move</span></span>(): <span class="type">Unit</span> = &#123;  <span class="comment">// 带有默认实现的方法</span></span><br><span class="line">    println(<span class="string">"walk"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">eat</span></span>() <span class="comment">//未实现的抽象方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码类似于以下的Java代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    String typeOf = <span class="string">"哺乳动物"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"walk"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 Scala 中使用关键字<code>trait</code>而不<code>interface</code>,和 Java 接口一样，<code>trait</code>也可以有默认方法的实现。也就是说 Java 接口有的，<code>trait</code>基本上也都有，而且实现起来要优雅许多。 </p>
+<p>之所以要说类似于以上的 Java 代码，原因在于<code>trait</code>拥有的是字段<code>typeOf</code>,而<code>interface</code>拥有的是静态属性<code>typeOf</code>。这是<code>interface</code>和<code>trait</code>的一点区别。但是再仔细观察思考这一点区别，<strong>更好更灵活的字段设计，是否使得<code>trait</code>更好地组织了抽象，使得它们成为了一个更好的整体。</strong></p>
+<h3 id="mix-in-trait"><a href="#mix-in-trait" class="headerlink" title="mix in trait"></a>mix in trait</h3><p>和 Java 一样，Scala 只支持单继承，但却可以有任意数量的特质。在 Scala 中，我们不称接口被<code>implements</code>实现了，而是<code>traits</code>被 mix in 混入了类中。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="keyword">val</span> typeOf: <span class="type">String</span> = <span class="string">"蛋生动物"</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">eat</span></span>(): <span class="type">Unit</span> = &#123;</span><br><span class="line">    println(<span class="string">"eat bugs"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">move</span></span>(): <span class="type">Unit</span> = &#123;</span><br><span class="line">    println(<span class="string">"fly"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码中，<code>Bird</code>类混入了特质<code>Animal</code>。当类混入了多个特质时，需要使用<code>with</code>关键字。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Egg</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">Bird</span> <span class="keyword">extends</span> <span class="title">Animal</span> <span class="keyword">with</span> <span class="title">Egg</span></span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="keyword">val</span> typeOf: <span class="type">String</span> = <span class="string">"蛋生动物"</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">eat</span></span>(): <span class="type">Unit</span> = &#123;</span><br><span class="line">    println(<span class="string">"eat bugs"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">move</span></span>(): <span class="type">Unit</span> = &#123;</span><br><span class="line">    println(<span class="string">"fly"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 Scala 中，我们将<code>extends with</code>的这种语法解读为一个整体，例如在以上代码中，我们将<code>extends Animal with Egg</code>看做一个整体，然后被<code>Bird</code>类混入。从这里你是否也能够感受到 <strong><code>trait</code>在尝试着将抽象更好地融为一个整体。</strong> </p>
+<p>到这里，你或许能够发现，相比 Java <code>interface</code>,<code>trait</code>和类更加相似。而事实也确实如此，<code>trait</code>可以具备类的所有特性，除了缺少构造器参数。这一点<code>trait</code>可以使用构造器字段来达到同样的效果。也就是说你不能想给类传入构造器参数那样给特质传入参数。具体代码这里就不再演示。</p>
+<p>其实在这里我们可以简单地思考一番，为什么要把<code>trait</code>设计得这么像一个<code>class</code>,是设计者们有意为之，还是无意间的巧合。其实，不管怎么样，<strong>个人认为，但从设计层面来讲，<code>class</code>类的设计就比<code>trait</code>更加具备一致性，class产生的对象就可以被很好的管理，为什么我们不像管理对象一样来管理我们的抽象呢？</strong></p>
+<h2 id="Traits的两大基本应用"><a href="#Traits的两大基本应用" class="headerlink" title="Traits的两大基本应用"></a>Traits的两大基本应用</h2><p>Traits 最常见的两种使用方式:一种是和 Java 接口类似，用于设计富接口，另一种是 Traits 独有的<code>stackable modifications</code>。这里就说到了<code>interface</code>和<code>trait</code>的第二个区别，Traits 支持<code>stackable modifications</code>，使它能够使用对象状态，可以对对象状态进行灵活地迭代。</p>
+<h3 id="rich-interface"><a href="#rich-interface" class="headerlink" title="rich interface"></a>rich interface</h3><p>富接口的应用要归功于<code>interface</code>中对默认方法这一特性的支持，一方面松绑了类和接口之间实现与被实现之间的强关系，另一方面为程序的可扩展性代入了很大的灵活性。<code>trait</code>在这一方面的应用和Java的没有很大的区别。而<code>trait</code>中的默认方法的实现背后采用的也是<code>interface</code>中的<code>default</code>默认方法。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Hello</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">hello</span></span>(): <span class="type">Unit</span> = &#123;println(<span class="string">"hello"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Hello2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123;...&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="stackable-modifications"><a href="#stackable-modifications" class="headerlink" title="stackable modifications"></a>stackable modifications</h3><p>关于<code>stackable modifications</code>，顾名思义，我们将<code>modification</code>保存在了一个<code>stack</code>栈中。也就是说我们可以对运算的结果进行不断的迭代处理，已达到我们想要的结果。这对于想要分布处理并得到某一结果的需求来说是非常有用的。</p>
+<p>这里我们借用一下<code>programming in scala</code>中的例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">IntQueue</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span></span>(): <span class="type">Int</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">put</span></span>(x: <span class="type">Int</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scala.collection.mutable.<span class="type">ArrayBuffer</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BasicIntQueue</span> <span class="keyword">extends</span> <span class="title">IntQueue</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> buf = <span class="keyword">new</span> <span class="type">ArrayBuffer</span>[<span class="type">Int</span>]</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span></span>() = buf.remove(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">put</span></span>(x: <span class="type">Int</span>) &#123;</span><br><span class="line">    buf += x</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Doubling</span> <span class="keyword">extends</span> <span class="title">IntQueue</span> </span>&#123;</span><br><span class="line">  <span class="keyword">abstract</span> <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">put</span></span>(x: <span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">super</span>.put(<span class="number">2</span> * x)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Incrementing</span> <span class="keyword">extends</span> <span class="title">IntQueue</span> </span>&#123;</span><br><span class="line">  <span class="keyword">abstract</span> <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">put</span></span>(x: <span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">super</span>.put(x + <span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Filtering</span> <span class="keyword">extends</span> <span class="title">IntQueue</span> </span>&#123;</span><br><span class="line">  <span class="keyword">abstract</span> <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">put</span></span>(x: <span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (x &gt;= <span class="number">0</span>) <span class="keyword">super</span>.put(x)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在以上代码中我们定义了一个抽象的队列，有<code>put</code>和<code>get</code>方法，在类BasicIntQueue中提供了相应的实现方法。同时又定义了三个特质<code>Doubling</code>、<code>Incrementing</code>、<code>Filtering</code>,它们都继承了IntQueue抽象类(还记得之前讲过的，<code>trait</code>可以具备类的所有特性),并重写了其中的方法。<code>Doubling</code>将处理结果*2，<code>Incrementing</code>特质将处理结果做了+1处理,<code>Filtering</code>将过滤掉&lt;0的值。</p>
+<p>我们在来看以下的运行结果：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> queue = (<span class="keyword">new</span> <span class="type">BasicIntQueue</span> <span class="keyword">with</span> <span class="type">Incrementing</span> <span class="keyword">with</span> <span class="type">Filtering</span>)</span><br><span class="line">queue: <span class="type">BasicIntQueue</span> <span class="keyword">with</span> <span class="type">Incrementing</span> <span class="keyword">with</span> <span class="type">Filtering</span>...</span><br><span class="line">scala&gt; queue.put(<span class="number">-1</span>); queue.put(<span class="number">0</span>); queue.put(<span class="number">1</span>)</span><br><span class="line">scala&gt; queue.get()</span><br><span class="line">res15: <span class="type">Int</span> = <span class="number">1</span></span><br><span class="line">scala&gt; queue.get()</span><br><span class="line">res16: <span class="type">Int</span> = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; <span class="keyword">val</span> queue = (<span class="keyword">new</span> <span class="type">BasicIntQueue</span> <span class="keyword">with</span> <span class="type">Filtering</span> <span class="keyword">with</span> <span class="type">Incrementing</span>)</span><br><span class="line">queue: <span class="type">BasicIntQueue</span> <span class="keyword">with</span> <span class="type">Filtering</span> <span class="keyword">with</span> <span class="type">Incrementing</span>...</span><br><span class="line">scala&gt; queue.put(<span class="number">-1</span>); queue.put(<span class="number">0</span>); queue.put(<span class="number">1</span>)</span><br><span class="line">scala&gt; queue.get()</span><br><span class="line">res17: <span class="type">Int</span> = <span class="number">0</span></span><br><span class="line">scala&gt; queue.get()</span><br><span class="line">res18: <span class="type">Int</span> = <span class="number">1</span></span><br><span class="line">scala&gt; queue.get()</span><br><span class="line">res19: <span class="type">Int</span> = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>仔细观察以上的代码，了解了上面的代码，你基本也就了解了<code>stackable modifications</code>。</p>
+<p>首先，你可以观察到，以上的两段代码整体相似，却得到不同的运行结果，原因只是因为特质<code>Filtering</code>和<code>Incrementing</code>混入的顺序不同。我们仔细查看一下特质中的方法实现，可以发现在特质中都通过<code>super</code>关键字调用了父类的方法。而以上情况的产生原因就在于此。<code>trait</code>中的<code>super</code>是支持<code>stackable modifications</code>的根本关键。</p>
+<p>在<code>trait</code>中的<code>super</code>是动态绑定的，并且<code>super</code>调用的是另一个特质中的方法，具体哪个特质中的方法被调用需要取决于特质被混入的顺序。对于一般的序列，我们可以采用”从后往前”的顺序来推断<code>super</code>的调用顺序。</p>
+<p>就拿以上的代码而言。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="type">BasicIntQueue</span> <span class="keyword">with</span> <span class="type">Incrementing</span> <span class="keyword">with</span> <span class="type">Filtering</span></span><br></pre></td></tr></table></figure>
+<p>代码的super的执行顺序按照从后往前的规则依次是：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Filtering</span> -&gt; <span class="type">Incrementing</span> -&gt; <span class="type">BasicIntQueue</span></span><br></pre></td></tr></table></figure>
+<p>举个具体的例子：</p>
+<p>例如这个时候我执行了<code>put(1)</code>的代码，那么按照上面的执行顺序，</p>
+<p>先执行<code>Filtering</code>的<code>put</code>方法判断值是否大于1，发现合法，将值1传给<code>Incrementing</code>中的<code>put</code>方法，<code>Incrementing</code>中的<code>put</code>方法将值加1之后传给<code>BasicIntQueue</code>然后将最终的值2放入队列中。</p>
+<p>以上代码的执行过程就是<code>stackable modifications</code>的核心。因此到这里，你或许也能理解以上因为混入顺序不同而出现的不同结果了吧。</p>
+<p>另外，说到动态性，我们在这里也可以简单地聊几句。在Java中，<code>super</code>的静态性与<code>trait</code>中<code>super</code>的动态性形成了鲜明的对比。而动态性所带来的种种优势与强大，我们也已经在这一小节的内容中见识了一二。其实动态性抽离出来是一种设计思想，而它也早已在我们的身边大展拳脚。例如我们熟知的IOC依赖注入，AOP面向切面编程，以及前端的动态压缩技术等等，能够列举的还有很多，而它们的背后就是动态性的思想，你越是灵活，能够做的事也就越多。</p>
+<h2 id="Traits-探索"><a href="#Traits-探索" class="headerlink" title="Traits 探索"></a>Traits 探索</h2><h3 id="Traits构造顺序"><a href="#Traits构造顺序" class="headerlink" title="Traits构造顺序"></a>Traits构造顺序</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">val</span> name:<span class="type">String</span> = <span class="string">"hello"</span> <span class="comment">//特质构造器的一部分</span></span><br><span class="line">    println(name);  <span class="comment">// 特质构造器的一部分</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>正如你在以上代码中所见的，在特质大括号中包裹的执行语句均属于特质构造器的一部分。</p>
+<p>特质构造器的顺序如下:（参考自《快学Scala》）</p>
+<ol>
+<li>首先执行超类的构造器(也就是跟在<code>extends</code>之后的类)</li>
+<li>特质构造器在超类构造器之后、类构造器之前执行</li>
+<li>特质由左到右构造</li>
+<li>父特质先构造</li>
+<li>类构造器</li>
+</ol>
+<p>举个例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SavingAccount</span> <span class="keyword">extends</span> <span class="title">Account</span> <span class="keyword">with</span> <span class="title">FileLogger</span> <span class="keyword">with</span> <span class="title">ShortLogger</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">trait</span> <span class="title">ShortLogger</span> <span class="keyword">extends</span> <span class="title">Logger</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">trait</span> <span class="title">FileLogger</span> <span class="keyword">extends</span> <span class="title">Logger</span></span></span><br></pre></td></tr></table></figure>
+<p>以上构造器将按如下顺序执行：</p>
+<ol>
+<li><code>Account</code>(超类)</li>
+<li><code>Logger</code>(第一个特质的父特质)</li>
+<li><code>FileLogger</code>(第一个特质)</li>
+<li><code>ShortLogger</code>(从左往右第二个特质，它的父特质<code>Logger</code>已经被构造，不再重复构造)</li>
+<li><code>SavingAccount</code>(类构造器)</li>
+</ol>
+<h4 id="线性化"><a href="#线性化" class="headerlink" title="线性化"></a>线性化</h4><p>其实以上构造器顺序实现的背后使用的是一种叫”线性化”的技术。</p>
+<p>拿以上的代码作为例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SavingAccount</span> <span class="keyword">extends</span> <span class="title">Account</span> <span class="keyword">with</span> <span class="title">FileLogger</span> <span class="keyword">with</span> <span class="title">ShortLogger</span></span></span><br></pre></td></tr></table></figure>
+<p>以上的代码将被线性化解析为：</p>
+<blockquote>
+<p><code>&gt;&gt;</code>的意思是右侧将先被构造</p>
+</blockquote>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lin(<span class="type">SavingsAccount</span>) = <span class="type">SavingsAccount</span> &gt;&gt; lin(<span class="type">ShortLogger</span>) &gt;&gt; lin(<span class="type">FileLogger</span>) &gt;&gt; lin(<span class="type">Account</span>)</span><br><span class="line"></span><br><span class="line">= <span class="type">SavingsAccount</span> &gt;&gt; (<span class="type">ShortLogger</span> &gt;&gt; <span class="type">Logger</span>) &gt;&gt; (<span class="type">FileLogger</span> &gt;&gt; <span class="type">Logger</span>) &gt;&gt; <span class="type">Account</span></span><br><span class="line"></span><br><span class="line">= <span class="type">SavingsAccount</span> &gt;&gt; <span class="type">ShortLogger</span> &gt;&gt; <span class="type">FileLogger</span> &gt;&gt; <span class="type">Logger</span> &gt;&gt; <span class="type">Account</span></span><br></pre></td></tr></table></figure>
+<p>仔细观察以下线性化的结果，你会发现，以上的顺序就是构造器执行的顺序。同时，线性化也给出了<code>super</code>的执行顺序，举例来说，在<code>ShortLogger</code>中调用<code>super</code>将调用右侧的<code>FileLogger</code>中的方法，而<code>FileLogger</code>中的<code>super</code>将调用右侧<code>Logger</code>中的方法，依次类推。</p>
+<h4 id="特质字段初始化"><a href="#特质字段初始化" class="headerlink" title="特质字段初始化"></a>特质字段初始化</h4><p>因此由于特质构造器的执行时间要早于类构造器的执行，因此在初始化特质中的字段时要额外注意字段的执行时间，避免出现空指针的情况。例如以下代码就会出现错误</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Hello</span> </span>&#123;</span><br><span class="line">  <span class="keyword">val</span> name:<span class="type">String</span></span><br><span class="line">  <span class="keyword">val</span> out = <span class="keyword">new</span> <span class="type">PrintStream</span>(name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> test = <span class="keyword">new</span> <span class="type">Test</span> <span class="keyword">with</span> <span class="type">Hello</span> &#123;</span><br><span class="line">    <span class="keyword">val</span> name = <span class="string">"Rhyme"</span> <span class="comment">// Error 类构造器晚于特质构造器</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解决方法有<code>提前定义</code>或者<code>懒值</code>。</p>
+<p>采用提前定义的代码如下所示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> test = <span class="keyword">new</span> &#123; </span><br><span class="line">    <span class="keyword">val</span> name = <span class="string">"Rhyme"</span> <span class="comment">//先于所有的构造器执行</span></span><br><span class="line">&#125;<span class="type">Test</span> <span class="keyword">with</span> <span class="type">Hello</span></span><br></pre></td></tr></table></figure>
+<p>采用提前定义的方式使得代码不太雅观，我们还可以使用懒值的方式。</p>
+<p>采用懒值的方式如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Hello</span> </span>&#123;</span><br><span class="line">  <span class="keyword">val</span> name:<span class="type">String</span></span><br><span class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> out = <span class="keyword">new</span> <span class="type">PrintStream</span>(name) <span class="comment">// 使用懒值，延迟name的初始化</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>懒值在每次使用前都回去检查字段是否已经初始化，存在一定的使用开销，使用前需要仔细考虑。</p>
+<p>由于篇幅限制，关于 Traits 的探索，我们就到此为止。希望本文能够对你学习和了解 Traits 提供一点帮助。在下一章我们将介绍 Traits 稍微高级一点的用法，自身类型和结构类型。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/类型相关/">类型相关</a>
+          
+            <a href="/tags/Java/">Java</a>
+          
+            <a href="/tags/从-Java-到-Scala/">~从 Java 到 Scala</a>
+          
+            <a href="/tags/Rhyme/">^Rhyme</a>
+          
+            <a href="/tags/trait/">trait</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/12/kotlin-4/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Dive Into Kotlin（四）：为什么 Kotlin 的根类型是「Any?」</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/11/cats-3/">
+        <span class="next-text nav-default">Cats（三）：高阶类型</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1543334400000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

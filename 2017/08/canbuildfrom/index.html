@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/08/canbuildfrom/">
+
+
+<meta name="description" content="从上一篇文章看出， CanBuildFrom 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的语法。">
+<meta name="keywords" content="^Yison,集合,Typeclass,~Scala 中的集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scala 中的集合（四）：CanBuildFrom">
+<meta property="og:url" content="http://scala.cool/2017/08/canbuildfrom/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="从上一篇文章看出， CanBuildFrom 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的语法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2017/08/type-of-map-is-ugly.png">
+<meta property="og:image" content="http://scala.cool/images/2017/08/simple-is-not-easy.jpg">
+<meta property="og:updated_time" content="2020-04-22T02:50:45.347Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scala 中的集合（四）：CanBuildFrom">
+<meta name="twitter:description" content="从上一篇文章看出， CanBuildFrom 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的语法。">
+<meta name="twitter:image" content="http://scala.cool/images/2017/08/type-of-map-is-ugly.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Scala 中的集合（四）：CanBuildFrom - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Scala 中的集合（四）：CanBuildFrom
+        
+      </h1>
+
+      <time class="post-time">
+          8月1日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Yison"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Yison"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <blockquote>
+<p>CanBuildFrom is probably the most infamous abstraction of the current collections. It is mainly criticised for making scary type signatures.</p>
+</blockquote>
+<p>从 <a href="http://scala.cool/2017/07/a-new-collection/">上一篇文章</a> 看出， <code>CanBuildFrom</code> 在当前 Scala 集合库中扮演了最关键的角色。而它，也如引言所道，又是其中最具争议的设计。</p>
+<p>本文将详细介绍 <code>CanBuildFrom</code> 的特性，它为何饱受诟病，而又解决了哪些问题。</p>
+<h2 id="map-的定义"><a href="#map-的定义" class="headerlink" title="map 的定义"></a>map 的定义</h2><p>以下是马丁在 <a href="https://www.youtube.com/watch?v=ecekSCX3B4Q" target="_blank" rel="noopener">Scala – the Simple Parts</a> talk 中 PPT 的一页：</p>
+<center><br><img src="/images/2017/08/type-of-map-is-ugly.png" alt="type of map is ugly"><br></center>
+
+<p>我们来看下 <code>map</code> 的类型到底有多丑？</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">map</span></span>[<span class="type">B</span>, <span class="type">That</span>](f: <span class="type">Elem</span> =&gt; <span class="type">B</span>)(<span class="keyword">implicit</span> bf: <span class="type">CanBuildFrom</span>[<span class="type">Repr</span>, <span class="type">B</span>, <span class="type">That</span>]): <span class="type">That</span></span><br></pre></td></tr></table></figure>
+<p>如果你接触 Scala 不深，以上的 <code>implicit</code> 的确费解。其实它无非是在 Scala 中实现 <a href="https://en.wikipedia.org/wiki/Type_class" target="_blank" rel="noopener">Type class</a> 的一种方式，这里你可以简单理解为：<strong>如此 <code>map</code> 就会在隐式范围中自动寻找关于 <code>bf</code> 对象的实现</strong>。</p>
+<p>为什么要采用这种方式呢？我们说过，<code>CanBuildFrom</code> 是极其强大的，以下是它解决的三大问题。</p>
+<h2 id="一、集合类型变换"><a href="#一、集合类型变换" class="headerlink" title="一、集合类型变换"></a>一、集合类型变换</h2><p><code>map</code> 最常见的操作，就是对集合中的元素进行转化，例如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).map(_.toString) <span class="comment">// List[String] = List(1, 2, 3)</span></span><br><span class="line"><span class="string">"foo"</span>.map(c =&gt; c.toUpper) <span class="comment">// String = FOO</span></span><br><span class="line"><span class="string">"foo"</span>.map(c =&gt; c.toInt) <span class="comment">// scala.collection.immutable.IndexedSeq[Int] = Vector(102, 111, 111)</span></span><br></pre></td></tr></table></figure>
+<p>这里，一个 <code>String</code> 可被视为 <code>Char</code> 元素的集合，它如同其它集合一样，在被 <code>map</code> 之后，有两种情况：</p>
+<ul>
+<li>类型不变，还是返回一个 <code>String</code></li>
+<li>类型变了，返回一个 <code>scala.collection.immutable.IndexedSeq[Int]</code></li>
+</ul>
+<p>这是 <code>CanBuildFrom</code> 要解决的第一个问题 — <strong>对要 <code>map</code> 的集合进行「类型修改」</strong>。</p>
+<p>还记得 <code>CanBuildFrom</code> 的定义吗？</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">CanBuildFrom</span>[-<span class="type">From</span>, -<span class="type">Elem</span>, +<span class="type">To</span>] </span>&#123;</span><br><span class="line">  <span class="comment">// 创建一个新的构造器(builder)</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(from: <span class="type">From</span>): <span class="type">Builder</span>[<span class="type">Elem</span>, <span class="type">To</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>复习下：<strong>「有这么一个方法，由给定的 From 类型的集合，使用 Elem 类型，建立 To 类型的集合」</strong>。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">map</span></span>[<span class="type">B</span>, <span class="type">That</span>](f: <span class="type">Char</span> =&gt; <span class="type">B</span>)(<span class="keyword">implicit</span> bf: <span class="type">CanBuildFrom</span>[<span class="type">String</span>, <span class="type">B</span>, <span class="type">That</span>]): <span class="type">That</span></span><br></pre></td></tr></table></figure>
+<p>我们把类型参数 <code>Elem</code> 替换成 <code>Char</code>，<code>From</code> 替换为 <code>String</code>，如此便实现了 <code>String</code> 类型的 <code>map</code> 操作。</p>
+<h2 id="二、不同的集合类型参数"><a href="#二、不同的集合类型参数" class="headerlink" title="二、不同的集合类型参数"></a>二、不同的集合类型参数</h2><p>我们知道，<code>Seq[A]</code>、<code>Set[A]</code> 继承了 <code>Iterable[A]</code>，三者有个相同点 — 都有一个类型参数。然而 <code>Map[K, V]</code> 是个特例，它也继承了 <code>Iterable[A]</code>，但却拥有两个。</p>
+<p>这就带来了一个问题。如果 <code>List[A]</code> 继承了 <code>Iterable[A]</code> 中的 <code>map</code> ，需要一个返回类型 <code>List[B]</code>，然而对 <code>HashMap[K, V]</code> 操作，却期望返回 <code>HashMap[L, W]</code>，<strong>这里的类型参数数量出现了不一致的情况</strong>。 </p>
+<p><code>CanBuildFrom</code> 再一次化解了这个问题。</p>
+<ul>
+<li>当 <code>Repr</code> 是 <code>List[_]</code> 时，<code>That</code> 变成了 <code>List[B]</code></li>
+<li>当 <code>Repr</code> 是 <code>HashMap[_, _]</code> 时，<code>B</code> 就是元祖 <code>(K, V)</code>，而 <code>That</code> 变成了 <code>HashMap[K, V]</code>。</li>
+</ul>
+<h2 id="三、有序集合的排序问题"><a href="#三、有序集合的排序问题" class="headerlink" title="三、有序集合的排序问题"></a>三、有序集合的排序问题</h2><p>思考有序集合之间的元素转换问题，比如 <code>TreeSet</code>。它们任何一次 <code>map</code>操作，都需要能够对元素进行排序，那么这种元素间的排序关系如何被定义呢？</p>
+<p>同样是定义一个 <code>CanBuildFrom</code> 的隐式对象，它的类型为 <code>CanBuildFrom[TreeSet[_], X, TreeSet[X]]</code>。其中 <code>X</code> 代表集合元素的类型，于是我们就可以利用相同的技术，定义一个 <code>Ordering[X]</code> 隐式对象，它解释了如何对 <code>TreeSet</code> 的元素进行排序。</p>
+<h2 id="Simple-is-not-Easy"><a href="#Simple-is-not-Easy" class="headerlink" title="Simple is not Easy"></a>Simple is not Easy</h2><p>上面列举了 <code>CanBuildFrom</code> 的各种美好，然而它还是逃脱不了被新方案替代的命运。究其原因，也可以用马丁 talk 的另一页 PPT 解释，Simple != Easy 。相信这也是 Scala 在「学院」与「工业」之间做出的平衡选择。</p>
+<center><br><img src="/images/2017/08/simple-is-not-easy.jpg" alt="simple is not easy"><br></center>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://www.youtube.com/watch?v=ecekSCX3B4Q" target="_blank" rel="noopener">SF Scala: Martin Odersky, Scala – the Simple Parts</a></li>
+<li><a href="https://www.scala-lang.org/blog/2017/05/30/tribulations-canbuildfrom.html" target="_blank" rel="noopener">Trinulations of CanBuildFrom</a></li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Yison/">^Yison</a>
+          
+            <a href="/tags/集合/">集合</a>
+          
+            <a href="/tags/Typeclass/">Typeclass</a>
+          
+            <a href="/tags/Scala-中的集合/">~Scala 中的集合</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/08/scala-weekly-15/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Scala 技术周刊 | 第 15 期</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/07/scala-design-patterns-3/">
+        <span class="next-text nav-default">Scala 与设计模式（三）：Prototype 原型模式</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1501516800000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

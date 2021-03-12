@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2018/01/scala-design-patterns-6/">
+
+
+<meta name="description" content="桥接模式是一种对象结构型模式，又称为柄体(Handle and Body)模式或接口(Interface)模式。">
+<meta name="keywords" content="设计模式,Java,~Scala 与设计模式,^Prefert">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scala 与设计模式（六）：Bridge 桥接模式">
+<meta property="og:url" content="http://scala.cool/2018/01/scala-design-patterns-6/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="桥接模式是一种对象结构型模式，又称为柄体(Handle and Body)模式或接口(Interface)模式。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2018/01/traditional-tetromino.jpg">
+<meta property="og:image" content="http://scala.cool/images/2018/01/modern-tetromino.jpg">
+<meta property="og:image" content="http://scala.cool/images/2018/01/bridge-old-java-design.png">
+<meta property="og:image" content="http://scala.cool/images/2018/01/bridge-pattern-2.png">
+<meta property="og:updated_time" content="2020-04-22T02:50:45.356Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scala 与设计模式（六）：Bridge 桥接模式">
+<meta name="twitter:description" content="桥接模式是一种对象结构型模式，又称为柄体(Handle and Body)模式或接口(Interface)模式。">
+<meta name="twitter:image" content="http://scala.cool/images/2018/01/traditional-tetromino.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Scala 与设计模式（六）：Bridge 桥接模式 - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Scala 与设计模式（六）：Bridge 桥接模式
+        
+      </h1>
+
+      <time class="post-time">
+          1月8日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Prefert"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Prefert"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>相信大家都玩过「俄罗斯方块」吧。</p>
+<center><img src="/images/2018/01/traditional-tetromino.jpg" width="300px"></center>
+
+<p>小罗年幼时最喜欢玩的就是俄罗斯方块。作为一个有情怀的程序员，小罗决定尝试实现这款游戏。</p>
+<p>玩过俄罗斯方块的人都会知道，俄罗斯方块由七种简单形状组成：</p>
+<ul>
+<li>I、J、L、O、S、T、Z</li>
+</ul>
+<center><img src="/images/2018/01/modern-tetromino.jpg" width="300px"></center>
+
+<p>小罗了然于心，抄起手中的键盘就创建了七个类。</p>
+<p>黑色过于单调，所以小罗又选了三种颜色准备为这些方块着色：</p>
+<ul>
+<li>Yellow</li>
+<li>Blue</li>
+<li>Red</li>
+</ul>
+<p>要实现这样的需求，最 low 的方法就是<strong>为每种形状创造所有颜色的版本</strong>。</p>
+<p>如果采用这种方案，双方之间处于强链接，类之间关联性极强，如要进行扩展，必然导致类结构急剧膨胀：</p>
+<center><img src="/images/2018/01/bridge-old-java-design.png" width="600px"></center>
+
+<p>如果仅用继承实现，我们会创造至少 3 * 7 = 21 个类。</p>
+<p>当我们想增加 1 种形状（或颜色）的时候，就需要新增 3 （或 7）个类。</p>
+<p><strong>数量爆炸的类 == 差劲的扩展能力 == 爆炸的维护成本</strong>！</p>
+<p>从 SOLID 原则来看，以上设计违背了「开放 - 封闭原则」。已知的，在设计类继承的时候，良好的设计应该是保持引起类变化的因素只有一个，也就是所谓的「单一职责原则」。</p>
+<p>那有没有环保一点的方式呢？让我们来看看「桥接模式」是怎么解决的。</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>桥接模式的定义比较简洁：</p>
+<blockquote>
+<p>把事物对象和其具体行为、具体特征分离开来，使它们可以各自独立的变化。 —— wikipedia</p>
+</blockquote>
+<p>换言之，即 <strong>抽象化与实现化解耦，使得二者可以独立变化</strong>。</p>
+<p>根据 GOF 提到的，桥接模式由四部分组成：</p>
+<ol>
+<li><strong>抽象类</strong>：定义了一个实现类接口类型的对象并可以维护该对象。</li>
+<li><strong>扩充抽象类</strong>：扩充由抽象类定义的接口，它实现了在抽象类中定义的抽象业务方法，在扩充抽象类中可以调用在实现类接口中定义的业务方法。</li>
+<li><strong>实现类接口</strong>：定义了实现类的接口，实现类接口仅提供基本操作，而抽象类定义的接口可能会做更多更复杂的操作。</li>
+<li><strong>具体实现类</strong>：实现了实现类接口并且具体实现它，在不同的具体实现类中提供基本操作的不同实现，在程序运行时，具体实现类对象将替换其父类对象，提供给客户端具体的业务操作方法。</li>
+</ol>
+<h2 id="Java-实现"><a href="#Java-实现" class="headerlink" title="Java 实现"></a>Java 实现</h2><p>在使用桥接模式时，我们首先应该识别出一个类所具有的两个独立变化的维度，将它们设计为两个独立的继承等级结构，为两个维度都提供抽象层，并建立抽象耦合。</p>
+<p>即，我们需要根据实际需求对形状和颜色进行组合。</p>
+<p>既然是组合，接口肯定是少不了的，先创建颜色接口（<strong>这里也称作「桥接口」</strong>）：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Color</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawShape</span><span class="params">(String type)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以及各种颜色类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Red</span> <span class="keyword">implements</span> <span class="title">Color</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawShape</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Red "</span> + type +<span class="string">" is drawn"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Yellow</span> <span class="keyword">implements</span> <span class="title">Color</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawShape</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Yellow "</span> + type +<span class="string">" is drawn"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Blue</span> <span class="keyword">implements</span> <span class="title">Color</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawShape</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Blue "</span> + type +<span class="string">" is drawn"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后，我们创建最重要的形状抽象类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Bridge.Java.Color.Color;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Shape</span> </span>&#123;</span><br><span class="line">    Color color;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setColor</span><span class="params">(Bridge.Java.Color.Color color)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.color = color;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>同样创建具体的方块：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShapeI</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        color.drawShape(<span class="string">"ShapeI"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>测试：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Color red = <span class="keyword">new</span> Red();</span><br><span class="line">Shape shapeI = <span class="keyword">new</span> ShapeI();</span><br><span class="line"><span class="comment">// 红色的 I</span></span><br><span class="line">shapeI.setColor(red);</span><br><span class="line">shapeI.draw();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 红色的 L</span></span><br><span class="line">Shape shapeL = <span class="keyword">new</span> ShapeJ();</span><br><span class="line">shapeL.setColor(red);</span><br><span class="line">shapeL.draw();</span><br></pre></td></tr></table></figure></p>
+<p>以上，我们将「形状」和「颜色」解耦。</p>
+<p><img src="/images/2018/01/bridge-pattern-2.png" alt="bridge-pattern"></p>
+<p>Hint: 如果你依旧有所疑惑，请回顾最开始的定义：</p>
+<blockquote>
+<p>把事物对象和其具体行为、具体特征分离开来，使它们可以各自独立的变化。</p>
+</blockquote>
+<p>此时，如需添加新的颜色或形状，我们只用实现一个桥接口或者继承一个抽象类即可。</p>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p>以上，相信你对桥接模式已经有所了解。</p>
+<p>再我们来看看它的优缺点。</p>
+<p><strong>优点</strong></p>
+<ol>
+<li>抽象和实现的分离。</li>
+<li>优秀的扩展能力。</li>
+<li>实现细节对客户透明。</li>
+</ol>
+<p><strong>缺点</strong><br>桥接模式需要建立在你对系统充分的认知下，需要我们识别出两个合理的变化维度，所以适用范围受到限制。</p>
+<p>所以你什么时候该使用桥接模式呢？</p>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><ol>
+<li><p>正如我们上方的例子，如果一个场景存在两个独立变化的维度，且这两个维度需要频繁扩展或变动时，我们优先考虑桥接模式。</p>
+</li>
+<li><p>如果一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性，避免在两个层次之间建立静态的继承联系，通过桥接模式可以使它们在抽象层建立一个关联关系。</p>
+</li>
+<li><p>对于那些不希望使用继承或因为多层次继承导致系统类的个数急剧增加的系统，桥接模式尤为适用。</p>
+</li>
+<li><p><a href="https://stackoverflow.com/questions/319728/when-do-you-use-the-bridge-pattern-how-is-it-different-from-adapter-pattern" target="_blank" rel="noopener">其他</a>。</p>
+</li>
+</ol>
+<h2 id="Scala-实现"><a href="#Scala-实现" class="headerlink" title="Scala 实现"></a>Scala 实现</h2><p>在 Scala 中，桥接模式的实现与 Java 大同小异，我们只需将接口关键字改为 <code>trait</code>。</p>
+<p>颜色接口：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Color</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">drawShape</span></span>(`<span class="class"><span class="keyword">type</span>`</span>: <span class="type">String</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>颜色类：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Red</span> <span class="keyword">extends</span> <span class="title">Color</span></span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">drawShape</span></span>(`<span class="class"><span class="keyword">type</span>`</span>: <span class="type">String</span>) = println(<span class="string">s"Red <span class="subst">$&#123;`type`&#125;</span> is drawn"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Blue</span> <span class="keyword">extends</span> <span class="title">Color</span></span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">drawShape</span></span>(`<span class="class"><span class="keyword">type</span>`</span>: <span class="type">String</span>) = println(<span class="string">s"Blue <span class="subst">$&#123;`type`&#125;</span> is drawn"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Yellow</span> <span class="keyword">extends</span> <span class="title">Color</span></span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">drawShape</span></span>(`<span class="class"><span class="keyword">type</span>`</span>: <span class="type">String</span>) = println(<span class="string">s"Yellow <span class="subst">$&#123;`type`&#125;</span> is drawn"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>形状抽象类以及实现类：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Shape</span>(<span class="params">color: <span class="type">Color</span></span>) </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">draw</span></span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ShapeI</span>(<span class="params">color: <span class="type">Color</span></span>) <span class="keyword">extends</span> <span class="title">Shape</span>(<span class="params">color</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">draw</span></span>(): <span class="type">Unit</span> = color.drawShape(<span class="string">"ShapeI"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ShapeJ</span>(<span class="params">color: <span class="type">Color</span></span>) <span class="keyword">extends</span> <span class="title">Shape</span>(<span class="params">color</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">draw</span></span>(): <span class="type">Unit</span> = color.drawShape(<span class="string">"ShapeJ"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">....</span><br></pre></td></tr></table></figure></p>
+<p>也许部分同学会问：这里抽象类可以用 <code>trait</code> 代替吗？<code>trait</code>扩展性会不会更好？具体还是参考这里吧：<a href="https://stackoverflow.com/questions/1991042/what-is-the-advantage-of-using-abstract-classes-instead-of-traits" target="_blank" rel="noopener">abstract class 比 trait 好在哪里？</a></p>
+<p>测试：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">App</span></span>&#123;</span><br><span class="line">   <span class="keyword">new</span> <span class="type">ShapeI</span>(<span class="keyword">new</span> <span class="type">Blue</span>).draw()</span><br><span class="line">   <span class="keyword">new</span> <span class="type">ShapeJ</span>(<span class="keyword">new</span> <span class="type">Red</span>).draw()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>桥接模式用一种巧妙的方式处理多层继承存在的问题，用抽象关联取代了传统的多层继承，将类之间的静态继承关系转换为动态的对象组合关系，使得系统更加灵活，并易于扩展，同时有效控制了系统中类的个数。在系统设计初期，合理利用桥接模式，会让系统更加优雅。</p>
+<p><a href="https://github.com/YarenTang/Design_Patterns_Examples/tree/master/src/Bridge" target="_blank" rel="noopener">源码链接</a><br>如有错误和讲述不恰当的地方还请指出，不胜感激！</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/">设计模式</a>
+          
+            <a href="/tags/Java/">Java</a>
+          
+            <a href="/tags/Scala-与设计模式/">~Scala 与设计模式</a>
+          
+            <a href="/tags/Prefert/">^Prefert</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/12/cats-2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Cats（二）：引用透明性和等式推理</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/01/mysql-parse-architecture/">
+        <span class="next-text nav-default">Asyncdb（五）：MySQL驱动架构设计</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1515340800000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

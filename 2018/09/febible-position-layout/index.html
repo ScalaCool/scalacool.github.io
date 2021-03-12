@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2018/09/febible-position-layout/">
+
+
+<meta name="description" content="本文旨在让你更深入地了解 position ,并为你提供一套使用 position 的范式，为你使用 position 提供一点建议和参考。">
+<meta name="keywords" content="前端开发,^Rhyme,~前端重构范式,^Captain">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端重构范式之 position">
+<meta property="og:url" content="http://scala.cool/2018/09/febible-position-layout/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="本文旨在让你更深入地了解 position ,并为你提供一套使用 position 的范式，为你使用 position 提供一点建议和参考。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://scala.cool/images/2018/09/Xnip2018-09-17_22-40-11.jpg">
+<meta property="og:image" content="https://scala.cool/images/2018/09/Xnip2018-09-17_22-45-18.jpg">
+<meta property="og:image" content="https://scala.cool/images/2018/09/Xnip2018-09-17_23-00-15.jpg">
+<meta property="og:image" content="https://scala.cool/images/2018/09/image-20180917213219642.png">
+<meta property="og:image" content="https://scala.cool/images/2018/09/image-20180917214330725.png">
+<meta property="og:image" content="https://scala.cool/images/2018/09/Xnip2018-09-18_00-27-58.jpg">
+<meta property="og:image" content="https://scala.cool/images/2018/09/Xnip2018-09-18_00-41-23.jpg">
+<meta property="og:image" content="https://scala.cool/images/2018/09/Xnip2018-09-18_00-43-28.jpg">
+<meta property="og:updated_time" content="2020-04-22T02:50:45.359Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端重构范式之 position">
+<meta name="twitter:description" content="本文旨在让你更深入地了解 position ,并为你提供一套使用 position 的范式，为你使用 position 提供一点建议和参考。">
+<meta name="twitter:image" content="https://scala.cool/images/2018/09/Xnip2018-09-17_22-40-11.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> 前端重构范式之 position - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          前端重构范式之 position
+        
+      </h1>
+
+      <time class="post-time">
+          9月18日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Rhyme/Captain"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Rhyme/Captain"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>本文旨在让你更深入地了解<code>position</code>,并为你提供一套使用<code>position</code>的范式，为你使用<code>position</code>提供一点建议和参考。</p>
+<p>在此之前先让我们来看看 learncss 中文文档中对<code>position</code>的定义</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>absolute</td>
+<td style="text-align:left">生成绝对定位的元素，相对于 static 定位以外的第一个父元素进行定位。元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定。</td>
+</tr>
+<tr>
+<td>fixed</td>
+<td style="text-align:left">生成绝对定位的元素，相对于浏览器窗口进行定位。元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定。</td>
+</tr>
+<tr>
+<td>relative</td>
+<td style="text-align:left">生成相对定位的元素，相对于其正常位置进行定位。因此，”left:20” 会向元素的 LEFT 位置添加 20 像素。</td>
+</tr>
+<tr>
+<td>static</td>
+<td style="text-align:left">默认值。没有定位，元素出现在正常的流中（忽略 top, bottom, left, right 或者 z-index 声明）。</td>
+</tr>
+<tr>
+<td>inherit</td>
+<td style="text-align:left">规定应该从父元素继承 position 属性的值。</td>
+</tr>
+</tbody>
+</table>
+<p>以上是较为官方的定义，你可以从中获取到关于<code>position</code>的一些基本操作，接下来让我们试图从另一个角度来理解<code>position</code>.</p>
+<blockquote>
+<p><strong><code>position</code>是一种描述物体相对位置的艺术，它的核心是「参考坐标系」的选择</strong></p>
+</blockquote>
+<p>正如我们在现实生活中看到的那样，我们需要使用各种不同的「参考坐标系」，来更方便准确地描述我们身边各种物体的相对位置。因为，我们已经知道，如果单纯依靠一个坐标系来描述这个世界上的各个位置，这个世界将变得异常复杂。我们需要使用不同的坐标系，来帮住我们简化对位置的描述。</p>
+<p>在我们的网页布局中也是一样，我们不能只采用一个坐标系来对网页中的元素进行定位，那将使得我们的网页变得异常复杂且不易维护。我们需要多个不同的坐标系，来帮助我们对网页进行更好地布局。css中的   <code>position</code>，就是我们俗称的「定位」，就是定义了这么一套规则，使得我们可以应用不同的坐标系，来对页面中的元素进行更好地布局和管理。</p>
+<p>反应在具体的规则当中，就是我们熟知的<code>static</code>,<code>relative</code>,<code>absolute</code>,<code>fixed</code>。而它们最本质的区别就在于「参考坐标系」的不同。其他的一系列问题，例如典型的元素层级，都可以归结为<code>position</code> 所带来的副作用。</p>
+<p>到这里，你或许对<code>position</code>有了一个不一样的认识，接下来可以尝试着思考以下几个问题</p>
+<ol>
+<li><code>position</code>的副作用是什么？</li>
+<li><code>position</code>的应用场景又是什么？</li>
+</ol>
+<p>不知道？没关系，或许以下的文章能够给你一点提示</p>
+<h1 id="副作用"><a href="#副作用" class="headerlink" title="副作用"></a>副作用</h1><p>首先我们需要讨论的是<code>position</code>的副作用，原因很简单，你手中有一个锤子，你总得知道这个锤子能干什么，不能干什么。我们只有像如来佛祖了解悟空那样了解<code>position</code>,才能发挥出悟空(<code>position</code>)的真正威力！</p>
+<p>要分析<code>position</code>的副作用，我们或许可以采用这样的思路：</p>
+<blockquote>
+<p>以下的组件均指开启了<code>position</code>定位的元素，这里把它称为组件 </p>
+</blockquote>
+<ol>
+<li>把该组件以及内部的元素作为一个整体,分析<strong>它对外界</strong>或者<strong>外界对它</strong>有什么影响。简称对外的影响</li>
+<li>单独分析该组件，不考虑对外的影响，分析该<code>position</code>属性对元素内部的元素会带来什么影响。简称对内的影响</li>
+<li>除了单独分析每个定位属性的副作用，我们还需要考虑不同的定位属性之间的<strong>组合</strong>会带来什么样的副作用，例如最为典型的<code>relative</code>和<code>absolute</code></li>
+</ol>
+<p>顺着这个思路，接下来我们来思考不同的<code>position</code>属性都会带来什么影响或副作用</p>
+<h2 id="副作用absolute-和-relative"><a href="#副作用absolute-和-relative" class="headerlink" title="副作用absolute 和 relative"></a>副作用<code>absolute</code> 和 <code>relative</code></h2><p><code>relative</code>和<code>absolute</code>是我们再熟悉不过的一对欢喜冤家，它们两个经常是成对出现，产生的副作用也更多地来自于它们之间的组合。因此在这里将它们放在一起分析。</p>
+<p><strong>特性与副作用往往是相伴而生的</strong>。我们先来回顾一下，这两个属性各有什么特性？</p>
+<p><code>position:absolute</code>元素具备的特性如下：</p>
+<ol>
+<li>相对于最近的设置了非static定位的祖先元素进行定位，如果没有，则相对于浏览器窗口进行定位</li>
+<li>脱离了文档流，对文档流不可见</li>
+<li>脱离了文档流，改变了元素性质,内联元素和块元素统一变性成为脱离文档流之后的元素，具体表现为类似<code>inline-block</code>的效果。</li>
+<li>使元素提升一个层级，层级要比浮动和文档流元素要高</li>
+</ol>
+<blockquote>
+<p>鉴于本人的经验限制，下面的副作用例子展示的也只是其中的一部分，如有更好的补充，欢迎在下方评论区中与大家一起分享</p>
+</blockquote>
+<p><code>position:relative</code>元素具备的特性如下：</p>
+<ol>
+<li>参考坐标系以该元素在文档中的原有位置作为参考点</li>
+<li>不脱离文档流，因此，元素本身性质不改变，块元素还是块元素，内联元素依然是内联元素。</li>
+<li>元素在原始文档中占有的位置依然存在，因此在执行<code>relative</code>定位之后，基本不会影响其他布局</li>
+<li>元素层级提升一级，元素层级高于浮动元素和文档流中的元素，也就是说会覆盖普通文档流和浮动的元素，可以使用<code>z-index</code>来提升元素的层级</li>
+<li>开启了相对定位的元素，若不设置任何偏移量，将不会发生任何变化（不考虑定位元素内部的变化）</li>
+</ol>
+<h3 id="深度relative"><a href="#深度relative" class="headerlink" title="深度relative"></a>深度<code>relative</code></h3><p>如果我们单独分析<code>absolute</code>的副作用，我们会把它简单地归结为脱离文档流，从而导致两个最为明显的副作用：改变布局和覆盖。</p>
+<p>但是我认为这属于它本身具备的特性，并不是它的副作用。我觉得在现实应用中真正存在的副作用在于<code>relative</code>和<code>absolute</code>的共同应用所造成的问题，在这里我把它称作「深度<code>relative</code>」。</p>
+<blockquote>
+<p>所谓的「深度<code>relative</code>」，指的是<code>relative</code>包裹的组件处于较深的层级，也就是被包裹的比较深，导致其中的<code>absolute</code>组件要想不被其他元素覆盖，需要一级一级地往f父元素设置<code>z-index</code>或者排查<code>overflow</code>属性。这个问题最关键的核心就是<code>relative</code>组件层级太深。</p>
+</blockquote>
+<p>这里讲得可能有点抽象，让我们一起来看一个例子：</p>
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-17_22-40-11.jpg" alt></p>
+<p>这是我在实际项目开发中遇到的一个典型的例子。简单来讲，就是点击重选按钮，在指定的位置跳出图标选择框，并且在窗口滚动时依然有效。具体效果如下图所示：</p>
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-17_22-45-18.jpg" alt></p>
+<p>就是这么一个简单的例子，当然以上是已经实现好的效果。如果你没有遇到过类似的问题，你会觉得这个问题很简单，使用<code>relative</code>和<code>absolute</code>就能轻松解决。但是，在这里先卖个关子，以上的效果是使用<code>fixed</code>实现的。</p>
+<p>我们首先使用我们典型的<code>relative</code>和<code>absolute</code>来实现以上的效果，我们可以得到如下的效果：</p>
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-17_23-00-15.jpg" alt></p>
+<p>首先你会发现一个最为明显的问题，就是图标选择框被其他元素盖住了，这个时候的原因就很多样了，或许是因为它所在的祖先元素的元素层级没有人家高，又或许是因为祖先元素设置了<code>overflow:hidden</code>等等。这个时候如果我们依然要坚持使用<code>relative</code>和<code>absolute</code>的解决方案，那我们通常会采取的解决方案就是，一级一级的网上排查<code>overflow:hidden</code>又或者是设置<code>z-index</code>，直到解决问题为止。</p>
+<h4 id="z-index"><a href="#z-index" class="headerlink" title="z-index"></a>z-index</h4><p>说到<code>z-index</code>，这里可以简单下使用方法。它仅在<code>positon</code>属性不为<code>static</code>时起作用。从<code>position</code>从基础可以了解到<code>absolute</code>和<code>fixed</code>会让元素脱离文档流，这两个修饰的元素默认层级自然比文档流的要高，然而<code>relative</code>则不会脱离文档流，但当它设置了 TRBL 时它也会覆盖文档流，其默认层级自然也是比后者要高的，<strong>脱离文档流和层级的概念不能混淆</strong>。</p>
+<h5 id="同级原则"><a href="#同级原则" class="headerlink" title="同级原则"></a>同级原则</h5><p>所谓同级，顾名思义，也就是同级间层级的比较，一个元素<code>position</code>不为<code>static</code>后，如果不给它的<code>z-index</code>设定值，默认为0，由下图可以看到，A 元素设定了<code>z-index</code>为0，B元素未设定，E 元素设定了<code>z-index</code>为负数，按照顺序 B 覆盖住了 A，而E则被A盖住。往后则是<code>z-index</code>大的把小的覆盖。</p>
+<p><img src="https://scala.cool/images/2018/09/image-20180917213219642.png" alt="image-20180917213219642"></p>
+<p>在此仅展示结构，css 代码则省去。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: 0"</span>&gt;</span>A<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"position: absolute"</span>&gt;</span>B<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"3"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: 1"</span>&gt;</span>C<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: 2"</span>&gt;</span>D<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"5"</span> <span class="attr">style</span>=<span class="string">"position: absolute;z-index: -1"</span>&gt;</span>E<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="多级原则"><a href="#多级原则" class="headerlink" title="多级原则"></a>多级原则</h5><p>看到这个标题，你可能会问，这是啥意思？其实很简单，它的意思是，要比较的元素不再是简单的同级概念，而是其中一个或两者都有祖先元素。看看下面这个代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:2;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span>A<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:999;"</span>&gt;</span>B<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="https://scala.cool/images/2018/09/image-20180917214330725.png" alt="image-20180917214330725"></p>
+<p>可见，A、B父元素的层级影响了相应的子元素的层级，就算 B 的<code>z-index</code>设的再大，它的父元素的<code>z-index</code>总是小于 A 的父元素的<code>z-index</code>值，这时候不论 A 的<code>z-index</code>怎么变化，元素 A 就会像图中一样一直压着 B，这就是从父原则。不过这里要划一下重点，这里的父元素不一定要同级，换句话说，两个元素间的层级比较，是<strong>相应的的同级祖先元素各自往下找到第一个<code>position</code>不为<code>static</code>的的两个元素之间的比较</strong>。举个栗子，结构改成下面这个结构，实现效果是一样的。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:2;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"1-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span>A<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:1;"</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"2-1"</span> <span class="attr">style</span>=<span class="string">"position:relative;z-index:999;"</span>&gt;</span>B<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>以上讲了这么多，你或许觉得怎么这么繁琐，要考虑这儿考虑那儿的，也会发现即使你用这种方法达到了你想要的效果，它也并不能从根本上解决问题。我一个简单的小组件，你却需要我去影响那么多父级元素，谁知道会造成什么意想之外的情况。除了这个，设置过多的<code>z-index</code>会导致页面层级管理的混乱，使得页面很难管理，所有有一个原则，要么对<code>z-index</code>做明文的规定，要么就少用层级过深的<code>z-index</code>。</p>
+<p>我这里有一种较好的解决方案，就是「<code>fixed</code>组件」。如果你有更好的解决方案，欢迎在下方评论区中进行分享。</p>
+<h3 id="fixed组件"><a href="#fixed组件" class="headerlink" title="fixed组件"></a>fixed组件</h3><p>我们都知道当元素设置了<code>position:fixed</code>之后，该元素将具备以下的特性：</p>
+<ol>
+<li>永远相对于浏览器窗口进行定位</li>
+<li>固定在浏览器窗口的某个位置，不随滚动条滚动</li>
+<li>脱离文档流</li>
+</ol>
+<p>以上是我们众所周知的一些特性，其实根据以上的特性，我们还可以推出以下这些特性：</p>
+<ol>
+<li>单独使用<code>fixed</code>属性，不需要再开启父元素的定位，使得，减少了很多的z-index属性的设置</li>
+</ol>
+<blockquote>
+<p>在下面的例子中，我们只对「图标组件」设置了<code>position:fixed</code>定位，页面中的其他大部分都是<code>position:static</code>组件，因此可以很轻松的解决原来的覆盖问题，也不会影响其他布局，更不会造成<code>z-index</code>管理混乱的问题。</p>
+</blockquote>
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-18_00-27-58.jpg" alt></p>
+<ol start="2">
+<li>使用js控制<code>fixed</code>组件的<code>margin</code>，我们可以实现，<code>fixed组件</code>相对于父元素进行定位</li>
+</ol>
+<blockquote>
+<p>通常我们在应用<code>fixed</code>组件的时候，都要解决<code>fixed</code>组件的滚动问题。通常<code>fixed</code>组件不会随着滚动条的滚动而滚动，但是我们拥有强大的js,我们可以通过为<code>fixed</code>组件设置一个固定的<code>margin-top</code>,然后通过js动态的控制这个值，使得它可以相对父元素进行滚动。因为我们都知道，<code>margin</code>属性调节的是<code>box</code>之间的距离，<code>fixed</code>组件脱了文档流，但它依然是一个box,因此我们可以使用margin来调节<code>fixed</code>组件与父元素之间的相对位置。</p>
+</blockquote>
+<p>就拿上面的例子而言，具体代码如下所示：</p>
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-18_00-41-23.jpg" alt></p>
+<p><img src="https://scala.cool/images/2018/09/Xnip2018-09-18_00-43-28.jpg" alt></p>
+<h2 id="副作用fixed"><a href="#副作用fixed" class="headerlink" title="副作用fixed"></a>副作用<code>fixed</code></h2><h3 id="fixed-失效"><a href="#fixed-失效" class="headerlink" title="fixed 失效"></a>fixed 失效</h3><p>在固定定位元素的父元素上应用transform属性，固定定位的元素会相对于父元素来定位</p>
+<p>具体可参考以下这篇博文，简单来说就是<code>transform</code>属性会对<code>fixed</code>组件造成影响</p>
+<p><a href="http://meyerweb.com/eric/thoughts/2011/09/12/un-fixing-fixed-elements-with-css-transforms/" target="_blank" rel="noopener">Eric’s Archived Thoughts: Un-fixing Fixed Elements with CSS Transforms</a></p>
+<h1 id="范式"><a href="#范式" class="headerlink" title="范式"></a>范式</h1><p>讲了这个多关于<code>position</code>的副作用，我想到这里你或许也早已经有了一套自己的范式，其实里面的很多细节我们都已经在前面提到过。在这里我将分享一套属于我自己的<code>position</code>范式，学才疏浅，请不要见怪</p>
+<ol>
+<li>相对于具体元素的小组件可以采用<code>relative</code>+<code>absolute</code>或者「<code>fixed</code>组件」的解决方案。如果组件层级较深，推荐使用「<code>fixed</code>组件」的方式来进行定位；具体可以参照上面提到过的图标选择框的例子。</li>
+<li>相对于浏览器窗口固定的小组件，推荐是用<code>fixed</code>定位，例如右下角的小弹窗，固定的底部导航</li>
+<li>要尽量减少<code>z-index</code>的嵌套使用</li>
+<li>在使用<code>fixed</code>定位时，要留意<code>transform</code>属性对它的影响</li>
+</ol>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/前端开发/">前端开发</a>
+          
+            <a href="/tags/Rhyme/">^Rhyme</a>
+          
+            <a href="/tags/前端重构范式/">~前端重构范式</a>
+          
+            <a href="/tags/Captain/">^Captain</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/11/cats-3/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Cats（三）：高阶类型</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/09/java-2-scala-3/">
+        <span class="next-text nav-default">从 Java 到 Scala（三）：object 的应用</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1537200000000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

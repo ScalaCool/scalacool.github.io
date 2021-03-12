@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/04/mysql-async-1/">
+
+
+<meta name="description" content="异步数据库驱动与传统 JDBC 驱动对比">
+<meta name="keywords" content="网络编程,数据库,~MySQL 异步驱动浅析,^Jilen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 异步驱动浅析 （一）：性能分析">
+<meta property="og:url" content="http://scala.cool/2017/04/mysql-async-1/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="异步数据库驱动与传统 JDBC 驱动对比">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2017/04/postgres-async-pool.png">
+<meta property="og:image" content="http://scala.cool/images/2017/04/mysql-async-select.png">
+<meta property="og:image" content="http://scala.cool/images/2017/04/hikaricp-select.png">
+<meta property="og:image" content="http://scala.cool/images/2017/04/mysql-async-trans.png">
+<meta property="og:image" content="http://scala.cool/images/2017/04/hikaricp-trans.png">
+<meta property="og:updated_time" content="2020-04-22T02:50:45.342Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL 异步驱动浅析 （一）：性能分析">
+<meta name="twitter:description" content="异步数据库驱动与传统 JDBC 驱动对比">
+<meta name="twitter:image" content="http://scala.cool/images/2017/04/postgres-async-pool.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> MySQL 异步驱动浅析 （一）：性能分析 - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          MySQL 异步驱动浅析 （一）：性能分析
+        
+      </h1>
+
+      <time class="post-time">
+          4月21日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Jilen"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Jilen"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p><a href="https://github.com/mauricio/postgresql-async" target="_blank" rel="noopener">Mysql Async</a> 是一个 Scala 编写的，基于 <a href="https://netty.io" target="_blank" rel="noopener">Netty</a> 实现的非阻塞异步数据库驱动。在本系列文章中我们将逐步分析：</p>
+<ul>
+<li>与传统的 JDBC 驱动相比有何优势</li>
+<li>Mysql Async 异步驱动存在什么问题，该如何优化</li>
+</ul>
+<h2 id="项目设计目标"><a href="#项目设计目标" class="headerlink" title="项目设计目标"></a>项目设计目标</h2><p>项目官网设计目标如下</p>
+<ul>
+<li>快、快、更快</li>
+<li>低内存开销</li>
+<li>尽量避免内存拷贝（也是为了更快，更节约内存）</li>
+<li>易于使用，调用方法，返回 <code>Future</code></li>
+<li>从不阻塞</li>
+<li>所有功能都被测试覆盖</li>
+<li>很小的依赖</li>
+</ul>
+<p>可以看出作者是希望通过异步非阻塞能让驱动更快（注意此处我们不讨论是真异步或者伪异步）。<br>接下来本文将具体分析与传统的 <code>mysql-connector/j</code> 相比究竟是不是更快，快在哪里。</p>
+<h2 id="网络-IO"><a href="#网络-IO" class="headerlink" title="网络 IO"></a>网络 IO</h2><h3 id="MysqlAsync-的-IO"><a href="#MysqlAsync-的-IO" class="headerlink" title="MysqlAsync 的 IO"></a>MysqlAsync 的 IO</h3><ul>
+<li>项目使用 Netty 的 NIO 来实现，在网络 IO 这一点上确实是非阻塞的。</li>
+<li>协议实现过程也没用使用 <code>synchronized</code> 和 <code>Lock</code></li>
+<li>Netty 默认情况下线程数为 CPU 核数2倍</li>
+</ul>
+<h3 id="Mysql-JDBC-驱动-的-IO"><a href="#Mysql-JDBC-驱动-的-IO" class="headerlink" title="Mysql JDBC 驱动 的 IO"></a>Mysql JDBC 驱动 的 IO</h3><p><code>mysql-connector/j</code> 使用的还是 Blocking IO ，这要求处理请求时必需有足够多的线程，否则吞吐量将受很大限制。</p>
+<p>例如同样基于 Blocking IO 的 <code>Tomcat7</code> 默认就配置了 200 线程。</p>
+<h2 id="连接池"><a href="#连接池" class="headerlink" title="连接池"></a>连接池</h2><h3 id="MysqlAsync-的链接池"><a href="#MysqlAsync-的链接池" class="headerlink" title="MysqlAsync 的链接池"></a>MysqlAsync 的链接池</h3><p><img src="/images/2017/04/postgres-async-pool.png" alt="Mysql Async Pool"></p>
+<p>项目还提供一个连接池，采用分区设计，一个 <code>PartitionedAsyncObjectPool</code> 包含多个 <code>SingleThreadedAsyncObjectPool</code> 。</p>
+<h4 id="PartitionedAsyncObjectPool"><a href="#PartitionedAsyncObjectPool" class="headerlink" title="PartitionedAsyncObjectPool"></a>PartitionedAsyncObjectPool</h4><p>流程十分简单，根据线程的 id 选择 <code>SingleThreadedAsyncObjectPool</code>，然后从中获取数据库链接。不存在<strong>阻塞</strong>的可能</p>
+<h4 id="SingleThreadedAsyncObjectPool"><a href="#SingleThreadedAsyncObjectPool" class="headerlink" title="SingleThreadedAsyncObjectPool"></a>SingleThreadedAsyncObjectPool</h4><p>顾名思义，这是一个单线程的对象池。当请求获取链接时，如果有多余链接则直接返回，如果没有则加入队列，等待有链接通过 <code>giveBack</code> 方法释放时返回给队列里的某个请求。<br>这里用了 Scala 的 <code>Future</code> 和 <code>Promise</code> 实现，也不存在阻塞的情况。</p>
+<p><a href="https://github.com/mauricio/postgresql-async/blob/master/db-async-common/src/main/scala/com/github/mauricio/async/db/pool/SingleThreadedAsyncObjectPool.scala#L202" target="_blank" rel="noopener">分析源代码后</a>发现此处使用只有一个线程的 <code>ThreadPoolExecutor</code> 来确保同一时间只有一个线程请求链接。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// Worker.scala</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span></span>(f: =&gt; <span class="type">Unit</span>) &#123;</span><br><span class="line">  <span class="keyword">this</span>.executionContext.execute(<span class="keyword">new</span> <span class="type">Runnable</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span></span>() &#123;</span><br><span class="line">      ...</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码中<code>this.executionContext.execute</code> 最终会执行 <code>TreadPoolExecutor.execute</code><br>而 <code>TreadPoolExecutor.execute</code> 并不是完全非阻塞的。</p>
+<p>这带来了一个问题：当多个线程同时要获取链接时，只有一个线程可以获得链接，其他线程全部处于 <code>blocked</code> 状态。</p>
+<p>由于是分区设计，并且 <a href="http://www.playframework.com" target="_blank" rel="noopener">Play</a> 这样的全异步框架主线程数默认非常少，所以这个问题在某些场合下并不严重。</p>
+<h3 id="Hikaricp"><a href="#Hikaricp" class="headerlink" title="Hikaricp"></a>Hikaricp</h3><p><a href="https://github.com/brettwooldridge/HikariCP" target="_blank" rel="noopener">HikariCP</a> 也许是目前优化得最好 JDBC 连接池。<br>该项目 <a href="https://github.com/brettwooldridge/HikariCP/wiki" target="_blank" rel="noopener">Wiki</a> 中的几篇文章也值得一看。</p>
+<p>我们无法从理论上直接得出何者性能更优的答案，后续将通过具体测试来估计何者更优。</p>
+<h2 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h2><p>为了验证上述观点，我进行了简单的性能测试，主要测试了简单查询和事务两个方面。</p>
+<h4 id="简单查询"><a href="#简单查询" class="headerlink" title="简单查询"></a>简单查询</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> remain = remain + ? <span class="keyword">where</span> <span class="keyword">id</span> = ?</span><br><span class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> remain = remain - ? <span class="keyword">where</span> <span class="keyword">id</span> = ?</span><br></pre></td></tr></table></figure>
+<h3 id="简单查询-1000qps"><a href="#简单查询-1000qps" class="headerlink" title="简单查询(1000qps)"></a>简单查询(1000qps)</h3><h4 id="MysqlAsync-64链接，默认16线程"><a href="#MysqlAsync-64链接，默认16线程" class="headerlink" title="MysqlAsync (64链接，默认16线程)"></a>MysqlAsync (64链接，默认16线程)</h4><p><img src="/images/2017/04/mysql-async-select.png" alt="MysqlAsync-select"></p>
+<h4 id="JDBC-64链接，64线程"><a href="#JDBC-64链接，64线程" class="headerlink" title="JDBC  (64链接，64线程)"></a>JDBC  (64链接，64线程)</h4><p><img src="/images/2017/04/hikaricp-select.png" alt="Hikaricp-select"></p>
+<h4 id="事务-1000tps，针对100条-user-记录"><a href="#事务-1000tps，针对100条-user-记录" class="headerlink" title="事务(1000tps，针对100条 user 记录)"></a>事务(1000tps，针对100条 user 记录)</h4><h4 id="MysqlAsync-64链接，默认16线程-1"><a href="#MysqlAsync-64链接，默认16线程-1" class="headerlink" title="MysqlAsync (64链接，默认16线程)"></a>MysqlAsync (64链接，默认16线程)</h4><p><img src="/images/2017/04/mysql-async-trans.png" alt="MysqlAsync-trans"></p>
+<h4 id="JDBC-64链接，64线程-1"><a href="#JDBC-64链接，64线程-1" class="headerlink" title="JDBC (64链接，64线程)"></a>JDBC (64链接，64线程)</h4><p><img src="/images/2017/04/hikaricp-trans.png" alt="MysqlAsync-trans"></p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><ul>
+<li>在查询非常简单，速度很快的情况下两者性能相当，<code>Mysql Async</code> 有微弱的优势。</li>
+<li>在并发竞争更新，并且存在事务情况下（数据库存在大量锁）:<ul>
+<li>基于 Hikaricp 连接池的程序在一段时间后直接失去响应，大量请求超时。</li>
+<li>基于 MysqlAsync 的程序仍旧在执行，大部分失败是因为事务中存在死锁或者系统繁忙。</li>
+</ul>
+</li>
+<li>通过调整连接数和线程数，<code>hikaricp + mysql-connector/j</code> 方案也许可以提升性能，但这套方案的问题是你永远不知道多少线程和链接数才是合适的。</li>
+</ul>
+<blockquote>
+<p>下表是结合上述测试和定性分析得出的结果</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>MysqlAsync</th>
+<th>HikariCP + mysql-connector/j</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>编程模型</td>
+<td>异步</td>
+<td>同步</td>
+</tr>
+<tr>
+<td>网络IO</td>
+<td>NIO</td>
+<td>BIO</td>
+</tr>
+<tr>
+<td>链接池</td>
+<td>异步实现</td>
+<td>同步实现</td>
+</tr>
+<tr>
+<td>过载防护</td>
+<td>通过调节队列长度实现</td>
+<td>需要额外实现 （例如指定线程池任务队列长度）</td>
+</tr>
+<tr>
+<td>可伸缩性</td>
+<td>只需要设置合理连接数(例如几十个)</td>
+<td>需要测试最佳线程数和链接数</td>
+</tr>
+<tr>
+<td>线程数</td>
+<td>少</td>
+<td>多</td>
+</tr>
+</tbody>
+</table>
+<p>总得来说 MysqlAsync 通过减少了线程数确实达到了以下效果</p>
+<ul>
+<li>更少内存占用</li>
+<li>减少不必要等待，从而减少线程上下文切换</li>
+<li>与 Play 这样的全异步框架更契合，不用反复调试线程数量和链接数量</li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/网络编程/">网络编程</a>
+          
+            <a href="/tags/数据库/">数据库</a>
+          
+            <a href="/tags/MySQL-异步驱动浅析/">~MySQL 异步驱动浅析</a>
+          
+            <a href="/tags/Jilen/">^Jilen</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/04/scala-weekly-1/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Scala 技术周刊 | 第 1 期</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/04/scala-types-of-types-part-2/">
+        <span class="next-text nav-default"><译> Scala 类型的类型（二）</译></span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1492704000000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

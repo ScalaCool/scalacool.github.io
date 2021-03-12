@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/11/kotlin-1/">
+
+
+<meta name="description" content="类型系统在各种语言之间存在比较大的差异。最主要的差异存在于编译时期的语法，以及运行时期的操作实现方式。本文将为你介绍 Kotlin 中的类型结构设计。">
+<meta name="keywords" content="^Prefert,Kotlin,~Dive Into Kotlin,Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dive Into Kotlin（二）：Kotlin 类型结构设计">
+<meta property="og:url" content="http://scala.cool/2017/11/kotlin-1/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="类型系统在各种语言之间存在比较大的差异。最主要的差异存在于编译时期的语法，以及运行时期的操作实现方式。本文将为你介绍 Kotlin 中的类型结构设计。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2017/11/kotlin-types.png">
+<meta property="og:image" content="http://scala.cool/images/2017/11/elvis.png">
+<meta property="og:image" content="http://scala.cool/images/2017/11/kotlin-top-1.png">
+<meta property="og:image" content="http://scala.cool/images/2017/11/kotlin-top-2.png">
+<meta property="og:image" content="http://scala.cool/images/2017/11/kotlin-top-3.png">
+<meta property="og:image" content="http://scala.cool/images/2017/11/kotlin-top-4.png">
+<meta property="og:image" content="http://scala.cool/images/2017/11/kotlin-unit-1.png">
+<meta property="og:image" content="http://scala.cool/images/2017/11/kotlin-nothing-1.png">
+<meta property="og:image" content="http://scala.cool/images/2017/11/kotlin-nullable-nothing.png">
+<meta property="og:image" content="http://scala.cool/images/2017/11/kotlin-basic-types-sys.png">
+<meta property="og:updated_time" content="2020-04-22T02:50:45.353Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dive Into Kotlin（二）：Kotlin 类型结构设计">
+<meta name="twitter:description" content="类型系统在各种语言之间存在比较大的差异。最主要的差异存在于编译时期的语法，以及运行时期的操作实现方式。本文将为你介绍 Kotlin 中的类型结构设计。">
+<meta name="twitter:image" content="http://scala.cool/images/2017/11/kotlin-types.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Dive Into Kotlin（二）：Kotlin 类型结构设计 - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Dive Into Kotlin（二）：Kotlin 类型结构设计
+        
+      </h1>
+
+      <time class="post-time">
+          12月1日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Prefert"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Prefert"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>无论在静态语言还是动态语言中，「类型系统」都起到了至关重要的作用。</p>
+<h1 id="一、类型系统简介"><a href="#一、类型系统简介" class="headerlink" title="一、类型系统简介"></a>一、类型系统简介</h1><blockquote>
+<p>在计算机科学中，类型系统用于定义如何将编程语言中的数值和表达式归类为许多不同的类型，如何操作这些类型，这些类型如何互相作用。  </p>
+</blockquote>
+<blockquote>
+<p>类型可以确认一个值或者一组值具有特定的意义和目的（虽然某些类型，如抽象类型和函数类型，在程序运行中，可能不表示为值）。</p>
+</blockquote>
+<h2 id="类型系统的作用"><a href="#类型系统的作用" class="headerlink" title="类型系统的作用"></a>类型系统的作用</h2><p>类型系统在各种语言之间存在比较大的差异。最主要的差异存在于编译时期的语法，以及运行时期的操作实现方式。我们可以简单理解为两个部分：</p>
+<ul>
+<li>一组基本类型构成的PTS（Primary Type Set，基本类型集合）；</li>
+<li>PTS上定义的一系列组合、运算、转换规则等。</li>
+</ul>
+<p>但是他们的目的都是一致的：</p>
+<p><strong>1. 安全</strong>。有了类型系统以后就可以实现类型安全，这时候程序就变成了一个严格的数学证明过程，编译器可以机械地验证程序某种程度的正确性，从而杜绝很多错误的发生。比如：Scala、Java。但是 JavaScript 等动态语言/弱类型语言就要借助其他插件（如 ESLint）来提示语法等错误。</p>
+<p><strong>2. 抽象能力</strong>。在安全的前提下，一个强大的类型系统的标准是抽象能力，能将程序中的很多东西纳入安全的类型系统中进行抽象，这在安全性的前提下又不损耗灵活性，甚至性能也能很优化。动态语言的抽象能力可以很强，但安全性和性能就不行了。泛型、高阶函数（闭包）、类型类、<code>Monad</code>、<code>Lifetime</code>（Rust） 属于这一块。</p>
+<p><strong>3. 工程能力</strong>。一个强类型的编程语言比动态类型的语言更适合大规模软件的构建，哪怕不存在性能问题，但是同样取决于前两点。</p>
+<blockquote>
+<p>Hint: 想深入了解类型系统的朋友可以参考 <a href="http://www.cs.colorado.edu/~bec/courses/csci5535/reading/cardelli-typesystems.pdf" target="_blank" rel="noopener">《Type Systems》</a>和 <a href="http://www.ling.ohio-state.edu/~pollard.4/type/books/pierce-tpl.pdf" target="_blank" rel="noopener">《Types and Programming》</a></p>
+</blockquote>
+<p>Kotlin 作为一门静态类型编程语言，同样拥有着强大的类型系统。</p>
+<p><img src="/images/2017/11/kotlin-types.png" alt="Kotlin types"></p>
+<h1 id="二、Kotlin-的类型系统"><a href="#二、Kotlin-的类型系统" class="headerlink" title="二、Kotlin 的类型系统"></a>二、Kotlin 的类型系统</h1><p>你可能会对类型后面的 <code>?</code> 产生疑问，那我们就先来看看 Kotlin 中的可空类型。  </p>
+<h2 id="可空类型-Nullable-Types-——-Int？-Boolean？-及其他"><a href="#可空类型-Nullable-Types-——-Int？-Boolean？-及其他" class="headerlink" title="可空类型(Nullable Types) —— Int？ Boolean？ 及其他"></a>可空类型(Nullable Types) —— <code>Int？</code> <code>Boolean？</code> 及其他</h2><p>许多编程语言中最常见的陷阱之一是访问空引用的成员，导致空引用异常。在 Java 中，这被称作 <code>NullPointerException</code> 或简称 <code>NPE</code>。</p>
+<p>Kotlin 的类型系统旨在从我们的代码中消除 <code>NullPointerException</code>。</p>
+<p>NPE 发生的原因可能是</p>
+<ul>
+<li>显式调用 <code>throw NullPointerException()；</code></li>
+<li>使用 <code>!!</code> 操作符(要求抛出 <code>NullPointerException</code>)</li>
+<li>外部 Java 代码导致</li>
+<li>初始化时有一些数据不一致（如一个未初始化的 this 用于构造函数的某个地方）。</li>
+</ul>
+<p>与 Java 不同，Kotlin 区分非空（non-null）和可空（nullable）类型。到目前为止，我们看到的类型都是非空类型，Kotlin 不允许 null 作为这些类型的值。访问非空类型的变量将永远不会抛出空指针异常。</p>
+<p><strong>由于 <code>null</code> 只能被存储在 Java 的引用类型的变量中，所以在 Kotlin 中基本数据的可空版本都会使用该类型的包装形式。</strong></p>
+<p>同样的，如果你用基本数据类型作为泛型类的类型参数，Kotlin 同样会使用该类型的包装形式。</p>
+<p>我们可以在任何类型后面加上<code>？</code>，比如<code>Int?</code>，实际上等同于<code>Int? = Int or null</code>，通过合理的使用，我们能够简化很多判空代码。并且我们能够有效规避 <code>NullPointerException</code> 导致的崩溃。</p>
+<h3 id="深入-Nullable-Types"><a href="#深入-Nullable-Types" class="headerlink" title="深入 Nullable Types"></a>深入 Nullable Types</h3><p>接下去让我们看看，非空的原理到底怎么样的。</p>
+<p>对于以下一段 Kotlin 代码：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">testNullable1</span><span class="params">(x: <span class="type">String</span>, y: <span class="type">String</span>?)</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> x.length</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">testNullable2</span><span class="params">(x: <span class="type">String</span>, y: <span class="type">String</span>?)</span></span>: <span class="built_in">Int</span>? &#123;</span><br><span class="line">    <span class="keyword">return</span> y?.length</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">testNullable3</span><span class="params">(x: <span class="type">String</span>, y: <span class="type">String</span>?)</span></span>: <span class="built_in">Int</span>? &#123;</span><br><span class="line">    <span class="keyword">return</span> y!!.length</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们利用 Idea 反编译后，产生的 Java 代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">NullableTypesKt</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">testNullable1</span><span class="params">(@NotNull String x, @Nullable String y)</span> </span>&#123;</span><br><span class="line">      Intrinsics.checkParameterIsNotNull(x, <span class="string">"x"</span>); <span class="comment">// 如果为 null， 抛出异常</span></span><br><span class="line">      <span class="keyword">return</span> x.length();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Nullable</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Integer <span class="title">testNullable2</span><span class="params">(@NotNull String x, @Nullable String y)</span> </span>&#123;</span><br><span class="line">      Intrinsics.checkParameterIsNotNull(x, <span class="string">"x"</span>);</span><br><span class="line">      <span class="keyword">return</span> y != <span class="keyword">null</span>?Integer.valueOf(y.length()):<span class="keyword">null</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Nullable</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Integer <span class="title">testNullable3</span><span class="params">(@NotNull String x, @Nullable String y)</span> </span>&#123;</span><br><span class="line">      Intrinsics.checkParameterIsNotNull(x, <span class="string">"x"</span>);</span><br><span class="line">      <span class="keyword">if</span>(y == <span class="keyword">null</span>) &#123;</span><br><span class="line">         Intrinsics.throwNpe();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> Integer.valueOf(y.length());</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，在不可空变量调用函数之前，都使用 <code>kotlin.jvm.internal.Intrinsics</code> 类里面的 <code>checkParameterIsNotNull</code> 方法检查是否为 <code>null</code>，如果是 <code>null</code> 则抛出异常：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">checkParameterIsNotNull</span><span class="params">(Object value, String paramName)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">        throwParameterIsNullException(paramName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>基于可空类型，Kotlin 才拥有很多促使安全的运算符。</p>
+<h3 id="——-安全调用"><a href="#——-安全调用" class="headerlink" title="?. —— 安全调用"></a><code>?.</code> —— 安全调用</h3><p><code>?.</code>允许我们把一次 <code>null</code> 检查和一次方法的调用合并成一个操作，比如：</p>
+<p><code>str?.toUpperCase()</code> 等同于 <code>if (str != null) str.toUpperCase() else null</code></p>
+<p>当然，<code>?.</code> 同样可以处理属性：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span></span>(<span class="keyword">val</span> nickname: String, <span class="keyword">val</span> master: User?)</span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">masterInfo</span><span class="params">(user: <span class="type">User</span>)</span></span>: String? = user.master?.nickname</span><br><span class="line"></span><br><span class="line"><span class="comment">// test</span></span><br><span class="line"><span class="keyword">val</span> ceo = User(<span class="string">"boss"</span>, <span class="literal">null</span>)</span><br><span class="line"><span class="keyword">val</span> employee = User(<span class="string">"employee-1"</span>, ceo)</span><br><span class="line">println(masterInfo(employee)) <span class="comment">// boss</span></span><br><span class="line">println(masterInfo(ceo)) <span class="comment">// null</span></span><br></pre></td></tr></table></figure>
+<h3 id="——-Elvis-运算符"><a href="#——-Elvis-运算符" class="headerlink" title="?: —— Elvis 运算符"></a><code>?:</code> —— Elvis 运算符</h3><p>刚开始我也不知道为什么称之为「Elvis 」运算符——直到我看到了这张图…</p>
+<p><img src="/images/2017/11/elvis.png" alt="elvis"></p>
+<p>如果你不喜欢这个名字，我们也可以叫它——「null 合并运算符」。如果你学习过 Scala，这类似于 <code>getOrElse</code>:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">getOrElse</span><span class="params">(str: <span class="type">String</span>?)</span></span> &#123;</span><br><span class="line">  <span class="keyword">val</span> result: String = str ?: <span class="string">""</span> <span class="comment">// 等价于 str == null ? "" : str</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外还有<code>as?</code>（安全转换）、<code>!!</code>（非空断言）、<code>let</code>、<code>lateinit</code>（延迟初始化属性）等此处就不详细介绍。</p>
+<h2 id="基本数据类型-——-Int-Boolean-及其他"><a href="#基本数据类型-——-Int-Boolean-及其他" class="headerlink" title="基本数据类型 —— Int, Boolean 及其他"></a>基本数据类型 —— <code>Int</code>, <code>Boolean</code> 及其他</h2><p>我们都知道，Java 将 <strong>基本数据类型</strong> 和 <strong>引用类型</strong> 做了区分：</p>
+<ul>
+<li>基本数据类型，例如 int 的变量直接存储了它的值，我们不能对这些值调用方法，或者把它们放到集合中。</li>
+<li>引用类型的变量存储的是指向包含该对象的内存地址的引用。</li>
+</ul>
+<p><strong>在 Kotlin 中，并不区分基本数据类型和包装类型 —— 你使用的永远是同一个类型</strong>。</p>
+<h3 id="数字转换"><a href="#数字转换" class="headerlink" title="数字转换"></a>数字转换</h3><p>Kotlin 中我们必须使用 <strong>显示转换</strong> 来对数字进行转换，例：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">  <span class="keyword">val</span> z = <span class="number">13</span></span><br><span class="line">  println(z.toLong() <span class="keyword">in</span> list(<span class="number">9L</span>, <span class="number">5L</span>, <span class="number">2L</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果觉得这种方式不够简便，你也可以尝试使用 Kotlin 中的字面量：</p>
+<ul>
+<li>使用后缀 <code>L</code> 表示 <code>Long</code>: <code>123L</code></li>
+<li>使用后缀 <code>F</code> 表示 <code>Float</code>: <code>.123f</code>、<code>1e3f</code></li>
+<li>使用前缀 <code>0x</code> / <code>0X</code> 表示十六进制：<code>0xadcL</code>  </li>
+<li>…</li>
+</ul>
+<p><strong>当你使用字面量去初始化一个类型已知的变量，或是把字面量作为实参传给函数时</strong> ，会发生隐式转换，并且算数运算符会被重载。<br>例：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">long</span><span class="params">(l: <span class="type">Long</span>)</span></span> = println(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">  <span class="keyword">val</span> b: <span class="built_in">Byte</span> = <span class="number">1</span> <span class="comment">// Int -&gt; Byte</span></span><br><span class="line">  <span class="keyword">val</span> l = b + <span class="number">1L</span> <span class="comment">// 重载 plus 运算符</span></span><br><span class="line">  foo(<span class="number">234</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="通用类型系统-——-Any-Any"><a href="#通用类型系统-——-Any-Any" class="headerlink" title="通用类型系统 —— Any, Any?"></a>通用类型系统 —— <code>Any</code>, <code>Any?</code></h2><p>和 <code>Object</code> 作为 Java 类层级结构的顶层类似，<code>Any</code> 类型是 Kotlin 中 <strong>所有非空类型</strong>（ex: <code>String</code>, <code>Int</code>) 的顶级类型——超类。</p>
+<center><img src="/images/2017/11/kotlin-top-1.png" alt="Kotlin types"></center>
+
+<p>与 Java 不同的是： Kotlin 不区分「原始类型」（primitive type）和其它的类型。它们都是同一类型层级结构的一部分。</p>
+<p>如果定义了一个没有指定父类型的类型，则该类型将是 <code>Any</code> 的直接子类型:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fruit</span></span>(<span class="keyword">val</span> weight: <span class="built_in">Double</span>)</span><br></pre></td></tr></table></figure></p>
+<center><img src="/images/2017/11/kotlin-top-2.png" alt="Kotlin types"></center>  
+
+<p>如果你为定义的类型指定了父类型，则该父类型将是新类型的直接父类型，但是新类型的最终祖先为 <code>Any</code>。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Fruit</span></span>(<span class="keyword">val</span> weight: <span class="built_in">Double</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Banana</span></span>(weight: <span class="built_in">Double</span>, <span class="keyword">val</span> size: <span class="built_in">Double</span>): Fruit(weight)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Peach</span></span>(weight: <span class="built_in">Double</span>, <span class="keyword">val</span> color: String): Fruit(weight)</span><br></pre></td></tr></table></figure>
+<center><img src="/images/2017/11/kotlin-top-3.png" alt="Kotlin types"></center>  
+
+<p>如果你的类型实现了多个接口，那么它将具有多个直接的父类型，而 <code>Any</code> 同样是最终的祖先。  </p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ICanGoInASalad</span></span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ICanBeSunDried</span></span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tomato</span></span>(weight: <span class="built_in">Double</span>): Fruit(weight), ICanGoInASalad, ICanBeSunDried</span><br></pre></td></tr></table></figure>
+<center><img src="/images/2017/11/kotlin-top-4.png" alt="Kotlin types"></center>
+
+<p>Kotlin 的 Type Checker 强制执行父子关系。</p>
+<p>例如:<br>你可以将子类型值存储到父类型变量中：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f: Fruit = Banana(weight = <span class="number">0.1</span>)</span><br><span class="line">f = Peach(weight = <span class="number">0.15</span>)</span><br></pre></td></tr></table></figure></p>
+<p>但是你不能将父类型值存储到子类型变量中：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> b = Banana(weight=<span class="number">0.1</span>)</span><br><span class="line"><span class="keyword">val</span> f: Fruit = b</span><br><span class="line"><span class="keyword">val</span> b2: Banana = f</span><br><span class="line"><span class="comment">// Error: Type mismatch: inferred type is Fruit but Banana was expected</span></span><br></pre></td></tr></table></figure></p>
+<p>正好也符合我们的日常理解：“香蕉是水果，水果不是香蕉。”</p>
+<p>另外，Kotlin 把 Java 方法参数和返回类型中用到的 <code>Object</code> 类型看作 <code>Any</code>(更确切地是当做「平台类型」)。当 Kotlin 函数函数中使用 <code>Any</code> 时，它会被编译成 Java 字节码中的 <code>Object</code>。</p>
+<blockquote>
+<p>Hint: 平台类型本质上就是 Kotlin 不知道可控性信息的类型 —— 所有 Java 引用类型在 Kotlin 中都表现为平台类型。</p>
+</blockquote>
+<p>上面提到：在 Kotlin 中， <strong><code>Any</code> 是所有 非空类型 的超类</strong>。<br>你可能会有疑问： <code>null</code> 类型的父类是什么呢？</p>
+<h2 id="Unit-——-Kotlin-里的-void"><a href="#Unit-——-Kotlin-里的-void" class="headerlink" title="Unit —— Kotlin 里的 void"></a>Unit —— Kotlin 里的 void</h2><p><strong>Kotlin 是一种表达式导向的语言，所有流程控制语句都是表达式</strong>。它没有 Java 和 C 中的 <code>void</code> 函数，函数总是会返回一个值。有时候函数并没有计算任何东西 —— 这被我们称作他们的副作用（side effect），这时将会返回 <code>Unit</code>——具有单一值的类型。</p>
+<p>大多数情况下，你不需要明确指定 <code>Unit</code> 作为返回类型或从函数返回 <code>Unit</code>。如果编写的函数具有块代码体，并且不指定返回类型，则编译器会将其视为返回 <code>Unit</code> 类型，否则编译器会使用推断的类型。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">example</span><span class="params">()</span></span> &#123;</span><br><span class="line">    println(<span class="string">"block body and no explicit return type, so returns Unit"</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">val</span> u: <span class="built_in">Unit</span> = example()</span><br></pre></td></tr></table></figure></p>
+<p><code>Unit</code> 并没什么特别之处。就像任何其他类型一样，它是 <code>Any</code> 的子类型，而 <code>Unit?</code> 是 <code>Any?</code> 的子类型。</p>
+<center><img src="/images/2017/11/kotlin-unit-1.png" alt="Kotlin types"></center>
+
+<p>然而 <code>Unit?</code> 类型却是一个奇怪的特殊例子，这是 Kotlin 的类型系统一致性的结果。<code>Unit?</code> 类型只有两个值：<code>Unit</code> 单例和 <code>null</code>。我暂时还没发现使用 <code>Unit?</code> 类型的地方，但是在类型系统中没有特殊的 void 这一事实，使得处理各种函数泛型变得更加容易。  </p>
+<h2 id="Nothing"><a href="#Nothing" class="headerlink" title="Nothing"></a>Nothing</h2><p>在 Kotlin 类型层级结构的最底层是 <code>Nothing</code> 类型。</p>
+<center><img src="/images/2017/11/kotlin-nothing-1.png" alt="Kotlin types"></center>  
+
+<p>顾名思义，<code>Nothing</code> 是没有实例的类型。<code>Nothing</code> 类型的表达式不会产生任何值。</p>
+<p>注意 <code>Unit</code> 和 <code>Nothing</code> 之间的区别，对 <code>Unit</code> 类型的表达式求值将返回 <code>Unit</code> 的单例，而对 <code>Nothing</code> 类型的表达式求值则永远都不会返回。</p>
+<p>这意味着任何类型为 <code>Nothing</code> 的表达式之后的所有代码都是无法得到执行的（unreachable code），编译器和 IDE 会向你发出警告。</p>
+<p>什么样的表达式类型为 <code>Nothing</code> 呢？<a href="https://kotlinlang.org/docs/reference/grammar.html#jump" target="_blank" rel="noopener">流程控制中与跳转相关的表达式。</a></p>
+<p>例如 <code>throw</code> 关键字会中断表达式的计算，并从函数中抛出异常。因此 <code>throw</code> 就是 <code>Nothing</code> 类型的表达式。</p>
+<p>通过将 <code>Nothing</code> 作为所有类型的子类型，类型系统允许程序中的任何表达求值失败。例如: JVM 在计算表达式时内存不足，或者是有人拔掉了计算机的电源插头。这也意味着我们可以从任何表达式中抛出异常。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">formatCell</span><span class="params">(value: <span class="type">Double</span>)</span></span>: String =</span><br><span class="line">    <span class="keyword">if</span> (value.isNaN())</span><br><span class="line">        <span class="keyword">throw</span> IllegalArgumentException(<span class="string">"<span class="variable">$value</span> is not a number"</span>)</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        value.toString()</span><br></pre></td></tr></table></figure>
+<p>你可能会惊奇地发现，<code>return</code> 语句的类型也为 <code>Nothing</code>。<code>return</code> 是一个流程控制语句，它立即从函数中返回一个值，打断其所在表达式的求值。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">formatCellRounded</span><span class="params">(value: <span class="type">Double</span>)</span></span>: String =</span><br><span class="line">    <span class="keyword">val</span> rounded: <span class="built_in">Long</span> = <span class="keyword">if</span> (value.isNaN()) <span class="keyword">return</span> <span class="string">"#ERROR"</span> <span class="keyword">else</span> Math.round(value)</span><br><span class="line">    rounded.toString()</span><br></pre></td></tr></table></figure>
+<p>进入无限循环或杀死当前进程的函数返回类型也为 Nothing。例如 Kotlin 标准库将 <code>exitProcess</code> 函数声明为：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">exitProcess</span><span class="params">(status: <span class="type">Int</span>)</span></span>: <span class="built_in">Nothing</span></span><br></pre></td></tr></table></figure></p>
+<p>如果你编写返回 <code>Nothing</code> 的自定义函数，编译器同样能检查出调用函数后无法得到执行的代码，就像使用语言本身的流程控制语句一样。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="title">forever</span><span class="params">(action: ()-&gt;<span class="type">Unit</span>)</span></span>: <span class="built_in">Nothing</span> &#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) action()</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">example</span><span class="params">()</span></span> &#123;</span><br><span class="line">    forever &#123;</span><br><span class="line">        println(<span class="string">"doing..."</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    println(<span class="string">"done"</span>) <span class="comment">// Warning: Unreachable code</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>与空安全一样，不可达代码分析是类型系统的一个特性。无需像 Java 一样在编译器和 IDE 中使用一些手段进行特殊处理。</p>
+<h2 id="可空的-Nothing"><a href="#可空的-Nothing" class="headerlink" title="可空的 Nothing?"></a>可空的 Nothing?</h2><p><code>Nothing</code> 像任何其他类型一样，如果允许其为空则可以得到对应的类型 <code>Nothing?</code>。<code>Nothing?</code> 只能包含一个值：<code>null</code>。事实上 <code>Nothing?</code> 就是 <code>null</code> 的类型。</p>
+<p><code>Nothing?</code> 是所有可空类型的最终子类型，所以我们可以使用 null 作为任何可空类型的值。</p>
+<center><img src="/images/2017/11/kotlin-nullable-nothing.png" alt="Kotlin types"></center>  
+
+<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>如果你还是对 Kotlin 类型系统不够清晰，下面这张图可能会对你有所帮助：</p>
+<center><img src="/images/2017/11/kotlin-basic-types-sys.png" alt="Kotlin types"></center>  
+
+<p>作为「Better Java」，Kotlin 的类型系统更加简洁，同时为了提高代码的安全性、可靠性，引入了一些新的特性（ex. <strong>Nullable Types</strong> 和 <strong>Immutable Collection</strong>）。</p>
+<p>我们将在下一篇详细介绍 Kotlin 中的集合。</p>
+<hr>
+<p>参考：</p>
+<ul>
+<li><a href="http://natpryce.com/articles/000818.html" target="_blank" rel="noopener">A Whirlwind Tour of the Kotlin Type Hierarchy</a></li>
+<li><a href="https://book.douban.com/subject/27093660/" target="_blank" rel="noopener"> 《Kotlin in Action》</a></li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Prefert/">^Prefert</a>
+          
+            <a href="/tags/Kotlin/">Kotlin</a>
+          
+            <a href="/tags/Dive-Into-Kotlin/">~Dive Into Kotlin</a>
+          
+            <a href="/tags/Android/">Android</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/12/swift-vue-like-1/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">用 Swift 模仿 Vue + Vuex 进行 iOS 开发（一）：ReSwift</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/11/cats-1/">
+        <span class="next-text nav-default">Cats（一）：从函数式编程思维谈起</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1512057600000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>
