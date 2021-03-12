@@ -719,7 +719,7 @@ hr {
     .post .post-content code, .post .post-content pre {
       padding: 7px;
       font-size: 13px;
-      font-family: "monospace";
+      font-family: monospace;
       background: #F8F8F8; }
     .post .post-content code {
       padding: 3px 5px;
