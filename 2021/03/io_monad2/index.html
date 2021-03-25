@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2021/03/io_monad2/">
+
+
+<meta name="description" content="基于回调的异步操作是非常常见的，本文我们尝试用 IO Monad 抽象此类操作">
+<meta name="keywords" content="^Jilen,~IO Monad 入门指南,函数式编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IO Monad 入门指南（二）： 处理回调式的异步操作">
+<meta property="og:url" content="http://scala.cool/2021/03/io_monad2/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="基于回调的异步操作是非常常见的，本文我们尝试用 IO Monad 抽象此类操作">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-03-12T12:05:42.461Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IO Monad 入门指南（二）： 处理回调式的异步操作">
+<meta name="twitter:description" content="基于回调的异步操作是非常常见的，本文我们尝试用 IO Monad 抽象此类操作">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> IO Monad 入门指南（二）： 处理回调式的异步操作 - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          IO Monad 入门指南（二）： 处理回调式的异步操作
+        
+      </h1>
+
+      <time class="post-time">
+          3月12日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Jilen"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Jilen"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h2 id="抽象基于-callback-的异步操作"><a href="#抽象基于-callback-的异步操作" class="headerlink" title="抽象基于 callback 的异步操作"></a>抽象基于 callback 的异步操作</h2><p>异步操作的一种最常见形式就是基于 callback，如早期的 Javascript 就是完全基于 callback 风格设计的。<br>抽象这种风格的异步操作，可以说是一个 IO Monad 的必备功能。<br>一个 callback 风格的异步操作通常可以定义为</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">triggerEvent</span></span>(cb: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">Event</span>] =&gt; <span class="type">Unit</span>): <span class="type">Unit</span></span><br></pre></td></tr></table></figure>
+<p>即，触发一个操作，并在完成时调用回调函数 <code>cb</code> 其对应的类型是 <code>(Either[Throwable, A] =&gt; Unit) =&gt; Unit</code></p>
+<p>注意，Java 中通常会将成功和失败的回调分开作为一个回调接口，如 <code>Channel</code> 的异步回调:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">CompletionHandler</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span>  <span class="title">completed</span><span class="params">(V result, A attachment)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">void</span>  <span class="title">failed</span><span class="params">(Throwable exc, A attachment)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这和上述形式并无区别。</p>
+<p>我们可能无法第一时间就给出一个抽象，那么还是回归前文的老套路，使用一种新的 ADT 来表示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">trait</span> <span class="title">IO</span></span></span><br><span class="line"><span class="class"><span class="title">object</span> <span class="title">IO</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Pure</span>[<span class="type">A</span>](<span class="params">value: <span class="type">A</span></span>) <span class="keyword">extends</span> <span class="title">IO</span>[<span class="type">A</span>]</span></span><br><span class="line"><span class="class">  <span class="title">private</span> <span class="title">case</span> <span class="title">class</span> <span class="title">FlatMap</span>[<span class="type">A</span>, <span class="type">B</span>](<span class="params">fa: <span class="type">IO</span>[<span class="type">A</span>], f: <span class="type">A</span> =&gt; <span class="type">IO</span>[<span class="type">B</span>]</span>) <span class="keyword">extends</span> <span class="title">IO</span>[<span class="type">B</span>]</span></span><br><span class="line"><span class="class">  <span class="title">private</span> <span class="title">case</span> <span class="title">class</span> <span class="title">Effect</span>[<span class="type">A</span>](<span class="params">run: (</span>) <span class="title">=&gt;</span> <span class="title">A</span>) <span class="keyword">extends</span> <span class="title">IO</span>[<span class="type">A</span>]</span></span><br><span class="line"><span class="class">  <span class="title">private</span> <span class="title">case</span> <span class="title">class</span> <span class="title">Failure</span>[<span class="type">A</span>](<span class="params">ex: <span class="type">Throwable</span></span>) <span class="keyword">extends</span> <span class="title">IO</span>[<span class="type">A</span>]</span></span><br><span class="line"><span class="class">  <span class="title">private</span> <span class="title">case</span> <span class="title">class</span> <span class="title">Recover</span>[<span class="type">A</span>](<span class="params">fa: <span class="type">IO</span>[<span class="type">A</span>], handler: <span class="type">Throwable</span> =&gt; <span class="type">IO</span>[<span class="type">A</span>]</span>) <span class="keyword">extends</span> <span class="title">IO</span>[<span class="type">A</span>]</span></span><br><span class="line"><span class="class">  <span class="title">private</span> <span class="title">case</span> <span class="title">class</span> <span class="title">Async</span>[<span class="type">A</span>](<span class="params">register: (<span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">A</span>] =&gt; <span class="type">Unit</span></span>) <span class="title">=&gt;</span> <span class="title">Unit</span>) <span class="keyword">extends</span> <span class="title">IO</span>[<span class="type">A</span>]</span></span><br><span class="line"><span class="class">  ...</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">  <span class="title">def</span> <span class="title">async</span>[<span class="type">A</span>](<span class="params">register: (<span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">A</span>], <span class="type">Unit</span></span>) <span class="title">=&gt;</span> <span class="title">Unit</span>)</span>: <span class="type">IO</span>[<span class="type">A</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在假设有一个回调风格的 httpclient</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">HttpClient</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span></span>(url: <span class="type">String</span>, cb: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">Response</span>] =&gt; <span class="type">Unit</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以将其转换为 <code>IO</code></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> cli: <span class="type">HttpClient</span> = ???</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">httpGet</span></span>() = &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span></span>(url: <span class="type">String</span>): <span class="type">IO</span>[<span class="type">Response</span>] = &#123;</span><br><span class="line">    <span class="type">IO</span>.async[<span class="type">Response</span>] &#123; cb =&gt;</span><br><span class="line">      cli.get(url, cb)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如此一来，我们就可以像前文一样使用 flatMap 等函数对这些操作进行组合，很大程度上避免了回调地狱带来的代码无法阅读的问题。例如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> &#123;</span><br><span class="line"> fisrtName &lt;- httpGet(urlA)</span><br><span class="line"> lastName &lt;- httpGet(urlB)</span><br><span class="line">&#125; <span class="keyword">yield</span> <span class="string">s"<span class="subst">$&#123;firstName&#125;</span><span class="subst">$&#123;lastName&#125;</span>"</span></span><br></pre></td></tr></table></figure>
+<h2 id="实现新的解释器"><a href="#实现新的解释器" class="headerlink" title="实现新的解释器"></a>实现新的解释器</h2><p>至此为止一切看起来都很简单，我们只要能针对新实现的 ADT 编写解释器就万事俱备了。<br>考虑到新增了异步操作，那么解释器理论上应该以回调的形式实现：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">unsafeRunFlatMap</span></span>[<span class="type">A</span>, <span class="type">B</span>](io: <span class="type">FlatMap</span>[<span class="type">A</span>, <span class="type">B</span>], cb: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">B</span>] =&gt; <span class="type">Unit</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">  unsafeRunAsync[<span class="type">A</span>](io.fa, &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Left</span>(e) =&gt;</span><br><span class="line">      cb(<span class="type">Left</span>(e))</span><br><span class="line">    <span class="keyword">case</span> <span class="type">Right</span>(a) =&gt;</span><br><span class="line">      unsafeRunAsync[<span class="type">B</span>](io.f(a), &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="type">Left</span>(e) =&gt; cb(<span class="type">Left</span>(e))</span><br><span class="line">        <span class="keyword">case</span> <span class="type">Right</span>(b) =&gt; cb(<span class="type">Right</span>(b))</span><br><span class="line">      &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">unsafeRunAsync</span></span>[<span class="type">A</span>](io: <span class="type">IO</span>[<span class="type">A</span>], cb: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">A</span>] =&gt; <span class="type">Unit</span>): <span class="type">Unit</span> = io <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Pure</span>(a) =&gt; cb(<span class="type">Right</span>(a))</span><br><span class="line">  <span class="keyword">case</span> io: <span class="type">IO</span>.<span class="type">FlatMap</span>[_, _] =&gt; unsafeRunFlatMap(io, cb)</span><br><span class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Effect</span>(run) =&gt; cb(<span class="type">Right</span>(run()))</span><br><span class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Failure</span>(ex) =&gt; cb(<span class="type">Left</span>(ex))</span><br><span class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Async</span>(register) =&gt;</span><br><span class="line">    register(cb)</span><br><span class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Recover</span>(fa, h) =&gt;</span><br><span class="line">    unsafeRunAsync[<span class="type">A</span>](fa, &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="type">Left</span>(e) =&gt; unsafeRunAsync(h(e), cb)</span><br><span class="line">      <span class="keyword">case</span> <span class="type">Right</span>(v) =&gt; cb(<span class="type">Right</span>(v))</span><br><span class="line">   &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个实现看起来仍旧非常的直观，目前为止，我们已经实现了一个朴素的，能隔离异步操作的 IO Monad。<br>通常，触发并注册回调的动作也会产生副作用，这个时候我们可以将 <code>Async</code> 调整为</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">AsyncF</span>[<span class="type">A</span>](<span class="params">register: (<span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">A</span>] =&gt; <span class="type">Unit</span></span>) <span class="title">=&gt;</span> <span class="title">IO</span>[<span class="type">Unit</span>]) <span class="keyword">extends</span> <span class="title">IO</span>[<span class="type">A</span>]</span></span><br></pre></td></tr></table></figure>
+<p>这样触发的动作也是一个受管理的 IO Monad。</p>
+<h2 id="Stack-safety"><a href="#Stack-safety" class="headerlink" title="Stack safety"></a>Stack safety</h2><p>然而，当我重新实现并运行 <code>MonadError</code> 相关的 Law 校验时，却发现运行 <code>tailRecM</code> 定义的校验时出现了 <code>StackOverflow</code>。<br>这是预料中的情况，前面的解释器存在递归调用，并且无法被优化为 tail call 形式。<br>一种简单的解决方案是将调用栈手工存储到一个 <code>Stack</code> 中。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">type</span> <span class="title">Callback</span> </span>= <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">Any</span>] =&gt; <span class="type">Unit</span></span><br><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">type</span> <span class="title">IOLoop</span> </span>= <span class="type">Stack</span>[(() =&gt; <span class="type">IO</span>[_], <span class="type">Callback</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">runAsyncFlatMap</span></span>[<span class="type">A</span>, <span class="type">B</span>](loop: <span class="type">IOLoop</span>, io: <span class="type">FlatMap</span>[<span class="type">A</span>, <span class="type">B</span>], fb: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">B</span>] =&gt; <span class="type">Unit</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">  loop.push((() =&gt; io.fa) -&gt; &#123; eoa: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">Any</span>] =&gt;</span><br><span class="line">    eoa <span class="keyword">match</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="type">Left</span>(e) =&gt;</span><br><span class="line">        fb(<span class="type">Left</span>(e))</span><br><span class="line">      <span class="keyword">case</span> <span class="type">Right</span>(a) =&gt;</span><br><span class="line">        loop.push((() =&gt; &#123;</span><br><span class="line">          io.f(a.asInstanceOf[<span class="type">A</span>])</span><br><span class="line">        &#125;) -&gt; &#123; eoa: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">Any</span>] =&gt;</span><br><span class="line">          loop.push((() =&gt; eoa.pure[<span class="type">IO</span>]) -&gt;&#123; eeob: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">Any</span>] =&gt;</span><br><span class="line">            eeob <span class="keyword">match</span> &#123;</span><br><span class="line">              <span class="keyword">case</span> <span class="type">Left</span>(e) =&gt; <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">Exception</span>(<span class="string">"unreachable"</span>)</span><br><span class="line">              <span class="keyword">case</span> <span class="type">Right</span>(v) =&gt; fb(v.asInstanceOf[<span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">B</span>]])</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">unsafeRunAsync</span></span>[<span class="type">A</span>](io: <span class="type">IO</span>[<span class="type">A</span>])(cb: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">A</span>] =&gt; <span class="type">Unit</span>) = &#123;</span><br><span class="line">  <span class="keyword">val</span> loop = <span class="type">Stack</span>[(() =&gt; <span class="type">IO</span>[_], <span class="type">Callback</span>)]()</span><br><span class="line">  start(() =&gt; io, loop)(cb.asInstanceOf[<span class="type">Callback</span>])</span><br><span class="line">  <span class="keyword">while</span>(!loop.isEmpty) &#123;</span><br><span class="line">    <span class="keyword">val</span> (io, cb) = loop.pop()</span><br><span class="line">    start(io, loop)(cb)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">start</span></span>[_]( io: () =&gt; <span class="type">IO</span>[_], loop: <span class="type">IOLoop</span> )(cb: <span class="type">Callback</span>): <span class="type">Unit</span> = io() <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Pure</span>(a) =&gt; cb(<span class="type">Right</span>(a))</span><br><span class="line">  <span class="keyword">case</span> io: <span class="type">IO</span>.<span class="type">FlatMap</span>[_, _] =&gt; runAsyncFlatMap(loop, io, cb)</span><br><span class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Effect</span>(run) =&gt; cb(<span class="type">Right</span>(run()))</span><br><span class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Failure</span>(ex) =&gt; cb(<span class="type">Left</span>(ex))</span><br><span class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">AsyncF</span>(register) =&gt;</span><br><span class="line">    loop.push(() =&gt; register(cb), _ =&gt; ())</span><br><span class="line">  <span class="keyword">case</span> <span class="type">IO</span>.<span class="type">Recover</span>(fa, h) =&gt;</span><br><span class="line">    loop.push((() =&gt; fa) -&gt; &#123; eoa: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">Any</span>] =&gt;</span><br><span class="line">      eoa <span class="keyword">match</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="type">Left</span>(e) =&gt;</span><br><span class="line">          loop.push((() =&gt; h(e)) -&gt; &#123; ee: <span class="type">Either</span>[<span class="type">Throwable</span>, <span class="type">Any</span>] =&gt;</span><br><span class="line">            cb(ee)</span><br><span class="line">          &#125;)</span><br><span class="line">        <span class="keyword">case</span> <span class="type">Right</span>(v) =&gt; cb(<span class="type">Right</span>(v))</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如此一来，一个不会 StackOverflow 的解释器就算实现好了。</p>
+<h2 id="手工消除递归的问题"><a href="#手工消除递归的问题" class="headerlink" title="手工消除递归的问题"></a>手工消除递归的问题</h2><p>上述手工消除递归的方式存在线程安全的问题，当然，我们可以使用线程安全的数据结构来规避这个问题。<br>同时，这种方式默认了回调处理发生的线程是不可控的，取决于具体框架。例如 <code>Netty</code> 的 <code>ChannelFuture</code>，默认情况回调会在其自身线程池里处理，这可能会影响 <code>Netty</code> 的性能。</p>
+<p>为了避免这些问题，我们还可以将回调以任务形式提交给线程池处理。当然，如果任意一个简单的操作都作为任务提交到线程池的话，会导致更多上下文切换。<br>这里的问题较为复杂，后续我们在介绍 <code>cats-effect</code> 或者 <code>zio</code> 相关内容时在详细介绍。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文简单介绍了<code>IO</code> Monad 如何抽象回调形式的异步操作，可以一定程度上消除回调地狱。<br>实际上这和 <code>Contiuation</code> Monad 的套路非常相似，不同的时过程中涉及到副作用隔离。</p>
+<p>本文相关代码可以在 <a href="https://github.com/jilen/naive-io-monad" target="_blank" rel="noopener">github仓库</a> 中查看</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Jilen/">^Jilen</a>
+          
+            <a href="/tags/IO-Monad-入门指南/">~IO Monad 入门指南</a>
+          
+            <a href="/tags/函数式编程/">函数式编程</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2019/12/io_monad-1/">
+        <span class="next-text nav-default">IO Monad 入门指南（一）：Monad 和 MonadError</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1615478400000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

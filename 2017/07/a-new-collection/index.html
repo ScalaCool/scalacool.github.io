@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/07/a-new-collection/">
+
+
+<meta name="description" content="Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
+<meta name="keywords" content="^Yison,集合,~Scala 中的集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scala 中的集合（三）：实现一个新的 Collection 类">
+<meta property="og:url" content="http://scala.cool/2017/07/a-new-collection/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-04-22T02:50:45.345Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scala 中的集合（三）：实现一个新的 Collection 类">
+<meta name="twitter:description" content="Scala 中的 collection 库符合 DRY 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个新的强大的集合类型。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Scala 中的集合（三）：实现一个新的 Collection 类 - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Scala 中的集合（三）：实现一个新的 Collection 类
+        
+      </h1>
+
+      <time class="post-time">
+          7月29日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Yison"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Yison"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>Scala 中的 collection 库是符合 <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="_blank" rel="noopener">DRY</a> 设计原则的典范，它包含了大量通用的集合操作 API，由此我们可以基于标准库，轻松构建出一个强大的新集合类型。</p>
+<p>本文将介绍「如何实现一个新集合类」，在开始之前，我们先来了解下 Scala 2.8 版本后的集合结构设计。</p>
+<h2 id="集合通用设计"><a href="#集合通用设计" class="headerlink" title="集合通用设计"></a>集合通用设计</h2><p>看过 <a href="http://localhost:4000/2017/03/how-to-handle-collection-in-scala-1/" target="_blank" rel="noopener">Scala 中的集合（一）</a> 的朋友已经知道，Scala 的集合类系统地区分了可变的和不可变的集合，它们存在于以下三个包中：</p>
+<ul>
+<li>scala.collection</li>
+<li>scala.collection.mutable</li>
+<li>scala.collection.immutable</li>
+</ul>
+<p>然而，以上所有的集合都继承了两个相同的特质 — <code>Traversable</code> 和 <code>Iterable</code>（后者继承了前者）。</p>
+<h3 id="Traversable"><a href="#Traversable" class="headerlink" title="Traversable"></a>Traversable</h3><p><code>Traversable</code> 是集合类最高级的特性，它具有一个抽象方法：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foreach</span></span>[<span class="type">U</span>](f: <span class="type">Elem</span> =&gt; <span class="type">U</span>)</span><br></pre></td></tr></table></figure>
+<p>顾名思义，<code>foreach</code> 方法用于遍历集合类的所有元素，然后进行指定的操作。<code>Iterable</code> 继承了 <code>Traversable</code>，也实现了 <code>foreach</code> 方法，继而所有继承了 <code>Iterable</code> 的集合类同时也获得了一个 <code>foreach</code> 的基础版本。</p>
+<p>很多集合操作都是基于 <code>foreach</code> 实现，因此它的性能非常关键。一些 <code>Iterable</code> 子类覆写了这个方法的实现，从而获得了符合不同集合特性的优化。</p>
+<p>那么，常见的集合类型（如 <code>Seq</code>） 是如何实现通用操作的呢（如 <code>map</code>）？</p>
+<p><strong>原来，<code>Traversable</code> 除了唯一的抽象方法以外，还包含了大量通用的集合操作方法。</strong></p>
+<p>Scala 文档对这些操作方法进行了归类，如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象方法</td>
+<td>foreach</td>
+</tr>
+<tr>
+<td>相加</td>
+<td>++</td>
+</tr>
+<tr>
+<td>Map</td>
+<td>map / flatMap / collect</td>
+</tr>
+<tr>
+<td>集合转换</td>
+<td>toArray / toList / toIterable / toSeq / toIndexedSeq / toStream / toSet / toMap</td>
+</tr>
+<tr>
+<td>拷贝</td>
+<td>copyToBuffer / copyToArray</td>
+</tr>
+<tr>
+<td>size 信息</td>
+<td>isEmpty / nonEmpty / size / hasDefiniteSize</td>
+</tr>
+<tr>
+<td>元素检索</td>
+<td>head / last / headOption / lastOption / find</td>
+</tr>
+<tr>
+<td>子集合检索</td>
+<td>tail / init / slice / take / drop / takeWhilte / dropWhile / filter / filteNot / withFilter</td>
+</tr>
+<tr>
+<td>拆分</td>
+<td>splitAt / span / partition / groupBy</td>
+</tr>
+<tr>
+<td>元素测试</td>
+<td>exists / forall / count</td>
+</tr>
+<tr>
+<td>折叠</td>
+<td>foldLeft / foldRight / /: / :\ / reduceLeft / reduceRight</td>
+</tr>
+<tr>
+<td>特殊折叠</td>
+<td>sum / product / min / max</td>
+</tr>
+<tr>
+<td>字符串转化</td>
+<td>mkString / addString / stringPrefix</td>
+</tr>
+<tr>
+<td>视图生成</td>
+<td>view</td>
+</tr>
+</tbody>
+</table>
+<p><strong>由此，一个集合仅需定义 <code>foreach</code> 方法，以上所有其它方法都可以从 <code>Traversable</code> 继承。</strong></p>
+<h3 id="Iterable"><a href="#Iterable" class="headerlink" title="Iterable"></a>Iterable</h3><p>Scala 当前版本的 <code>Iterable</code> 设计略显尴尬，它实现了 <code>Traversable</code>，也同时被其它所有集合实现。然而事实上这并不是一个好的设计，原因如下：</p>
+<ul>
+<li><code>Traversable</code> 具有隐式的行为假设，它在公开的签名中是不可见的，容易导致 API 出错</li>
+<li>遍历一个 <code>Traversable</code> 比 <code>Iterable</code> 性能要差</li>
+<li>所有继承了 <code>Traversable</code> 的数据类型，无不接受 <code>Iterator</code> 的实现，前者显得多余</li>
+</ul>
+<blockquote>
+<p>详情参见 @Alexelcu 的文章 — <a href="https://alexn.org/blog/2017/01/13/traversable.html" target="_blank" rel="noopener">Why scala.collection.Traversable Is Bad Design</a> </p>
+</blockquote>
+<p>因此，正在进行的 <a href="https://contributors.scala-lang.org/t/ongoing-work-on-standard-collections-redesign/293" target="_blank" rel="noopener">Scala collection redesign</a> 项目也已经抛弃了 <code>Traversable</code>。</p>
+<p>然而，这并不妨碍我们研究 <code>Iterable</code> 中的通用方法，它们也在 <a href="https://github.com/scala/collection-strawman" target="_blank" rel="noopener">collection-strawman</a> 中被保留，如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象方法</td>
+<td>iterator</td>
+</tr>
+<tr>
+<td>其他迭代器</td>
+<td>grouped / sliding</td>
+</tr>
+<tr>
+<td>子集合</td>
+<td>takeRight / dropRight</td>
+</tr>
+<tr>
+<td>拉链操作</td>
+<td>zip / zipAll</td>
+</tr>
+<tr>
+<td>比对</td>
+<td>sameElements</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Builder-类"><a href="#Builder-类" class="headerlink" title="Builder 类"></a>Builder 类</h2><p>几乎所有的集合操作都由「遍历器」和「构建器」完成，在了解以上内容之后，我们再来了解下如何构建一个集合类型。在当前的 Scala 中，是利用一个 <code>Builder</code> 类实现的。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> scala.collection.mutable</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Builder</span>[-<span class="type">Elem</span>, +<span class="type">To</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">+=</span></span>(elem: <span class="type">Elem</span>): <span class="keyword">this</span><span class="class">.<span class="keyword">type</span></span></span><br><span class="line"><span class="class">  <span class="title">def</span> <span class="title">result</span>(<span class="params"></span>)</span>: <span class="type">To</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">clear</span></span>(): <span class="type">Unit</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">mapResult</span></span>[<span class="type">NewTo</span>](f: <span class="type">To</span> =&gt; <span class="type">NewTo</span>): <span class="type">Builder</span>[<span class="type">Elem</span>, <span class="type">NewTo</span>] = ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意类型参数，<code>Elem</code> 表示元素的类型（如 <code>Int</code> ），<code>To</code> 表示集合的类型（如 <code>Array[Int]</code>）。</p>
+<p>此外：</p>
+<ul>
+<li><code>+=</code> 可以增加元素</li>
+<li><code>result</code> 返回一个集合</li>
+<li><code>clear</code> 把集合重置为空状态</li>
+<li><code>mapResult</code> 返回一个 <code>Builder</code>，拥有新的集合类型</li>
+</ul>
+<p>我们来看下<code>Builder</code> 如何结合 <code>foreach</code> 方法，实现常见的 <code>filter</code> 操作：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">filter</span></span>(p: <span class="type">Elem</span> =&gt; <span class="type">Boolean</span>): <span class="type">Repr</span> = &#123;</span><br><span class="line">  <span class="keyword">val</span> b = newBuilder</span><br><span class="line">  foreach &#123; elem =&gt; <span class="keyword">if</span> (p(elem)) b += elem &#125;</span><br><span class="line">  b.result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>So easy！没什么挑战。</p>
+<p>我们再来考虑下 <code>map</code>，它与 <code>filter</code> 的差异之一，在于前者可以返回一个「元素类型不同」的集合。如：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scala &gt; <span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).map(_.toString)</span><br><span class="line">res0: <span class="type">List</span>[<span class="type">String</span>] = <span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure></p>
+<p>这下有难度了，仅凭 <code>Builder</code> 和 <code>foreach</code> 组合，似乎完成不了这个任务。</p>
+<p>于是，我们决定看下 <code>TraversableLike</code> 中 <code>map</code> 的 Scala 源码实现：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">map</span></span>[<span class="type">B</span>, <span class="type">That</span>](f: <span class="type">Elem</span> =&gt; <span class="type">B</span>)</span><br><span class="line">    (<span class="keyword">implicit</span> bf: <span class="type">CanBuildFrom</span>[<span class="type">Repr</span>, <span class="type">B</span>, <span class="type">That</span>]): <span class="type">That</span> = &#123;</span><br><span class="line">  <span class="keyword">val</span> b = bf(<span class="keyword">this</span>)</span><br><span class="line">  <span class="keyword">this</span>.foreach(x =&gt; b += f(x))</span><br><span class="line">  b.result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>当前 Scala 集合中，???Like 命名的特质是 ??? 特质的实现。</p>
+</blockquote>
+<p>一个大发现 — <strong>当前版本的 Scala 原来是利用 <code>CanBuildFrom</code> 类型来解决如何集合「类型转换」的问题</strong>。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> scala.collection.generic</span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">CanBuildFrom</span>[-<span class="type">From</span>, -<span class="type">Elem</span>, +<span class="type">To</span>] </span>&#123;</span><br><span class="line">  <span class="comment">// 创建一个新的构造器(builder)</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(from: <span class="type">From</span>): <span class="type">Builder</span>[<span class="type">Elem</span>, <span class="type">To</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种利用 TypeClass 技术 — 采用隐式转换来获得扩展的方式，显得强大且灵活，但在新手看来会比较怵。</p>
+<p>通过字面的理解，我们知晓 — <code>From</code> 代表当前的集合类型，<code>Elem</code> 代表元素类型，<code>To</code> 代表目标集合的类型。<br>所以我们可以如此解读 <code>CanBuildFrom</code>：「<strong>有这么一个方法，由给定的 From 类型的集合，使用 Elem 类型，建立 To 类型的集合</strong>」。</p>
+<h2 id="新集合类实现"><a href="#新集合类实现" class="headerlink" title="新集合类实现"></a>新集合类实现</h2><p>通过以上的介绍，大家对 Scala 的集合结构设计有了整体的认识，现在开始来实现一个新的集合类。</p>
+<blockquote>
+<p>以下例子来自 Scala 文档，细节有调整，精简。</p>
+</blockquote>
+<p>假设我们需要设计一套新的「密文编码序列」，由最基本的 A、B、C、D 四个字母组成。定义类型如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">object</span> <span class="title">A</span> <span class="keyword">extends</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">object</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">object</span> <span class="title">C</span> <span class="keyword">extends</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">object</span> <span class="title">D</span> <span class="keyword">extends</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class"><span class="title">object</span> <span class="title">Base</span> </span>&#123;</span><br><span class="line">  <span class="keyword">val</span> fromInt: <span class="type">Int</span> =&gt; <span class="type">Base</span> = <span class="type">Array</span>(<span class="type">A</span>, <span class="type">B</span>, <span class="type">C</span>, <span class="type">D</span>)</span><br><span class="line">  <span class="keyword">val</span> toInt: <span class="type">Base</span> =&gt; <span class="type">Int</span> = <span class="type">Map</span>(<span class="type">A</span> -&gt; <span class="number">0</span>, <span class="type">B</span> -&gt; <span class="number">1</span>, <span class="type">C</span> -&gt; <span class="number">2</span>, <span class="type">D</span> -&gt; <span class="number">3</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>显然，我们可以使用 <code>Seq[Base]</code> 来表示一个密文序列，但由于这个密文可能很长，并且 Base 类型只有 4 种可能，我们可以通过「位计算」的方式来开发一种压缩过的集合，它是 <code>Seq[Base]</code> 的子类。</p>
+<blockquote>
+<p>以下将采用伴生对象的方式来创建 <code>Message</code> 实例，可参考 <a href="http://scala.cool/2017/07/scala-design-patterns-2/">Builder 创建者模式
+</a></p>
+</blockquote>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collection.<span class="type">IndexedSeqLike</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Message</span> <span class="title">private</span> (<span class="params"></span></span></span><br><span class="line"><span class="class"><span class="params">    val groups: <span class="type">Array</span>[<span class="type">Int</span>],</span></span></span><br><span class="line"><span class="class"><span class="params">    val length: <span class="type">Int</span></span>) <span class="keyword">extends</span> <span class="title">IndexedSeq</span>[<span class="type">Base</span>] </span>&#123;</span><br><span class="line">  <span class="keyword">import</span> <span class="type">Message</span>._</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(idx: <span class="type">Int</span>): <span class="type">Base</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (idx &lt; <span class="number">0</span> || length &lt;= idx)</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">IndexOutOfBoundsException</span></span><br><span class="line">    <span class="type">Base</span>.fromInt(groups(idx / <span class="type">N</span>) &gt;&gt; (idx % <span class="type">N</span> * <span class="type">S</span>) &amp; <span class="type">M</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Message</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> <span class="type">S</span> = <span class="number">2</span> <span class="comment">// 表示一组所需要的位数             </span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> <span class="type">N</span> = <span class="number">32</span> / <span class="type">S</span>  <span class="comment">// 一个Int能够放入的组数      </span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> <span class="type">M</span> = (<span class="number">1</span> &lt;&lt; <span class="type">S</span>) - <span class="number">1</span> <span class="comment">// 分离组的位掩码(bitmask)</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">fromSeq</span></span>(buf: <span class="type">Seq</span>[<span class="type">Base</span>]): <span class="type">Message</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> groups = <span class="keyword">new</span> <span class="type">Array</span>[<span class="type">Int</span>]((buf.length + <span class="type">N</span> - <span class="number">1</span>) / <span class="type">N</span>)</span><br><span class="line">    <span class="keyword">for</span> (i &lt;- <span class="number">0</span> until buf.length)</span><br><span class="line">      groups(i / <span class="type">N</span>) |= <span class="type">Base</span>.toInt(buf(i)) &lt;&lt; (i % <span class="type">N</span> * <span class="type">S</span>)</span><br><span class="line">    <span class="keyword">new</span> <span class="type">Message</span>(groups, buf.length)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(bases: <span class="type">Base</span>*) = fromSeq(bases)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> message = <span class="type">Message</span>(<span class="type">A</span>, <span class="type">B</span>, <span class="type">B</span> ,<span class="type">D</span>)</span><br><span class="line">println(message.length) <span class="comment">// 4</span></span><br><span class="line">println(message.last) <span class="comment">// D</span></span><br><span class="line">println(message.take(<span class="number">3</span>)) <span class="comment">// Vector(A, B, B)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Message 很好地获得了 <code>IndexedSeq</code> 的通用集合方法，如 <code>length</code>、<code>last</code></li>
+<li><strong>但 <code>take</code> 方法并没有获得预期的 <code>Message(A, B, B)</code>，而是 <code>Vector(A, B, B)</code></strong></li>
+</ul>
+<p>改进一下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">take</span></span>(count: <span class="type">Int</span>): <span class="type">Message</span> = <span class="type">Message</span>.fromSeq(<span class="keyword">super</span>.take(count))</span><br></pre></td></tr></table></figure>
+<ul>
+<li>确实可以解决 <code>take</code> 返回动态类型的问题，可得到 <code>Message(A, B, B)</code>的结果</li>
+<li><strong> 然而集合除了 <code>take</code> 外还有大量通用方法，覆写每个方法的策略不可取 </strong></li>
+</ul>
+<h3 id="正确的姿势"><a href="#正确的姿势" class="headerlink" title="正确的姿势"></a>正确的姿势</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collection.mutable.&#123;<span class="type">Builder</span>, <span class="type">ArrayBuffer</span>&#125;</span><br><span class="line"><span class="keyword">import</span> collection.generic.<span class="type">CanBuildFrom</span></span><br></pre></td></tr></table></figure>
+<p>在伴生类中重新实现 <code>newBuilder</code> ：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Message</span> <span class="title">private</span> (<span class="params">val groups: <span class="type">Array</span>[<span class="type">Int</span>], val length: <span class="type">Int</span></span>)</span></span><br><span class="line"><span class="class">  <span class="keyword">extends</span> <span class="title">IndexedSeq</span>[<span class="type">Base</span>] <span class="keyword">with</span> <span class="title">IndexedSeqLike</span>[<span class="type">Base</span>, <span class="type">Message</span>] </span>&#123;</span><br><span class="line">  <span class="keyword">import</span> <span class="type">Message</span>._</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 在IndexedSeq中必须重新实现newBuilder</span></span><br><span class="line">  <span class="keyword">override</span> <span class="keyword">protected</span>[<span class="keyword">this</span>] <span class="function"><span class="keyword">def</span> <span class="title">newBuilder</span></span>: <span class="type">Builder</span>[<span class="type">Base</span>, <span class="type">Message</span>] =</span><br><span class="line">    <span class="type">Message</span>.newBuilder</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(idx: <span class="type">Int</span>): <span class="type">Base</span> = &#123;</span><br><span class="line">    ……</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改写伴生对象：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Message</span> </span>&#123;</span><br><span class="line">  ……</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">fromSeq</span></span>(buf: <span class="type">Seq</span>[<span class="type">Base</span>]): <span class="type">Message</span> = &#123;</span><br><span class="line">    ……</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(bases: <span class="type">Base</span>*) = fromSeq(bases)</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">newBuilder</span></span>: <span class="type">Builder</span>[<span class="type">Base</span>, <span class="type">Message</span>] =</span><br><span class="line">    <span class="keyword">new</span> <span class="type">ArrayBuffer</span> mapResult fromSeq</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">canBuildFrom</span></span>: <span class="type">CanBuildFrom</span>[<span class="type">Message</span>, <span class="type">Base</span>, <span class="type">Message</span>] =</span><br><span class="line">    <span class="keyword">new</span> <span class="type">CanBuildFrom</span>[<span class="type">Message</span>, <span class="type">Base</span>, <span class="type">Message</span>] &#123;</span><br><span class="line">      <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(): <span class="type">Builder</span>[<span class="type">Base</span>, <span class="type">Message</span>] = newBuilder</span><br><span class="line">      <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(from: <span class="type">Message</span>): <span class="type">Builder</span>[<span class="type">Base</span>, <span class="type">Message</span>] = newBuilder</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此外，如前文提到，我们还可以重新实现 <code>foreach</code> 方法来提高该集合类的效率：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Message</span> <span class="title">private</span> (<span class="params">val groups: <span class="type">Array</span>[<span class="type">Int</span>], val length: <span class="type">Int</span></span>)</span></span><br><span class="line"><span class="class">  <span class="keyword">extends</span> <span class="title">IndexedSeq</span>[<span class="type">Base</span>] <span class="keyword">with</span> <span class="title">IndexedSeqLike</span>[<span class="type">Base</span>, <span class="type">Message</span>] </span>&#123;</span><br><span class="line">  ……</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">foreach</span></span>[<span class="type">U</span>](f: <span class="type">Base</span> =&gt; <span class="type">U</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">var</span> i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">var</span> b = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> (i &lt; length) &#123;</span><br><span class="line">      b = <span class="keyword">if</span> (i % <span class="type">N</span> == <span class="number">0</span>) groups(i / <span class="type">N</span>) <span class="keyword">else</span> b &gt;&gt;&gt; <span class="type">S</span></span><br><span class="line">      f(<span class="type">Base</span>.fromInt(b &amp; <span class="type">M</span>))</span><br><span class="line">      i += <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上，我们便构建了一个新的集合类型 <code>Message</code>，通过极少的代码，拥有了强大的通用集合特性。</p>
+<p>我们将在下一篇文章中进一步介绍 <code>CanBuildFrom</code> ，几乎确定地说，它也会在未来的 Scala 版本中被新的方案替代。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://docs.scala-lang.org/overviews/collections/introduction.html" target="_blank" rel="noopener">Scala’s Collections Library</a></li>
+<li><a href="http://docs.scala-lang.org/overviews/core/architecture-of-scala-collections.html" target="_blank" rel="noopener">The Architecture of Scala Collections</a></li>
+</ul>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Yison/">^Yison</a>
+          
+            <a href="/tags/集合/">集合</a>
+          
+            <a href="/tags/Scala-中的集合/">~Scala 中的集合</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/07/scala-design-patterns-3/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Scala 与设计模式（三）：Prototype 原型模式</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/07/scala-weekly-14/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第 14 期</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1501257600000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

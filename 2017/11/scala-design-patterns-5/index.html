@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/11/scala-design-patterns-5/">
+
+
+<meta name="description" content="在开发时，我们经常会遇上一些接口不兼容的问题。">
+<meta name="keywords" content="^Prefert,设计模式,Java,~Scala 与设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scala 与设计模式（五）：Adapter 适配器模式">
+<meta property="og:url" content="http://scala.cool/2017/11/scala-design-patterns-5/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="在开发时，我们经常会遇上一些接口不兼容的问题。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2017/11/iPhone-X-Home-Button-Audio-Jack-960x540.jpg">
+<meta property="og:image" content="http://scala.cool/images/2017/11/zhuan-jie-xian.jpg">
+<meta property="og:updated_time" content="2020-04-22T02:50:45.355Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scala 与设计模式（五）：Adapter 适配器模式">
+<meta name="twitter:description" content="在开发时，我们经常会遇上一些接口不兼容的问题。">
+<meta name="twitter:image" content="http://scala.cool/images/2017/11/iPhone-X-Home-Button-Audio-Jack-960x540.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Scala 与设计模式（五）：Adapter 适配器模式 - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Scala 与设计模式（五）：Adapter 适配器模式
+        
+      </h1>
+
+      <time class="post-time">
+          11月20日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Prefert"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Prefert"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>不管你是不是果粉，肯定对 iphone X 都有所耳闻。最近的「掉漆门」和「人脸识别被破解」更是将其推到了风口浪尖上。</p>
+<center><br><image src="/images/2017/11/iphone%20x2.jpg" width="300" height="400"></image><br></center>
+
+<p>但是对于我而言，最难以忍受的还是耳机接口被取消这一改变（自 Iphone 7 开始)，你可以想象这样一幅画面：当你开开心心地和小伙伴开着语音吃（song）着（kuai）鸡（di）或者是多人一起上（song）分时——你的电量见底，为了不影响队友（shou）的游戏体验，肯定得充电玩下去。</p>
+<p>这时你得面对一个难题：<strong>只有一个孔，插耳机还是插电源！？</strong>（在没有蓝牙耳机的前提下）  </p>
+<center><br><img src="/images/2017/11/iPhone-X-Home-Button-Audio-Jack-960x540.jpg" alt><br></center>
+
+<p>(侵删)</p>
+<p>由于生活经常会欺骗我们，以及各种环境因素，所以不是每个人都选择蓝牙耳机（贫穷使我理智）。</p>
+<p>是否存在别的解决方法呢？还好有转接线这样的好东西</p>
+<center><br><img src="/images/2017/11/zhuan-jie-xian.jpg" alt><br></center>
+
+<p>(侵删)</p>
+<p>在编程中，我们也会遇上类似的问题：</p>
+<ol>
+<li>当你想使用一个已经存在的类，而它的接口不符合你的需求；  </li>
+<li>你想创建一个可以复用的类，该类可以与其他不相关的类或不可预见的类协同工作；  </li>
+<li>…  </li>
+</ol>
+<p>本文会通过 Adapter Pattern 来探究如何解决这类问题。</p>
+<p>本篇文章结构如下：</p>
+<ul>
+<li>adapter pattern 的概念</li>
+<li>实际问题分解</li>
+<li>Java 实例</li>
+<li>Scala 实例</li>
+<li>总结</li>
+</ul>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>适配器模式（Adapter Pattern）有时候也称包装样式或者包装（Wrapper）。定义如下：  </p>
+<blockquote>
+<p>将一个类的接口转接成用户所期待的。一个适配使得因接口不兼容而不能在一起工作的类能在一起工作，做法是将类自己的接口包裹在一个已存在的类中。</p>
+</blockquote>
+<h2 id="它解决了什么问题"><a href="#它解决了什么问题" class="headerlink" title="它解决了什么问题"></a>它解决了什么问题</h2><p>适配器模式将现有接口转化为客户类所期望的接口，实现了对现有类的复用，它是一种使用频率非常高的设计模式，在软件开发中得以广泛应用，在 <code>Spring</code> 等框架、驱动程序设计（如 <code>JDBC</code> 中的数据库驱动程序）中也使用了适配器模式。  </p>
+<h3 id="Java-版本"><a href="#Java-版本" class="headerlink" title="Java 版本"></a>Java 版本</h3><p>小 A 是个苹果控 + 耳机控，之前买了一款很贵的耳机，对其爱不释手。我们都知道一般耳机接口都是 3.5mm 的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PhoneJackInterface</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 传统的播放音频</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">audioTraditionally</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PhoneJackConnector</span> <span class="keyword">implements</span> <span class="title">PhoneJackInterface</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">audioTraditionally</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"通过 PhoneJack 播放声音"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>iphone 7 之前的 iphone 支持 3.5mm 接口：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Iphone</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> PhoneJackInterface phoneJack;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Iphone</span><span class="params">(PhoneJackInterface phoneJack)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.phoneJack = phoneJack;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Iphone 具备播放声音的功能</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 通过 3.5mm 接口耳机播放</span></span><br><span class="line">        phoneJack.audioTraditionally();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样的情况下，小 A 还可以愉快地听歌：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test</span></span><br><span class="line">PhoneJackInterface phoneJack = <span class="keyword">new</span> PhoneJackConnector();</span><br><span class="line">Iphone iphone6 = <span class="keyword">new</span> Iphone(phoneJack);</span><br><span class="line">iphone6.play();</span><br><span class="line"><span class="comment">// 控制台输出 “通过 PhoneJack 播放声音”</span></span><br></pre></td></tr></table></figure></p>
+<p>在 iphone 7 问世后，问题出现了：小 A 发现其<strong>不支持 3.5mm 接口 —— 将有线耳机的插口改为了 lightning</strong>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">LightningInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">audioWithLightning</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LightningConnector</span> <span class="keyword">implements</span> <span class="title">LightningInterface</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">audioWithLightning</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"通过 Lightning 播放声音"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一边是耳机，一边是手机，这太难以抉择了。但苹果怎么可能没考虑到这点了，可以<strong>通过赠送的耳机转接器 —— 将传统的耳机头转为 lightning</strong>：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeadsetAdapter</span> <span class="keyword">implements</span> <span class="title">PhoneJackInterface</span> </span>&#123; <span class="comment">// 基于传统耳机接口</span></span><br><span class="line"></span><br><span class="line">   LightningInterface lightning; <span class="comment">// 兼容新接口</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 传入 lightning 接口</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> lightning</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HeadsetAdapter</span><span class="params">(LightningInterface lightning)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.lightning = lightning;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 对传统接口兼容</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">audioTraditionally</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        lightning.audioWithLightning();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="类适配器"><a href="#类适配器" class="headerlink" title="类适配器"></a>类适配器</h3><p>这样不够简洁，我们可以改一改：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeadsetAdapter</span> <span class="keyword">extends</span> <span class="title">LightningConnector</span> <span class="keyword">implements</span> <span class="title">PhoneJackInterface</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">audioTraditionally</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 传统接口兼容 lightning</span></span><br><span class="line">        <span class="keyword">super</span>.audioWithLightning();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>测试：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test</span></span><br><span class="line">HeadsetAdapter headsetAdapter = <span class="keyword">new</span> HeadsetAdapter();</span><br><span class="line">Iphone iphone7 = <span class="keyword">new</span> Iphone(headsetAdapter);</span><br><span class="line">iphone7.play();</span><br><span class="line"><span class="comment">// 控制台输出 “通过 Lightning 播放声音”</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="对象适配器"><a href="#对象适配器" class="headerlink" title="对象适配器"></a>对象适配器</h3><p>我们一般将上面的适配器称作「类适配器」，除此之外还有一种 「对象适配器」，我们可以对适配器类进行如下修改：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObjectHeadsetAdapter</span> <span class="keyword">implements</span> <span class="title">PhoneJackInterface</span> </span>&#123; <span class="comment">// 基于传统耳机接口</span></span><br><span class="line"></span><br><span class="line">   LightningConnector lightning; <span class="comment">// 兼容新接口</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 传入 lightning 接口</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> lightning</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ObjectHeadsetAdapter</span><span class="params">(LightningConnector lightning)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.lightning = lightning;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 对传统接口兼容</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">audioTraditionally</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 使用委托实现兼容</span></span><br><span class="line">        <span class="keyword">this</span>.lightning.audioWithLightning();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>测试：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ObjectHeadsetAdapter objectHeadsetAdapter = <span class="keyword">new</span> ObjectHeadsetAdapter(<span class="keyword">new</span> LightningConnector());</span><br><span class="line">Iphone iphoneX = <span class="keyword">new</span> Iphone(objectHeadsetAdapter);</span><br><span class="line">iphoneX.play();</span><br></pre></td></tr></table></figure></p>
+<h3 id="对象适配器-vs-类适配器"><a href="#对象适配器-vs-类适配器" class="headerlink" title="对象适配器 vs 类适配器"></a>对象适配器 vs 类适配器</h3><p>通过以上简单的例子，相信你对适配器模式有一个大致了解了。「类适配器」与「对象适配器」的区别概括如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">-</th>
+<th style="text-align:center">类适配器</th>
+<th style="text-align:center">对象适配器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">创建方式</td>
+<td style="text-align:center">需要通过创建自身创建出一个新的 Adapter</td>
+<td style="text-align:center">可以通过已有的 Adapter 对象来转换接口</td>
+</tr>
+<tr>
+<td style="text-align:left">扩展性</td>
+<td style="text-align:center">通过 Override 来扩展新需求</td>
+<td style="text-align:center">因为包含关系所以不能扩展</td>
+</tr>
+<tr>
+<td style="text-align:left">其他</td>
+<td style="text-align:center">继承被适配类，所以相对静态</td>
+<td style="text-align:center">包含被适配类，所以相对灵活</td>
+</tr>
+</tbody>
+</table>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>总的来说，适配器模式主要有以下几个优点：  </p>
+<ol>
+<li>将目标类和适配者类解耦，通过引入一个适配器类来重用现有的适配者类，无须修改原有结构。</li>
+<li>增加了类的透明性和复用性，将具体的业务实现过程封装在适配者类中，对于客户端类而言是透明的，而且提高了适配者的复用性，同一个适配者类可以在多个不同的系统中复用。  </li>
+<li>灵活性和扩展性都非常好，通过使用配置文件，可以很方便地更换适配器，也可以在不修改原有代码的基础上增加新的适配器类，完全符合「开闭原则」。</li>
+</ol>
+<p>看完 Java 的实现方式，我们再来看看 Scala 是如何实现的。</p>
+<h3 id="Scala-版本"><a href="#Scala-版本" class="headerlink" title="Scala 版本"></a>Scala 版本</h3><p>在 Scala 中，由于方便的语法糖，我们并不需要像 Java 那样麻烦，已知传统接口类（此处省略一些接口）<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PhoneJackConnector</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">def</span>  <span class="title">audioTraditionally</span> </span>= println(<span class="string">"通过 PhoneJack 播放声音"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果我们有需要适配的，为其创建一个 <code>trait</code> 即可:<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Lightning</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">audioWithLightning</span></span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其次再新建一个类，继承传统类：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HeadsetAdapter</span> <span class="keyword">extends</span> <span class="title">PhoneJackConnector</span> <span class="keyword">with</span> <span class="title">Lightning</span> </span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">audioTraditionally</span></span>: <span class="type">Unit</span> = <span class="keyword">super</span>.audioTraditionally</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">audioWithLightning</span></span>: <span class="type">Unit</span> = println(<span class="string">"通过 Lightning 播放声音"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>你会开心的发现：在这个新的类里，我们可以对新老方法一起扩展——在 Java 中，这是「对象适配器」和 「类适配器」比较大的一个劣势。<br>测试：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> headsetAdapter = <span class="keyword">new</span> <span class="type">HeadsetAdapter</span></span><br><span class="line">headsetAdapter.audioTraditionally</span><br></pre></td></tr></table></figure></p>
+<p>当然，除了这种方式，Scala 里还可以通过隐式转换来实现适配 <code>final</code> 类的适配器:<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalPhoneJackConector</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span>  <span class="title">audioTraditionally</span> </span>= println(<span class="string">"通过 PhoneJack 播放声音"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">FinalPhoneJackConector</span> </span>&#123;</span><br><span class="line">    <span class="keyword">implicit</span> <span class="class"><span class="keyword">class</span> <span class="title">ImplictHeadsetAdapter</span>(<span class="params">phoneJackConnector: <span class="type">FinalPhoneJackConector</span></span>) <span class="keyword">extends</span> <span class="title">Lightning</span> </span>&#123;</span><br><span class="line">      <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">audioWithLightning</span></span>: <span class="type">Unit</span> =  println(<span class="string">"通过 Lightning 播放声音"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>测试：</p>
+<pre><code class="Scala"><span class="keyword">val</span> headsetAdapter = <span class="keyword">new</span> <span class="type">HeadsetAdapter</span>
+headsetAdapter.audioTraditionally
+
+<span class="comment">// 隐式</span>
+<span class="keyword">val</span> light: <span class="type">Lightning</span> = <span class="keyword">new</span> <span class="type">FinalPhoneJackConector</span>
+light.audioWithLightning()
+</code></pre>
+<blockquote>
+<p>Hint: 对于不熟悉 <code>implicit</code> 的朋友可以 <a href="https://docs.scala-lang.org/zh-cn/overviews/core/implicit-classes.html" target="_blank" rel="noopener">看一下这里</a> </p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>光从代码量来说，Scala 简洁比 Java 表现的好太多。  </p>
+<p>其次，Scala 结合了「类适配器」和「对象适配器」所有的优点，并消除了自身问题。与 Java 相比，Scala 有如下特点：</p>
+<ol>
+<li>与对象适配器一样灵活</li>
+<li>与「类适配器相比」，没有对特定被适配类的依赖</li>
+<li>只适用于不需要动态改变被适配类的情况</li>
+</ol>
+<p><a href="https://github.com/YarenTang/Design_Patterns_Examples/tree/master/src/Adapter" target="_blank" rel="noopener">源码链接</a><br>如有错误和讲述不恰当的地方还请指出，不胜感激！</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Prefert/">^Prefert</a>
+          
+            <a href="/tags/设计模式/">设计模式</a>
+          
+            <a href="/tags/Java/">Java</a>
+          
+            <a href="/tags/Scala-与设计模式/">~Scala 与设计模式</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/11/scala-weekly-27/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Scala 技术周刊 | 第 27 期</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/11/play-3/">
+        <span class="next-text nav-default">Play! Framework 系列（三）：依赖注入</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1511107200000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

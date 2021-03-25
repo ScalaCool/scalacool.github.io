@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/12/be_2_fe/">
+
+
+<meta name="description" content="大家好，我是 KnewHow，一名前 Java 开发工程师。为什么要说是「前」呢？这要从两周前我加入一家新公司说起。">
+<meta name="keywords" content="前端开发,~后端工程师入门前端页面重构,^KnewHow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后端工程师入门前端页面重构（一）：口诀">
+<meta property="og:url" content="http://scala.cool/2017/12/be_2_fe/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="大家好，我是 KnewHow，一名前 Java 开发工程师。为什么要说是「前」呢？这要从两周前我加入一家新公司说起。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://scala.cool/images/2017/12/suprise.jpeg">
+<meta property="og:image" content="http://scala.cool/images/2017/12/serious.jpeg">
+<meta property="og:image" content="http://scala.cool/images/2017/12/desk.jpg">
+<meta property="og:image" content="http://scala.cool/images/2017/12/secene-sum.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/box-module.jpeg">
+<meta property="og:image" content="http://scala.cool/images/2017/12/box.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/emoj4.jpeg">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-box.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/good.gif">
+<meta property="og:image" content="http://scala.cool/images/2017/12/absolute-layout.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/float-layout.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/youyu.gif">
+<meta property="og:image" content="http://scala.cool/images/2017/12/layout-direction.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-index.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-index-first.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-index-second.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-head.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-head-first.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-head-second.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-middle.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-middle-first.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-part-1.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-part-2.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/last-second.jpeg">
+<meta property="og:image" content="http://scala.cool/images/2017/12/douban-part-3.png">
+<meta property="og:image" content="http://scala.cool/images/2017/12/last.jpeg">
+<meta property="og:updated_time" content="2020-04-22T02:50:45.355Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="后端工程师入门前端页面重构（一）：口诀">
+<meta name="twitter:description" content="大家好，我是 KnewHow，一名前 Java 开发工程师。为什么要说是「前」呢？这要从两周前我加入一家新公司说起。">
+<meta name="twitter:image" content="http://scala.cool/images/2017/12/suprise.jpeg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> 后端工程师入门前端页面重构（一）：口诀 - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          后端工程师入门前端页面重构（一）：口诀
+        
+      </h1>
+
+      <time class="post-time">
+          12月18日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="KnewHow"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="KnewHow"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>大家好，我是 KnewHow，一名前 Java 开发工程师。为什么要说是「前」呢？这要从两周前我加入一家新公司说起。</p>
+<p>入职第一天，实习导师告诉我会有一个月的新人引导计划，当时心里还是美滋滋的，觉得这个公司比较人性化，没有把工程师当劳动力使。</p>
+<p>但随后，我就被震撼到了。因为面试时就得知公司崇尚的是全栈文化，在部署完一切办公环境之后，实习导师告诉我开始学习的第一个技能竟然是：「前端页面重构」！！！</p>
+<p>当时我的内心是这样子的。</p>
+<center><br><img src="/images/2017/12/suprise.jpeg" width="400"><br></center>
+
+<p>要知道，我对于前端，除了几个基本的标签外，可是一无所知。然而，我很快调整了状态，不就是前端开发么，应该难不倒机智的我。</p>
+<center><br>—————————— 以下开始严肃脸 —————————<br></center>
+
+<center><br><img src="/images/2017/12/serious.jpeg" width="400"><br></center>
+
+<h2 id="什么是页面重构"><a href="#什么是页面重构" class="headerlink" title="什么是页面重构"></a>什么是页面重构</h2><p><strong>好，第一个问题：所谓的「页面重构」到底是干嘛的？</strong></p>
+<p>实习导师提出了要求，一定要有自己深刻的见解，好吧。。。。。</p>
+<p>于是，我的视线离开了电脑屏幕，开始寻求不一样的答案。很快，我注意到了我的办公桌面，是这样子滴。</p>
+<center><br><img src="/images/2017/12/desk.jpg"><br></center>
+
+<p>在我看来，前端页面重构，<strong>本质不就是处理空间布局的关系吗？</strong></p>
+<p>于是，机智如我，很快得出了自己的见解和答案。</p>
+<p>上面的这张图片是日常生活一个场景，「 一张办公桌上面摆放着一些物品。桌面是背景，书和键盘并排的放着，白色书和紫色书交叠着，紫色书上面放着一个鼠标」。</p>
+<p>其实这就是一个布局，也类似一张网页。</p>
+<p>然后我看了看旁边同事的桌子，也看了看整个公司的办公环境。</p>
+<p>然后我发现在一个布局中，存在三种关系：<strong>组成、包含和交叠</strong>。</p>
+<p><img src="/images/2017/12/secene-sum.png" alt></p>
+<p>于是，我把这个结论告诉了实习导师。实习导师听后思考许久，但还是表达了赞赏。之后，他又提出了第二个问题：</p>
+<p><strong>那么，你说说看什么是「盒子模型」？</strong></p>
+<p>这一次，我马上 Google 了这个概念。机智如我，基于我以上的结论，很快我又得出了以下的解读。</p>
+<h2 id="盒子模型"><a href="#盒子模型" class="headerlink" title="盒子模型"></a>盒子模型</h2><p>在我看来，「盒子模型」，<strong>本质就是去处理布局中，元素大小、位置和距离的关系。</strong></p>
+<center><br><img src="/images/2017/12/box-module.jpeg" alt><br></center>
+
+<p>在上面的场景中，键盘和紫色书是有尺寸、边框的，它们是并排放置的，彼此之间的距离可以使用盒子模型中的「外边距（margin）」来表示。</p>
+<p>鼠标被紫色书包含着（如果按照完全 2D 的视角），它们的距离可以使用「内边距（padding）」来表示。</p>
+<p>白色书和紫色书交叠在一起的，这个如何表示呢？</p>
+<p>哈哈，它们其实同样可以使用某一方的「外边距(margin)」来处理，只不过值要是负数而已。</p>
+<center><br><img src="/images/2017/12/box.png" alt><br></center>
+
+<p>我找到了实习导师，把我刚刚总结的答案告诉了他，他微微一笑：「这个回答还算不错」，接着又问道：</p>
+<p><strong>那么在网页布局中，「盒子模型」是怎么被使用的呢？</strong></p>
+<p>当时我的内心是这样的：</p>
+<center><br><img src="/images/2017/12/emoj4.jpeg" width="400"><br></center>
+
+<p>你怎么这么多问题，你特么还有完没完!!!</p>
+<p>理智的我压制了自己的小情绪，不就是怎么使用「盒子模型」吗？</p>
+<h2 id="绝对定位布局"><a href="#绝对定位布局" class="headerlink" title="绝对定位布局"></a>绝对定位布局</h2><p>机智的我思考片刻，很快就有了答案，这也太简单了！</p>
+<p>直觉上我们只要把网页划分成一个个小块，然后调整它们的位置就行了。</p>
+<p>拿豆瓣的首页来说，我们可以把第一行分为三块，分别为豆瓣的 logo、搜索框以及后面的热搜主题。</p>
+<p>然后我们只需要使用「外边距(margin)」来设置他们和浏览器左边界之间的距离，就 OK 了。</p>
+<center><br><img src="/images/2017/12/douban-box.png" alt><br></center>
+
+<p>哈哈，我简直就是个天才。</p>
+<p>我把我的答案告诉了实习导师。心里美滋滋的：「我聪明吧」。</p>
+<p>实习导师轻瞟了一眼我的答案，预料中的赞美和肯定并没有出现。</p>
+<p>他目光转向我，说：「你的这种方案是可行的，但是至少犯了两个错误。」</p>
+<p>① <strong>在绝对定位中，不会使用 margin 来表示位置偏移，我们应该使用 top 和 left 。</strong>（可参见：<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/position" target="_blank" rel="noopener">position</a>）</p>
+<p>② <strong>只有入门级别的小白才会使用「绝对定位布局」来作为一个网页的主要布局方式，这种方案是十分低效的！</strong></p>
+<h2 id="绝对定位布局-－-低效分析"><a href="#绝对定位布局-－-低效分析" class="headerlink" title="绝对定位布局 － 低效分析"></a>绝对定位布局 － 低效分析</h2><p>「啊，低效的？为什么是低效的？」</p>
+<p>「<strong>在网页中，会有成百上千的元素，如果每个元素你都去量一下它的边距，这个效率是不是很低！</strong>」</p>
+<p>「iOS 端布局有一个更清晰的描述：绝对定位本质就是通过帧来定位一个视图的起点，高度和宽度。」</p>
+<p>「这个就要求你需要去计算每个视图的位置和大小。」</p>
+<p>「<strong>更可怕的是，如果有一天有一个元素的位置或者大小发生改变，那么其它的元素也可能需要更改，这个更是低效的！</strong>」</p>
+<p>「简单来说　就是牵一发而动全身！」</p>
+<center><br><img src="/images/2017/12/good.gif" alt><br></center>
+
+<p>「现在的页面布局都使用<strong>浮动布局</strong>，你去调研一下吧。」</p>
+<h2 id="浮动布局"><a href="#浮动布局" class="headerlink" title="浮动布局"></a>浮动布局</h2><p>我用 Google 搜索了浮动布局和绝对定位布局。机智的我发现了它们最本质的一个区别：</p>
+<p>绝对定位布局使用浏览器的窗口的边界作为参考，一个元素的位置是针对浏览器的边界来设定的。</p>
+<p><strong>然而在绝对定位布局中，元素和元素之间视对方为不存在，这意味着当一个元素位置和大小发生了变化，不会对其它元素产生影响</strong>。</p>
+<center><br><img src="/images/2017/12/absolute-layout.png" alt><br></center>
+
+<p>而在浮动布局中，它的位置通常采用 「 float 」 来处理，一个元素的位置受到其它的元素的影响。</p>
+<p>如果有一天被参考的元素位置或者大小发生了变化，那么当前元素的位置也会发生相应的变化。这样就比较高效了。</p>
+<center><br><img src="/images/2017/12/float-layout.png" alt><br></center>
+
+<p>我兴奋的把调研结果告诉了实习导师，实习导师看了后，说：「还可以吧。」</p>
+<p>接着他又问道，「如果现在给你一个网页，你知道怎么布局吗？」</p>
+<p>「这个。。。」</p>
+<center><br><img src="/images/2017/12/youyu.gif" alt><br></center>
+
+<h2 id="页面重构之口诀"><a href="#页面重构之口诀" class="headerlink" title="页面重构之口诀"></a>页面重构之口诀</h2><p>「看你这个犹犹豫豫的样子，我直接告诉你好了。」</p>
+<p>「<strong>我们在网页的左上方放一块磁铁，那么所有元素都会被磁铁所吸引，那么磁力相反的方向，就是我们布局的方向。</strong>」</p>
+<center><br><img src="/images/2017/12/layout-direction.png" alt><br></center>
+
+<p><strong>「所以我们布局的方向就是先从左到右，再从上到下，从整体到局部，化整为零！」</strong></p>
+<p>「明白了吗？」</p>
+<p>「还不是很明白。」</p>
+<p>「那我们来做个练习吧。」</p>
+<p>「看这个豆瓣的首页，先从整体来看，按照从左到右可以分成几个部分。」</p>
+<center><br><img src="/images/2017/12/douban-index.png" alt><br></center>
+
+<p>「一个部分吧。」</p>
+<p>「对的。」</p>
+<p>「因为整个页面就只有中间的那个部分。」</p>
+<center><br><img src="/images/2017/12/douban-index-first.png" alt><br></center>
+
+<p>「从上到下，你看看这个页面可以分成几个部分。」</p>
+<p>「这个好像有点多了，每一行都可以分成一个部分吧。」</p>
+<center><br><img src="/images/2017/12/douban-index-second.png" alt><br></center>
+
+<p>「不错嘛，看你你已经掌握了规律，看看下面的可以分成几个部分。」</p>
+<center><br><img src="/images/2017/12/douban-head.png" alt><br></center>
+
+<p>「这个。。。」</p>
+<p>「不要捉急，按照我的口诀，先看从左到右分成几个部分，再看从上到下分成几个部分。」</p>
+<p>「从左到右可以分成三个部分。」</p>
+<center><br><img src="/images/2017/12/douban-head-first.png" alt><br></center>
+
+<p>「从上到下就一个部分吧，感觉没有其它东西了。」</p>
+<center><br><img src="/images/2017/12/douban-head-second.png" alt><br></center>
+
+<p>「不错不错，我们再来一个难一点的，看看这个可以分成几个部分。」</p>
+<center><br><img src="/images/2017/12/douban-middle.png" alt><br></center>
+
+<p>「从左到右可以分成三个部分。」</p>
+<center><br><img src="/images/2017/12/douban-middle-first.png" alt><br></center>
+
+<p>「从上到下可以分成一个部分。」</p>
+<p>「那这个呢？」</p>
+<center><br><img src="/images/2017/12/douban-part-1.png" alt><br></center>
+
+<p>「从左到右一个部分，从上到下也是一个部分。」</p>
+<p>「这个呢？」</p>
+<center><br><img src="/images/2017/12/douban-part-2.png" alt><br></center>
+
+<p>「从左到右一个部分，从上到下三个部分。」</p>
+<center><br><img src="/images/2017/12/last-second.jpeg" alt><br></center>
+
+<p>「这个呢？」</p>
+<center><br><img src="/images/2017/12/douban-part-3.png" alt><br></center>
+
+<p>「从左到右一个部分，从上到下四个部分，然后再对更小的模块进行划分。」</p>
+<center><br><img src="/images/2017/12/last.jpeg" alt><br></center>
+
+
+<p>「有没有发现什么规律？」</p>
+<p>「就是按从左到右，从上到下的顺序，先把网页的进行整体的划分，然后在依次对小模块进行划分，然后再对更小的模块进行划分，一直这么递归划分下去。」</p>
+<p>「好的！你已经学会了！」</p>
+<p>「啊！这么简单的？那个可以问你一个问题？能不能先从上到下，在从左到右？」</p>
+<p>不能，因为人看网页的习惯就是先从左到右，在从上到下，这样的设计会有更好的视觉效果。」</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>好了，通过本篇文章，我们领悟了前端页面重构的口诀，再来重复一遍：「<strong>从左到右，从上到下，化整为零</strong>」。</p>
+<p>那么，在后续的文章里，我们将进一步介绍所谓的心法和招式。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/前端开发/">前端开发</a>
+          
+            <a href="/tags/后端工程师入门前端页面重构/">~后端工程师入门前端页面重构</a>
+          
+            <a href="/tags/KnewHow/">^KnewHow</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/12/scala-weekly-28/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Scala 技术周刊 | 第 28 期</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/12/swift-vue-like-1/">
+        <span class="next-text nav-default">用 Swift 模仿 Vue + Vuex 进行 iOS 开发（一）：ReSwift</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1513526400000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

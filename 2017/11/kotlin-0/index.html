@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2017/11/kotlin-0/">
+
+
+<meta name="description" content="在今年的 Google I/O 大会上，Google 宣布在 Android 上为 Kotlin 提供一等支持（转为正房），本系列文章将会对 Kotlin 进行较为系统的介绍。">
+<meta name="keywords" content="Kotlin,~Dive Into Kotlin,^Prefert,Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dive Into Kotlin（一）：初探 Kotlin">
+<meta property="og:url" content="http://scala.cool/2017/11/kotlin-0/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="在今年的 Google I/O 大会上，Google 宣布在 Android 上为 Kotlin 提供一等支持（转为正房），本系列文章将会对 Kotlin 进行较为系统的介绍。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://ovib8fj5v.bkt.clouddn.com/kotlin&&android.png">
+<meta property="og:image" content="http://om6vvgjw7.bkt.clouddn.com/FP.jpg">
+<meta property="og:updated_time" content="2020-04-22T02:50:45.353Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dive Into Kotlin（一）：初探 Kotlin">
+<meta name="twitter:description" content="在今年的 Google I/O 大会上，Google 宣布在 Android 上为 Kotlin 提供一等支持（转为正房），本系列文章将会对 Kotlin 进行较为系统的介绍。">
+<meta name="twitter:image" content="http://ovib8fj5v.bkt.clouddn.com/kotlin&&android.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> Dive Into Kotlin（一）：初探 Kotlin - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Dive Into Kotlin（一）：初探 Kotlin
+        
+      </h1>
+
+      <time class="post-time">
+          11月6日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="Prefert"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="Prefert"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>在今年的 <a href="https://www.youtube.com/watch?v=Y2VF8tmLFHw" target="_blank" rel="noopener">Google I/O</a> 大会上，Google 宣布在 Android 上为 Kotlin 提供一等支持（转为正房）。  </p>
+<p>在 Andorid 开发的圈子中，这无疑掀起了轩然大浪。对部分人来说，也许这是第一次听到 Kotlin 。事实上，在 2011 年 7 月，JetBrains 就推出 Kotlin 项目，直到去年 2 月 Kotlin v1.0 才正式发布。  </p>
+<a id="more"></a>
+<p>本系列文章「Dive Into Kotlin」将会对 Kotlin 进行较为系统的介绍，大致分为四个章节：  </p>
+<p><strong>1. 热身</strong>  —— Kotlin 基本特性<br><strong>2. 下水</strong>  —— Kotlin 与函数式<br><strong>3. 潜入</strong>  —— Kotlin 核心<br><strong>4. 遨游</strong>  —— kotlin 与 Android 实战</p>
+<p>本文将简单介绍 Kotlin 的生态和部分语言功能，目录如下：</p>
+<ul>
+<li>Kotlin 是一门怎么样的语言</li>
+<li>强大的生态圈</li>
+<li>基本特征</li>
+</ul>
+<!-- toc -->  
+<h2 id="Kotlin-是一门怎么样的语言？"><a href="#Kotlin-是一门怎么样的语言？" class="headerlink" title="Kotlin 是一门怎么样的语言？"></a>Kotlin 是一门怎么样的语言？</h2><p>Kotlin 是一种在 JVM 上运行的静态类型编程语言，可以编译成 Java 字节码，也可以编译成 JavaScript，方便在没有 JVM 的设备上运行。  </p>
+<h3 id="Kotlin-核心的目标"><a href="#Kotlin-核心的目标" class="headerlink" title="Kotlin 核心的目标"></a>Kotlin 核心的目标</h3><ul>
+<li><p><strong>简约</strong>：帮你减少实现同一个功能的代码量。  </p>
+</li>
+<li><p><strong>易懂</strong>：让你的代码更容易阅读，同时易于理解。  </p>
+</li>
+<li><p><strong>安全</strong>：移除了你可能会犯错误的功能。  </p>
+</li>
+<li><p><strong>通用</strong>：基于 JVM 和 JavaScript，你可以在很多地方运行。  </p>
+</li>
+<li><p><strong>互操作性</strong>： Kotlin 和 Java 可以相互调用，同时 Jetbrains 的目标是让他们 100% 兼容。<br>对比 Java，Kotlin 或许显得有点年轻，但这并不代表它的生态圈不够稳定。</p>
+</li>
+</ul>
+<h2 id="强大的生态圈"><a href="#强大的生态圈" class="headerlink" title="强大的生态圈"></a>强大的生态圈</h2><p><strong>Kotlin 编译为 JVM 字节码或 JavaScript</strong><br>它可以吸引所有使用垃圾回收机制语言的程序员，包括 Java，Scala，Go，Python， Ruby 和 JavaScript。</p>
+<p><strong>kotlin 产自工业，而不是学术界。</strong><br>它解决了程序员目前所面临的一些问题。举个例子：类型系统可以帮助你避免空指针异常。当我们在使用一些 API 或者大型库时判断是否为 null，往往没有什么实际作用。</p>
+<p><strong>Kotlin 完美兼容 Java</strong><br>在 Idea 中，你可以一键实现 Java 与 Kotlin 的转换。也就是说， Kotlin 写的项目中可以使用所有现有的 Java 框架和库，甚至是依赖于注解的高级框架，并且它整合了 Maven，Gradle 和其他构建工具——帮助我们实现无缝的互操作。  </p>
+<p><strong>Kotlin 相对入门简单</strong><br>所以正如大家所说的那样，Kotlin 是一门十分友好的语言，你甚至可以花几个小时阅读下相关书籍就能入门。它的语法简洁直观，也许大多时候看起来比较像 Scala，实际上简单了很多。这种语言很好地平衡了简洁和可读性。</p>
+<p><strong>不施加运行时间的开销</strong><br>标准库是比较小的：主要是对 Java 标准库的重点扩展。大量使用编译时内联（compile-time inlining）就意味着像 <code>map</code>、 <code>filter</code>、 <code>reduce</code> 这样的语法编译起来与命令式的相似。</p>
+<p><strong>Android扩展库</strong><br><a href="https://github.com/Kotlin/anko" target="_blank" rel="noopener">Anko</a> 与 <a href="http://kovenant.komponents.nl/android/features/" target="_blank" rel="noopener">kovenant</a> 让 Kotlin 在 Android 的开发中更加方便，如果你看过这两个库，一定也为之青睐。</p>
+<p>除 Android 外，其实企业级别的 Java 项目也可以考虑使用 Kotlin：  </p>
+<ol>
+<li><p><strong>它有一个成熟的公司强大的商业支持</strong>，JetBrains 致力于该项目的发展，拥有一支高效的团队和稳定的商业模式。在较长的时间内，你都不用担心 Kotlin 被抛弃。  </p>
+</li>
+<li><p><strong>Kotlin 的风险很低</strong>：可以由一两个成员尝试在某个功能块使用，但并不会影响其他模块：Kotlin 类可以导出一个与常规 Java 代码看起来相同的 Java API。</p>
+</li>
+<li><p><strong>Java 6 废土中的一线希望</strong>：如果升级 JVM 对于你们的成本很高，你可以使用 Kotlin，它是「加强版的 Java 6」。</p>
+</li>
+</ol>
+<p>看完生态圈，来看看最吸引我们的语言功能部分。</p>
+<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><p><img src="http://ovib8fj5v.bkt.clouddn.com/kotlin&amp;&amp;android.png" alt="kotlin&amp;&amp;Android">  </p>
+<h4 id="属性前置"><a href="#属性前置" class="headerlink" title="属性前置"></a>属性前置</h4><p>Java Bean 中总是出现一些重复工作量的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span></span>&#123;</span><br><span class="line">  String name;</span><br><span class="line">  <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Customer</span><span class="params">(String name, <span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name=name;</span><br><span class="line">    <span class="keyword">this</span>.age=age;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> name;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> age;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">setName</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name=name;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">   <span class="keyword">this</span>.age=age;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在 Java 对象中，构造函数和属性的 <code>Getter</code>、<code>Setter</code> 函数在每个Bean类中都会出现，看起来非常冗余。  </p>
+<p>但是使用 Kotlin，代码是这样的：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span></span>(<span class="keyword">val</span> name:String, <span class="keyword">val</span> age:<span class="built_in">Int</span>)</span><br></pre></td></tr></table></figure></p>
+<p>Kotlin 将<code>Getter</code>、<code>Setter</code> 等函数省略，让我们更加关注属性。</p>
+<h4 id="函数式编程是变革的关键"><a href="#函数式编程是变革的关键" class="headerlink" title="函数式编程是变革的关键"></a>函数式编程是变革的关键</h4><p>如果你是一名 「FP」 （Functional Programming） 爱好者，你肯定知道 <a href="https://zh.wikipedia.org/wiki/Scala" target="_blank" rel="noopener">Scala</a>  这门语言。而 Kotlin 的设计初衷就是提供 Scala 里的很多特性，但不被编译时间束缚。  </p>
+<p><img src="http://om6vvgjw7.bkt.clouddn.com/FP.jpg" alt="FP">  </p>
+<p>网上对函数式编程的介绍，大多数对初学者都是不够友好的，下面是一种比较简洁的概括：</p>
+<blockquote>
+<p>函数编程以基于数学的函数构成，实现一个功能时倾向于实现的目标，而不是实现目标的方式。  </p>
+</blockquote>
+<p>也就是说，函数式编程处理的是不可变的数据，即不会改变变量的值。它所做的只是 Receive（接收）-&gt; Compute（计算）-&gt; Return（返回） ，而不改变它接收到的值，或者引起<a href="https://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B0%E5%89%AF%E4%BD%9C%E7%94%A8" target="_blank" rel="noopener">「副作用」</a>。  </p>
+<h4 id="Kotlin-重新定义了函数的写法"><a href="#Kotlin-重新定义了函数的写法" class="headerlink" title="Kotlin 重新定义了函数的写法"></a>Kotlin 重新定义了函数的写法</h4><ul>
+<li>简化函数重载。</li>
+<li>命名参数不遵循顺序：命名参数允许完全控制什么值被传递给变量，并在与布尔处理，举个例子：  </li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Java</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">check</span><span class="params">(<span class="keyword">boolean</span> isAlpha, <span class="keyword">boolean</span> isNum)</span></span>&#123;</span><br><span class="line">	<span class="comment">// do something</span></span><br><span class="line">&#125;</span><br><span class="line">check(<span class="keyword">true</span>, <span class="keyword">false</span>); <span class="comment">// 函数调用</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Kotlin</span></span><br><span class="line"><span class="function">fun <span class="title">check</span><span class="params">(isAlpha:Boolean, isNum：Boolean = <span class="keyword">false</span>)</span> </span>&#123;</span><br><span class="line">   <span class="comment">// do something</span></span><br><span class="line">&#125;</span><br><span class="line">check(<span class="keyword">true</span>)<span class="comment">// 1</span></span><br><span class="line">check(<span class="keyword">true</span>,<span class="keyword">true</span>)<span class="comment">// 2</span></span><br><span class="line">check(isAlpha = <span class="keyword">true</span>, isNum = <span class="keyword">false</span>) <span class="comment">// 3</span></span><br><span class="line">check(isNum = <span class="keyword">false</span>, isAlpha = <span class="keyword">true</span>) <span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
+<p>其中1、3、4实际效果一致。</p>
+<h4 id="函数可读性"><a href="#函数可读性" class="headerlink" title="函数可读性"></a>函数可读性</h4><ul>
+<li>单行表达式是提高代码可读性的第一步。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Java</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sum</span> <span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>&#123; <span class="comment">// 必须声明返回类型</span></span><br><span class="line">  x = x + y; <span class="comment">// x的值被改变，带来副作用</span></span><br><span class="line">  <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// kotlin</span></span><br><span class="line"><span class="function">fun <span class="title">sum</span><span class="params">(x: Int, y: Int)</span> </span>= x + y <span class="comment">// 完美</span></span><br></pre></td></tr></table></figure>
+<p>在 Android 开发时，我们应该都会对视图的 <code>onClick</code> 事件感到烦躁。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Java</span></span><br><span class="line">view.setOnClickListener(<span class="keyword">new</span> View.OnClickKistener() &#123;</span><br><span class="line">  @ Override</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"sad"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>在 kotlin 中，这也得到简化：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">view.onClick &#123;</span><br><span class="line">  println(<span class="string">"nice !!"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="类型安全"><a href="#类型安全" class="headerlink" title="类型安全"></a>类型安全</h4><p>在 Android 开发中，出现 <code>NullPointerException</code> 已经可以说是家常便饭了。但如果在运行的时候出现这个异常导致程序崩溃，对用户体验造成的损失是巨大的。  </p>
+<p>Kotlin 能很好的避免这个问题：  </p>
+<ul>
+<li>指定 null  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Java</span></span><br><span class="line">String text1 = <span class="keyword">null</span> <span class="comment">// NE  </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Kotlin</span></span><br><span class="line"><span class="keyword">var</span> text1: String = <span class="string">"Kotlin"</span><span class="comment">// 正常</span></span><br><span class="line"><span class="keyword">var</span> text2: String = <span class="keyword">null</span> <span class="comment">// NE</span></span><br><span class="line"><span class="keyword">var</span> text3: String ?= <span class="keyword">null</span> <span class="comment">// 正常</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>Kotlin 中只有加了 <code>?</code> 才允许为 null。</strong>  </p>
+<ul>
+<li><p>检查 null<br>Kotlin 可以通过 <code>?</code>确保安全调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Java</span></span><br><span class="line"><span class="keyword">if</span>（a != <span class="keyword">null</span>）&#123;</span><br><span class="line">  <span class="keyword">int</span> x = a.length（）;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Kotlin</span></span><br><span class="line">val x = a?.length <span class="comment">// 仅当 a 不为 null 时才能通过编译</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为 null 时默认值  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val x = b?.length ?: <span class="number">0</span> <span class="comment">// 如果 b 为 null，那他的 length 就为0</span></span><br><span class="line">val x = b?.length ?: <span class="keyword">throw</span> NullPointerException()</span><br><span class="line">val x = b!!.length</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Lambda-优化"><a href="#Lambda-优化" class="headerlink" title="Lambda 优化"></a>Lambda 优化</h4><p>Lambda 表达式增加了 Kotlin 的简洁功能，从而也让代码更容易理解。(Java 6 不支持 lambda )<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sum = &#123;x: <span class="built_in">Int</span>, y: <span class="built_in">Int</span> -&gt; x + y&#125; <span class="comment">// 类型:（Int, Int） -&gt; Int</span></span><br><span class="line"><span class="keyword">val</span> result = sum（<span class="number">2</span>, <span class="number">7</span>）<span class="comment">// result == 9</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="条件判断更优雅"><a href="#条件判断更优雅" class="headerlink" title="条件判断更优雅"></a>条件判断更优雅</h4><p>kotlin 中 <code>when</code> 同样能带给你惊喜，你可以用它简化 <code>if..else</code> 或 <code>switch</code>：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Java</span></span><br><span class="line"><span class="keyword">if</span>(x == <span class="number">1</span>) println(<span class="string">"x is 1"</span>);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(x == <span class="number">2</span>) println(<span class="string">"x is 2"</span>);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(x == <span class="number">3</span> || x == <span class="number">4</span>) println(<span class="string">"x is 3 or 4"</span>);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(x &gt;= <span class="number">5</span> || x &lt;= <span class="number">10</span>) println(<span class="string">"x is 5, 6, 7, 8, 9, or 10"</span>);</span><br><span class="line"><span class="keyword">else</span> println(<span class="string">"x is out of range"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Kotlin</span></span><br><span class="line">when (x) &#123;</span><br><span class="line">  <span class="number">1</span> -&gt; print(<span class="string">"x is 1"</span>)</span><br><span class="line">  <span class="number">2</span> -&gt; print(<span class="string">"x is 2"</span>)</span><br><span class="line">  <span class="number">3</span>, <span class="number">4</span> -&gt; print(<span class="string">"x is 3 or 4"</span>)</span><br><span class="line">  in <span class="number">5</span>..<span class="number">10</span> -&gt; print(<span class="string">"x is 5, 6, 7, 8, 9, or 10"</span>)</span><br><span class="line">  <span class="keyword">else</span> -&gt; print(<span class="string">"x is out of range"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当然除了以上这些，Kotlin 还有许多令人惊喜的特性，将会在后续的文章中详细介绍，敬请期待。  </p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/">Kotlin</a>
+          
+            <a href="/tags/Dive-Into-Kotlin/">~Dive Into Kotlin</a>
+          
+            <a href="/tags/Prefert/">^Prefert</a>
+          
+            <a href="/tags/Android/">Android</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/11/java-nio/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Asyncdb（三）：Java NIO</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/10/scala-weekly-25/">
+        <span class="next-text nav-default">Scala 技术周刊 | 第 25 期</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1509897600000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>

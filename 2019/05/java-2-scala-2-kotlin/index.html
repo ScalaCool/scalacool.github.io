@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<meta name="description" content="这是水滴产品团队面向 Scala 的中文技术博客，原创 Scala 文章、教程。">
+
+
+<meta name="keywords" content="scala,scala 教程,scala 文章,scala 中文,scala 社区">
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+
+
+  <link rel="alternate" href="/default" title="ScalaCool">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://scala.cool/2019/05/java-2-scala-2-kotlin/">
+
+
+<meta name="description" content="本文我们会通过对比 Java、Scala、Kotlin 这三门语言各自的发展路线，来认识 Kotlin 的设计哲学。">
+<meta name="keywords" content="Kotlin,Java,函数式编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从 Java 到 Scala，再到 Kotlin">
+<meta property="og:url" content="http://scala.cool/2019/05/java-2-scala-2-kotlin/index.html">
+<meta property="og:site_name" content="ScalaCool">
+<meta property="og:description" content="本文我们会通过对比 Java、Scala、Kotlin 这三门语言各自的发展路线，来认识 Kotlin 的设计哲学。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-04-22T02:50:45.361Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从 Java 到 Scala，再到 Kotlin">
+<meta name="twitter:description" content="本文我们会通过对比 Java、Scala、Kotlin 这三门语言各自的发展路线，来认识 Kotlin 的设计哲学。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?dfcb338d3c2ed49b6a5e26760868e19f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> 从 Java 到 Scala，再到 Kotlin - ScalaCool </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead">
+<div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ScalaCool</a>
+    </h1>
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="http://news.scala.cool">
+                            
+                            
+                                动态
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://scala.cool/2017/03/hello-scala/">
+                            
+                            
+                                关于
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="https://medium.com/drip-engineering">
+                            
+                            
+                                EN
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          从 Java 到 Scala，再到 Kotlin
+        
+      </h1>
+
+      <time class="post-time">
+          5月31日
+      </time>
+      
+        <span class="author-split">|</span>
+        <span class="author-info">
+          by <span class="_author-text-holder" data-author="ScalaCool"></span>
+        </span>
+      
+      
+        <div class="avatar-holder">
+          <span class="_author-avatar-holder" data-author="ScalaCool"></span>
+        </div>
+      
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>在 Java 之后，JVM 平台上出现了一些其他的编程语言，Scala 和 Kotlin 可以算是其中的佼佼者。Scala 已成为大数据领域的明星，Kotlin 在 2017 年 Google IO 大会之后，俨然也成为了安卓平台潜力巨大的官方支持语言。他们都被冠以“更好的Java”而称道，然而它们采用的是两种不同的设计理念。</p>
+<p>本文我们会通过对比 Java、Scala、Kotlin 这三门语言各自的发展路线，来认识 Kotlin 的设计哲学。</p>
+<h2 id="Java的发展"><a href="#Java的发展" class="headerlink" title="Java的发展"></a>Java的发展</h2><p>不得不说，Java是当今最成功的编程语言之一。自1996年Java问世，它始终霸占着编程语言生态中很大的一块。它的优势主要体现在：</p>
+<ul>
+<li><strong>多平台与强大的社区支持</strong>。无论是在Web开发还是移动设备，Java都是最主流的编程语言之一；</li>
+<li><strong>尊重标准，有着严格的语言规范以及向后兼容性</strong>。因此Java非常适合开发团队之间的协作，即使组织变动，新人同样可以在相同的规范下快速推进项目。</li>
+</ul>
+<p>然而，随着计算平台的快速发展，平台和业务本身对编程语言提出了更大的挑战。Java的发展也受到环境变化所带来的影响。如多核时代与大数据的到来，使得古老的函数式编程又重新变得“时髦”，Scala、Clojure这种多范式的编程语言开始受到越来越多开发人员的关注和喜爱。另一方面，Java的严格规范也常常被吐槽乏味。</p>
+<p>因此，Java必须开始改变。</p>
+<h3 id="Java-8的探索"><a href="#Java-8的探索" class="headerlink" title="Java 8的探索"></a>Java 8的探索</h3><p>如果说Java 5引入泛型是Java发展历史上重大的进步，那么Java 8的发布也同样意义深远，它是Java对其未来发展一次崭新的探索。Java 8引入了很多全新的语言特性，如：</p>
+<ul>
+<li><strong>高阶函数和Lambda</strong>。首次突破了只有类作为头等公民的设计，支持将函数作为参数来进行传递，同时结合Lambda语法，改变了现有的程序设计模式；</li>
+<li><strong>Stream API</strong>。流的引入简化了日常开发中的集合操作，并赋予了更强大的业务表达能力，并增强了代码的可读性；</li>
+<li><strong>Optional类</strong>。为消除null引用所带来的NullPointerException问题在类型层面提供了一种解决思路。<br>这一次的发布在Java社区引来了不同寻常的反响，因为Java程序员开始感受到另外一种编程范式所带来的全新体验—也就是所谓的函数式编程。拥抱函数式也为Java的发展指引了一个很好的方向。</li>
+</ul>
+<h3 id="Java未来会是什么样子"><a href="#Java未来会是什么样子" class="headerlink" title="Java未来会是什么样子"></a>Java未来会是什么样子</h3><p>2016年11月在欧洲最大的Java峰会上，Oracle的Java语言架构师—Brian Goetz分享了关于Java这门语言未来发展的演讲。本次会议最大的收获，就是探索了未来Java可能支持的语言特性，它们包含了：</p>
+<ul>
+<li>数据类</li>
+<li>值类</li>
+<li>泛型特化</li>
+<li>更强大的类型推导</li>
+<li>模式匹配</li>
+</ul>
+<p>以上的语言特性，对于初尝函数式编程甜头的Java开发者而言，是十分值得期待的。它们可以进一步解放Java，让开发工作变得更加高效和灵活。比如，一旦Java支持了数据类，我们就可以用非常简短的语法来表示一个常见的数据对象类，就像这样子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> class <span class="title">User</span><span class="params">(String firstName, String lastName, DateTime birthday)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>而用如今的JavaBean，则意味着好几倍的代码量，这一切都让人迫不及待。与此同时，或许早有Java程序员开始了JVM平台上另一种语言的研究。这门语言已支持了所有这些新的特性，并在设计的一开始，就集成了面向对象和函数式两大特征，它就是Scala。</p>
+<h2 id="Scala的百宝箱"><a href="#Scala的百宝箱" class="headerlink" title="Scala的百宝箱"></a>Scala的百宝箱</h2><p>Scala是洛桑联邦理工大学的马丁（Martin Odersky）教授创造的一门语言。他也参与了Java语言发展的研究工作，Java 5引入泛型就是他的杰作。事实上，在Java刚发布的时候，马丁教授就开始了Java的改良工作—他在JVM平台探索函数式编程，发布了一个名为Pizza的语言，那时就支持了泛型、高阶函数和模式匹配。</p>
+<p>然而，在随后的探索过程中，他渐渐发现Java是一门具有硬性约束的语言，在某些时候不能采用最优的方式来实施设计方案。因此，他和他的研究伙伴决定重新创造一门语言，既在学术上合理，同时也具备实用价值，这就是Scala的由来。</p>
+<h3 id="学术和工业的平衡"><a href="#学术和工业的平衡" class="headerlink" title="学术和工业的平衡"></a>学术和工业的平衡</h3><p>Scala是一门非常强大的编程语言，正如它名字（Scalable—可拓展）本身，用Scala编程就像拥有了哆啦A梦的口袋，里面装满了各种编程语言特性，如面向对象、函数式、宏。</p>
+<p>Scala不仅在面向对象方面进行了诸多的改良，而且彻底拥抱了函数式。因此Scala也吸引了函数式编程社区很多厉害的程序员，他们将函数式编程的思想注入到了Scala社区，如此将使用Scala进行函数式编程提高到了新的高度。</p>
+<p>由于Scala设计者学院派的背景，以及它某些看似“不同寻常”的语法，它在发展早期（甚至现在）经常被描述为“过于学院派”，以至于马丁教授在某次Scala大会的演讲时，自嘲“Scala真正的作用是将人引向了Haskell”。</p>
+<p>然而，真实的Scala却是在不断地探索学术和实用价值两方面的平衡。不可否认的是：</p>
+<ul>
+<li>Scala已经成为大数据领域的热门语言，明星项目Spark就是用Scala开发，还有很多其他知名的项目如Akka、Kafka；</li>
+<li>越来越多的商业公司如Twitter、PayPal、Salesforce都在大量使用这门语言。</li>
+</ul>
+<p>另一方面，Scala也确实是一门有着较陡的学习曲线的语言，因为它强大且灵活，正如马丁教授自己所言，Scala相信程序员的聪明才智，开发人员可以用它来灵活选择语言特性。但学术和工业的平衡始终是一个难题，与Java严格标准相比，Scala的多重选择也常常让人吐槽它复杂。</p>
+<h3 id="复合但不复杂"><a href="#复合但不复杂" class="headerlink" title="复合但不复杂"></a>复合但不复杂</h3><p>那么，Scala真的复杂吗？我们不知听了多少次类似这样的抱怨。在搞明白这个问题之前，我们需要先弄清楚到底什么是“复杂”。在英文中，复杂一词可以联想到两个单词—complex和complicated。实际上它们的含义截然不同，更准确地说，complex更好的翻译是“具有复合性”。<br>Nicolas Perony曾在Ted上发表过一次关于“复合性理论”的演讲。</p>
+<blockquote>
+<p>什么是复合性？复合并不是复杂。一件复杂的事物是由很多小部分所组成的，每一部分都各不相同，而且每一部分都在这个体系中有其自身的确切作用。与之相反，一个复合的系统，由很多类似的部分所组成，而且（就是因为）它们之间的相互影响，才形成了一种宏观上一致的行为。复合系统含有很多相互动的元素，它们根据简单的、个体的规则行动，如此导致新特征的出现。</p>
+</blockquote>
+<p>马丁教授同样发表过一篇名为《简单还是复杂》的文章，表达过类似的观点。如果对搭积木这件事情进行思考，摩比世界提供固定的方案，而乐高提供了无穷的选择。然而，前者的零件种类数量比后者要多得的。类似的道理，编程语言可以依靠功能累加来构建所谓的语法，同样也可以通过简单完备的理论来发展语言特性，在马丁教授看来，Scala显然属于后者，它并不复杂，而且非常简单。</p>
+<h3 id="简单却不容易"><a href="#简单却不容易" class="headerlink" title="简单却不容易"></a>简单却不容易</h3><p>事实上，函数式编程最明显的特征就是具备复合性。函数式开发做的最多的事情，就是对所需要处理的事物进行组合。如果说面向对象是归纳法，侧重于对事物特征的提取及概括；函数式中的组合思想则更像是演绎法，近似数学中的推导。</p>
+<p>然而，“简单”的哲学也带来了相应的代价：</p>
+<ul>
+<li>这是一种更加抽象的编程范式，诸如高阶类型、Typeclass等高级的函数式特性虽然提供了无比强大的抽象能力，但学习成本更高;</li>
+<li>建立了另一种与采用Java面向对象编程截然不同的思维模式。这种思维方式上的巨大差异，显然是一个极高的门槛，同时也是造成Scala令人望而却步的原因之一。</li>
+</ul>
+<p>Scala在选择彻底拥抱函数式的同时，也意味着它不是一门容易的语言，它无法成为一门像Java那样主流的编程语言。事实上，即使很多人采用Scala来进行开发，也还是采用类似Java的思维模式来编程，换句话说，Scala依旧是被当做是更好的Java来使用，但这确实是当今主流编程界最大的诉求。</p>
+<p>在这种背景下，Kotlin作为一门JVM平台上新兴的编程语言，悄悄打开了一扇同样广阔的大门。</p>
+<h2 id="Kotlin—改良的Java"><a href="#Kotlin—改良的Java" class="headerlink" title="Kotlin—改良的Java"></a>Kotlin—改良的Java</h2><p>2010年JetBrains开始了创造Kotlin的想法。关于大名鼎鼎的JetBrains，想必是家喻户晓，知名的IntelliJ IDEA就是他们的产品之一。拥有为各种语言构建开发工具经验的JetBrains，自然是对编程语言设计领域最熟悉的一群人。当时，一方面他们看到了C#在.NET平台上大放异彩，另一方面，Java相比新语言在某种程度上的滞后，让他们意识到了改良Java这门主流语言的必要性。</p>
+<p>JetBrain团队设计Kotlin所要面临的第一个问题，就是必须兼容他们所拥有的数百万行Java代码库，这也似乎正好代表了Kotlin基于整个Java社区所承载的使命之一，即需要与现有的Java代码完全兼容。这个背景也决定了Kotlin的核心目标，就是为Java程序员提供一门更好的编程语言。</p>
+<h3 id="Kotlin的实用主义"><a href="#Kotlin的实用主义" class="headerlink" title="Kotlin的实用主义"></a>Kotlin的实用主义</h3><p>Kotlin常常被认为是一门非常近似Scala的语言。的确，它们的诞生都源于Java语言的改良，同时都在面向对象和函数式之间建立起了多范式的桥梁。不可否认的是，Kotlin确实从Scala身上借鉴了许多，就连它的创作团队也表示过：“如果你Scala用的很开心，那么你并不需要Kotlin。”</p>
+<p>然而，Kotlin与Scala的设计哲学又十分不同。Kotlin并没有像Scala那样热衷于编程语言本身的研究和探索。相反，它在解放Java的同时，又在语言特性的选择上表现得相当克制。</p>
+<p>我们说过，Scala旨在成为一门程序员梦想中的语言，它包含了所有你想拥有的语言特性。而Kotlin更加立足现实，它现阶段仍没有宏，也拒绝了很多所谓的高级函数式语言特性。但它在Java 的基础上发展了很多改善生产力的语言特性，如数据类、when表达式（一定程度上的模式匹配）、扩展函数（和属性）、可空类型等等，而且它似乎偏好语法糖，比如Smart Casts，因为这可以让编程人员在工程中的开发变得更加容易。</p>
+<p>可以看出，Kotlin的自我定位非常清晰—它的目标就是在应用领域成为一门实用且高效的编程语言。如果说Scala的设计理念是more than Java（不仅仅是Java），那么Kotlin才是一门真正意义上的better Java（更好的Java）。</p>
+<h3 id="更好的Java"><a href="#更好的Java" class="headerlink" title="更好的Java"></a>更好的Java</h3><p>如果你用Kotlin开发过业务，很快就会意识到它相较于Java的语法，显得更加简洁、高效，比如Kotlin做了这些改良：</p>
+<ul>
+<li>极大程度上实现了类型推导，而Java在SE 10才支持了局部变量的推导；</li>
+<li>放弃了static关键字，但又引入了object，我们可以直接用它来声明一个单例，作为比较Java则必须依靠构建所谓的“单例模式”才能等效地表达；</li>
+<li>引入了一些在Java中没有的“特殊类”，比如Data Classes（数据类）、Sealed Classes（密封类），我们可以构建更深程度上的代数数据类型，结合when表达式来使用。</li>
+</ul>
+<p>但可能你会问，以上Kotlin的特性，Scala也有，能否可以说前者只是后者的一个子集。这种表述其实是不恰当的。其实，Kotlin在致力于成为更好的Java的道路上，不仅仅是依靠这些新增的语言特性，它在兼容Java方面的设计，做了大量的工作，比Scala走的更远。</p>
+<p>首先，从语言命名上就可以看出Kotlin在严格遵循Java的先例，它们都采用了岛屿的名字。</p>
+<blockquote>
+<p>Java的名字来源于印度尼西亚瓜哇岛的英文名称，而Kotlin是俄罗斯圣彼得堡附近的一个岛屿。</p>
+</blockquote>
+<p>其次，虽然都是兼容Java，Scala（最近的几个版本）必须要求Java 8，而Kotlin则可以跟Java 6一起工作，这也是后者在Android上更加流行的原因之一。</p>
+<p>另外，Kotlin并没有像Scala那样在语法的探索上表现得“随心所欲”，Java程序员在学习Kotlin新语法特性的同时，依旧可以保留更多原有的习惯。举个例子，在Scala中，一切皆有类型。所以大部分时间，我们都用等号来定义一个Scala的函数。函数体最后一个表达式的值就是这个函数的返回类型。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span></span>(x: <span class="type">Int</span>) = &#123;</span><br><span class="line">    <span class="keyword">val</span> y = x + <span class="number">2</span></span><br><span class="line">    x + y</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>没错，Scala舍弃了return关键字。在Kotlin中，它也引入了使用单行表达式来定义函数的语法，不需要用return来返回结果值。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(x: <span class="type">Int</span>)</span></span> = x * <span class="number">2</span> + <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>然而，大部分情况下，我们还是可以采用类似Java的方式来定义一个函数，如：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">foo</span><span class="params">(x: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">    <span class="keyword">val</span> y = x * <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> y + <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于Kotlin比Scala更加兼容Java的生态和语法，Java程序员可以更加容易地掌握它。另一方面，Kotlin非常注重语法的简洁表达。如果你了解Scala中的implicit，可能曾被这个Scala的语法惊吓到，因为它非常强大。然而，正如我们提到的“简单灵活”的另一面，则意味着抽象和晦涩。Kotlin注重的是工程的实用性，所以它创造了扩展的语法，虽然相比implicit在功能上有损，但显得更加的具体直观，且依旧非常强大，满足了日常开发中绝大多数的需求。值得一提的是，Android则依靠这个Java所没有的特性，推出了扩展库android-ktx。</p>
+<p>此外，Kotlin还新增了一些Java、Scala中没有的语法糖。如果你从事Android开发，那么肯定少不了在工程中写过这样子的Java代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(parentView <span class="keyword">instanceof</span> ViewGroup)&#123;</span><br><span class="line">    ((ViewGroup) parentView).addView(childView);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为了类型安全我们不得不写两遍ViewGroup，然而在Kotlin中我们却可以直接这么写：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(parentView <span class="keyword">is</span> ViewGroup)&#123;</span><br><span class="line">    parentView.addView(childView)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这依靠的是Kotlin中的Smart Casts特性，我们不评价这种语法糖是否好坏，但它可以在一定程度上改善我们在工程中的开发体验。</p>
+<p>总体而言，Kotlin旨在成为一门提升Java生产力的更好的编程语言，它拥有简洁的表达能力、强大的工具支持，同时至今仍然保持着非常快速的编译能力。相较而言，用Scala开发则常常受到编译过慢而带来的困扰。</p>
+<h3 id="强大的生态"><a href="#强大的生态" class="headerlink" title="强大的生态"></a>强大的生态</h3><p>现在，我们已经了解了Kotlin整体的设计哲学，以及它相较Java、Scala的魅力所在。当然，本文似乎并没有任何关于语法细节的介绍，不着急，我们会在后续的内容中深入介绍Kotlin的语言特性，并且探索它具体的高级应用。</p>
+<p>关于Kotlin，还有一个问题需要解答—我们究竟可以用它来做什么。大概率上你是因为Kotlin成为Android官方支持语言的新闻而知晓它的。事实上，Kotlin不仅支持Android，它还是一门通用语言，如果用一句话来总结，那就是“Targeting JVM / JavaScript and Native”。现阶段的Kotlin我们至少可以用它做以下的事情：</p>
+<ul>
+<li>Android开发</li>
+</ul>
+<p>我们不仅可以用Kotlin调用现成的Java库，而且还有Google提供的Kotlin扩展库。Kotlin的语法非常适合Android工程开发，例如我们提到过的Smart Casts，用它还可以改善findViewById的语法调用；</p>
+<ul>
+<li>服务端开发</li>
+</ul>
+<p>这是JVM语言最大的一个应用领域，自然也是Kotlin发挥的舞台。在Android支持Kotlin之后，Spring Framework 5也对它敞开了怀抱。基于Kotlin更自然的函数式特性，用Spring进行Web开发会在某些方面拥有比Java更好的体验；</p>
+<ul>
+<li>前端开发</li>
+</ul>
+<p>Kotlin还有两个强大的特性—dynamic类型以及类型安全的构建器，前者实现其与JavaScript互通，后者可以帮助开发者构建可靠的HTML页面。你可以尝试使用Kotlin来构建UI。</p>
+<ul>
+<li>原生环境开发</li>
+</ul>
+<p>因为Kotlin Native这个项目，Kotlin终于告别了Java，离开了JVM，直接编译成机器码供系统环境运行。虽然Kotlin Native尚处于早期阶段，但后续的发展非常值得期待。如果你家里有一个树莓派，不妨可以用它来试一试。</p>
+<p>如你所见，Kotlin还是一门非常开放、具有强大生态的编程语言。如果说与Java兼容能让它运行在所有支持Java的地方，那么它的革命创新使得它超越了Java，进入了更加广阔的世界。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>我们打算用一个比喻来结尾。这个生动形象的说法来自于Lutz Hühnken的博客，他把Java、Scala、Kotlin比作滑雪运动中的不同种类。</p>
+<p>如果说JVM平台是一个滑雪世界，那么最早的Java语言就是大家最熟知的滑雪方式—双脚各踏一个滑雪板来进行滑雪。Scala则更像将两只脚都站在一块单板上来滑行的滑雪方式。那些用滑雪单板的高级运动员非常令人羡慕，因为他们可以用更优雅的姿势获得更快的速度，而且最重要的是他们可以做“深粉雪”滑行，这也就是所谓的函数式编程。</p>
+<p>然而，对于用惯双板滑雪的运动员而言，尝试用单板来滑雪，就像是学习一种新的运动，会经常摔跤。其实，大部分人还是更乐意用双板来进行滑雪。这时候，刻滑板出现了，使用它，运动员完全可以保留原有双板的习惯，但同时依旧可以做某个程度上的深粉雪滑行。你猜的没错，它就是Kotlin。</p>
+<p>对于滑雪这项运动而言，别忘了，还有一个世界性的赛事—Android开发，它暂时并没有对单板开放，但对刻滑板则已经敞开了怀抱。</p>
+<p>所以，如果你是想要寻找一种更好的Java语言的话，欢迎来到Kotlin的滑雪世界！</p>
+<blockquote>
+<p>以上内容摘自<a href="https://scala.cool/2019/05/dive-into-kotlin/">《Kotlin核心编程》</a></p>
+</blockquote>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/">Kotlin</a>
+          
+            <a href="/tags/Java/">Java</a>
+          
+            <a href="/tags/函数式编程/">函数式编程</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2019/12/io_monad-1/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">IO Monad 入门指南（一）：Monad 和 MonadError</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2019/05/cats-4/">
+        <span class="next-text nav-default">Cats（四）：Typeclass</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <!--<div style="text-align:center;margin-top: 50px;">
+      <a class="btn" href="https://gitter.im/scala_cool/Lobby?source=orgpage" target="_blank">评论这篇文章</a>
+    </div>-->
+    <div id="gitalk-container"></div>
+    <script>
+      var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}} 
+      var id = Base64.encode(document.getElementsByClassName('post-title')[0].innerHTML.trim())
+      id = id.length > 50 && 1559232000000 > 1517414400123 ? id.slice(-50, id.length) : id;
+      var gitalk = new Gitalk({
+        clientID: '23770b27c2837a5e79a1',
+        clientSecret: 'd41712ccd45d7142b31d3b9f355e77f107b29ef2',
+        repo: 'scalacool.github.io',
+        owner: 'ScalaCool',
+        admin: ['yisonshan'],
+        id: id,
+        distractionFreeMode: true
+      });
+      gitalk.render('gitalk-container');
+    </script>
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2017 -
+    
+    2021
+    <span class="footer-author">ScalaCool.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/author.js?v=1.1"></script>
+
+  </body>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+</html>
