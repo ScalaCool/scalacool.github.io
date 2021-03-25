@@ -1,15 +1,753 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
   <url>
-    <loc>http://scala.cool</loc>
-    <lastmod>2017-9-1</lastmod>
-    <changefreq>always</changefreq>
-    <priority>1</priority>
+    <loc>http://scala.cool/2019/05/dive-into-kotlin/</loc>
+    
+    <lastmod>2021-03-25T09:31:10.899Z</lastmod>
+    
   </url>
+  
   <url>
-    <loc>http://scala.cool/archives/</loc>
-    <lastmod>2017-9-1</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.8</priority>
+    <loc>http://scala.cool/2019/12/io_monad-1/</loc>
+    
+    <lastmod>2021-03-25T09:31:05.773Z</lastmod>
+    
   </url>
+  
+  <url>
+    <loc>http://scala.cool/2021/03/io_monad2/</loc>
+    
+    <lastmod>2021-03-12T12:05:42.461Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2019/05/java-2-scala-2-kotlin/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.361Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2019/05/cats-4/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.360Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2019/01/kotlin-optional-type-vs-scala-option/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.360Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/11/java-2-scala-4/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.360Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/11/cats-3/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.360Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/09/java-2-scala-3/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.359Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/08/febible-float-layout/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.359Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/09/febible-position-layout/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.359Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/04/play-4/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.359Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/08/java-2-scala-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.359Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/03/learning-kafka-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.358Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/03/learning-kafka-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.358Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/03/reactive-web-applications-4/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.358Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/03/kotlin-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.358Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/03/reactive-web-applications-5/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.358Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/02/shapeless-3/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.357Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/03/Form-Java2Scala-1-oop/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.357Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/01/swift-vue-like-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.357Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/03/java-2-scala-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.357Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/02/back-2-font-xinfa-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.357Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/12/kotlin-4/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.356Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/01/scala-design-patterns-6/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.356Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/12/swift-vue-like-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.356Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/01/scala-weekly-29/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.356Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2018/01/mysql-parse-architecture/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.356Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/12/scala-weekly-28/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.356Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/11/scala-weekly-26/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.355Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/11/scala-design-patterns-5/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.355Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/12/be_2_fe/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.355Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/12/cats-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.355Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/11/scala-weekly-27/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.355Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/11/mysql-protocol/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.354Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/11/play-3/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.354Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/11/java-nio/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.353Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/10/scala-weekly-25/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.353Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/10/shapeless-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.353Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/11/kotlin-0/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.353Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/11/cats-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.353Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/11/kotlin-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.353Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/10/scala-weekly-24/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.352Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/10/scala-weekly-23/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.352Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/10/reactive-web-applications-3/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.352Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/10/java-io/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.352Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/10/asyncdb-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.351Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/09/subtyping-vs-typeclasses-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.351Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/09/shapeless-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.351Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/09/scala-weekly-22/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.351Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/09/scala-weekly-20/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.351Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/09/scala-weekly-21/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.351Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/09/subtyping-vs-typeclasses-3/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.351Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/09/reactive-web-applications-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.350Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/09/scala-weekly-19/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.350Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/08/subtyping-vs-typeclasses/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.349Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/09/learning-akka-10/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.349Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/08/scala-weekly-18/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.349Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/09/play2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.349Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/08/scala-weekly-15/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.348Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/08/learning-akka-9/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.348Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/08/scala-weekly-16/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.348Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/08/scala-weekly-17/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.348Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/08/learning-akka-8/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.348Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/08/scala-design-patterns-4-factory/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.348Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/08/reactive-web-applications-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.348Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/scala-weekly-12/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.347Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/scala-weekly-11/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.347Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/scala-weekly-13/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.347Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/scala-types-of-types-part-4/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.347Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/scala-types-of-types-part-6/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.347Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/08/canbuildfrom/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.347Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/scala-types-of-types-part-5/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.347Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/scala-weekly-14/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.347Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/scala-design-patterns-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.346Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/scala-design-patterns-3/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.346Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/scala-design-patterns-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.346Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/play-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.345Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/mysql-async-3/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.345Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/learning-akka-6/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.345Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/learning-akka-7/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.345Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/07/a-new-collection/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.345Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/05/scala-weekly-6/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.344Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/06/learning-akka-5/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.344Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/05/scala-weekly-5/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.344Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/05/scala-weekly-4/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.344Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/06/scala-weekly-10/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.344Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/06/scala-weekly-8/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.344Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/06/scala-weekly-7/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.344Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/06/scala-weekly-9/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.344Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/05/learning-akka-4/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.343Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/05/scala-weekly-3/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.343Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/05/scala-types-of-types-part-3/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.343Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/05/mysql-async-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.343Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/05/scala-weekly-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.343Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/04/learning-akka-3/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.342Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/04/mysql-async-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.342Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/05/how-to-handle-collection-in-scala-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.342Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/04/scala-types-of-types-part-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.342Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/04/scala-weekly-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.342Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/04/learning-akka-2/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.342Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/03/scala-types-of-types-part-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.341Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/03/how-to-use-algebraic-data-type-in-scala-development/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.341Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/03/learning-akka-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.341Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/03/hello-scala/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.341Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/03/scala-news-beta-release/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.341Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://scala.cool/2017/03/how-to-handle-collection-in-scala-1/</loc>
+    
+    <lastmod>2020-04-22T02:50:45.341Z</lastmod>
+    
+  </url>
+  
 </urlset>
